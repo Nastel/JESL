@@ -16,9 +16,9 @@
 package com.jkool.jesl.net.socket;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
@@ -39,7 +39,7 @@ import com.nastel.jkool.tnt4j.sink.EventSink;
  *
  * @version $Revision: 2 $
  */
-public class SocketClient implements SocketConnection {
+public class SocketClient implements JKStream {
 	protected EventSink logger;
 
 	protected InetSocketAddress proxyAddr;
@@ -49,7 +49,7 @@ public class SocketClient implements SocketConnection {
 	protected int				port;
 	protected boolean			secure;
 	protected Socket			socket;
-	protected PrintWriter		out;
+	protected DataOutputStream	out;
 	protected BufferedReader	in;
 
 
@@ -69,7 +69,7 @@ public class SocketClient implements SocketConnection {
 	}
 
 	@Override
-	public void connect() throws IOException {
+	public synchronized void connect() throws IOException {
 		if (secure) {
 			SocketFactory socketFactory = SSLSocketFactory.getDefault();
 			socket = socketFactory.createSocket(host, port);
@@ -77,11 +77,11 @@ public class SocketClient implements SocketConnection {
 		else {
 			socket = new Socket(host, port);
 		}
-		out = new PrintWriter(socket.getOutputStream(), false);
+		out = new DataOutputStream(socket.getOutputStream());
 	}
 
 	@Override
-	public void connect(String token) throws IOException {
+	public synchronized void connect(String token) throws IOException {
 		connect();
 		if (token != null && !StringUtils.isEmpty(token)) {
 			AuthUtils.authenticate(this, token);
@@ -89,19 +89,14 @@ public class SocketClient implements SocketConnection {
 	}
 
 	@Override
-	public void sendMessage(String msg, boolean wantResponse) throws IOException {
+	public synchronized void sendMessage(String msg, boolean wantResponse) throws IOException {
 		if (wantResponse)
 			throw new UnsupportedOperationException("Responses are not supported for TCP connections");
-
-		if (!isConnected())
-			connect();
-
-		out.println(msg);
+		
+		String lineMsg = msg.endsWith("\n")? msg: msg + "\n";
+		byte [] bytes = lineMsg.getBytes();
+		out.write(bytes, 0, bytes.length);
 		out.flush();
-		if (out.checkError()) {
-			close();
-			throw new IOException("Unknown error writing data to socket, closing");
-		}
 	}
 
 	@Override
@@ -110,7 +105,7 @@ public class SocketClient implements SocketConnection {
 	}
 
 	@Override
-	public void close() {
+	public synchronized void close() {
 		try {
 			if (socket != null) {
 				if (out != null) out.close();

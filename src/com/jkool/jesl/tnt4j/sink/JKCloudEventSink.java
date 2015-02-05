@@ -162,18 +162,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 		if (StringUtils.isEmpty(msg))
 			return;
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
-		try {
-			synchronized (this) {
-				jkHandle.sendMessage(lineMsg, false);
-			}
-		} catch (Throwable e) {
-			close();
-			if (e instanceof IOException)
-				throw (IOException) e;
-			IOException ioe = new IOException("Failed writing to connection");
-			ioe.initCause(e);
-			throw ioe;
-		}
+		jkHandle.sendMessage(lineMsg, false);
 	}
 
 	@Override

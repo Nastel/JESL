@@ -15,7 +15,7 @@
  */
 package com.jkool.jesl.net.security;
 
-import com.jkool.jesl.net.socket.SocketConnection;
+import com.jkool.jesl.net.socket.JKStream;
 
 /**
  *
@@ -23,7 +23,7 @@ import com.jkool.jesl.net.socket.SocketConnection;
  * @version $Revision: 1 $
  */
 public class AuthUtils {
-	public static void authenticate(SocketConnection client, String token) throws SecurityException {
+	public static void authenticate(JKStream client, String token) throws SecurityException {
 		String respStr = null;
 		try {
 			client.sendMessage(new AccessRequest(token).generateMsg(), true);

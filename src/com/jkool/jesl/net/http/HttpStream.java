@@ -21,14 +21,14 @@ import org.jboss.netty.handler.codec.http.HttpMethod;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.handler.codec.http.HttpVersion;
 
-import com.jkool.jesl.net.socket.SocketConnection;
+import com.jkool.jesl.net.socket.JKStream;
 
 /**
  *
  *
  * @version $Revision: 1 $
  */
-public interface HttpSocketConnection extends SocketConnection {
+public interface HttpStream extends JKStream {
 	void sendRequest(HttpRequest request, boolean wantResponse) throws IOException;
 	void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws IOException;
 

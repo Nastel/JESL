@@ -55,7 +55,7 @@ import com.nastel.jkool.tnt4j.sink.EventSink;
  *
  * @version $Revision: 3 $
  */
-public class HttpClient implements HttpSocketConnection {
+public class HttpClient implements HttpStream {
 	public static final String NO_RESPONSE_REQUIRED_HEADER = "Pragma";
 	public static final String NO_RESPONSE_REQUIRED_VALUE  = "no-response";
 
@@ -125,7 +125,7 @@ public class HttpClient implements HttpSocketConnection {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void connect() throws IOException {
+	public synchronized void connect() throws IOException {
 		if (logger.isSet(OpLevel.DEBUG))
 			logger.log(OpLevel.DEBUG, "Connecting to {0}{1}", httpHost, (httpProxy != null ? " via proxy " + httpProxy : ""));
 
@@ -167,7 +167,7 @@ public class HttpClient implements HttpSocketConnection {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void connect(String token) throws IOException {
+	public synchronized void connect(String token) throws IOException {
 		connect();
 		if (logger.isSet(OpLevel.DEBUG))
 			logger.log(OpLevel.DEBUG, "Authenticating connection with token ''{0}''", token);
@@ -175,7 +175,7 @@ public class HttpClient implements HttpSocketConnection {
 	}
 
 	@Override
-	public void sendRequest(HttpRequest request, boolean wantResponse) throws IOException {
+	public synchronized void sendRequest(HttpRequest request, boolean wantResponse) throws IOException {
 		if (!(request instanceof org.apache.http.HttpRequest))
 			throw new IllegalArgumentException("request must be an instance of org.apache.http.HttpRequest");
 
@@ -198,9 +198,6 @@ public class HttpClient implements HttpSocketConnection {
 
 	@Override
 	public void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws IOException {
-		if (!isConnected())
-			connect();
-
 		if (StringUtils.isEmpty(reqUri))
 			reqUri = "/";
 
@@ -242,7 +239,7 @@ public class HttpClient implements HttpSocketConnection {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public HttpResponse getResponse() throws IOException {
+	public synchronized HttpResponse getResponse() throws IOException {
 		try {
 			HttpResponseImpl resp = new HttpResponseImpl(connection.receiveResponseHeader());
 			String contentLenStr = resp.getHeader(HttpHeaders.CONTENT_LENGTH);
@@ -261,7 +258,7 @@ public class HttpClient implements HttpSocketConnection {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getReply() throws IOException {
+	public synchronized String getReply() throws IOException {
 		HttpResponse resp = null;
 		resp = getResponse();
 		String content = resp.getContentString();

@@ -23,7 +23,7 @@ import java.net.URI;
  *
  * @version $Revision: 1 $
  */
-public interface SocketConnection {
+public interface JKStream {
 	URI getURI();
 	String getHost();
 	int getPort();

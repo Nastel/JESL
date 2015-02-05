@@ -31,6 +31,7 @@ import javax.net.ssl.SSLSocketFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import com.jkool.jesl.net.security.AuthUtils;
+import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.sink.DefaultEventSinkFactory;
 import com.nastel.jkool.tnt4j.sink.EventSink;
 
@@ -83,7 +84,9 @@ public class SocketClient implements JKStream {
 	@Override
 	public synchronized void connect(String token) throws IOException {
 		connect();
-		if (token != null && !StringUtils.isEmpty(token)) {
+		if (!StringUtils.isEmpty(token)) {
+			if (logger.isSet(OpLevel.DEBUG))
+				logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token='{1}'", this, token);
 			AuthUtils.authenticate(this, token);
 		}
 	}

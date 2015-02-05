@@ -16,21 +16,19 @@
 package com.jkool.jesl.simulator.tnt4j;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.jkool.jesl.net.http.HttpClient;
-import com.jkool.jesl.net.socket.SocketClient;
+import com.jkool.jesl.net.JKClient;
 import com.nastel.jkool.tnt4j.TrackingLogger;
+import com.nastel.jkool.tnt4j.sink.EventSink;
 
 public class JKCloudConnection {
 	private String gwUrl;
 	private String accessToken;
 
-	private SocketClient	taTcpConn;
-	private HttpClient		taHttpConn;
+	private JKClient		jkHandle;
 	private TrackingLogger	logger;
 
 	public JKCloudConnection(String url, String accessToken, TrackingLogger logger) {
@@ -39,58 +37,29 @@ public class JKCloudConnection {
 		this.logger = logger;
 	}
 
-	public boolean isOpen() {
-		return (taTcpConn != null || taHttpConn != null);
+	protected EventSink getEventSink() {
+		return (logger == null ? null : logger.getEventSink());
 	}
-	public void open() throws IOException {
+	
+	public boolean isOpen() {
+		return (jkHandle != null);
+	}
+	
+	public synchronized void open() throws IOException {
 		if (isOpen())
 			return;
 
 		try {
-			URI uri = new URI(gwUrl);
-			String protocol = uri.getScheme();
-			if (StringUtils.isEmpty(protocol))
-				throw new MalformedURLException("Protocol not specified");
-
-			if ("http".equalsIgnoreCase(protocol)) {
-				taHttpConn = new HttpClient(gwUrl, (logger == null ? null : logger.getEventSink()));
-
-				if (!StringUtils.isEmpty(accessToken))
-					taHttpConn.connect(accessToken);
-				else
-					taHttpConn.connect();
-			}
-			else if ("https".equalsIgnoreCase(protocol)) {
-				taHttpConn = new HttpClient(gwUrl, (logger == null ? null : logger.getEventSink()));
-//				if (!StringUtils.isEmpty(sslKeystore))
-//					taHttpConn.setSslKeystore(sslKeystore, sslKeystorePwd);
-
-				if (!StringUtils.isEmpty(accessToken))
-					taHttpConn.connect(accessToken);
-				else
-					taHttpConn.connect();
-			}
-			else if ("tcp".equalsIgnoreCase(protocol)) {
-				String host = uri.getHost();
-				int port = uri.getPort();
-				taTcpConn = new SocketClient(host, port, false, (logger == null ? null : logger.getEventSink()));
-				taTcpConn.connect();
-			}
-			else {
-				throw new IOException("Unsupported protocol " + protocol + " for gateway connection");
-			}
+			jkHandle = new JKClient(gwUrl, getEventSink());
+			jkHandle.connect(accessToken);
 		}
-		catch (Throwable e) {
-			if ((e instanceof IOException))
-				throw (IOException)e;
+		catch (URISyntaxException e) {
 			close();
-			IOException ioe = new IOException("Failed opening connection");
-			ioe.initCause(e);
-			throw ioe;
+			throw new IOException(e.getMessage(), e);
 		}
 	}
 
-	public void write(String msg) throws IOException {
+	public synchronized void write(String msg) throws IOException {
 		if (StringUtils.isEmpty(msg))
 			return;
 
@@ -98,32 +67,21 @@ public class JKCloudConnection {
 			open();
 
 		try {
-			if (taHttpConn != null)
-				taHttpConn.sendMessage(msg, false);
-			else if (taTcpConn != null)
-				taTcpConn.sendMessage(msg, false);
+			if (jkHandle != null)
+				jkHandle.sendMessage(msg, false);
 			else
 				throw new IOException("Connection not opened");
 		}
-		catch (Throwable e) {
+		catch (IOException e) {
 			close();
-			if (e instanceof IOException)
-				throw (IOException)e;
-			IOException ioe = new IOException("Failed writing to connection");
-			ioe.initCause(e);
-			throw ioe;
+			throw e;
 		}
 	}
 
-	public void close() throws IOException {
-		if (taTcpConn != null) {
-			taTcpConn.close();
-			taTcpConn = null;
-		}
-
-		if (taHttpConn != null) {
-			taHttpConn.close();
-			taHttpConn = null;
+	public synchronized void close() throws IOException {
+		if (jkHandle != null) {
+			jkHandle.close();
+			jkHandle = null;
 		}
 	}
 

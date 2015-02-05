@@ -169,9 +169,11 @@ public class HttpClient implements HttpStream {
 	@Override
 	public synchronized void connect(String token) throws IOException {
 		connect();
-		if (logger.isSet(OpLevel.DEBUG))
-			logger.log(OpLevel.DEBUG, "Authenticating connection with token ''{0}''", token);
-		AuthUtils.authenticate(this, token);
+		if (!StringUtils.isEmpty(token)) {
+			if (logger.isSet(OpLevel.DEBUG))
+				logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token='{1}'", this, token);
+			AuthUtils.authenticate(this, token);
+		}
 	}
 
 	@Override

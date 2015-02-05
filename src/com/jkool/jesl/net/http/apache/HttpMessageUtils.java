@@ -15,6 +15,8 @@
  */
 package com.jkool.jesl.net.http.apache;
 
+import java.io.IOException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -49,28 +51,28 @@ public class HttpMessageUtils {
 		return (getEntity(message) != null);
 	}
 
-	public static byte[] getContentBytes(HttpMessage message) throws Exception {
+	public static byte[] getContentBytes(HttpMessage message) throws IOException {
 		HttpEntity entity = getEntity(message);
 		if (entity == null)
 			return null;
 		return EntityUtils.toByteArray(entity);
 	}
 
-	public static String getContentString(HttpMessage message) throws Exception {
+	public static String getContentString(HttpMessage message) throws IOException {
 		HttpEntity entity = getEntity(message);
 		if (entity == null)
 			return null;
 		return EntityUtils.toString(entity);
 	}
 
-	public static String getContentString(HttpMessage message, String charset) throws Exception {
+	public static String getContentString(HttpMessage message, String charset) throws IOException {
 		HttpEntity entity = getEntity(message);
 		if (entity == null)
 			return null;
 		return EntityUtils.toString(entity, charset);
 	}
 
-	public static void setContent(HttpMessage message, String contentType, byte[] content, String contentEncoding) throws Exception {
+	public static void setContent(HttpMessage message, String contentType, byte[] content, String contentEncoding) throws IOException {
 		ByteArrayEntity httpContent = new ByteArrayEntity(content);
 		if (!StringUtils.isEmpty(contentEncoding))
 			httpContent.setContentEncoding(contentEncoding);
@@ -80,11 +82,11 @@ public class HttpMessageUtils {
 		setEntity(message, httpContent);
 	}
 
-	public static void setContent(HttpMessage message, String contentType, String content) throws Exception {
+	public static void setContent(HttpMessage message, String contentType, String content) throws IOException {
 		setContent(message, contentType, content.getBytes(), null);
 	}
 
-	public static void setContent(HttpMessage message, String contentType, String content, String charset) throws Exception {
+	public static void setContent(HttpMessage message, String contentType, String content, String charset) throws IOException {
 		setContent(message, contentType + "; charset=" + charset, content.getBytes(charset), charset);
 	}
 }

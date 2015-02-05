@@ -15,6 +15,8 @@
  */
 package com.jkool.jesl.net.http.apache;
 
+import java.io.IOException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
@@ -95,32 +97,32 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	}
 
 	@Override
-	public byte[] getContentBytes() throws Exception {
+	public byte[] getContentBytes() throws IOException {
 		return HttpMessageUtils.getContentBytes(getRawReq());
 	}
 
 	@Override
-	public String getContentString() throws Exception {
+	public String getContentString() throws IOException {
 		return HttpMessageUtils.getContentString(getRawReq());
 	}
 
 	@Override
-	public String getContentString(String charset) throws Exception {
+	public String getContentString(String charset) throws IOException {
 		return HttpMessageUtils.getContentString(getRawReq(), charset);
 	}
 
 	@Override
-	public void setContent(String contentType, byte[] content, String contentEncoding) throws Exception {
+	public void setContent(String contentType, byte[] content, String contentEncoding) throws IOException {
 		HttpMessageUtils.setContent(getRawReq(), contentType, content, contentEncoding);
 	}
 
 	@Override
-	public void setContent(String contentType, String content) throws Exception {
+	public void setContent(String contentType, String content) throws IOException {
 		HttpMessageUtils.setContent(getRawReq(), contentType, content);
 	}
 
 	@Override
-	public void setContent(String contentType, String content, String charset) throws Exception {
+	public void setContent(String contentType, String content, String charset) throws IOException {
 		HttpMessageUtils.setContent(getRawReq(), contentType, content, charset);
 	}
 

@@ -17,10 +17,11 @@ package com.jkool.jesl.tnt4j.sink;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.URISyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.jkool.jesl.net.http.HttpClient;
+import com.jkool.jesl.net.JKClient;
 import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.core.Snapshot;
 import com.nastel.jkool.tnt4j.format.EventFormatter;
@@ -50,11 +51,9 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	private Socket socketSink = null;
 	private EventSink logSink = null;
-	private HttpClient jkHandle;
+	private JKClient jkHandle;
 
 	private String url = "localhost";
-	private String sslKeystore;
-	private String sslKeystorePwd;
 	private String proxyHost = null;
 	private int proxyPort = 0;
 	private String accessToken = null;
@@ -77,14 +76,11 @@ public class JKCloudEventSink extends AbstractEventSink {
 		logSink = sink;
 	}
 
-	public JKCloudEventSink(String name, String url, String token, String sslKeystore, String sslKeystorePwd,
-	        EventFormatter frm, EventSink sink) {
+	public JKCloudEventSink(String name, String url, String token, EventFormatter frm, EventSink sink) {
 		super(name, frm);
 		this.url = url;
 		this.logSink = sink;
 		this.accessToken = token;
-		this.sslKeystore = sslKeystore;
-		this.sslKeystorePwd = sslKeystorePwd;
 	}
 
 	/**
@@ -137,25 +133,15 @@ public class JKCloudEventSink extends AbstractEventSink {
 	@Override
 	public synchronized void open() throws IOException {
 		try {
-			jkHandle = new HttpClient(url, proxyHost, proxyPort, logger);
-			
-			if (!StringUtils.isEmpty(sslKeystore)) {
-				jkHandle.setSslKeystore(sslKeystore, sslKeystorePwd);
-			}
-			
+			jkHandle = new JKClient(url, proxyHost, proxyPort, logger);
 			if (!StringUtils.isEmpty(accessToken)) {
 				jkHandle.connect(accessToken);
-			}
-			else {
+			} else {
 				jkHandle.connect();
 			}
-		} catch (Throwable e) {
-			if ((e instanceof IOException))
-				throw (IOException) e;
+		} catch (URISyntaxException e) {
 			close();
-			IOException ioe = new IOException("Failed opening connection");
-			ioe.initCause(e);
-			throw ioe;
+			throw new IOException(e.getMessage(), e);
 		}
 	}
 

@@ -45,8 +45,6 @@ import com.nastel.jkool.tnt4j.sink.EventSinkFactory;
 public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	private String token = System.getProperty("tnt4j.sink.factory.socket.token", "");
 	private String url = System.getProperty("tnt4j.sink.factory.socket.url", "http://localhost:6580");
-	private String sslKeystore = System.getProperty("tnt4j.sink.factory.socket.SSLKeystore", "");
-	private String sslKeystorePwd = System.getProperty("tnt4j.sink.factory.socket.SSLKeystorePwd", "");
 
 	private EventSinkFactory eventSinkFactory = DefaultEventSinkFactory.getInstance();
 
@@ -79,7 +77,7 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 
 	@Override
     public EventSink getEventSink(String name, Properties props, EventFormatter frmt) {
-	    return new JKCloudEventSink(name, url,  token, sslKeystore, sslKeystorePwd, frmt, eventSinkFactory.getEventSink(name, props, new JSONFormatter()));
+	    return new JKCloudEventSink(name, url,  token, frmt, eventSinkFactory.getEventSink(name, props, new JSONFormatter()));
     }
 
 	@Override
@@ -92,9 +90,6 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 		super.setConfiguration(settings);
 		url = config.get("Url") != null? config.get("Url").toString(): url;
 		token = config.get("Token") != null? config.get("Token").toString(): token;
-		sslKeystore = config.get("SSLKeystore") != null ? config.get("SSLKeystore").toString(): sslKeystore;
-		sslKeystorePwd = config.get("SSLKeystorePwd") != null ? config.get("SSLKeystorePwd").toString() : sslKeystorePwd;
-
 		try {
 			URI uri = new URI(url);
 			url = uri.toString();

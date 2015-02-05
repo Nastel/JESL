@@ -15,6 +15,8 @@
  */
 package com.jkool.jesl.net.http;
 
+import java.io.IOException;
+
 /**
  *
  *
@@ -28,11 +30,11 @@ public interface HttpMessage {
 	void removeHeader(String name);
 
 	boolean hasContent();
-	byte[] getContentBytes() throws Exception;
-	String getContentString() throws Exception;
-	String getContentString(String charset) throws Exception;
+	byte[] getContentBytes() throws IOException;
+	String getContentString() throws IOException;
+	String getContentString(String charset) throws IOException;
 
-	void setContent(String contentType, byte[] content, String contentEncoding) throws Exception;
-	void setContent(String contentType, String content) throws Exception;
-	void setContent(String contentType, String content, String charset) throws Exception;
+	void setContent(String contentType, String content) throws IOException;
+	void setContent(String contentType, byte[] content, String contentEncoding) throws IOException;
+	void setContent(String contentType, String content, String charset) throws IOException;
 }

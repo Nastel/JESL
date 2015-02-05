@@ -19,12 +19,14 @@
  */
 package com.jkool.jesl.net.http;
 
+import java.io.IOException;
+
 /**
  *
  *
  * @version $Revision: 1 $
  */
-public class RequestFailedException extends Exception {
+public class RequestFailedException extends IOException {
 	private static final long serialVersionUID = 1827966640612146841L;
 
 	protected String status;

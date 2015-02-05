@@ -22,6 +22,8 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
@@ -49,6 +51,7 @@ public class SocketClient implements SocketConnection {
 	protected Socket			socket;
 	protected PrintWriter		out;
 	protected BufferedReader	in;
+
 
 	public SocketClient(String host, int port, boolean secure, EventSink logger) {
 		this.host   = host;
@@ -78,7 +81,7 @@ public class SocketClient implements SocketConnection {
 	}
 
 	@Override
-	public void connect(String token) throws Throwable {
+	public void connect(String token) throws IOException {
 		connect();
 		if (token != null && !StringUtils.isEmpty(token)) {
 			AuthUtils.authenticate(this, token);
@@ -86,7 +89,7 @@ public class SocketClient implements SocketConnection {
 	}
 
 	@Override
-	public void sendMessage(String msg, boolean wantResponse) throws Throwable {
+	public void sendMessage(String msg, boolean wantResponse) throws IOException {
 		if (wantResponse)
 			throw new UnsupportedOperationException("Responses are not supported for TCP connections");
 
@@ -102,7 +105,7 @@ public class SocketClient implements SocketConnection {
 	}
 
 	@Override
-	public void sendRequest(String msg, boolean wantResponse) throws Throwable {
+	public void sendRequest(String msg, boolean wantResponse) throws IOException {
 		sendMessage(msg, wantResponse);
 	}
 
@@ -152,13 +155,12 @@ public class SocketClient implements SocketConnection {
 	}
 
 	@Override
-	public String getReply() throws Throwable {
+	public String getReply() throws IOException {
 		if (socket == null)
 			connect();
 
 		if (in == null)
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
 		return in.readLine();
 	}
 
@@ -166,4 +168,13 @@ public class SocketClient implements SocketConnection {
 	public String toString() {
 		return "tcp" + (isSecure() ? "s" : "") + "://" + host + ":" + port;
 	}
+
+	@Override
+    public URI getURI() { 
+		try {
+			return new URI("tcp://" + host + ":" + port);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+    }
 }

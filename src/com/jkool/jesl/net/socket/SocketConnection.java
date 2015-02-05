@@ -15,12 +15,16 @@
  */
 package com.jkool.jesl.net.socket;
 
+import java.io.IOException;
+import java.net.URI;
+
 /**
  *
  *
  * @version $Revision: 1 $
  */
 public interface SocketConnection {
+	URI getURI();
 	String getHost();
 	int getPort();
 
@@ -29,13 +33,13 @@ public interface SocketConnection {
 	String getProxyHost();
 	int getProxyPort();
 
-	void connect() throws Throwable;
-	void connect(String token) throws Throwable;
+	void connect() throws IOException;
+	void connect(String token) throws IOException;
 	boolean isConnected();
 
-	void sendMessage(String msg, boolean wantResponse) throws Throwable;
-	void sendRequest(String msg, boolean wantResponse) throws Throwable;
-	String getReply() throws Throwable;
+	void sendMessage(String msg, boolean wantResponse) throws IOException;
+	void sendRequest(String msg, boolean wantResponse) throws IOException;
+	String getReply() throws IOException;
 
 	void close();
 }

@@ -59,6 +59,7 @@ public class HttpClient implements HttpSocketConnection {
 	public static final String NO_RESPONSE_REQUIRED_HEADER = "Pragma";
 	public static final String NO_RESPONSE_REQUIRED_VALUE  = "no-response";
 
+	protected URI							uri;
 	protected EventSink		 			    logger;
 	protected String						host;
 	protected int							port;
@@ -79,25 +80,16 @@ public class HttpClient implements HttpSocketConnection {
 	}
 
 	public HttpClient(String urlStr, String proxyHost, int proxyPort, EventSink logger) throws URISyntaxException {
-		URI uri = new URI(urlStr);
-
+		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
-
 		secure = "https".equalsIgnoreCase(scheme);
-
 		host = uri.getHost();
 	    if (host == null)
 	    	host = "localhost";
-
 	    port = uri.getPort();
 	    if (port <= 0)
 	    	port = (secure ? 443 : 80);
-
 		init(host, port, uri.getPath(), secure, proxyHost, proxyPort, logger);
-	}
-
-	public HttpClient(String host, int port, boolean secure, String proxyHost, int proxyPort, EventSink logger) {
-		init(host, port, "/", secure, proxyHost, proxyPort, logger);
 	}
 
 	/**
@@ -175,7 +167,7 @@ public class HttpClient implements HttpSocketConnection {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void connect(String token) throws Throwable {
+	public void connect(String token) throws IOException {
 		connect();
 		if (logger.isSet(OpLevel.DEBUG))
 			logger.log(OpLevel.DEBUG, "Authenticating connection with token ''{0}''", token);
@@ -183,7 +175,7 @@ public class HttpClient implements HttpSocketConnection {
 	}
 
 	@Override
-	public void sendRequest(HttpRequest request, boolean wantResponse) throws Exception {
+	public void sendRequest(HttpRequest request, boolean wantResponse) throws IOException {
 		if (!(request instanceof org.apache.http.HttpRequest))
 			throw new IllegalArgumentException("request must be an instance of org.apache.http.HttpRequest");
 
@@ -193,16 +185,19 @@ public class HttpClient implements HttpSocketConnection {
 		if (logger.isSet(OpLevel.TRACE))
 			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", httpHost, request);
 
-		org.apache.http.HttpRequest httpRequest = (org.apache.http.HttpRequest) request;
-		connection.sendRequestHeader(httpRequest);
-		if (httpRequest instanceof HttpEntityEnclosingRequest && request.hasContent())
-			connection.sendRequestEntity((HttpEntityEnclosingRequest)httpRequest);
-
-		connection.flush();
+		try {
+			org.apache.http.HttpRequest httpRequest = (org.apache.http.HttpRequest) request;
+			connection.sendRequestHeader(httpRequest);
+			if (httpRequest instanceof HttpEntityEnclosingRequest && request.hasContent())
+				connection.sendRequestEntity((HttpEntityEnclosingRequest)httpRequest);
+			connection.flush();
+		} catch (HttpException he) {
+			throw new IOException(he.getMessage(), he);
+		}
 	}
 
 	@Override
-	public void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws Exception {
+	public void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws IOException {
 		if (!isConnected())
 			connect();
 
@@ -215,9 +210,6 @@ public class HttpClient implements HttpSocketConnection {
 
 		try {
 			sendRequest(req, wantResponse);
-		}
-		catch (HttpException e) {
-			throw new IOException("Failed sending to " + httpHost, e);
 		}
 		catch (IllegalStateException ise) {
 			close();
@@ -233,7 +225,7 @@ public class HttpClient implements HttpSocketConnection {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void sendMessage(String msg, boolean wantResponse) throws Throwable {
+	public void sendMessage(String msg, boolean wantResponse) throws IOException {
 		String contentType = (msg != null && msg.startsWith("<?xml") ? "text/xml" : "text/plain");
 		sendRequest("POST", uriPath, contentType, msg, wantResponse);
 	}
@@ -242,7 +234,7 @@ public class HttpClient implements HttpSocketConnection {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void sendRequest(String msg, boolean wantResponse) throws Throwable {
+	public void sendRequest(String msg, boolean wantResponse) throws IOException {
 		sendMessage(msg, wantResponse);
 	}
 
@@ -250,33 +242,28 @@ public class HttpClient implements HttpSocketConnection {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public HttpResponse getResponse() throws Throwable {
-		HttpResponseImpl resp = new HttpResponseImpl(connection.receiveResponseHeader());
+	public HttpResponse getResponse() throws IOException {
+		try {
+			HttpResponseImpl resp = new HttpResponseImpl(connection.receiveResponseHeader());
+			String contentLenStr = resp.getHeader(HttpHeaders.CONTENT_LENGTH);
+			String contentType   = resp.getHeader(HttpHeaders.CONTENT_TYPE);
+			int contentLen = (StringUtils.isEmpty(contentLenStr) ? 0 : Integer.parseInt(contentLenStr));
+			if (contentLen > 0 || !StringUtils.isEmpty(contentType))
+				connection.receiveResponseEntity(resp);
 
-		String contentLenStr = resp.getHeader(HttpHeaders.CONTENT_LENGTH);
-		String contentType   = resp.getHeader(HttpHeaders.CONTENT_TYPE);
-		int contentLen = (StringUtils.isEmpty(contentLenStr) ? 0 : Integer.parseInt(contentLenStr));
-        if (contentLen > 0 || !StringUtils.isEmpty(contentType))
-			connection.receiveResponseEntity(resp);
-
-		return resp;
+			return resp;
+		} catch (Throwable ex) {
+			throw new IOException(ex.getMessage(), ex);
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getReply() throws Exception {
+	public String getReply() throws IOException {
 		HttpResponse resp = null;
-		try {
-			resp = getResponse();
-		}
-		catch (Throwable e) {
-			if (e instanceof Exception)
-				throw (Exception)e;
-			throw new Exception(e);
-		}
-
+		resp = getResponse();
 		String content = resp.getContentString();
 
 		if (logger.isSet(OpLevel.TRACE))
@@ -297,7 +284,6 @@ public class HttpClient implements HttpSocketConnection {
 				throw new RequestFailedException(status.toString(), content);
 			}
 		}
-
 		return content;
 	}
 
@@ -393,4 +379,9 @@ public class HttpClient implements HttpSocketConnection {
 	public HttpResponse newResponse(HttpVersion version, HttpResponseStatus status) {
 		return new HttpResponseImpl(new ProtocolVersion(version.getProtocolName(), version.getMajorVersion(), version.getMinorVersion()), status.getCode());
 	}
+
+	@Override
+    public URI getURI() {
+	    return uri;
+    }
 }

@@ -15,6 +15,8 @@
  */
 package com.jkool.jesl.net.http;
 
+import java.io.IOException;
+
 import org.jboss.netty.handler.codec.http.HttpMethod;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.handler.codec.http.HttpVersion;
@@ -27,11 +29,10 @@ import com.jkool.jesl.net.socket.SocketConnection;
  * @version $Revision: 1 $
  */
 public interface HttpSocketConnection extends SocketConnection {
-	void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws Throwable;
-	void sendRequest(HttpRequest request, boolean wantResponse) throws Throwable;
+	void sendRequest(HttpRequest request, boolean wantResponse) throws IOException;
+	void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws IOException;
 
-	HttpResponse getResponse() throws Throwable;
-
+	HttpResponse getResponse() throws IOException;
 	HttpRequest  newRequest(HttpMethod method, String uri);
 	HttpResponse newResponse(HttpVersion version, HttpResponseStatus status);
 }

@@ -15,6 +15,7 @@
  */
 package com.jkool.jesl.net.http.apache;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
@@ -120,7 +121,7 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public byte[] getContentBytes() throws Exception {
+	public byte[] getContentBytes() throws IOException {
 		return HttpMessageUtils.getContentBytes(getRawResp());
 	}
 
@@ -128,7 +129,7 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getContentString() throws Exception {
+	public String getContentString() throws IOException {
 		return HttpMessageUtils.getContentString(getRawResp());
 	}
 
@@ -136,7 +137,7 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getContentString(String charset) throws Exception {
+	public String getContentString(String charset) throws IOException {
 		return HttpMessageUtils.getContentString(getRawResp(), charset);
 	}
 
@@ -144,7 +145,7 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setContent(String contentType, byte[] content, String contentEncoding) throws Exception {
+	public void setContent(String contentType, byte[] content, String contentEncoding) throws IOException {
 		HttpMessageUtils.setContent(getRawResp(), contentType, content, contentEncoding);
 	}
 
@@ -152,7 +153,7 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setContent(String contentType, String content) throws Exception {
+	public void setContent(String contentType, String content) throws IOException {
 		HttpMessageUtils.setContent(getRawResp(), contentType, content);
 	}
 
@@ -160,7 +161,7 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setContent(String contentType, String content, String charset) throws Exception {
+	public void setContent(String contentType, String content, String charset) throws IOException {
 		HttpMessageUtils.setContent(getRawResp(), contentType, content, charset);
 	}
 

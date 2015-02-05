@@ -29,6 +29,10 @@ public class JKClient implements JKStream {
 	boolean secure;
 	URI uri;
 	
+	public JKClient(String urlStr, EventSink logger) throws URISyntaxException {
+		this(urlStr, null, 0, logger);
+	}
+
 	public JKClient(String urlStr, String proxyHost, int proxyPort, EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();

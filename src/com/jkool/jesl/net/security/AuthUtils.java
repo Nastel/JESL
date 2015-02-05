@@ -23,25 +23,6 @@ import com.jkool.jesl.net.socket.SocketConnection;
  * @version $Revision: 1 $
  */
 public class AuthUtils {
-	public static void authenticate(SocketConnection client, String user, String pwd) throws SecurityException {
-		String respStr = null;
-		try {
-			client.sendMessage(new LoginRequest(user, pwd, true).generateMsg(), true);
-			respStr = client.getReply();
-		}
-		catch (Throwable e) {
-			throw new SecurityException("Failed to log in to '" + client.getHost() + "' with user '" + user + "'", e);
-		}
-
-		LoginResponse resp = LoginResponse.parseMsg(respStr);
-		if (!resp.isSuccess()) {
-			String msg = "Failed to log in to '" + client.getHost() + "' with user '" + user + "'";
-			if (resp.getReason() != null)
-				msg += ": " + resp.getReason();
-			throw new SecurityException(msg);
-		}
-	}
-
 	public static void authenticate(SocketConnection client, String token) throws SecurityException {
 		String respStr = null;
 		try {

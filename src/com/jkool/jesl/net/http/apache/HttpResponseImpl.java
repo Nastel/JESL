@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jkool.jesl.net.http.impl;
+package com.jkool.jesl.net.http.apache;
 
 import java.util.Locale;
 

@@ -41,8 +41,8 @@ import org.jboss.netty.handler.codec.http.HttpMethod;
 import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.jboss.netty.handler.codec.http.HttpVersion;
 
-import com.jkool.jesl.net.http.impl.HttpRequestImpl;
-import com.jkool.jesl.net.http.impl.HttpResponseImpl;
+import com.jkool.jesl.net.http.apache.HttpRequestImpl;
+import com.jkool.jesl.net.http.apache.HttpResponseImpl;
 import com.jkool.jesl.net.security.AccessResponse;
 import com.jkool.jesl.net.security.AuthUtils;
 import com.jkool.jesl.net.ssl.SSLContextFactory;
@@ -170,16 +170,6 @@ public class HttpClient implements HttpSocketConnection {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void connect(String user, String password) throws Throwable {
-		connect();
-		if (logger.isSet(OpLevel.DEBUG))
-			logger.log(OpLevel.DEBUG, "Authenticating connection with user ''{0}''", user);
-		AuthUtils.authenticate(this, user, password);
-	}
 
 	/**
 	 * {@inheritDoc}

@@ -30,7 +30,6 @@ public interface SocketConnection {
 	int getProxyPort();
 
 	void connect() throws Throwable;
-	void connect(String user, String password) throws Throwable;
 	void connect(String token) throws Throwable;
 	boolean isConnected();
 

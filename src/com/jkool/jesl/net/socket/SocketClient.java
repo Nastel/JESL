@@ -78,12 +78,6 @@ public class SocketClient implements SocketConnection {
 	}
 
 	@Override
-	public void connect(String user, String password) throws Throwable {
-		connect();
-		AuthUtils.authenticate(this, user, password);
-	}
-
-	@Override
 	public void connect(String token) throws Throwable {
 		connect();
 		if (token != null && !StringUtils.isEmpty(token)) {

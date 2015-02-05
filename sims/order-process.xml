@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<tnt4j-simulator>
+
+  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
+          info="Redhat5 Server" user="webuser" url="https://www.sample.com/orders/parts"/>
+  <source id="2" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=Los Angeles, CA"
+          info="Ubuntu12.04 Server" user="ebay-proc"/>
+  <source id="3" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=London, England"
+          info="z/OS" user="SYSPRC"/>
+  <source id="4" fqn="APPL=VerifyCredit#SERVER=CreditServerVISA#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=Paris, France"
+          info="Windows 2012 Server" user="system"/>
+  <source id="5" fqn="APPL=ShipProduct#SERVER=SupplyChainServer#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=Miami, Florida"
+          info="Windows 2012 Server" user="system"/>
+  <source id="6" fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Washington#GEOADDR=Washington, Virginia"
+          info="IBM AIX 5 Alpha" user="mqm"/>
+  <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=Las Vegas, Nevada"
+          info="Windows 2012 WebSphere Server" user="mqm"/>
+  
+  <msg id="1">AMAZON ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr.</msg>
+  <msg id="2">Verify ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr</msg>
+  <msg id="3">Process Payment ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr</msg>
+  <msg id="4">Ship ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr</msg>
+  <msg id="5">Confirm ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr</msg>
+  
+  <activity name="AcceptOrder" source="1" pid="5432" tid="4">
+    <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="OrderId:123"/>
+    <event name="ValidateOrder" type="SEND" elapsed="823" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="OrderId:123"/>
+    <sleep usec="121"/>
+    <snapshot name="ShopingCart" cat="Orders">
+      <prop name="ProductCount" type="INTEGER" value="2"/>
+      <prop name="OrderAmount" type="DECIMAL" value="210.38"/>
+      <prop name="Taxes" type="DECIMAL" value="10.73"/>
+      <prop name="ShippingCost" type="DECIMAL" value="15.25"/>
+    </snapshot>
+    <snapshot name="CPU" cat="Java">
+      <prop name="Count" type="INTEGER" value="8"/>
+      <prop name="TotalCpuUsec" type="DECIMAL" value="46800.3"/>
+      <prop name="TotalCpuUserUsec" type="DECIMAL" value="46800.3"/>
+    </snapshot>
+    <snapshot name="Thread" cat="Java">
+      <prop name="Count" type="INTEGER" value="69"/>
+      <prop name="DaemonCount" type="INTEGER" value="15"/>
+      <prop name="StartedCount" type="INTEGER" value="71"/>
+      <prop name="PeakCount" type="INTEGER" value="69"/>
+      <prop name="BlockedCount" type="INTEGER" value="69"/>
+      <prop name="WaitedCount" type="INTEGER" value="4"/>
+      <prop name="BlockedUsec" type="INTEGER" value="35000"/>
+      <prop name="WaitUsec" type="INTEGER" value="32493000"/>
+    </snapshot>
+    <snapshot name="Memory" cat="Java">
+      <prop name="MaxBytes" type="INTEGER" value="7635533824"/>
+      <prop name="TotalBytes" type="INTEGER" value="514523136"/>
+      <prop name="FreeBytes" type="INTEGER" value="450058552"/>
+      <prop name="UsedBytes" type="INTEGER" value="64464584"/>
+      <prop name="Usage" type="INTEGER" value="12"/>
+    </snapshot>
+    <snapshot name="PS Scavenge" cat="GarbageCollector">
+      <prop name="Count" type="INTEGER" value="1"/>
+      <prop name="Time" type="INTEGER" value="9"/>
+      <prop name="isValid" type="BOOLEAN" value="true"/>
+    </snapshot>
+    <snapshot name="PS MarkSweep" cat="GarbageCollector">
+      <prop name="Count" type="INTEGER" value="10"/>
+      <prop name="Time" type="INTEGER" value="12200"/>
+      <prop name="isValid" type="BOOLEAN" value="true"/>
+    </snapshot>
+    <snapshot name="Activity" cat="Java">
+      <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1"/>
+      <prop name="SlackUsec" type="INTEGER" value="1399"/>
+      <prop name="WallUsec" type="DECIMAL" value="3.25116001E7"/>
+      <prop name="BlockedCount" type="INTEGER" value="1090"/>
+      <prop name="WaitedCount" type="INTEGER" value="547"/>
+      <prop name="BlockedUsec" type="INTEGER" value="3000"/>
+      <prop name="WaitUsec" type="INTEGER" value="32493000"/>
+      <prop name="OverheadUsec" type="DECIMAL" value="962.175"/>
+    </snapshot>
+  </activity>
+  
+  <sleep msec="163"/>
+
+  <activity name="ValidateOrder" source="2" pid="7373" tid="15">
+    <event name="ValidateAndVerify" type="RECEIVE" elapsed="626" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="OrderId:123"/>
+    <event name="Credit" type="SEND" elapsed="2323" res="CREDIT.ORDERS.QUEUE" msg="2" corrs="OrderId:123"/>
+  </activity>
+
+  <activity name="CreditValidate" source="4" pid="432" tid="64">
+    <event name="ValidateCredit" type="RECEIVE" elapsed="2782" res="CREDIT.ORDERS.QUEUE" msg="2" corrs="OrderId:123"/>
+    <event name="Validated" type="SEND" elapsed="7189" res="ROUTE.ORDERS.QUEUE" msg="1" corrs="OrderId:123"/>
+  </activity>
+
+  <activity name="RouteOrder" source="7" pid="67126" tid="43">
+    <event name="ReadAndRoute" type="RECEIVE" elapsed="626" res="ROUTE.ORDERS.QUEUE" msg="1" corrs="OrderId:123"/>
+    <event name="ProcessPayment" type="SEND" elapsed="128" res="PAYMENT.ORDERS.QUEUE" msg="3" corrs="OrderId:123"/>
+    <event name="PossibleFraud" type="SEND" elapsed="234" res="FRAUD.ORDERS.QUEUE" msg="1" corrs="OrderId:123"/>
+  </activity>
+    
+  <sleep msec="891"/>
+    
+  <activity name="ProcessFraudAlerts" source="6" pid="3423" tid="548">
+    <event name="EvaluateFraud" type="RECEIVE" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1" corrs="OrderId:123"/>
+  </activity>
+
+  <activity name="PaymentProcess" source="3" pid="8154" tid="12" sev="WARNING">
+    <event name="ReadOrder" type="RECEIVE" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" sev="ERROR" corrs="OrderId:123"/>
+    <sleep msec="11"/>
+    <event name="SendShipment" type="SEND" elapsed="293" res="SHIP.ORDERS.QUEUE" msg="4"/>
+  </activity>
+    
+  <sleep msec="512"/>
+    
+  <activity name="ShipOrders" source="5" pid="39572" tid="183">
+    <event name="ReadOrderContents" type="RECEIVE" elapsed="32679" res="SHIP.ORDERS.QUEUE" msg="4" msgage="7272" corrs="OrderId:123"/>
+    <sleep msec="412"/>
+    <event name="PrepareShippingSlip" type="EVENT" elapsed="4821"/>
+    <sleep msec="835"/>
+    <event name="SendConfirmation" type="SEND" elapsed="142" msg="5"/>
+    <snapshot name="ShopingCart" cat="Orders">
+      <prop name="ProductCount" type="INTEGER" value="2"/>
+      <prop name="OrderAmount" type="DECIMAL" value="210.38"/>
+      <prop name="Taxes" type="DECIMAL" value="10.73"/>
+      <prop name="ShippingCost" type="DECIMAL" value="15.25"/>
+      <prop name="Packages" type="INTEGER" value="2"/>
+    </snapshot>
+    <snapshot name="CPU" cat="Java">
+      <prop name="Count" type="INTEGER" value="8"/>
+      <prop name="TotalCpuUsec" type="DECIMAL" value="78000.5"/>
+      <prop name="TotalCpuUserUsec" type="DECIMAL" value="62400.4"/>
+    </snapshot>
+    <snapshot name="Thread" cat="Java">
+      <prop name="Count" type="INTEGER" value="69"/>
+      <prop name="DaemonCount" type="INTEGER" value="15"/>
+      <prop name="StartedCount" type="INTEGER" value="71"/>
+      <prop name="PeakCount" type="INTEGER" value="69"/>
+      <prop name="BlockedCount" type="INTEGER" value="76"/>
+      <prop name="WaitedCount" type="INTEGER" value="6"/>
+      <prop name="BlockedUsec" type="INTEGER" value="36000"/>
+      <prop name="WaitUsec" type="INTEGER" value="8075000"/>
+    </snapshot>
+    <snapshot name="Memory" cat="Java">
+      <prop name="MaxBytes" type="INTEGER" value="7635533824"/>
+      <prop name="TotalBytes" type="INTEGER" value="514523136"/>
+      <prop name="FreeBytes" type="INTEGER" value="428179112"/>
+      <prop name="UsedBytes" type="INTEGER" value="86344024"/>
+      <prop name="Usage" type="INTEGER" value="16"/>
+    </snapshot>
+    <snapshot name="PS Scavenge" cat="GarbageCollector">
+      <prop name="Count" type="INTEGER" value="1378"/>
+      <prop name="Time" type="INTEGER" value="734737"/>
+      <prop name="isValid" type="BOOLEAN" value="true"/>
+    </snapshot>
+    <snapshot name="PS MarkSweep" cat="GarbageCollector">
+      <prop name="Count" type="INTEGER" value="213"/>
+      <prop name="Time" type="INTEGER" value="272881"/>
+      <prop name="isValid" type="BOOLEAN" value="true"/>
+    </snapshot>
+    <snapshot name="Activity" cat="Java">
+      <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1"/>
+      <prop name="SlackUsec" type="INTEGER" value="-6600"/>
+      <prop name="WallUsec" type="DECIMAL" value="201600.1"/>
+      <prop name="BlockedCount" type="INTEGER" value="7382"/>
+      <prop name="WaitedCount" type="INTEGER" value="12312"/>
+      <prop name="BlockedUsec" type="INTEGER" value="17812828"/>
+      <prop name="WaitUsec" type="INTEGER" value="186000"/>
+      <prop name="OverheadUsec" type="DECIMAL" value="181.7"/>
+    </snapshot>
+  </activity>
+ 
+</tnt4j-simulator>

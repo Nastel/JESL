@@ -1,0 +1,18 @@
+<!-- This file is intended to be included by all build.xml files for each project.
+-->
+<project name="JeslBuildProps">
+  <!-- Installation package directories -->
+  <property name="project-build"       value="${basedir}/../build/jesl"/>
+  <property name="project-install"     value="${project-build}/install"/>
+  
+  <!-- Default compilation settings -->
+  <property name="target"     value="1.6"/>
+  <property name="source"     value="1.6"/>
+  <property name="debuglevel" value="source,lines,vars"/>
+
+  <!-- loads project version and build information -->
+  <loadproperties srcFile="${root}/build.properties"/>
+
+  <!-- exclude VSS control files -->
+  <defaultexcludes add="**/*.scc"/>
+</project>

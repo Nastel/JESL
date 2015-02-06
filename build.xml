@@ -13,14 +13,17 @@
 
 	<property name="src"       value="src"/>
 	<property name="lib"       value="lib"/>
+	<property name="config"    value="config"/>
+	<property name="scripts"   value="bin"/>
+	<property name="classes"   value="classes"/>
 	<property name="doc"       value="${project-build}/doc"/>
-	<property name="docpkg"    value="com.jkool.jesl.*"/>
-	<property name="bin"       value="${project-build}/bin"/>
 	<property name="jar"       value="${project-build}/jkool-jesl.jar"/>
+	<property name="docpkg"    value="com.jkool.jesl.*"/>
 
 	<target name="init">
 		<tstamp/>
-		<mkdir dir="${bin}"/>
+		<mkdir dir="${classes}"/>
+		<mkdir dir="${scripts}"/>
 		<mkdir dir="${project-build}/lib"/>
 		<copy todir="${lib}" quiet="true" failonerror="false">
 			<fileset dir="${project-build}/../tnt4j">
@@ -60,9 +63,9 @@
 		</javadoc>
 	</target>
 
-	<!-- Compile into ${bin} directory -->
+	<!-- Compile into ${classes} directory -->
 	<target name="compile" depends="init" description="compile the source">
-		<javac destdir="${bin}" debug="true" debuglevel="${debuglevel}" source="${source}" target="${target}">
+		<javac destdir="${classes}" debug="true" debuglevel="${debuglevel}" source="${source}" target="${target}">
 			<src path="${src}"/>
 			<classpath>
 				<fileset dir="${project-build}/lib"/>
@@ -78,7 +81,7 @@
 	</target>
 
 	<target name="jesl" depends="init,compile" description="build JESL package">
-		<jar jarfile="${jar}" basedir="${bin}" update="false">
+		<jar jarfile="${jar}" basedir="${classes}" update="false">
 			<manifest>
 				<attribute name="Implementation-Vendor" value="${vendor}"/>
 				<attribute name="Implementation-Title" value="${prodname}"/>
@@ -86,11 +89,14 @@
 				<attribute name="Main-Class" value="com.jkool.jesl.simulator.TNT4JSimulator"/>
 			</manifest>
 		</jar>
-		<copy todir="${project-build}">
-			<fileset dir="${root}">
-				<include name="log4j.properties"/>
-				<include name="tnt4j.properties"/>
-				<include name="tnt4j-tokens.properties"/>
+		<copy todir="${project-build}/config">
+			<fileset dir="${config}">
+				<include name="**/*.properties"/>
+			</fileset>
+		</copy>
+		<copy todir="${project-build}/bin">
+			<fileset dir="${scripts}">
+				<include name="**/*.*"/>
 			</fileset>
 		</copy>
 		<echo message="Build of ${ant.project.name} Complete${line.separator}" level="info"/>

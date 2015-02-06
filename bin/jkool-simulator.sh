@@ -3,4 +3,5 @@ origdir=`pwd`
 cd `dirname $0`
 jardir=`pwd`
 cd ${origdir}
-java -Dlog4j.configuration=file:../log4j.properties  -Dtnt4j.config=../tnt4j-simulator.properties -jar ${jardir}/jkool-jesl.jar $*
+options=-cp ${jardir}/../lib -Dlog4j.configuration=file:${jardir}/../config/log4j-simulator.properties -Dtnt4j.config=${jardir}/../config/tnt4j-simulator.properties -Dtnt4j.token.repository=${jardir}/../tnt4j-tokens.properties
+java ${options} -jar ${jardir}/../jkool-jesl.jar $*

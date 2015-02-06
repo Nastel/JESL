@@ -68,7 +68,7 @@ public class JKCloudConnection {
 
 		try {
 			if (jkHandle != null)
-				jkHandle.sendMessage(msg, false);
+				jkHandle.send(msg, false);
 			else
 				throw new IOException("Connection not opened");
 		}

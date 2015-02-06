@@ -26,8 +26,8 @@ public class AuthUtils {
 	public static void authenticate(JKStream client, String token) throws SecurityException {
 		String respStr = null;
 		try {
-			client.sendMessage(new AccessRequest(token).generateMsg(), true);
-			respStr = client.getReply();
+			client.send(new AccessRequest(token).generateMsg(), true);
+			respStr = client.read();
 		}
 		catch (Throwable e) {
 			throw new SecurityException("Failed to validate access to '" + client.getHost() + "' with token '" + token + "'", e);

@@ -48,7 +48,7 @@ import com.nastel.jkool.tnt4j.sink.DefaultEventSinkFactory;
 import com.nastel.jkool.tnt4j.sink.EventSink;
 
 /**
- * Establishes an HTTP[S] connection to the specified server based on given URL.
+ * This class provides HTTP[S] connection to the specified JESK server based on given URL.
  *
  * @version $Revision: 3 $
  */
@@ -72,10 +72,26 @@ public class HttpClient implements HttpStream {
 	protected SchemeRegistry				schemeReg;
 	protected boolean						secure = false;
 
+	/**
+	 * Create JESL HTTP[S} client stream with given attributes
+	 * 
+	 * @param urlStr connection string to specified JESL server
+	 * @param logger event sink used for logging, null if none
+	 * 
+	 */
 	public HttpClient(String urlStr, EventSink logger) throws URISyntaxException {
 		this(urlStr, null, 0, logger);
 	}
 
+	/**
+	 * Create JESL HTTP[S} client stream with given attributes
+	 * 
+	 * @param urlStr connection string to specified JESL server
+	 * @param proxyHost proxy host name if any, null if none
+	 * @param proxyPort proxy port number if any, 0 of none
+	 * @param logger event sink used for logging, null if none
+	 * 
+	 */
 	public HttpClient(String urlStr, String proxyHost, int proxyPort, EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
@@ -159,7 +175,6 @@ public class HttpClient implements HttpStream {
 		}
 	}
 
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -173,6 +188,9 @@ public class HttpClient implements HttpStream {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void sendRequest(HttpRequest request, boolean wantResponse) throws IOException {
 		if (!(request instanceof org.apache.http.HttpRequest))
@@ -195,6 +213,9 @@ public class HttpClient implements HttpStream {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws IOException {
 		if (StringUtils.isEmpty(reqUri))
@@ -221,17 +242,9 @@ public class HttpClient implements HttpStream {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void sendMessage(String msg, boolean wantResponse) throws IOException {
+	public void send(String msg, boolean wantResponse) throws IOException {
 		String contentType = (msg != null && msg.startsWith("<?xml") ? "text/xml" : "text/plain");
 		sendRequest("POST", uriPath, contentType, msg, wantResponse);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void sendRequest(String msg, boolean wantResponse) throws IOException {
-		sendMessage(msg, wantResponse);
 	}
 
 	/**
@@ -257,7 +270,7 @@ public class HttpClient implements HttpStream {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized String getReply() throws IOException {
+	public synchronized String read() throws IOException {
 		HttpResponse resp = null;
 		resp = getResponse();
 		String content = resp.getContentString();
@@ -266,7 +279,6 @@ public class HttpClient implements HttpStream {
 			logger.log(OpLevel.TRACE, "Received response from {0}: {1}", httpHost, content);
 
 		int status = resp.getStatus();
-
 		if (status >= 400) {
 			if (AccessResponse.isAccessResponse(content)) {
 				close();
@@ -277,7 +289,7 @@ public class HttpClient implements HttpStream {
 				throw new SecurityException(reason);
 			}
 			else {
-				throw new RequestFailedException(String.valueOf(status), content);
+				throw new HttpRequestException(status, content);
 			}
 		}
 		return content;
@@ -376,6 +388,9 @@ public class HttpClient implements HttpStream {
 		return new HttpResponseImpl(new ProtocolVersion(protocol, major, minor), status);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public URI getURI() {
 	    return uri;

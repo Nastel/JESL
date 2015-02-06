@@ -162,7 +162,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 		if (StringUtils.isEmpty(msg))
 			return;
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
-		jkHandle.sendMessage(lineMsg, false);
+		jkHandle.send(lineMsg, false);
 	}
 
 	@Override

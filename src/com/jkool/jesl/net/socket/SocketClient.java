@@ -37,9 +37,10 @@ import com.nastel.jkool.tnt4j.sink.DefaultEventSinkFactory;
 import com.nastel.jkool.tnt4j.sink.EventSink;
 
 /**
+ * This class provides TCP/SSL connection to the specified JESK server based on given URL.
+ * tcp[s]://host:port
  *
- *
- * @version $Revision: 2 $
+ * @version $Revision: 3 $
  */
 public class SocketClient implements JKStream {
 	protected EventSink logger;
@@ -55,6 +56,15 @@ public class SocketClient implements JKStream {
 	protected BufferedReader	in;
 
 
+	/**
+	 * Create JESL HTTP[S} client stream with given attributes
+	 * 
+	 * @param host JESL host server
+	 * @param port JESL host port number
+	 * @param secure use SSL if secure, standard sockets if false
+	 * @param logger event sink used for logging, null if none
+	 * 
+	 */
 	public SocketClient(String host, int port, boolean secure, EventSink logger) {
 		this.host   = host;
 		this.port   = port;
@@ -62,6 +72,17 @@ public class SocketClient implements JKStream {
 		this.logger = (logger != null ? logger : DefaultEventSinkFactory.defaultEventSink(SocketClient.class));
 	}
 
+	/**
+	 * Create JESL HTTP[S} client stream with given attributes
+	 * 
+	 * @param host JESL host server
+	 * @param port JESL host port number
+	 * @param secure use SSL if secure, standard sockets if false
+	 * @param proxyHost proxy host name if any, null if none
+	 * @param proxyPort proxy port number if any, 0 of none
+	 * @param logger event sink used for logging, null if none
+	 * 
+	 */
 	public SocketClient(String host, int port, boolean secure, String proxyHost, int proxyPort, EventSink logger) {
 		this(host, port, secure, logger);
 		if (!StringUtils.isEmpty(proxyHost)) {
@@ -70,8 +91,12 @@ public class SocketClient implements JKStream {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void connect() throws IOException {
+		if (isConnected()) return;
 		if (secure) {
 			SocketFactory socketFactory = SSLSocketFactory.getDefault();
 			socket = socketFactory.createSocket(host, port);
@@ -80,8 +105,12 @@ public class SocketClient implements JKStream {
 			socket = new Socket(host, port);
 		}
 		out = new DataOutputStream(socket.getOutputStream());
+		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void connect(String token) throws IOException {
 		connect();
@@ -92,8 +121,11 @@ public class SocketClient implements JKStream {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public synchronized void sendMessage(String msg, boolean wantResponse) throws IOException {
+	public synchronized void send(String msg, boolean wantResponse) throws IOException {
 		if (wantResponse)
 			throw new UnsupportedOperationException("Responses are not supported for TCP connections");
 		
@@ -103,11 +135,9 @@ public class SocketClient implements JKStream {
 		out.flush();
 	}
 
-	@Override
-	public void sendRequest(String msg, boolean wantResponse) throws IOException {
-		sendMessage(msg, wantResponse);
-	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void close() {
 		try {
@@ -123,55 +153,78 @@ public class SocketClient implements JKStream {
 		socket = null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getHost() {
 		return host;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int getPort() {
 		return port;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isSecure() {
 		return secure;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getProxyHost() {
 		return (proxyAddr != null ? proxyAddr.getHostName() : null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int getProxyPort() {
 		return (proxyAddr != null ? proxyAddr.getPort() : 0);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isConnected() {
 		return (socket != null && out != null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public String getReply() throws IOException {
-		if (socket == null)
-			connect();
-
-		if (in == null)
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	public String read() throws IOException {
+		if (socket == null) connect();
 		return in.readLine();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		return "tcp" + (isSecure() ? "s" : "") + "://" + host + ":" + port;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public URI getURI() { 
 		try {
-			return new URI("tcp://" + host + ":" + port);
+			return new URI("tcp" + (isSecure() ? "s" : "") + "://" + host + ":" + port);
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}

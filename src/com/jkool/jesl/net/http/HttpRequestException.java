@@ -22,26 +22,26 @@ package com.jkool.jesl.net.http;
 import java.io.IOException;
 
 /**
- *
+ * This exception encapsulates HTTP errors, status codes.
  *
  * @version $Revision: 1 $
  */
-public class RequestFailedException extends IOException {
+public class HttpRequestException extends IOException {
 	private static final long serialVersionUID = 1827966640612146841L;
 
-	protected String status;
+	protected int status;
 
-	public RequestFailedException(String status, String message) {
+	public HttpRequestException(int status, String message) {
 		super(message);
 		this.status = status;
 	}
 
-	public RequestFailedException(String status, String message, Throwable cause) {
+	public HttpRequestException(int status, String message, Throwable cause) {
 		super(message, cause);
 		this.status = status;
 	}
 
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 

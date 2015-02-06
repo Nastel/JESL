@@ -18,7 +18,7 @@ package com.jkool.jesl.net.http;
 import java.io.IOException;
 
 /**
- *
+ * This interface defines JESL HTTP message. 
  *
  * @version $Revision: 1 $
  */

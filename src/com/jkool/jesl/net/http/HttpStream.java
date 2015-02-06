@@ -20,7 +20,10 @@ import java.io.IOException;
 import com.jkool.jesl.net.JKStream;
 
 /**
- *
+ * This interface defines JESL HTTP based Stream based on
+ * <code>JKStream</code>
+ * 
+ * @see JKStream
  *
  * @version $Revision: 1 $
  */

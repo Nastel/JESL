@@ -16,7 +16,7 @@
 package com.jkool.jesl.net.http;
 
 /**
- *
+ * This interface defines JESL HTTP Response. 
  *
  * @version $Revision: 1 $
  */

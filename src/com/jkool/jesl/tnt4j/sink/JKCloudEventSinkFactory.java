@@ -35,9 +35,7 @@ import com.nastel.jkool.tnt4j.sink.EventSinkFactory;
  * format log messages.</p>
  *
  *
- * @see EventSink
- * @see EventFormatter
- * @see JSONFormatter
+ * @see JKCloudEventSink
  *
  * @version $Revision: 6 $
  *

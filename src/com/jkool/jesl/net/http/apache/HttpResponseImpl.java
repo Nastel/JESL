@@ -26,7 +26,6 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.params.HttpParams;
-import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 
 import com.jkool.jesl.net.http.HttpResponse;
 
@@ -57,17 +56,16 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setStatus(HttpResponseStatus status) {
-		getRawResp().setStatusCode(status.getCode());
-		getRawResp().setReasonPhrase(status.getReasonPhrase());
+	public void setStatus(int status) {
+		getRawResp().setStatusCode(status);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public HttpResponseStatus getStatus() {
-		return HttpResponseStatus.valueOf(getRawResp().getStatusLine().getStatusCode());
+	public int getStatus() {
+		return getRawResp().getStatusLine().getStatusCode();
 	}
 
 	/**

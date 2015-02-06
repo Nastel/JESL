@@ -30,6 +30,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.jkool.jesl.net.JKStream;
 import com.jkool.jesl.net.security.AuthUtils;
 import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.sink.DefaultEventSinkFactory;

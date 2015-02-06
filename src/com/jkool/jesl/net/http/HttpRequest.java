@@ -15,8 +15,6 @@
  */
 package com.jkool.jesl.net.http;
 
-import org.jboss.netty.handler.codec.http.HttpMethod;
-
 
 /**
  *
@@ -24,6 +22,6 @@ import org.jboss.netty.handler.codec.http.HttpMethod;
  * @version $Revision: 1 $
  */
 public interface HttpRequest extends HttpMessage {
-	HttpMethod	getMethod();
-	String		getUri();
+	String	getMethod();
+	String	getUri();
 }

@@ -21,7 +21,6 @@ import java.net.URISyntaxException;
 
 import com.jkool.jesl.net.http.HttpClient;
 import com.jkool.jesl.net.socket.SocketClient;
-import com.jkool.jesl.net.socket.JKStream;
 import com.nastel.jkool.tnt4j.sink.EventSink;
 
 public class JKClient implements JKStream {

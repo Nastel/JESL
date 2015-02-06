@@ -17,11 +17,7 @@ package com.jkool.jesl.net.http;
 
 import java.io.IOException;
 
-import org.jboss.netty.handler.codec.http.HttpMethod;
-import org.jboss.netty.handler.codec.http.HttpResponseStatus;
-import org.jboss.netty.handler.codec.http.HttpVersion;
-
-import com.jkool.jesl.net.socket.JKStream;
+import com.jkool.jesl.net.JKStream;
 
 /**
  *
@@ -33,6 +29,6 @@ public interface HttpStream extends JKStream {
 	void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws IOException;
 
 	HttpResponse getResponse() throws IOException;
-	HttpRequest  newRequest(HttpMethod method, String uri);
-	HttpResponse newResponse(HttpVersion version, HttpResponseStatus status);
+	HttpRequest  newRequest(String method, String uri);
+	HttpResponse newResponse(String protocol, int major, int minor, int status);
 }

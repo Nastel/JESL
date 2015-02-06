@@ -27,7 +27,6 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.RequestLine;
 import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.apache.http.params.HttpParams;
-import org.jboss.netty.handler.codec.http.HttpMethod;
 
 import com.jkool.jesl.net.http.HttpRequest;
 
@@ -55,8 +54,8 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	///////////////////// HttpRequest methods
 
 	@Override
-	public HttpMethod getMethod() {
-		return HttpMethod.valueOf(getRawReq().getRequestLine().getMethod());
+	public String getMethod() {
+		return getRawReq().getRequestLine().getMethod();
 	}
 
 	@Override

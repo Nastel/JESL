@@ -37,9 +37,6 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.conn.BasicClientConnectionManager;
 import org.apache.http.params.BasicHttpParams;
-import org.jboss.netty.handler.codec.http.HttpMethod;
-import org.jboss.netty.handler.codec.http.HttpResponseStatus;
-import org.jboss.netty.handler.codec.http.HttpVersion;
 
 import com.jkool.jesl.net.http.apache.HttpRequestImpl;
 import com.jkool.jesl.net.http.apache.HttpResponseImpl;
@@ -203,7 +200,7 @@ public class HttpClient implements HttpStream {
 		if (StringUtils.isEmpty(reqUri))
 			reqUri = "/";
 
-		HttpRequest req = newRequest(HttpMethod.valueOf(method), reqUri);
+		HttpRequest req = newRequest(method, reqUri);
 		if (!StringUtils.isEmpty(content))
 			req.setContent(contentType, content, "UTF-8");
 
@@ -268,9 +265,9 @@ public class HttpClient implements HttpStream {
 		if (logger.isSet(OpLevel.TRACE))
 			logger.log(OpLevel.TRACE, "Received response from {0}: {1}", httpHost, content);
 
-		HttpResponseStatus status = resp.getStatus();
+		int status = resp.getStatus();
 
-		if (status.getCode() >= 400) {
+		if (status >= 400) {
 			if (AccessResponse.isAccessResponse(content)) {
 				close();
 				AccessResponse accessResp = AccessResponse.parseMsg(content);
@@ -280,7 +277,7 @@ public class HttpClient implements HttpStream {
 				throw new SecurityException(reason);
 			}
 			else {
-				throw new RequestFailedException(status.toString(), content);
+				throw new RequestFailedException(String.valueOf(status), content);
 			}
 		}
 		return content;
@@ -367,16 +364,16 @@ public class HttpClient implements HttpStream {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public HttpRequest newRequest(HttpMethod method, String uri) {
-		return new HttpRequestImpl(method.getName(), uri);
+	public HttpRequest newRequest(String method, String uri) {
+		return new HttpRequestImpl(method, uri);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public HttpResponse newResponse(HttpVersion version, HttpResponseStatus status) {
-		return new HttpResponseImpl(new ProtocolVersion(version.getProtocolName(), version.getMajorVersion(), version.getMinorVersion()), status.getCode());
+	public HttpResponse newResponse(String protocol, int major, int minor, int status) {
+		return new HttpResponseImpl(new ProtocolVersion(protocol, major, minor), status);
 	}
 
 	@Override

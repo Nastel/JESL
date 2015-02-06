@@ -15,15 +15,12 @@
  */
 package com.jkool.jesl.net.http;
 
-import org.jboss.netty.handler.codec.http.HttpResponseStatus;
-
-
 /**
  *
  *
  * @version $Revision: 1 $
  */
 public interface HttpResponse extends HttpMessage {
-	void setStatus(HttpResponseStatus status);
-	HttpResponseStatus	getStatus();
+	void setStatus(int status);
+	int	getStatus();
 }

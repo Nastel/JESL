@@ -15,7 +15,7 @@
  */
 package com.jkool.jesl.net.security;
 
-import com.jkool.jesl.net.socket.JKStream;
+import com.jkool.jesl.net.JKStream;
 
 /**
  *

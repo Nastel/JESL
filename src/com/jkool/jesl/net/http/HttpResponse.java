@@ -21,6 +21,17 @@ package com.jkool.jesl.net.http;
  * @version $Revision: 1 $
  */
 public interface HttpResponse extends HttpMessage {
+	/**
+	 * Set HTTP status code
+	 * 
+	 * @param status HTTP status code
+	 */
 	void setStatus(int status);
+	
+	/**
+	 * Get HTTP status code
+	 * 
+	 * @return HTTP status code
+	 */
 	int	getStatus();
 }

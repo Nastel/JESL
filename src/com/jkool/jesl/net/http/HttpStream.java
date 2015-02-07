@@ -28,10 +28,50 @@ import com.jkool.jesl.net.JKStream;
  * @version $Revision: 1 $
  */
 public interface HttpStream extends JKStream {
+	/**
+	 * Send HTTP request
+	 * 
+	 * @param request HTTP request message
+	 * @param wantResponse block to wait for response from server
+	 */
 	void sendRequest(HttpRequest request, boolean wantResponse) throws IOException;
+
+	/**
+	 * Send HTTP request
+	 * 
+	 * @param method HTTP method
+	 * @param reqUri request URI
+	 * @param contentType content type
+	 * @param content content message to be sent
+	 * @param wantResponse block to wait for response from server
+	 */
 	void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws IOException;
 
+	/**
+	 * Get/receive HTTP response
+	 * 
+	 * @return HTTP response object
+	 */
 	HttpResponse getResponse() throws IOException;
+	
+	/**
+	 * Create a new response object with 
+	 * a given method and URI
+	 * 
+	 * @param method HTTP method
+	 * @param uri associated with HTTP request
+	 * @return HTTP response object
+	 */
 	HttpRequest  newRequest(String method, String uri);
+
+	/**
+	 * Create a new response object with 
+	 * 
+	 * @param protocol HTTP protocol
+	 * @param major protocol major version
+	 * @param minor protocol minor version
+	 * @param status HTTP status code
+	 * @return HTTP response object
+	 */
 	HttpResponse newResponse(String protocol, int major, int minor, int status);
 }

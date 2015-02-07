@@ -41,6 +41,11 @@ public class HttpRequestException extends IOException {
 		this.status = status;
 	}
 
+	/**
+	 * Get HTTP status code
+	 * 
+	 * @return HTTP status code
+	 */
 	public int getStatus() {
 		return status;
 	}

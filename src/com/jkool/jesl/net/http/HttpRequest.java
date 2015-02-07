@@ -22,6 +22,17 @@ package com.jkool.jesl.net.http;
  * @version $Revision: 1 $
  */
 public interface HttpRequest extends HttpMessage {
+	/**
+	 * Get HTTP method
+	 * 
+	 * @return HTTP method
+	 */
 	String	getMethod();
+	
+	/**
+	 * Get URI
+	 * 
+	 * @return HTTP URI
+	 */
 	String	getUri();
 }

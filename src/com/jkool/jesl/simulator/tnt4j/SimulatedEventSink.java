@@ -32,7 +32,7 @@ import com.nastel.jkool.tnt4j.tracker.TrackingActivity;
 import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
 
 /**
- *
+ * JESL event sink implements event sink simulation used by JESL Simulator.
  *
  * @version $Revision $
  */

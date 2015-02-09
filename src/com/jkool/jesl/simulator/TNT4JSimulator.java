@@ -44,7 +44,7 @@ import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.core.UsecTimestamp;
 
 /**
- * jKool TNT4J Activity Simulator
+ * JESL Activity Simulator which uses TNT4J to simulate application activities and transactions.
  * This will simulate activities by loading activity definitions from an XML file.
  *
  * @version $Revision: $

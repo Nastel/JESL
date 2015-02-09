@@ -27,11 +27,17 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.util.EntityUtils;
 
 /**
- *
+ * JESL HTTP message utilities class
  *
  * @version $Revision: 1 $
  */
 public class HttpMessageUtils {
+	/**
+	 * Obtain entity object which is sent/received over HTTP.
+	 * 
+	 * @param message HTTP message
+	 * @return HTTP entity object
+	 */
 	protected static HttpEntity getEntity(HttpMessage message) {
 		if (message instanceof HttpEntityEnclosingRequest)
 			return ((HttpEntityEnclosingRequest)message).getEntity();
@@ -40,6 +46,12 @@ public class HttpMessageUtils {
 		return null;
 	}
 
+	/**
+	 * Set entity object which are sent/received over HTTP.
+	 * 
+	 * @param message HTTP message
+	 * @param entity HTTP entity object
+	 */
 	protected static void setEntity(HttpMessage message, HttpEntity entity) {
 		if (message instanceof HttpEntityEnclosingRequest)
 			((HttpEntityEnclosingRequest)message).setEntity(entity);
@@ -47,10 +59,22 @@ public class HttpMessageUtils {
 			((HttpResponse)message).setEntity(entity);
 	}
 
+	/**
+	 * True if HTTP message has content
+	 * 
+	 * @param message HTTP message
+	 * @return true if HTTP message has content, false otherwise
+	 */
 	public static boolean hasContent(HttpMessage message) {
 		return (getEntity(message) != null);
 	}
 
+	/**
+	 * Obtain content from HTTP message
+	 * 
+	 * @param message HTTP message
+	 * @return bytes associated with HTTP content
+	 */
 	public static byte[] getContentBytes(HttpMessage message) throws IOException {
 		HttpEntity entity = getEntity(message);
 		if (entity == null)
@@ -58,6 +82,12 @@ public class HttpMessageUtils {
 		return EntityUtils.toByteArray(entity);
 	}
 
+	/**
+	 * Obtain content from HTTP message
+	 * 
+	 * @param message HTTP message
+	 * @return string associated with HTTP content
+	 */
 	public static String getContentString(HttpMessage message) throws IOException {
 		HttpEntity entity = getEntity(message);
 		if (entity == null)
@@ -65,6 +95,13 @@ public class HttpMessageUtils {
 		return EntityUtils.toString(entity);
 	}
 
+	/**
+	 * Obtain content from HTTP message
+	 * 
+	 * @param message HTTP message
+	 * @param charset target character set
+	 * @return string associated with HTTP content in the specified character set
+	 */
 	public static String getContentString(HttpMessage message, String charset) throws IOException {
 		HttpEntity entity = getEntity(message);
 		if (entity == null)
@@ -72,6 +109,14 @@ public class HttpMessageUtils {
 		return EntityUtils.toString(entity, charset);
 	}
 
+	/**
+	 * Set HTTP message content
+	 * 
+	 * @param message HTTP message
+	 * @param contentType contentType
+	 * @param content content bytes
+	 * @param contentEncoding content encoding
+	 */
 	public static void setContent(HttpMessage message, String contentType, byte[] content, String contentEncoding) throws IOException {
 		ByteArrayEntity httpContent = new ByteArrayEntity(content);
 		if (!StringUtils.isEmpty(contentEncoding))
@@ -82,10 +127,25 @@ public class HttpMessageUtils {
 		setEntity(message, httpContent);
 	}
 
+	/**
+	 * Set HTTP message content
+	 * 
+	 * @param message HTTP message
+	 * @param contentType contentType
+	 * @param content content string
+	 */
 	public static void setContent(HttpMessage message, String contentType, String content) throws IOException {
 		setContent(message, contentType, content.getBytes(), null);
 	}
 
+	/**
+	 * Set HTTP message content
+	 * 
+	 * @param message HTTP message
+	 * @param contentType contentType
+	 * @param content content string
+	 * @param charset character set of the content string
+	 */
 	public static void setContent(HttpMessage message, String contentType, String content, String charset) throws IOException {
 		setContent(message, contentType + "; charset=" + charset, content.getBytes(charset), charset);
 	}

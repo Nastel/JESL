@@ -24,6 +24,12 @@ import com.jkool.jesl.net.JKClient;
 import com.nastel.jkool.tnt4j.TrackingLogger;
 import com.nastel.jkool.tnt4j.sink.EventSink;
 
+/**
+ * JESL Cloud connection class that encapsulates streaming to jKool Cloud servers
+ * using HTTP[S] or TCP[S] protocols.
+ *
+ * @version $Revision: $
+ */
 public class JKCloudConnection {
 	private String gwUrl;
 	private String accessToken;

@@ -22,6 +22,12 @@ import com.nastel.jkool.tnt4j.format.EventFormatter;
 import com.nastel.jkool.tnt4j.sink.EventSink;
 import com.nastel.jkool.tnt4j.sink.EventSinkFactory;
 
+/**
+ * JESL event sink factory implements event sink factory simulation used by JESL Simulator.
+ *
+ * @see SimulatedEventSink
+ * @version $Revision $
+ */
 public class SimulatedEventSinkFactory implements EventSinkFactory {
 
 	public SimulatedEventSinkFactory() {

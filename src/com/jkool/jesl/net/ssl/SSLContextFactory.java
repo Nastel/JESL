@@ -37,17 +37,32 @@ public class SSLContextFactory {
 	protected SSLContext clientContext = null;
 	protected SSLContext dfltContext   = null;
 
-    public SSLContextFactory() throws SecurityException {
+	/**
+	 * Create default SSL context factory
+	 * 
+	 */
+	public SSLContextFactory() throws SecurityException {
     	init();
     }
 
-    public SSLContextFactory(String keyStoreFileName, String keyStorePassword, String keyPassword) throws SecurityException {
+	/**
+	 * Create SSL context factory with given attributes
+	 * 
+	 * @param keyStoreFileName key store file name
+	 * @param keyStorePassword key store password
+	 * @param keyPassword key password
+	 */
+   public SSLContextFactory(String keyStoreFileName, String keyStorePassword, String keyPassword) throws SecurityException {
     	if (keyStoreFileName == null)
     		init();
     	else
     		init(keyStoreFileName, keyStorePassword, keyPassword);
     }
 
+	/**
+	 * Initialize default SSL context
+	 * 
+	 */
     protected void init() throws SecurityException {
         try {
         	dfltContext = SSLContext.getDefault();
@@ -57,6 +72,13 @@ public class SSLContextFactory {
         }
     }
 
+	/**
+	 * Initialize SSL context factory with given attributes
+	 * 
+	 * @param keyStoreFileName key store file name
+	 * @param keyStorePassword key store password
+	 * @param keyPassword key password
+	 */
 	protected void init(String keyStoreFileName, String keyStorePassword, String keyPassword) throws SecurityException {
         String algorithm = Security.getProperty("ssl.KeyManagerFactory.algorithm");
         if (algorithm == null)
@@ -108,6 +130,11 @@ public class SSLContextFactory {
         }
     }
 
+	/**
+	 * Obtain <code>SSLContext</code> instance
+	 * 
+	 * @param isClient is client
+	 */
 	public SSLContext getSslContext(boolean isClient) {
 		if (dfltContext != null)
 			return dfltContext;

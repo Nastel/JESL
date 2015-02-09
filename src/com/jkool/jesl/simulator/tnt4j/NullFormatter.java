@@ -20,7 +20,8 @@ import com.nastel.jkool.tnt4j.tracker.TrackingActivity;
 import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
 
 /**
- *
+ * This class implements TNT4J event formatter that produced NULL output (nothing)
+ * for tracking activities and default for tracking events.
  *
  * @version $Revision $
  */

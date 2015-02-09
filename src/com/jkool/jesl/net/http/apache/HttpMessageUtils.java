@@ -27,9 +27,11 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.util.EntityUtils;
 
 /**
+<<<<<<< HEAD
  * JESL HTTP common utilities
 =======
  * JESL HTTP message utilities class
+>>>>>>> origin/master
  *
  * @version $Revision: 1 $
  */

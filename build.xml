@@ -14,6 +14,7 @@
 	<property name="src"       value="src"/>
 	<property name="lib"       value="lib"/>
 	<property name="config"    value="config"/>
+	<property name="sims"      value="sims"/>
 	<property name="scripts"   value="bin"/>
 	<property name="classes"   value="classes"/>
 	<property name="doc"       value="${project-build}/doc"/>
@@ -92,6 +93,11 @@
 		<copy todir="${project-build}/config">
 			<fileset dir="${config}">
 				<include name="**/*.properties"/>
+			</fileset>
+		</copy>
+		<copy todir="${project-build}/sims">
+			<fileset dir="${sims}">
+				<include name="**/*.xml"/>
 			</fileset>
 		</copy>
 		<copy todir="${project-build}/bin">

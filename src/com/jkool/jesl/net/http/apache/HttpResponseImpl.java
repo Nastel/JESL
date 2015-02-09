@@ -37,15 +37,31 @@ import com.jkool.jesl.net.http.HttpResponse;
 public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse {
 	protected org.apache.http.HttpResponse response;
 
+	/**
+	 * Create HTTP response object
+	 * 
+	 * @param response apache HTTP response
+	 */
 	public HttpResponseImpl(org.apache.http.HttpResponse response) {
 		super(response.getStatusLine());
 		this.response = response;
 	}
 
+	/**
+	 * Create HTTP response object
+	 * 
+	 * @param version protocol version
+	 * @param statusCode HTTP status code
+	 */
 	public HttpResponseImpl(ProtocolVersion version, int statusCode) {
 		super(version, statusCode, null);
 	}
 
+	/**
+	 * Obtain apache response implementation object instance
+	 *
+	 * @return apache response implementation object instance
+	 */
 	protected org.apache.http.HttpResponse getRawResp() {
 		return (response != null ? response : this);
 	}
@@ -410,16 +426,13 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();
-
 		str.append(response != null ? response.toString() : super.toString());
-
 		try {
 			String content = getContentString();
 			if (!StringUtils.isEmpty(content))
 				str.append("\n").append(content);
 		}
 		catch (Exception e) {}
-
 		return str.toString();
 	}
 }

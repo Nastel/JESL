@@ -31,44 +31,72 @@ import org.apache.http.params.HttpParams;
 import com.jkool.jesl.net.http.HttpRequest;
 
 /**
- *
+ * JESL HTTP Request implementation class based on Apache HTTP Core package.
  *
  * @version $Revision: 1 $
  */
 public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements HttpRequest {
 	protected HttpEntityEnclosingRequest request;
 
+	/**
+	 * Create HTTP request object
+	 * 
+	 * @param request apache HTTP request
+	 */
 	public HttpRequestImpl(HttpEntityEnclosingRequest request) {
 		super(request.getRequestLine());
 		this.request = request;
 	}
 
+	/**
+	 * Create HTTP request object
+	 * 
+	 * @param method HTTP method
+	 * @param uri URI
+	 */
 	public HttpRequestImpl(String method, String uri) {
 		super(method, uri, HttpVersion.HTTP_1_1);
 	}
 
+	/**
+	 * Obtain apache request implementation object instance
+	 *
+	 * @return apache request implementation object instance
+	 */
 	protected HttpEntityEnclosingRequest getRawReq() {
 		return (request != null ? request : this);
 	}
 
 	///////////////////// HttpRequest methods
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getMethod() {
 		return getRawReq().getRequestLine().getMethod();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getUri() {
 		return getRawReq().getRequestLine().getUri();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getHeader(String name) {
 		Header header = getRawReq().getFirstHeader(name);
 		return (header == null ? null : header.getValue());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addHeader(String name, String value) {
 		if (request != null)
@@ -77,6 +105,9 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 			super.addHeader(name, value);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setHeader(String name, String value) {
 		if (request != null)
@@ -85,41 +116,65 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 			super.setHeader(name, value);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void removeHeader(String name) {
 		getRawReq().removeHeaders(name);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean hasContent() {
 		return HttpMessageUtils.hasContent(getRawReq());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public byte[] getContentBytes() throws IOException {
 		return HttpMessageUtils.getContentBytes(getRawReq());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getContentString() throws IOException {
 		return HttpMessageUtils.getContentString(getRawReq());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getContentString(String charset) throws IOException {
 		return HttpMessageUtils.getContentString(getRawReq(), charset);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setContent(String contentType, byte[] content, String contentEncoding) throws IOException {
 		HttpMessageUtils.setContent(getRawReq(), contentType, content, contentEncoding);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setContent(String contentType, String content) throws IOException {
 		HttpMessageUtils.setContent(getRawReq(), contentType, content);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setContent(String contentType, String content, String charset) throws IOException {
 		HttpMessageUtils.setContent(getRawReq(), contentType, content, charset);
@@ -127,31 +182,49 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 
 	///////////////////// BasicHttpEntityEnclosingRequest methods
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ProtocolVersion getProtocolVersion() {
 		return (request != null ? request.getProtocolVersion() : super.getProtocolVersion());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public RequestLine getRequestLine() {
 		return (request != null ? request.getRequestLine() : super.getRequestLine());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Header getFirstHeader(String name) {
 		return (request != null ? request.getFirstHeader(name) : super.getFirstHeader(name));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Header getLastHeader(String name) {
 		return (request != null ? request.getLastHeader(name) : super.getLastHeader(name));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Header[] getAllHeaders() {
 		return (request != null ? request.getAllHeaders() : super.getAllHeaders());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addHeader(Header header) {
 		if (request != null)
@@ -160,6 +233,9 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 			super.addHeader(header);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setHeader(Header header) {
 		if (request != null)
@@ -168,6 +244,9 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 			super.setHeader(header);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setHeaders(Header[] headers) {
 		if (request != null)
@@ -176,6 +255,9 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 			super.setHeaders(headers);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void removeHeader(Header header) {
 		if (request != null)
@@ -184,26 +266,41 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 			super.removeHeader(header);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public HeaderIterator headerIterator() {
 		return (request != null ? request.headerIterator() : super.headerIterator());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public HeaderIterator headerIterator(String name) {
 		return (request != null ? request.headerIterator(name) : super.headerIterator(name));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean containsHeader(String name) {
 		return (request != null ? request.containsHeader(name) : super.containsHeader(name));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Header[] getHeaders(String name) {
 		return (request != null ? request.getHeaders(name) : super.getHeaders(name));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void removeHeaders(String name) {
 		if (request != null)
@@ -212,11 +309,17 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 			super.removeHeaders(name);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public HttpParams getParams() {
 		return (request != null ? request.getParams() : super.getParams());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setParams(HttpParams params) {
 		if (request != null)
@@ -225,11 +328,17 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 			super.setParams(params);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public HttpEntity getEntity() {
 		return (request != null ? request.getEntity() : super.getEntity());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setEntity(HttpEntity entity) {
 		if (request != null)
@@ -238,11 +347,17 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 			super.setEntity(entity);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean expectContinue() {
 		return (request != null ? request.expectContinue() : super.expectContinue());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();

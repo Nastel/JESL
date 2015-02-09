@@ -74,61 +74,97 @@ public class JKClient implements JKStream {
 	    }
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public String getHost() {
 	    return uri.getHost();
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public int getPort() {
 	    return uri.getPort();
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public boolean isSecure() {
 	    return secure;
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public String getProxyHost() {
 	    return handle.getProxyHost();
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public int getProxyPort() {
 	    return handle.getProxyPort();
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public void connect() throws IOException {
 		handle.connect();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public void connect(String token) throws IOException {
 		handle.connect(token);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public boolean isConnected() {
 	    return handle.isConnected();
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public void send(String msg, boolean wantResponse) throws IOException {
 		handle.send(msg, wantResponse);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public String read() throws IOException {
 	    return handle.read();
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public void close() {
 		handle.close();
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
     public URI getURI() {
 	    return handle.getURI();

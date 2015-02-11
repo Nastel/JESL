@@ -1,4 +1,11 @@
 #JESL - jKool Event Streaming Library
+JESL is library that allows application developers stream time-series data to jKool Cloud.
+To stream data to jKool Cloud your application must:
+	
+	1. Use TNT4J, or log4J+TNT4JAppender to log events, activities, metrics
+	2. JESL Cloud Event Sink implementation (contained in this project)
+	3. Configure your application for streaming to jKool Cloud
+	
 JESL consists of the following main components:
 
 	1. TNT4J streaming library (https://github.com/Nastel/TNT4J)

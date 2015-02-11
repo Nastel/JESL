@@ -144,3 +144,18 @@ JESL Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSink):
 ```
 <b>NOTE:</b> You will need to provide your actual API access token in (`event.sink.factory.EventSinkFactory.Token`).
 
+# Project Dependencies
+JESL requires the following:
+* JDK 1.6+
+* TNT4J (https://github.com/Nastel/TNT4J)
+* Apache HTTP Client 4.2.5 (http://hc.apache.org/httpcomponents-client-ga/)
+* Apache HTTP Core 4.3.4 (http://hc.apache.org/httpcomponents-client-ga/)
+
+# Related Projects
+* TrackingFilter (http://nastel.github.io/TrackingFilter/)
+* PingJMX (http://nastel.github.io/PingJMX/)
+
+# Available Integrations
+* TNT4J (https://github.com/Nastel/TNT4J)
+* Log4J (http://logging.apache.org/log4j/1.2/)
+* jkoolcloud.com (https://www.jkoolcloud.com)

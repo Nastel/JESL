@@ -1,8 +1,11 @@
 #JESL - jKool Event Streaming Library
-JESL cosists of the following main components:
-* TNT4J streaming library (https://github.com/Nastel/TNT4J)
-* JESL Simulator -- allows streaming user simulated events, activities and metrics to jKool Cloud.
-* JESL Cloud Event Sink -- TNT4J Event Sink implementation that allows streaming of TNT4J events to jKool Cloud (`com.jkool.jesl.tnt4j.sink.JKCloudEventSink`)
+JESL consists of the following main components:
+
+	1. TNT4J streaming library (https://github.com/Nastel/TNT4J)
+	
+	2. JESL Simulator -- allows streaming user simulated events, activities and metrics to jKool Cloud.
+	
+	3. JESL Cloud Event Sink -- TNT4J Event Sink implementation to stream events to jKool Cloud
 
 ## JESL Simulator
 The JESL Simulator provides the ability to simulate tracking activities

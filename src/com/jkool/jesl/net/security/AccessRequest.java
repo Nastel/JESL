@@ -26,7 +26,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- *
+ * JESL access request implementation, which encapsulates JESL
+ * authentication request message.
  *
  * @version $Revision: 1 $
  */
@@ -38,14 +39,28 @@ public class AccessRequest {
 
 	private String	token;
 
+	/**
+	 * Create access request with a given access token
+	 * 
+	 * @param token access token
+	 */
 	public AccessRequest(String token) {
 		this.token = token;
 	}
 
+	/**
+	 * Get access token associated with this request
+	 * 
+	 * @return access token associated with this request
+	 */
 	public String getToken() {
 		return token;
 	}
 
+	/**
+	 * Generate access request message
+	 * 
+	 */
 	public String generateMsg() {
 		StringBuilder msg = new StringBuilder();
 
@@ -56,6 +71,12 @@ public class AccessRequest {
 		return msg.toString();
 	}
 
+	/**
+	 * Parse and create access request from a given string
+	 * 
+	 * @param msg access request message
+	 * @return access request object instance
+	 */
 	public static AccessRequest parseMsg(String msg) {
 		try {
 			SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
@@ -68,6 +89,12 @@ public class AccessRequest {
 		}
 	}
 
+	/**
+	 * Is a given string message an access request message
+	 * 
+	 * @param msg access request message
+	 * @return true if given string is an access request message, false otherwise
+	 */
 	public static boolean isAccessRequest(String msg) {
 		return (msg != null &&
 				msg.length() > ROOT_ELMT.length() &&

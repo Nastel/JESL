@@ -18,11 +18,20 @@ package com.jkool.jesl.net.security;
 import com.jkool.jesl.net.JKStream;
 
 /**
- *
+ * JESL Authentication Utility class used to authenticate with
+ * jKool servers.
  *
  * @version $Revision: 1 $
  */
 public class AuthUtils {
+	/**
+	 * Authenticate with jKool servers using client handle
+	 * and a given access token.
+	 * 
+	 * @param client jkool client handle encapsulating connection to jkool servers
+	 * @param token access token to be used for authentication
+	 *
+	 */
 	public static void authenticate(JKStream client, String token) throws SecurityException {
 		String respStr = null;
 		try {

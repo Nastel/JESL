@@ -26,7 +26,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- *
+ * JESL access response implementation, which encapsulates JESL
+ * authentication response message.
  *
  * @version $Revision: 1 $
  */
@@ -42,29 +43,61 @@ public class AccessResponse {
 	private boolean success;
 	private String  reason;
 
+	/**
+	 * Create access response with a given access token and status
+	 * 
+	 * @param token access token
+	 * @param success flag
+	 */
 	public AccessResponse(String token, boolean success) {
 		this.token   = token;
 		this.success = success;
 	}
 
+	/**
+	 * Create access response with a given access token and status
+	 * 
+	 * @param token access token
+	 * @param success flag
+	 * @param reason success flag reason
+	 */
 	public AccessResponse(String token, boolean success, String reason) {
 		this.token   = token;
 		this.success = success;
 		this.reason  = reason;
 	}
 
+	/**
+	 * Get user name associated with the response
+	 * 
+	 * @return user name associated with the response
+	 */
 	public String getUser() {
 		return token;
 	}
 
+	/**
+	 * Is access response signify success
+	 * 
+	 * @return true if success, false otherwise
+	 */
 	public boolean isSuccess() {
 		return success;
 	}
 
+	/**
+	 * Get success flag reason message
+	 * 
+	 * @return success flag reason message
+	 */
 	public String getReason() {
 		return reason;
 	}
 
+	/**
+	 * Generate access response message
+	 * 
+	 */
 	public String generateMsg() {
 		StringBuilder msg = new StringBuilder();
 
@@ -80,6 +113,12 @@ public class AccessResponse {
 		return msg.toString();
 	}
 
+	/**
+	 * Parse and create access response from a given string
+	 * 
+	 * @param msg access response message
+	 * @return access response object instance
+	 */
 	public static AccessResponse parseMsg(String msg) {
 		try {
 			SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
@@ -92,6 +131,12 @@ public class AccessResponse {
 		}
 	}
 
+	/**
+	 * Is a given string message an access response message
+	 * 
+	 * @param msg access response message
+	 * @return true if given string is an access response message, false otherwise
+	 */
 	public static boolean isAccessResponse(String msg) {
 		return (msg != null &&
 				msg.length() > ROOT_ELMT.length() &&

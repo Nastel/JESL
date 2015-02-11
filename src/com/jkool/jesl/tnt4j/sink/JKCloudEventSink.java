@@ -62,6 +62,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 * Create a socket event sink based on a given URL and formatter. Another sink can be associated with this sink
 	 * where all events are routed.
 	 *
+	 * @param name
+	 *            sink name
 	 * @param url
 	 *            http/https URL to jkool cloud service
 	 * @param frm
@@ -76,6 +78,22 @@ public class JKCloudEventSink extends AbstractEventSink {
 		logSink = sink;
 	}
 
+	/**
+	 * Create a socket event sink based on a given URL and formatter. Another sink can be associated with this sink
+	 * where all events are routed.
+	 *
+	 * @param name
+	 *            sink name
+	 * @param url
+	 *            http/https URL to jkool cloud service
+	 * @param token
+	 *            api access token
+	 * @param frm
+	 *            event formatter associated with this sink
+	 * @param sink
+	 *            piped sink where all events are piped
+	 *
+	 */
 	public JKCloudEventSink(String name, String url, String token, EventFormatter frm, EventSink sink) {
 		super(name, frm);
 		this.url = url;

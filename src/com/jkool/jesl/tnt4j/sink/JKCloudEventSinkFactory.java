@@ -31,8 +31,8 @@ import com.nastel.jkool.tnt4j.sink.EventSinkFactory;
 /**
  * <p>Concrete implementation of <code>EventSinkFactory</code> interface, which
  * creates instances of <code>EventSink</code>. This factory uses <code>JKCloudEventSink</code>
- * as the underlying sink provider provider and by default uses <code>JSONFormatter</code> to
- * format log messages.</p>
+ * as the underlying sink provider and by default uses <code>JSONFormatter</code> to
+ * format messages.</p>
  *
  *
  * @see JKCloudEventSink
@@ -47,16 +47,16 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	private EventSinkFactory eventSinkFactory = DefaultEventSinkFactory.getInstance();
 
 	/**
-	 * Create a gateway event sink factory.
+	 * Create a jKool Cloud Event Sink factory.
 	 *
 	 */
 	public JKCloudEventSinkFactory() {
 	}
 
 	/**
-	 * Create a gateway event sink factory
+	 * Create a jKool Cloud Event Sink factory
 	 *
-	 * @param url host location of the jkool cloud server
+	 * @param url host location of the jKool cloud service
 	 *
 	 */
 	public JKCloudEventSinkFactory(String url) {

@@ -96,14 +96,14 @@ To see the full set of supported options, run:
 Streaming TNT4J to jKool Cloud 
 ==============================
 Applications that use TNT4J can be configured to stream events and metrics to jKool Cloud
-by configuring application source to use JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSink`)
+by configuring application source to use JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
 Configure your TNT4J source as follows (using `tnt4j.properties` file):
 ```
 {
 	....
 	; event sink configuration: destination and data format
 	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
-	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSink
+	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
 	event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
@@ -111,7 +111,7 @@ Configure your TNT4J source as follows (using `tnt4j.properties` file):
 }
 ```
 Below is an example of a sample TNT4J source (com.myco.myappl) configuration with 
-JESL Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSink):
+JESL Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory):
 ```
 {
 	source: com.myco.myappl
@@ -125,7 +125,7 @@ JESL Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSink):
 
 	; event sink configuration: destination and data format
 	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
-	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSink
+	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
 	event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter

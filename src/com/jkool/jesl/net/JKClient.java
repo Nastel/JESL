@@ -25,7 +25,7 @@ import com.nastel.jkool.tnt4j.sink.EventSink;
 
 /**
  * JESL Client Stream class that enables client applications
- * to connect to JESL server using http, https, and tcp URI.
+ * to connect to JESL server using http, https, and tcp[s] URI.
  * Example: http://data.jkoolcloud.com:6580.
  * Applications should use this class to connect to JESL servers
  * to stream events.
@@ -34,7 +34,6 @@ import com.nastel.jkool.tnt4j.sink.EventSink;
  */
 public class JKClient implements JKStream {
 	JKStream handle;
-	boolean secure;
 	URI uri;
 	
 	/**
@@ -60,16 +59,14 @@ public class JKClient implements JKStream {
 	public JKClient(String urlStr, String proxyHost, int proxyPort, EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
-	    if (scheme.equalsIgnoreCase("tcp")) {
+	    if (scheme.equalsIgnoreCase("tcp") || scheme.equalsIgnoreCase("tcps")) {
 			String host = uri.getHost();
 		    if (host == null) host = "localhost";
-
-			secure = "tcps".equalsIgnoreCase(scheme);
+			boolean secure = "tcps".equalsIgnoreCase(scheme);
 		    int port = uri.getPort();
 		    if (port <= 0) port = (secure ? 443 : 80);
 	    	handle = new SocketClient(host, port, secure, proxyHost, proxyPort, logger);
 	    } else {
-			secure = "https".equalsIgnoreCase(scheme);
 	    	handle = new HttpClient(urlStr, proxyHost, proxyPort, logger);
 	    }
 	}
@@ -95,7 +92,7 @@ public class JKClient implements JKStream {
 	 */
 	@Override
     public boolean isSecure() {
-	    return secure;
+	    return handle.isSecure();
     }
 
 	/**

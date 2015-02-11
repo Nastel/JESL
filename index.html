@@ -66,9 +66,9 @@ a XML format.  There are three major parts to a simulation definition:</p>
    Defines the actual activites and the subactivities and events in them
 </code></pre>
 
-<p>The included file <code>tnt4j-sim-template.xml</code> contains a simulation definition template,
+<p>The included file <code>sims/tnt4j-sim-template.xml</code> contains a simulation definition template,
 along with detailed descriptions of each element, showing the XML element
-hierarchy.  The file order-process.xml contains a sample set of activities and
+hierarchy. The file order-process.xml contains a sample set of activities and
 their events, along with some sample snapshots.</p>
 
 <p>To define a simulation, copy one of the supplied XML simulation definition
@@ -77,10 +77,10 @@ files to use as a template and create the necessary activity elements.</p>
 <p>The simulator can be run in one of two modes:</p>
 
 <pre><code>1. Simulation (simulation type: `run`)
-   Runs the specified simulation file and sends the tracking data to
+   Runs default simulation file (`sims/order-process.xml`) and sends the tracking data to
    the JESL Event Sink and/or writes the tracking data to the
    specified file.  In this mode, the simulator can be configured to
-   run the simulation file a specified number of times, optionally
+   run the simulation file a specified number of iterations, optionally
    generating unique correlators and tags for each iteration of
    the simulation file (appends a unique value to end of defined
    correlator and tags in simulation definition file).
@@ -93,12 +93,15 @@ files to use as a template and create the necessary activity elements.</p>
 <p>The simplest way to run the simulator is to execute the file jkool-simulator.bat
 (or jkool-simulator.sh) as follows:</p>
 
-<pre><code>`jkool-simulator.bat run -A:&lt;access_token&gt; -f:&lt;sim_def_file&gt; -T:&lt;jkool_host&gt; -C:HTTP`
+<pre><code>Windows: `jkool-simulator.bat &lt;access_token&gt; [&lt;iterations&gt;]`
+Unix: `jkool-simulator.sh &lt;access_token&gt; [&lt;iterations&gt;]`
 </code></pre>
 
-<p>If <code>-f</code> is omitted, the simulator will prompt for the simulation definition
-filename.  One of <code>-T</code> (to send tracking data to JESL Event Sink) or <code>-x</code> (to send
-tracking data to file) must be specified.</p>
+<p><code>&lt;iterations&gt;</code> is the number of interations for a given simulation (1 default).</p>
+
+<p><b>NOTE:</b> You will need to alter <code>jkool-simulator</code> scripts to specify
+custom simulator parameters such as simulation type as well as options described
+further in this document.</p>
 
 <p>The simulator also contains options for allowing the data values used for some of
 the tracking component attributes to be altered to provide unique values for these
@@ -184,6 +187,35 @@ JESL Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSink):</p>
 </code></pre>
 
 <p><b>NOTE:</b> You will need to provide your actual API access token in (<code>event.sink.factory.EventSinkFactory.Token</code>).</p>
+
+<h1>
+<a id="project-dependencies" class="anchor" href="#project-dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Project Dependencies</h1>
+
+<p>JESL requires the following:</p>
+
+<ul>
+<li>JDK 1.6+</li>
+<li>TNT4J (<a href="https://github.com/Nastel/TNT4J">https://github.com/Nastel/TNT4J</a>)</li>
+<li>Apache HTTP Client 4.2.5 (<a href="http://hc.apache.org/httpcomponents-client-ga/">http://hc.apache.org/httpcomponents-client-ga/</a>)</li>
+<li>Apache HTTP Core 4.3.4 (<a href="http://hc.apache.org/httpcomponents-client-ga/">http://hc.apache.org/httpcomponents-client-ga/</a>)</li>
+</ul>
+
+<h1>
+<a id="related-projects" class="anchor" href="#related-projects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Related Projects</h1>
+
+<ul>
+<li>TrackingFilter (<a href="http://nastel.github.io/TrackingFilter/">http://nastel.github.io/TrackingFilter/</a>)</li>
+<li>PingJMX (<a href="http://nastel.github.io/PingJMX/">http://nastel.github.io/PingJMX/</a>)</li>
+</ul>
+
+<h1>
+<a id="available-integrations" class="anchor" href="#available-integrations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Available Integrations</h1>
+
+<ul>
+<li>TNT4J (<a href="https://github.com/Nastel/TNT4J">https://github.com/Nastel/TNT4J</a>)</li>
+<li>Log4J (<a href="http://logging.apache.org/log4j/1.2/">http://logging.apache.org/log4j/1.2/</a>)</li>
+<li>jkoolcloud.com (<a href="https://www.jkoolcloud.com">https://www.jkoolcloud.com</a>)</li>
+</ul>
       </section>
     </div>
 

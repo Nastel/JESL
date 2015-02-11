@@ -38,7 +38,7 @@ files to use as a template and create the necessary activity elements.
 
 The simulator can be run in one of two modes:
 
-	1. Simulation (simulation type: "run")
+	1. Simulation (simulation type: `run`)
 	   Runs the specified simulation file and sends the tracking data to
 	   the JESL Cloud Event Sink and/or writes the tracking data to the
 	   specified file.  In this mode, the simulator can be configured to
@@ -47,7 +47,7 @@ The simulator can be run in one of two modes:
 	   the simulation file (appends a unique value to end of defined
 	   correlator and tags in simulation definition file).
 	
-	2. Replay (simulation type: "replay")
+	2. Replay (simulation type: `replay`)
 	   Reads previously-saved tracking data from the specified file
 	   and sends it to the JESL Cloud Event Sink
 
@@ -56,8 +56,8 @@ The simplest way to run the simulator is to execute the file jkool-simulator.bat
 
 	`jkool-simulator.bat run -A:<access_token> -f:<sim_def_file> -T:<jkool_host> -C:HTTP`
 	
-If '-f' is omitted, the simulator will prompt for the simulation definition
-filename.  One of -T (to send tracking data to JESL Cloud Event Sink) or -x (to send
+If `-f` is omitted, the simulator will prompt for the simulation definition
+filename.  One of `-T` (to send tracking data to JESL Cloud Event Sink) or `-x` (to send
 tracking data to file) must be specified.
 
 The simulator also contains options for allowing the data values used for some of
@@ -92,8 +92,8 @@ To see the full set of supported options, run:
 Streaming TNT4J to jKool Cloud 
 ==============================
 Applications that use TNT4J can be configured to stream events and metrics to jKool Cloud
-by configuring application source to use JESL Cloud Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSink)
-Configure your TNT4J source as follows (using tnt4j.properties file):
+by configuring application source to use JESL Cloud Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSink`)
+Configure your TNT4J source as follows (using `tnt4j.properties` file):
 ```
 {
 	....

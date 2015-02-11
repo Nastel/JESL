@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>JESL by Nastel</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>JESL</h1>
+        <h2>jKool Event Streaming Library</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/Nastel/JESL/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/Nastel/JESL/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/Nastel/JESL" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="jesl---jkool-event-streaming-library" class="anchor" href="#jesl---jkool-event-streaming-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>JESL - jKool Event Streaming Library</h1>
+
+<p>JESL allows application developers stream time-series data to jKool Cloud.
+To stream data to jKool Cloud your application must:</p>
+
+<pre><code>1. Use TNT4J, or log4J+TNT4JAppender to log events, activities, metrics
+2. Obtain your jKool account and API access token at https://www.jkoolcloud.com
+2. JESL Event Sink implementation (contained in this project) 
+3. Configure your application for streaming to jKool Cloud using JESL Event Sink (requires API access token)
+</code></pre>
+
+<p>JESL consists of the following main components:</p>
+
+<pre><code>1. TNT4J streaming library (https://github.com/Nastel/TNT4J)
+
+2. JESL Simulator -- allows streaming user simulated events, activities and metrics to jKool Cloud.
+
+3. JESL Event Sink -- TNT4J Event Sink implementation to stream events to jKool Cloud
+</code></pre>
+
+<h2>
+<a id="jesl-simulator" class="anchor" href="#jesl-simulator" aria-hidden="true"><span class="octicon octicon-link"></span></a>JESL Simulator</h2>
+
+<p>The JESL Simulator provides the ability to simulate tracking activities
+and events. The activities, events, and their components are defined using
+a XML format.  There are three major parts to a simulation definition:</p>
+
+<pre><code>1. Sources
+   Defines the sources involved in simulated activities and events
+
+2. Messages
+   Defines the messages that will be exchanged during activities
+
+3. Activities and Events
+   Defines the actual activites and the subactivities and events in them
+</code></pre>
+
+<p>The included file <code>tnt4j-sim-template.xml</code> contains a simulation definition template,
+along with detailed descriptions of each element, showing the XML element
+hierarchy.  The file order-process.xml contains a sample set of activities and
+their events, along with some sample snapshots.</p>
+
+<p>To define a simulation, copy one of the supplied XML simulation definition
+files to use as a template and create the necessary activity elements.</p>
+
+<p>The simulator can be run in one of two modes:</p>
+
+<pre><code>1. Simulation (simulation type: `run`)
+   Runs the specified simulation file and sends the tracking data to
+   the JESL Event Sink and/or writes the tracking data to the
+   specified file.  In this mode, the simulator can be configured to
+   run the simulation file a specified number of times, optionally
+   generating unique correlators and tags for each iteration of
+   the simulation file (appends a unique value to end of defined
+   correlator and tags in simulation definition file).
+
+2. Replay (simulation type: `replay`)
+   Reads previously-saved tracking data from the specified file
+   and sends it to the JESL Event Sink
+</code></pre>
+
+<p>The simplest way to run the simulator is to execute the file jkool-simulator.bat
+(or jkool-simulator.sh) as follows:</p>
+
+<pre><code>`jkool-simulator.bat run -A:&lt;access_token&gt; -f:&lt;sim_def_file&gt; -T:&lt;jkool_host&gt; -C:HTTP`
+</code></pre>
+
+<p>If <code>-f</code> is omitted, the simulator will prompt for the simulation definition
+filename.  One of <code>-T</code> (to send tracking data to JESL Event Sink) or <code>-x</code> (to send
+tracking data to file) must be specified.</p>
+
+<p>The simulator also contains options for allowing the data values used for some of
+the tracking component attributes to be altered to provide unique values for these
+attributes for each tracking activity so that each activity definition in the input
+file serves as a template for the activities to generate, allowing each to be a unique
+instance of an activity with the defined components.  An example of such an attribute
+is the Correlator.  If a Correlator is defined and the correlator value is not unique
+across each activity then all activities will get stitched together into one large
+activity.</p>
+
+<p>Some of the available options are:</p>
+
+<pre><code>-A      This option specifies the access token to use to validate
+        connection to JESL Event Sink.  This option is required
+        when using `-T` option
+
+-p      This option will cause simulator to scale each time attribute
+        up or down by the specified percentage.  This prevents each
+        activity from looking exactly the same, showing some variation
+        in the event durations, as well as the times between events
+
+-u      Makes correlators and tags unique between iterations on the
+        input file by appending a timestamp to each one, so that each
+        iteration over the file will generate independent activities
+        and events
+</code></pre>
+
+<p>To see the full set of supported options, run:</p>
+
+<pre><code>`jkool-simulator.bat help`
+</code></pre>
+
+<h1>
+<a id="streaming-tnt4j-to-jkool-cloud-" class="anchor" href="#streaming-tnt4j-to-jkool-cloud-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Streaming TNT4J to jKool Cloud </h1>
+
+<p>Applications that use TNT4J can be configured to stream events and metrics to jKool Cloud
+by configuring application source to use JESL Event Sink (<code>com.jkool.jesl.tnt4j.sink.JKCloudEventSink</code>)
+Configure your TNT4J source as follows (using <code>tnt4j.properties</code> file):</p>
+
+<pre><code>{
+    ....
+    ; event sink configuration: destination and data format
+    event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
+    event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSink
+    event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com
+    event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
+    event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
+    ....
+}
+</code></pre>
+
+<p>Below is an example of a sample TNT4J source (com.myco.myappl) configuration with 
+JESL Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSink):</p>
+
+<pre><code>{
+    source: com.myco.myappl
+    source.factory: com.nastel.jkool.tnt4j.source.SourceFactoryImpl
+    source.factory.GEOADDR: NewYork
+    source.factory.DATACENTER: HQDC
+    source.factory.RootFQN: SERVER=?#DATACENTER=?#GEOADDR=? 
+
+    tracker.factory: com.nastel.jkool.tnt4j.tracker.DefaultTrackerFactory
+    dump.sink.factory: com.nastel.jkool.tnt4j.dump.DefaultDumpSinkFactory
+
+    ; event sink configuration: destination and data format
+    event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
+    event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSink
+    event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com
+    event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
+    event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
+
+    ; Configure default sink filter based on level and time (elapsed/wait)
+    event.sink.factory.Filter: com.nastel.jkool.tnt4j.filters.EventLevelTimeFilter
+    event.sink.factory.Filter.Level: TRACE
+    ; Uncomment lines below to filter out events based on elapsed time and wait time
+    ; Timed event/activities greater or equal to given values will be logged
+    ;event.sink.factory.Filter.ElapsedUsec: 100
+    ;event.sink.factory.Filter.WaitUsec: 100
+
+    tracking.selector: com.nastel.jkool.tnt4j.selector.DefaultTrackingSelector
+    tracking.selector.Repository: com.nastel.jkool.tnt4j.repository.FileTokenRepository
+}
+</code></pre>
+
+<p><b>NOTE:</b> You will need to provide your actual API access token in (<code>event.sink.factory.EventSinkFactory.Token</code>).</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>

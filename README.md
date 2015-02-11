@@ -29,9 +29,9 @@ a XML format.  There are three major parts to a simulation definition:
 	3. Activities and Events
 	   Defines the actual activites and the subactivities and events in them
 
-The included file `tnt4j-sim-template.xml` contains a simulation definition template,
+The included file `sims/tnt4j-sim-template.xml` contains a simulation definition template,
 along with detailed descriptions of each element, showing the XML element
-hierarchy.  The file order-process.xml contains a sample set of activities and
+hierarchy. The file order-process.xml contains a sample set of activities and
 their events, along with some sample snapshots.
 
 To define a simulation, copy one of the supplied XML simulation definition

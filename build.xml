@@ -96,6 +96,11 @@
 				<include name="README.md"/>
 			</fileset>
 		</copy>
+		<copy todir="${project-build}">
+			<fileset dir="${root}">
+				<include name="README.md"/>
+			</fileset>
+		</copy>
 		<copy todir="${project-build}/sims">
 			<fileset dir="${sims}">
 				<include name="**/*.xml"/>

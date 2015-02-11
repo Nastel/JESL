@@ -1,10 +1,10 @@
 #JESL - jKool Event Streaming Library
-JESL is library that allows application developers stream time-series data to jKool Cloud.
+JESL allows application developers stream time-series data to jKool Cloud.
 To stream data to jKool Cloud your application must:
 	
 	1. Use TNT4J, or log4J+TNT4JAppender to log events, activities, metrics
-	2. JESL Cloud Event Sink implementation (contained in this project)
-	3. Configure your application for streaming to jKool Cloud
+	2. JESL Event Sink implementation (contained in this project)
+	3. Configure your application for streaming to jKool Cloud using JESL Event Sink
 	
 JESL consists of the following main components:
 
@@ -12,7 +12,7 @@ JESL consists of the following main components:
 	
 	2. JESL Simulator -- allows streaming user simulated events, activities and metrics to jKool Cloud.
 	
-	3. JESL Cloud Event Sink -- TNT4J Event Sink implementation to stream events to jKool Cloud
+	3. JESL Event Sink -- TNT4J Event Sink implementation to stream events to jKool Cloud
 
 ## JESL Simulator
 The JESL Simulator provides the ability to simulate tracking activities
@@ -40,7 +40,7 @@ The simulator can be run in one of two modes:
 
 	1. Simulation (simulation type: `run`)
 	   Runs the specified simulation file and sends the tracking data to
-	   the JESL Cloud Event Sink and/or writes the tracking data to the
+	   the JESL Event Sink and/or writes the tracking data to the
 	   specified file.  In this mode, the simulator can be configured to
 	   run the simulation file a specified number of times, optionally
 	   generating unique correlators and tags for each iteration of
@@ -49,7 +49,7 @@ The simulator can be run in one of two modes:
 	
 	2. Replay (simulation type: `replay`)
 	   Reads previously-saved tracking data from the specified file
-	   and sends it to the JESL Cloud Event Sink
+	   and sends it to the JESL Event Sink
 
 The simplest way to run the simulator is to execute the file jkool-simulator.bat
 (or jkool-simulator.sh) as follows:
@@ -57,7 +57,7 @@ The simplest way to run the simulator is to execute the file jkool-simulator.bat
 	`jkool-simulator.bat run -A:<access_token> -f:<sim_def_file> -T:<jkool_host> -C:HTTP`
 	
 If `-f` is omitted, the simulator will prompt for the simulation definition
-filename.  One of `-T` (to send tracking data to JESL Cloud Event Sink) or `-x` (to send
+filename.  One of `-T` (to send tracking data to JESL Event Sink) or `-x` (to send
 tracking data to file) must be specified.
 
 The simulator also contains options for allowing the data values used for some of
@@ -72,7 +72,7 @@ activity.
 Some of the available options are:
 
 	-A		This option specifies the access token to use to validate
-			connection to jKool Cloud Event Sink.  This option is required
+			connection to JESL Event Sink.  This option is required
 			when using `-T` option
 
 	-p		This option will cause simulator to scale each time attribute
@@ -92,7 +92,7 @@ To see the full set of supported options, run:
 Streaming TNT4J to jKool Cloud 
 ==============================
 Applications that use TNT4J can be configured to stream events and metrics to jKool Cloud
-by configuring application source to use JESL Cloud Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSink`)
+by configuring application source to use JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSink`)
 Configure your TNT4J source as follows (using `tnt4j.properties` file):
 ```
 {
@@ -107,7 +107,7 @@ Configure your TNT4J source as follows (using `tnt4j.properties` file):
 }
 ```
 Below is an example of a sample TNT4J source (com.myco.myappl) configuration with 
-jKool Cloud Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSink):
+JESL Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSink):
 ```
 {
 	source: com.myco.myappl

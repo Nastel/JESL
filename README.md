@@ -40,10 +40,10 @@ files to use as a template and create the necessary activity elements.
 The simulator can be run in one of two modes:
 
 	1. Simulation (simulation type: `run`)
-	   Runs the specified simulation file and sends the tracking data to
+	   Runs default simulation file (`sims/order-process.xml`) and sends the tracking data to
 	   the JESL Event Sink and/or writes the tracking data to the
 	   specified file.  In this mode, the simulator can be configured to
-	   run the simulation file a specified number of times, optionally
+	   run the simulation file a specified number of iterations, optionally
 	   generating unique correlators and tags for each iteration of
 	   the simulation file (appends a unique value to end of defined
 	   correlator and tags in simulation definition file).
@@ -55,11 +55,14 @@ The simulator can be run in one of two modes:
 The simplest way to run the simulator is to execute the file jkool-simulator.bat
 (or jkool-simulator.sh) as follows:
 
-	`jkool-simulator.bat run -A:<access_token> -f:<sim_def_file> -T:<jkool_host> -C:HTTP`
-	
-If `-f` is omitted, the simulator will prompt for the simulation definition
-filename.  One of `-T` (to send tracking data to JESL Event Sink) or `-x` (to send
-tracking data to file) must be specified.
+	Windows: `jkool-simulator.bat <access_token> [<iterations>]`
+	Unix: `jkool-simulator.sh <access_token> [<iterations>]`
+		
+`<iterations>` is the number of interations for a given simulation (1 default).
+
+<b>NOTE:</b> You will need to alter `jkool-simulator` scripts to specify
+custom simulator parameters such as simulation type as well as options described
+further in this document.
 
 The simulator also contains options for allowing the data values used for some of
 the tracking component attributes to be altered to provide unique values for these

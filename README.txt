@@ -1,5 +1,5 @@
 jKool(TM) Simulator
-===================
+==============================
 
 Version: @VERSION@
 
@@ -28,7 +28,7 @@ The simulator can be run in one of two modes:
 
 	1. Simulation (simulation type: "run")
 	   Runs the specified simulation file and sends the tracking data to
-	   the jKool Cloud Gateway and/or writes the tracking data to the
+	   the jKool Cloud Event Sink and/or writes the tracking data to the
 	   specified file.  In this mode, the simulator can be configured to
 	   run the simulation file a specified number of times, optionally
 	   generating unique correlators and tags for each iteration of
@@ -37,7 +37,7 @@ The simulator can be run in one of two modes:
 	
 	2. Replay (simulation type: "replay")
 	   Reads previously-saved tracking data from the specified file
-	   and sends it to the jKool Cloud Gateway
+	   and sends it to the jKool Cloud Event Sink
 
 The simplest way to run the simulator is to execute the file jkool-simulator.bat
 (or jkool-simulator.sh) as follows:
@@ -45,7 +45,7 @@ The simplest way to run the simulator is to execute the file jkool-simulator.bat
 	jkool-simulator.bat run -A:<access_token> -f:<sim_def_file> -T:<jkool_host> -C:HTTP
 	
 If '-f' is omitted, the simulator will prompt for the simulation definition
-filename.  One of -T (to send tracking data to jKool Cloud Gateway) or -x (to send
+filename.  One of -T (to send tracking data to jKool Cloud Event Sink) or -x (to send
 tracking data to file) must be specified.
 
 The simulator also contains options for allowing the data values used for some of
@@ -60,7 +60,7 @@ activity.
 Some of the available options are:
 
 	-A		This option specifies the access token to use to validate
-			connection to jKool Cloud Gateway.  This option is required
+			connection to jKool Cloud Event Sink.  This option is required
 			when using -T option
 
 	-p		This option will cause simulator to scale each time attribute
@@ -76,3 +76,52 @@ Some of the available options are:
 To see the full set of supported options, run:
 
 	jkool-simulator.bat help
+
+Streaming TNT4J to jKool Cloud 
+==============================
+Applications that use TNT4J can be configured to stream events and metrics to jKool Cloud
+by configuring application source to use jKool Cloud Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSink)
+Configure your TNT4J source as follows (using tnt4j.properties file):
+{
+	....
+	; event sink configuration: destination and data format
+	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
+	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSink
+	event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com
+	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
+	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
+	....
+}
+
+Below is an example of a sample TNT4J source (com.myco.myappl) configuration with 
+jKool Cloud Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSink):
+{
+	source: com.myco.myappl
+	source.factory: com.nastel.jkool.tnt4j.source.SourceFactoryImpl
+	source.factory.GEOADDR: NewYork
+	source.factory.DATACENTER: HQDC
+	source.factory.RootFQN: SERVER=?#DATACENTER=?#GEOADDR=?	
+	
+	tracker.factory: com.nastel.jkool.tnt4j.tracker.DefaultTrackerFactory
+	dump.sink.factory: com.nastel.jkool.tnt4j.dump.DefaultDumpSinkFactory
+
+	; event sink configuration: destination and data format
+	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
+	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSink
+	event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com
+	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
+	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
+
+	; Configure default sink filter based on level and time (elapsed/wait)
+	event.sink.factory.Filter: com.nastel.jkool.tnt4j.filters.EventLevelTimeFilter
+	event.sink.factory.Filter.Level: TRACE
+	; Uncomment lines below to filter out events based on elapsed time and wait time
+	; Timed event/activities greater or equal to given values will be logged
+	;event.sink.factory.Filter.ElapsedUsec: 100
+	;event.sink.factory.Filter.WaitUsec: 100
+	
+	tracking.selector: com.nastel.jkool.tnt4j.selector.DefaultTrackingSelector
+	tracking.selector.Repository: com.nastel.jkool.tnt4j.repository.FileTokenRepository
+}
+NOTE: You will need to provide your actual API access token in (event.sink.factory.EventSinkFactory.Token).
+

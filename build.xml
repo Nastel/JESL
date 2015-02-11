@@ -93,6 +93,7 @@
 		<copy todir="${project-build}/config">
 			<fileset dir="${config}">
 				<include name="**/*.properties"/>
+				<include name="README.txt"/>
 			</fileset>
 		</copy>
 		<copy todir="${project-build}/sims">

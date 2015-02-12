@@ -2,14 +2,15 @@
 JESL allows application developers stream time-series data to jKool Cloud.
 To stream data to jKool Cloud your application must:
 	
-	1. Use TNT4J, or log4J+TNT4JAppender to log events,
-	   activities, metrics
+	1. Use TNT4J, or log4J+TNT4JAppender in your application
+	  to log events, activities, metrics
 	
 	2. Obtain your jKool account and API access token 
 	   at https://www.jkoolcloud.com
 	
 	3. Use JESL Event Sink implementation (contained in this project) 
-	   within your tnt4j configuration 
+	   within your tnt4j configuration. API access token will be required
+	   to stream data to jKool Cloud.
 	
 	4. Configure your application for streaming to jKool Cloud 
 	   using JESL Event Sink (requires API access token)
@@ -20,10 +21,11 @@ JESL consists of the following main components:
 	   (https://github.com/Nastel/TNT4J)
 	
 	2. JESL Simulator -- allows streaming user simulated events,
-	   activities and metrics to jKool Cloud.
+	   activities and metrics to jKool Cloud. Simulations are defined
+	   in xml files. (see `sims/tnt4j-sim-template.xml` and `sims/order-process.xml`) 
 	
 	3. JESL Event Sink -- TNT4J Event Sink implementation
-	   to stream events to jKool Cloud
+	   to stream events to jKool Cloud.
 
 ## JESL Simulator
 The JESL Simulator provides the ability to simulate tracking activities

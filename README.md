@@ -13,16 +13,17 @@ To stream data to jKool Cloud your application must:
 	   to stream data to jKool Cloud.
 	
 	4. Configure your application for streaming to jKool Cloud 
-	   using JESL Event Sink (requires API access token)
+	   using JESL Event Sink (requires API access token).
+	   See (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
 	
 JESL consists of the following main components:
 
 	1. TNT4J streaming library 
 	   (https://github.com/Nastel/TNT4J)
 	
-	2. JESL Simulator -- allows streaming user simulated events,
-	   activities and metrics to jKool Cloud. Simulations are defined
-	   in xml files. (see `sims/tnt4j-sim-template.xml` and `sims/order-process.xml`) 
+	2. JESL Simulator -- stream simulated events, activities and metrics
+	   to jKool Cloud. Simulations are defined in xml files.
+	   (see `sims/tnt4j-sim-template.xml` and `sims/order-process.xml`) 
 	
 	3. JESL Event Sink -- TNT4J Event Sink implementation
 	   to stream events to jKool Cloud.
@@ -123,7 +124,7 @@ Configure your TNT4J source as follows (using `tnt4j.properties` file):
 }
 ```
 Below is an example of a sample TNT4J source (com.myco.myappl) configuration with 
-JESL Event Sink (com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory):
+JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 ```
 {
 	source: com.myco.myappl

@@ -16,11 +16,14 @@ To stream data to jKool Cloud your application must:
 	
 JESL consists of the following main components:
 
-	1. TNT4J streaming library (https://github.com/Nastel/TNT4J)
+	1. TNT4J streaming library 
+	   (https://github.com/Nastel/TNT4J)
 	
-	2. JESL Simulator -- allows streaming user simulated events, activities and metrics to jKool Cloud.
+	2. JESL Simulator -- allows streaming user simulated events,
+	   activities and metrics to jKool Cloud.
 	
-	3. JESL Event Sink -- TNT4J Event Sink implementation to stream events to jKool Cloud
+	3. JESL Event Sink -- TNT4J Event Sink implementation
+	   to stream events to jKool Cloud
 
 ## JESL Simulator
 The JESL Simulator provides the ability to simulate tracking activities

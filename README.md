@@ -117,7 +117,7 @@ Configure your TNT4J source as follows (using `tnt4j.properties` file):
 	; event sink configuration: destination and data format
 	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
 	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
-	event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com
+	event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com:6580
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
 	....
@@ -139,7 +139,7 @@ JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 	; event sink configuration: destination and data format
 	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
 	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
-	event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com
+	event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com:6580
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
 

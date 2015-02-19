@@ -115,8 +115,7 @@ public class SocketClient implements JKStream {
 	public synchronized void connect(String token) throws IOException {
 		connect();
 		if (!StringUtils.isEmpty(token)) {
-			if (logger.isSet(OpLevel.DEBUG))
-				logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token='{1}'", this, token);
+			logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token={1}", this, token);
 			AuthUtils.authenticate(this, token);
 		}
 	}

@@ -48,13 +48,13 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
 public class JKCloudEventSink extends AbstractEventSink {
 	private static final EventSink logger = DefaultEventSinkFactory.defaultEventSink(JKCloudEventSink.class);
 
-	private EventSink logSink = null;
+	private EventSink logSink;
 	private JKClient jkHandle;
 
 	private String url = "localhost";
-	private String proxyHost = null;
+	private String proxyHost;
+	private String accessToken;
 	private int proxyPort = 0;
-	private String accessToken = null;
 
 	/**
 	 * Create a socket event sink based on a given URL and formatter. Another sink can be associated with this sink

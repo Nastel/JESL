@@ -139,9 +139,7 @@ public class HttpClient implements HttpStream {
 	 */
 	@Override
 	public synchronized void connect() throws IOException {
-		if (logger.isSet(OpLevel.DEBUG))
-			logger.log(OpLevel.DEBUG, "Connecting to {0}{1}", httpHost, (httpProxy != null ? " via proxy " + httpProxy : ""));
-
+		logger.log(OpLevel.DEBUG, "Connecting to {0}{1}", httpHost, (httpProxy != null ? " via proxy " + httpProxy : ""));
 		try {
 		    if (secure) {
 		    	SSLSocketFactory ssf = null;
@@ -171,7 +169,7 @@ public class HttpClient implements HttpStream {
 		}
 		catch (Exception e) {
 			close();
-			throw new IOException("Failed to connect to " + httpHost, e);
+			throw new IOException("Failed to connect to " + uri, e);
 		}
 	}
 
@@ -182,8 +180,7 @@ public class HttpClient implements HttpStream {
 	public synchronized void connect(String token) throws IOException {
 		connect();
 		if (!StringUtils.isEmpty(token)) {
-			if (logger.isSet(OpLevel.DEBUG))
-				logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token='{1}'", this, token);
+			logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token={1}", this, token);
 			AuthUtils.authenticate(this, token);
 		}
 	}
@@ -199,9 +196,7 @@ public class HttpClient implements HttpStream {
 		if (!wantResponse)
 			request.setHeader(NO_RESPONSE_REQUIRED_HEADER, NO_RESPONSE_REQUIRED_VALUE);
 
-		if (logger.isSet(OpLevel.TRACE))
-			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", httpHost, request);
-
+		logger.log(OpLevel.TRACE, "Sending to {0}: {1}", httpHost, request);
 		try {
 			org.apache.http.HttpRequest httpRequest = (org.apache.http.HttpRequest) request;
 			connection.sendRequestHeader(httpRequest);
@@ -275,9 +270,7 @@ public class HttpClient implements HttpStream {
 		resp = getResponse();
 		String content = resp.getContentString();
 
-		if (logger.isSet(OpLevel.TRACE))
-			logger.log(OpLevel.TRACE, "Received response from {0}: {1}", httpHost, content);
-
+		logger.log(OpLevel.TRACE, "Received response from {0}: {1}", httpHost, content);
 		int status = resp.getStatus();
 		if (status >= 400) {
 			if (AccessResponse.isAccessResponse(content)) {
@@ -299,11 +292,9 @@ public class HttpClient implements HttpStream {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void close() {
+	public synchronized void close() {
 		if (connection != null) {
-			if (logger.isSet(OpLevel.DEBUG))
-				logger.log(OpLevel.DEBUG, "Closing connection to {0}", httpHost);
-
+			logger.log(OpLevel.DEBUG, "Closing connection to {0}", httpHost);
 			connMgr.releaseConnection(connection, 0, TimeUnit.MILLISECONDS);
 			connMgr.closeIdleConnections(0, TimeUnit.MILLISECONDS);
 			connMgr.shutdown();

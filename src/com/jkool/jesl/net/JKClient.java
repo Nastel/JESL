@@ -32,7 +32,7 @@ import com.nastel.jkool.tnt4j.sink.EventSink;
  * 
  * @version $Revision: 1 $
  */
-public class JKClient implements JKStream {
+public class JKClient implements JKStream {	
 	JKStream handle;
 	URI uri;
 	

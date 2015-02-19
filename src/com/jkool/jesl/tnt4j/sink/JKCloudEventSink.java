@@ -16,7 +16,6 @@
 package com.jkool.jesl.tnt4j.sink;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.net.URISyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +48,6 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
 public class JKCloudEventSink extends AbstractEventSink {
 	private static final EventSink logger = DefaultEventSinkFactory.defaultEventSink(JKCloudEventSink.class);
 
-	private Socket socketSink = null;
 	private EventSink logSink = null;
 	private JKClient jkHandle;
 
@@ -73,9 +71,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 *
 	 */
 	public JKCloudEventSink(String name, String url, EventFormatter frm, EventSink sink) {
-		super(name, frm);
-		this.url = url;
-		logSink = sink;
+		this(name, url, null, frm, sink);
 	}
 
 	/**
@@ -135,7 +131,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 */
 	@Override
 	public Object getSinkHandle() {
-		return socketSink;
+		return jkHandle;
 	}
 
 	/**
@@ -151,6 +147,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	@Override
 	public synchronized void open() throws IOException {
 		try {
+			logger.log(OpLevel.DEBUG, "Open name={3}, url={0}, proxy.host={1}, proxy.port={2}", url, proxyHost, proxyPort, this.getName());
 			jkHandle = new JKClient(url, proxyHost, proxyPort, logger);
 			if (!StringUtils.isEmpty(accessToken)) {
 				jkHandle.connect(accessToken);
@@ -158,6 +155,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 				jkHandle.connect();
 			}
 		} catch (URISyntaxException e) {
+			logger.log(OpLevel.ERROR, "Failed to open name={3}, url={0}, proxy.host={1}, proxy.port={2}", url, proxyHost, proxyPort, this.getName(), e);
 			close();
 			throw new IOException(e.getMessage(), e);
 		}
@@ -166,6 +164,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	@Override
 	public synchronized void close() throws IOException {
 		if (jkHandle != null) {
+			logger.log(OpLevel.DEBUG, "Closing name={3}, url={0}, proxy.host={1}, proxy.port={2}", url, proxyHost, proxyPort, this.getName());
 			jkHandle.close();
 			jkHandle = null;
 		}
@@ -177,15 +176,14 @@ public class JKCloudEventSink extends AbstractEventSink {
 	}
 
 	private void writeLine(String msg) throws IOException {
-		if (StringUtils.isEmpty(msg))
-			return;
+		if (StringUtils.isEmpty(msg)) return;
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
 		jkHandle.send(lineMsg, false);
 	}
 
 	@Override
 	protected void _log(TrackingEvent event) throws IOException {
-		if (logSink != null) {
+		if (logSink != null && logSink.isSet(event.getSeverity())) {
 			logSink.log(event);
 		}
 		writeLine(getEventFormatter().format(event));
@@ -193,7 +191,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	@Override
 	protected void _log(TrackingActivity activity) throws IOException {
-		if (logSink != null) {
+		if (logSink != null && logSink.isSet(activity.getSeverity())) {
 			logSink.log(activity);
 		}
 		writeLine(getEventFormatter().format(activity));
@@ -201,7 +199,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	@Override
 	protected void _log(Source src, OpLevel sev, String msg, Object... args) throws IOException {
-		if (logSink != null) {
+		if (logSink != null && logSink.isSet(sev)) {
 			logSink.log(src, sev, msg, args);
 		}
 		writeLine(getEventFormatter().format(src, sev, msg, args));
@@ -209,7 +207,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	@Override
 	protected void _log(Snapshot snapshot) throws Exception {
-		if (logSink != null) {
+		if (logSink != null && logSink.isSet(snapshot.getSeverity())) {
 			logSink.log(snapshot);
 		}
 		writeLine(getEventFormatter().format(snapshot));
@@ -217,12 +215,12 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	@Override
 	public boolean isSet(OpLevel sev) {
-		return logSink != null ? logSink.isSet(sev) : true;
+		return true;
 	}
 
 	@Override
 	protected void _checkState() throws IllegalStateException {
 		if (!isOpen())
-			throw new IllegalStateException("Sink closed url=" + url + ", socket=" + socketSink);
+			throw new IllegalStateException("Sink closed name=" + getName() + ", url=" + url + ", handle=" + jkHandle);
 	}
 }

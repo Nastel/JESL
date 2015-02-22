@@ -141,12 +141,13 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 */
 	@Override
 	public synchronized boolean isOpen() {
-		return (jkHandle != null);
+		return (jkHandle != null && jkHandle.isConnected());
 	}
 
 	@Override
 	public synchronized void open() throws IOException {
 		try {
+			close();
 			logger.log(OpLevel.DEBUG, "Open name={3}, url={0}, proxy.host={1}, proxy.port={2}", url, proxyHost, proxyPort, this.getName());
 			jkHandle = new JKClient(url, proxyHost, proxyPort, logger);
 			if (!StringUtils.isEmpty(accessToken)) {
@@ -163,20 +164,20 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	@Override
 	public synchronized void close() throws IOException {
-		if (jkHandle != null) {
+		if (isOpen()) {
 			logger.log(OpLevel.DEBUG, "Closing name={3}, url={0}, proxy.host={1}, proxy.port={2}", url, proxyHost, proxyPort, this.getName());
 			jkHandle.close();
-			jkHandle = null;
 		}
 	}
 
 	@Override
 	public String toString() {
-		return super.toString() + "(url: " + url + ", piped.sink: " + logSink + ")";
+		return super.toString() + "(url: " + url + ", jk.handle: " + jkHandle + ", piped.sink: " + logSink + ")";
 	}
 
 	private void writeLine(String msg) throws IOException {
 		if (StringUtils.isEmpty(msg)) return;
+		_checkState();
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
 		jkHandle.send(lineMsg, false);
 	}

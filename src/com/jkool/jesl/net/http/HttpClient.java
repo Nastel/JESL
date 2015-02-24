@@ -139,8 +139,8 @@ public class HttpClient implements HttpStream {
 	 */
 	@Override
 	public synchronized void connect() throws IOException {
-		logger.log(OpLevel.DEBUG, "Connecting to {0}{1}", httpHost, (httpProxy != null ? " via proxy " + httpProxy : ""));
 		try {
+			logger.log(OpLevel.DEBUG, "Connecting to {0}{1}", httpHost, (httpProxy != null ? " via proxy " + httpProxy : ""));
 		    if (secure) {
 		    	SSLSocketFactory ssf = null;
 		    	if (!StringUtils.isEmpty(sslKeystore)) {
@@ -150,26 +150,22 @@ public class HttpClient implements HttpStream {
 		    	else {
 		    		ssf = new SSLSocketFactory(SSLContext.getDefault());
 		    	}
-
 		    	Scheme secureScheme = new Scheme("https", port, ssf);
 		    	schemeReg = new SchemeRegistry();
 		    	schemeReg.register(secureScheme);
 		    }
-
 			route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN, RouteInfo.LayerType.PLAIN);
-
-			if (schemeReg != null)
+			if (schemeReg != null) {
 				connMgr = new BasicClientConnectionManager(schemeReg);
-			else
+			} else {
 				connMgr = new BasicClientConnectionManager();
-
+			}
 			connReq = connMgr.requestConnection(route, null);
 			connection = connReq.getConnection(0, null);
 			connection.open(route, null, new BasicHttpParams());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			close();
-			throw new IOException("Failed to connect to " + uri, e);
+			throw new IOException("Failed to connect to uri=" + uri, e);
 		}
 	}
 
@@ -193,11 +189,11 @@ public class HttpClient implements HttpStream {
 		if (!(request instanceof org.apache.http.HttpRequest))
 			throw new IllegalArgumentException("request must be an instance of org.apache.http.HttpRequest");
 
-		if (!wantResponse)
-			request.setHeader(NO_RESPONSE_REQUIRED_HEADER, NO_RESPONSE_REQUIRED_VALUE);
-
-		logger.log(OpLevel.TRACE, "Sending to {0}: {1}", httpHost, request);
 		try {
+			if (!wantResponse)
+				request.setHeader(NO_RESPONSE_REQUIRED_HEADER, NO_RESPONSE_REQUIRED_VALUE);
+
+			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", httpHost, request);
 			org.apache.http.HttpRequest httpRequest = (org.apache.http.HttpRequest) request;
 			connection.sendRequestHeader(httpRequest);
 			if (httpRequest instanceof HttpEntityEnclosingRequest && request.hasContent())
@@ -216,11 +212,10 @@ public class HttpClient implements HttpStream {
 		if (StringUtils.isEmpty(reqUri))
 			reqUri = "/";
 
-		HttpRequest req = newRequest(method, reqUri);
-		if (!StringUtils.isEmpty(content))
-			req.setContent(contentType, content, "UTF-8");
-
 		try {
+			HttpRequest req = newRequest(method, reqUri);
+			if (!StringUtils.isEmpty(content))
+				req.setContent(contentType, content, "UTF-8");
 			sendRequest(req, wantResponse);
 		}
 		catch (IllegalStateException ise) {
@@ -266,8 +261,7 @@ public class HttpClient implements HttpStream {
 	 */
 	@Override
 	public synchronized String read() throws IOException {
-		HttpResponse resp = null;
-		resp = getResponse();
+		HttpResponse resp = getResponse();
 		String content = resp.getContentString();
 
 		logger.log(OpLevel.TRACE, "Received response from {0}: {1}", httpHost, content);
@@ -294,11 +288,11 @@ public class HttpClient implements HttpStream {
 	@Override
 	public synchronized void close() {
 		if (connection != null) {
-			logger.log(OpLevel.DEBUG, "Closing connection to {0}", httpHost);
-			connMgr.releaseConnection(connection, 0, TimeUnit.MILLISECONDS);
-			connMgr.closeIdleConnections(0, TimeUnit.MILLISECONDS);
-			connMgr.shutdown();
 			try {
+				logger.log(OpLevel.DEBUG, "Closing connection to {0}", httpHost);
+				connMgr.releaseConnection(connection, 0, TimeUnit.MILLISECONDS);
+				connMgr.closeIdleConnections(0, TimeUnit.MILLISECONDS);
+				connMgr.shutdown();
 				connection.close();
 			} catch (IOException ioe) {
 			}

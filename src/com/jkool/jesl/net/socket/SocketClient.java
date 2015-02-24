@@ -147,9 +147,6 @@ public class SocketClient implements JKStream {
 			}
 		}
 		catch (IOException e) {}
-		out    = null;
-		in     = null;
-		socket = null;
 	}
 
 	/**
@@ -197,14 +194,14 @@ public class SocketClient implements JKStream {
 	 */
 	@Override
 	public boolean isConnected() {
-		return (socket != null && out != null);
+		return (socket != null && socket.isConnected());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String read() throws IOException {
+	public synchronized String read() throws IOException {
 		if (socket == null) connect();
 		return in.readLine();
 	}

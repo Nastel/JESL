@@ -298,12 +298,10 @@ public class HttpClient implements HttpStream {
 			connMgr.releaseConnection(connection, 0, TimeUnit.MILLISECONDS);
 			connMgr.closeIdleConnections(0, TimeUnit.MILLISECONDS);
 			connMgr.shutdown();
-
-			connReq    = null;
-			connection = null;
-			connMgr    = null;
-			route      = null;
-			schemeReg  = null;
+			try {
+				connection.close();
+			} catch (IOException ioe) {
+			}
 		}
 	}
 

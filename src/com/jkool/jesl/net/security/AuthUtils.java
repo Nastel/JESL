@@ -37,16 +37,15 @@ public class AuthUtils {
 		try {
 			client.send(new AccessRequest(token).generateMsg(), true);
 			respStr = client.read();
-		}
-		catch (Throwable e) {
-			throw new SecurityException("Failed to validate access to '" + client.getHost() + "' with token '" + token + "'", e);
+		} catch (Throwable e) {
+			throw new SecurityException("Failed to authenticate with service='" + client.getURI()  + "' token='" + token + "'", e);
 		}
 
 		AccessResponse resp = AccessResponse.parseMsg(respStr);
 		if (!resp.isSuccess()) {
-			String msg = "Failed to validate access to '" + client.getHost() + "' with token '" + token + "'";
+			String msg = "Failed to validate access with service='" + client.getURI() + "' token='" + token + "'";
 			if (resp.getReason() != null)
-				msg += ": " + resp.getReason();
+				msg += ": reason='" + resp.getReason() + "'";
 			throw new SecurityException(msg);
 		}
 	}

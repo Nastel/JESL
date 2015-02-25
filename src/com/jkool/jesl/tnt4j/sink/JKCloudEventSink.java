@@ -17,10 +17,13 @@ package com.jkool.jesl.tnt4j.sink;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.jkool.jesl.net.JKClient;
+import com.nastel.jkool.tnt4j.core.KeyValueStats;
 import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.core.Snapshot;
 import com.nastel.jkool.tnt4j.format.EventFormatter;
@@ -46,7 +49,10 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  * @see EventFormatter
  */
 public class JKCloudEventSink extends AbstractEventSink {
-	private static final EventSink logger = DefaultEventSinkFactory.defaultEventSink(JKCloudEventSink.class);
+	public static final String KEY_SENT_BYTES = "jkcloud-sent-bytes";
+	public static final String KEY_LAST_BYTES = "jkcloud-last-bytes";
+	public static final String KEY_SERVICE_URL = "jkcloud-service-url";
+	private static final EventSink logger = DefaultEventSinkFactory.defaultEventSink(JKCloudEventSink.class);	
 
 	private EventSink logSink;
 	private JKClient jkHandle;
@@ -55,6 +61,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 	private String proxyHost;
 	private String accessToken;
 	private int proxyPort = 0;
+	private AtomicLong sentBytes = new AtomicLong(0);
+	private AtomicLong lastBytes = new AtomicLong(0);
 
 	/**
 	 * Create a socket event sink based on a given URL and formatter. Another sink can be associated with this sink
@@ -120,6 +128,28 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void resetStats() {
+		sentBytes.set(0);
+		lastBytes.set(0);
+		super.resetStats();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public KeyValueStats getStats(Map<String, Object> stats) {
+		super.getStats(stats);
+		stats.put(KEY_SENT_BYTES, sentBytes);
+		stats.put(KEY_LAST_BYTES, lastBytes);
+		stats.put(KEY_SERVICE_URL, url);
+		return this;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void write(Object msg, Object... args) throws IOException {
 		if (isOpen()) {
 			writeLine(getEventFormatter().format(msg, args));
@@ -180,6 +210,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 		_checkState();
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
 		jkHandle.send(lineMsg, false);
+		lastBytes.set(lineMsg.length());
+		sentBytes.addAndGet(lineMsg.length());
 	}
 
 	@Override

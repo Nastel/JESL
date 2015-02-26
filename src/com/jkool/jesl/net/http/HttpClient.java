@@ -140,7 +140,7 @@ public class HttpClient implements HttpStream {
 	@Override
 	public synchronized void connect() throws IOException {
 		try {
-			logger.log(OpLevel.DEBUG, "Connecting to {0}{1}", httpHost, (httpProxy != null ? " via proxy " + httpProxy : ""));
+			logger.log(OpLevel.DEBUG, "Connecting to {0}{1}", uri, (httpProxy != null ? " via proxy " + httpProxy : ""));
 		    if (secure) {
 		    	SSLSocketFactory ssf = null;
 		    	if (!StringUtils.isEmpty(sslKeystore)) {
@@ -193,7 +193,7 @@ public class HttpClient implements HttpStream {
 			if (!wantResponse)
 				request.setHeader(NO_RESPONSE_REQUIRED_HEADER, NO_RESPONSE_REQUIRED_VALUE);
 
-			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", httpHost, request);
+			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", uri, request);
 			org.apache.http.HttpRequest httpRequest = (org.apache.http.HttpRequest) request;
 			connection.sendRequestHeader(httpRequest);
 			if (httpRequest instanceof HttpEntityEnclosingRequest && request.hasContent())
@@ -264,7 +264,7 @@ public class HttpClient implements HttpStream {
 		HttpResponse resp = getResponse();
 		String content = resp.getContentString();
 
-		logger.log(OpLevel.TRACE, "Received response from {0}: {1}", httpHost, content);
+		logger.log(OpLevel.TRACE, "Received response from {0}: {1}", uri, content);
 		int status = resp.getStatus();
 		if (status >= 400) {
 			if (AccessResponse.isAccessResponse(content)) {
@@ -289,12 +289,12 @@ public class HttpClient implements HttpStream {
 	public synchronized void close() {
 		if (connection != null) {
 			try {
-				logger.log(OpLevel.DEBUG, "Closing connection to {0}", httpHost);
+				logger.log(OpLevel.DEBUG, "Closing connection to {0}", uri);
 				connMgr.releaseConnection(connection, 0, TimeUnit.MILLISECONDS);
 				connMgr.closeIdleConnections(0, TimeUnit.MILLISECONDS);
 				connMgr.shutdown();
 				connection.close();
-			} catch (IOException ioe) {
+			} catch (Throwable err) {
 			}
 		}
 	}

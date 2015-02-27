@@ -40,7 +40,7 @@ a XML format.  There are three major parts to a simulation definition:
 	   Defines the messages that will be exchanged during activities
 	   
 	3. Activities and Events
-	   Defines the actual activites and the subactivities and events in them
+	   Defines the actual activities and the sub-activities and events in them
 
 The included file `sims/tnt4j-sim-template.xml` contains a simulation definition template,
 along with detailed descriptions of each element, showing the XML element
@@ -71,7 +71,7 @@ The simplest way to run the simulator is to execute the file jkool-simulator.bat
 	Windows: `jkool-simulator.bat <access_token> [<iterations>]`
 	Unix: `jkool-simulator.sh <access_token> [<iterations>]`
 		
-`<iterations>` is the number of interations for a given simulation (1 default).
+`<iterations>` is the number of iterations for a given simulation (1 default).
 
 <b>NOTE:</b> You will need to alter `jkool-simulator` scripts to specify
 custom simulator parameters such as simulation type as well as options described
@@ -98,7 +98,7 @@ Some of the available options are:
 			in the event durations, as well as the times between events
 	
 	-u		Makes correlators and tags unique between iterations on the
-			input file by appending a timestamp to each one, so that each
+			input file by appending a time stamp to each one, so that each
 			iteration over the file	will generate independent activities
 			and events
 	

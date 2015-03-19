@@ -70,7 +70,6 @@ public class TNT4JSimulator {
 	private static JKCloudConnection	gwConn          = null;
 	private static TrackingLogger		logger          = null;
 	private static long					iteration       = 0L;
-	private static Map<String,Long>		totalSinkStats  = new TreeMap<String,Long>();
 
 	public static void error(String msg, Throwable e) {
 		logger.tnt(OpLevel.ERROR, null, null, msg, e);
@@ -168,8 +167,9 @@ public class TNT4JSimulator {
 
 	public static void incrementValue(Map<String,Long> map, String item, long amount) {
 		Long prev = map.put(item, amount);
-		if (prev != null)
+		if (prev != null) {
 			map.put(item, prev.longValue() + amount);
+		}
 	}
 
 	public static long getIteration() {
@@ -374,8 +374,6 @@ public class TNT4JSimulator {
 					simDef.append(line).append("\n");
 				simLoader.close();
 
-				Map<String,Long> sinkStats = null;
-
 				info("jKool TNT4J Activity Simulator Run starting...");
 				startTime = System.currentTimeMillis();
 
@@ -392,20 +390,13 @@ public class TNT4JSimulator {
 						gwFile.println("");
 						gwFile.close();
 					}
-
-					sinkStats = xmlHandler.getSinkStats();
-					for (String item : sinkStats.keySet())
-						incrementValue(totalSinkStats, item, sinkStats.get(item));
 				}
 				if (numIterations > 1)
 					System.out.println("");
 
 				info("jKool TNT4J Activity Simulator Run finished, elasped time = " +
 					 DurationFormatUtils.formatDurationHMS(System.currentTimeMillis()-startTime));
-
-				if (numIterations > 1 && sinkStats != null)
-					printMetrics(sinkStats, "Per-Iteration Sink Statistics");
-				printMetrics(totalSinkStats, "Total Sink Statistics");
+				printMetrics(xmlHandler.getSinkStats(), "Total Sink Statistics");
 			}
 			else if (runType == SimulatorRunType.REPLAY_SIM) {
 				info("jKool TNT4J Activity Simulator Replay starting...");

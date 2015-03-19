@@ -134,8 +134,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			Map<String,Object> stats = tracker.getStats();
 			for (String stat : stats.keySet()) {
 				Object value = stats.get(stat);
-				if (value instanceof Number)
+				if (value instanceof Number) {
 					TNT4JSimulator.incrementValue(sinkStats, stat, ((Number)value).longValue());
+				} 
 			}
 		}
 		sinkStats.put("tracker-sources", (long)trackers.size());
@@ -183,9 +184,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		activeActivities.clear();
 		activeElements.clear();
 		genValues.clear();
-
-		for (Tracker tracker : trackers.values())
-			tracker.resetStats();
 
 		curMsg           = null;
 		curActivity      = null;

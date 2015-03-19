@@ -51,6 +51,7 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
 public class JKCloudEventSink extends AbstractEventSink {
 	public static final String KEY_SENT_BYTES = "jkcloud-sent-bytes";
 	public static final String KEY_LAST_BYTES = "jkcloud-last-bytes";
+	public static final String KEY_SENT_MSGS = "jkcloud-sent-msgs";
 	public static final String KEY_SERVICE_URL = "jkcloud-service-url";
 	private static final EventSink logger = DefaultEventSinkFactory.defaultEventSink(JKCloudEventSink.class);	
 
@@ -63,6 +64,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	private int proxyPort = 0;
 	private AtomicLong sentBytes = new AtomicLong(0);
 	private AtomicLong lastBytes = new AtomicLong(0);
+	private AtomicLong msgCount = new AtomicLong(0);
 
 	/**
 	 * Create a socket event sink based on a given URL and formatter. Another sink can be associated with this sink
@@ -131,6 +133,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	public void resetStats() {
 		sentBytes.set(0);
 		lastBytes.set(0);
+		msgCount.set(0);
 		super.resetStats();
 	}
 
@@ -142,6 +145,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 		super.getStats(stats);
 		stats.put(KEY_SENT_BYTES, sentBytes);
 		stats.put(KEY_LAST_BYTES, lastBytes);
+		stats.put(KEY_SENT_MSGS, msgCount);
 		stats.put(KEY_SERVICE_URL, url);
 		return this;
 	}
@@ -210,6 +214,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 		_checkState();
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
 		jkHandle.send(lineMsg, false);
+		msgCount.incrementAndGet();
 		lastBytes.set(lineMsg.length());
 		sentBytes.addAndGet(lineMsg.length());
 	}

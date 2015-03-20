@@ -139,7 +139,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				} 
 			}
 		}
-		sinkStats.put("tracker-sources", (long)trackers.size());
+		sinkStats.put(Utils.qualify(this, "tracker-sources"), (long)trackers.size());
 		return sinkStats;
 	}
 

@@ -26,7 +26,9 @@ import com.nastel.jkool.tnt4j.format.DefaultFormatter;
 import com.nastel.jkool.tnt4j.format.EventFormatter;
 import com.nastel.jkool.tnt4j.format.JSONFormatter;
 import com.nastel.jkool.tnt4j.sink.AbstractEventSink;
+import com.nastel.jkool.tnt4j.sink.EventSink;
 import com.nastel.jkool.tnt4j.sink.FileSink;
+import com.nastel.jkool.tnt4j.sink.Sink;
 import com.nastel.jkool.tnt4j.source.Source;
 import com.nastel.jkool.tnt4j.tracker.TrackingActivity;
 import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
@@ -40,20 +42,16 @@ public class SimulatedEventSink extends AbstractEventSink {
 	private static final String FILE_PREFIX = "file://";
 	
 	private EventFormatter		formatter = new JSONFormatter();
-	private JKCloudEventSink	gwSink;
-	private FileSink			fileSink;
+	private Sink				outSink;
 
 	public SimulatedEventSink(String name, String url, String gwAccessToken, EventFormatter formatter) {
-		super(name);
-
-		if (formatter != null)
-			this.formatter = formatter;
+		super(name, formatter);
 
 		if (!url.startsWith("file://")) {
-			gwSink = new JKCloudEventSink(name, url, gwAccessToken, new DefaultFormatter(), null);
+			outSink = new JKCloudEventSink(name, url, gwAccessToken, new DefaultFormatter(), null);
 		} else { 
 			String fileName = url.substring(FILE_PREFIX.length());
-			fileSink = new FileSink(fileName, true, new DefaultFormatter());
+			outSink = new FileSink(fileName, true, new DefaultFormatter());
 		}
 	}
 
@@ -70,29 +68,20 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 */
 	@Override
 	public Object getSinkHandle() {
-		return this;
+		return outSink;
 	}
 
-	private void writeFormattedMsg(String msg) throws IOException {
-		if (fileSink != null && fileSink.isOpen())
-			fileSink.write(msg);
-		if (gwSink != null && gwSink.isOpen())
-			gwSink.write(msg);
+	private void writeFormattedMsg(String msg) throws IOException, InterruptedException {
+		if (isOpen()) outSink.write(msg);
 	}
 
 	/**
 	 * {@inheritDoc}
+	 * @throws InterruptedException 
 	 */
 	@Override
-	public void write(Object msg, Object... args) throws IOException {
+	protected void _write(Object msg, Object... args) throws IOException, InterruptedException {
 		writeFormattedMsg(formatter.format(msg, args));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void _checkState() throws IllegalStateException {
 	}
 
 	/**
@@ -131,11 +120,8 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void open() throws IOException {
-		if (gwSink != null)
-			gwSink.open();
-		if (fileSink != null)
-			fileSink.open();
+	public synchronized void open() throws IOException {
+		if (outSink != null) outSink.open();
 	}
 
 	/**
@@ -143,40 +129,41 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 */
 	@Override
 	public boolean isOpen() {
-		return ((fileSink != null && fileSink.isOpen()) || (gwSink != null && gwSink.isOpen()));
+		return (outSink != null && outSink.isOpen());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void close() throws IOException {
+	public synchronized void close() throws IOException {
 		try {
-			if (fileSink != null)
-				fileSink.close();
-			if (gwSink != null)
-				gwSink.close();
-		}
-		finally {
-			fileSink = null;
-			gwSink   = null;
+			if (outSink != null)
+				outSink.close();
+		} finally {
+			outSink = null;
 		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public Map<String, Object> getStats() {
-		if (gwSink != null)
-			return gwSink.getStats();
-		return super.getStats();
-	}
-
 	@Override
 	public KeyValueStats getStats(Map<String, Object> stats) {
-		if (gwSink != null)
-			return gwSink.getStats(stats);
+		if (outSink instanceof EventSink) {
+			((EventSink)outSink).getStats(stats);
+		}
 		return super.getStats(stats);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void resetStats() {
+		super.resetStats();
+		if (outSink instanceof EventSink) {
+			((EventSink)outSink).resetStats();		
+		}
 	}
 }

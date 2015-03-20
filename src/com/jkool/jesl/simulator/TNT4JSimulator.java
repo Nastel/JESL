@@ -490,7 +490,7 @@ public class TNT4JSimulator {
 		for (String key : map.keySet()) {
 			V value = map.get(key);
 			String valueStr = (value instanceof Number ? String.format("%,15d", value) : String.format("%s", value.toString()));
-			info(String.format("    %-30s %s", key+":", valueStr));
+			info(String.format("    %-50s %s", key+":", valueStr));
 		}
 	}
 }

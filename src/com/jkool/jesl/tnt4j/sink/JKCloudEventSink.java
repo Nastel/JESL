@@ -33,6 +33,7 @@ import com.nastel.jkool.tnt4j.sink.EventSink;
 import com.nastel.jkool.tnt4j.source.Source;
 import com.nastel.jkool.tnt4j.tracker.TrackingActivity;
 import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
+import com.nastel.jkool.tnt4j.utils.Utils;
 
 /**
  * <p>
@@ -143,23 +144,13 @@ public class JKCloudEventSink extends AbstractEventSink {
 	@Override
 	public KeyValueStats getStats(Map<String, Object> stats) {
 		super.getStats(stats);
-		stats.put(KEY_SENT_BYTES, sentBytes);
-		stats.put(KEY_LAST_BYTES, lastBytes);
-		stats.put(KEY_SENT_MSGS, sentMsgs);
-		stats.put(KEY_SERVICE_URL, url);
+		stats.put(Utils.qualify(this, KEY_SENT_BYTES), sentBytes);
+		stats.put(Utils.qualify(this, KEY_LAST_BYTES), lastBytes);
+		stats.put(Utils.qualify(this, KEY_SENT_MSGS), sentMsgs);
+		stats.put(Utils.qualify(this, KEY_SERVICE_URL), url);
 		return this;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void write(Object msg, Object... args) throws IOException {
-		if (isOpen()) {
-			writeLine(getEventFormatter().format(msg, args));
-		}
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -217,6 +208,14 @@ public class JKCloudEventSink extends AbstractEventSink {
 		sentMsgs.incrementAndGet();
 		lastBytes.set(lineMsg.length());
 		sentBytes.addAndGet(lineMsg.length());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void _write(Object msg, Object... args) throws IOException {
+		writeLine(getEventFormatter().format(msg, args));
 	}
 
 	@Override

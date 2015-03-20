@@ -64,7 +64,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	private int proxyPort = 0;
 	private AtomicLong sentBytes = new AtomicLong(0);
 	private AtomicLong lastBytes = new AtomicLong(0);
-	private AtomicLong msgCount = new AtomicLong(0);
+	private AtomicLong sentMsgs = new AtomicLong(0);
 
 	/**
 	 * Create a socket event sink based on a given URL and formatter. Another sink can be associated with this sink
@@ -133,7 +133,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	public void resetStats() {
 		sentBytes.set(0);
 		lastBytes.set(0);
-		msgCount.set(0);
+		sentMsgs.set(0);
 		super.resetStats();
 	}
 
@@ -145,7 +145,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 		super.getStats(stats);
 		stats.put(KEY_SENT_BYTES, sentBytes);
 		stats.put(KEY_LAST_BYTES, lastBytes);
-		stats.put(KEY_SENT_MSGS, msgCount);
+		stats.put(KEY_SENT_MSGS, sentMsgs);
 		stats.put(KEY_SERVICE_URL, url);
 		return this;
 	}
@@ -214,7 +214,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 		_checkState();
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
 		jkHandle.send(lineMsg, false);
-		msgCount.incrementAndGet();
+		sentMsgs.incrementAndGet();
 		lastBytes.set(lineMsg.length());
 		sentBytes.addAndGet(lineMsg.length());
 	}

@@ -123,7 +123,7 @@ public class TNT4JSimulator {
 	}
 
 	public static String getConnectUrl() {
-		return jkProtocol.equalsIgnoreCase("file")? 
+		return jkProtocol.equalsIgnoreCase("file")?
 				(jkProtocol.toLowerCase() + "://" + jkFileName):
 				(jkProtocol.toLowerCase() + "://" + jkHost + ":" + jkPort);
 	}
@@ -267,11 +267,15 @@ public class TNT4JSimulator {
 							printUsage("Missing <sim_def_file_name> for '-f' argument");
 					}
 					else if (arg.startsWith("-i:")) {
+						String iterations = arg.substring(3);
 						try {
-							numIterations = Long.parseLong(arg.substring(3));
+							numIterations = Long.parseLong(iterations);
 						}
 						catch (NumberFormatException e) {
-							printUsage("Missing or invalid <iterations> for '-i' argument");
+							if (StringUtils.isEmpty(iterations))
+								printUsage("Missing <iterations> for '-i' argument");
+							else
+								printUsage("Invalid <iterations> for '-i' argument (" + arg.substring(3) + ")");
 						}
 						if (numIterations <= 0)
 							printUsage("<iterations> for '-i' argument must be > 0");

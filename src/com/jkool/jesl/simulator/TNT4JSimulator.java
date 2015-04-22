@@ -377,7 +377,7 @@ public class TNT4JSimulator {
 					simDef.append(line).append("\n");
 				simLoader.close();
 
-				info("jKool TNT4J Activity Simulator Run starting...");
+				info("jKool Activity Simulator Run starting...");
 				startTime = System.currentTimeMillis();
 
 				if (isTTY && numIterations > 1)
@@ -397,12 +397,12 @@ public class TNT4JSimulator {
 				if (numIterations > 1)
 					System.out.println("");
 
-				info("jKool TNT4J Activity Simulator Run finished, elasped time = " +
+				info("jKool Activity Simulator Run finished, elapsed time = " +
 					 DurationFormatUtils.formatDurationHMS(System.currentTimeMillis()-startTime));
 				printMetrics(xmlHandler.getSinkStats(), "Total Sink Statistics");
 			}
 			else if (runType == SimulatorRunType.REPLAY_SIM) {
-				info("jKool TNT4J Activity Simulator Replay starting...");
+				info("jKool Activity Simulator Replay starting...");
 
 				connect();
 
@@ -430,7 +430,7 @@ public class TNT4JSimulator {
 					System.out.println("");
 				long endTime = System.currentTimeMillis();
 
-				info("jKool TNT4J Activity Simulator Replay finished, elasped.time = " +
+				info("jKool Activity Simulator Replay finished, elasped.time = " +
 					 DurationFormatUtils.formatDurationHMS(endTime-startTime));
 			}
 		}

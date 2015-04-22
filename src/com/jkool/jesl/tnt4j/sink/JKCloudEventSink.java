@@ -52,10 +52,10 @@ import com.nastel.jkool.tnt4j.utils.Utils;
 public class JKCloudEventSink extends AbstractEventSink {
 	private static final EventSink logger = DefaultEventSinkFactory.defaultEventSink(JKCloudEventSink.class);	
 
-	public static final String KEY_SENT_BYTES = "sent-bytes";
-	public static final String KEY_LAST_BYTES = "last-bytes";
-	public static final String KEY_SENT_MSGS = "sent-msgs";
-	public static final String KEY_SERVICE_URL = "service-url";
+	public static final String KEY_SENT_BYTES = "sink-sent-bytes";
+	public static final String KEY_LAST_BYTES = "sink-last-bytes";
+	public static final String KEY_SENT_MSGS = "sink-sent-msgs";
+	public static final String KEY_SERVICE_URL = "sink-service-url";
 
 	private EventSink logSink;
 	private JKClient jkHandle;

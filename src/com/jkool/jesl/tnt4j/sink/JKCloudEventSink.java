@@ -54,7 +54,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	public static final String KEY_SENT_BYTES = "sink-sent-bytes";
 	public static final String KEY_LAST_BYTES = "sink-last-bytes";
-	public static final String KEY_SENT_MSGS = "sink-sent-msgs";
+	public static final String KEY_SENT_MSGS = "sink-sent-messages";
 	public static final String KEY_SERVICE_URL = "sink-service-url";
 
 	private EventSink logSink;

@@ -65,15 +65,15 @@ The simulator can be run in one of two modes:
 	   Reads previously-saved tracking data from the specified file
 	   and sends it to the JESL Event Sink
 
-The simplest way to run the simulator is to execute the file jkool-simulator.bat
-(or jkool-simulator.sh) as follows:
+The simplest way to run the simulator is to execute the file `jksim.bat`
+(or `jksim.sh`) as follows:
 
-	Windows: `jkool-simulator.bat <access_token> [<iterations>]`
-	Unix: `jkool-simulator.sh <access_token> [<iterations>]`
+	Windows: `jksim.bat <access_token> [<iterations>]`
+	Unix: `jksim.sh <access_token> [<iterations>]`
 		
 `<iterations>` is the number of iterations for a given simulation (1 default).
 
-<b>NOTE:</b> You will need to alter `jkool-simulator` scripts to specify
+<b>NOTE:</b> You will need to alter `jksim` scripts to specify
 custom simulator parameters such as simulation type as well as options described
 further in this document.
 
@@ -104,7 +104,7 @@ Some of the available options are:
 	
 To see the full set of supported options, run:
 
-	`jkool-simulator.bat help`
+	`jksim.bat help`
 
 Streaming TNT4J to jKool Cloud 
 ==============================

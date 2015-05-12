@@ -106,6 +106,38 @@ To see the full set of supported options, run:
 
 	`jksim.bat help`
 
+Streaming Log4j to jKool Cloud 
+==============================
+Log4J can be configured to stream events and metrics to jKool Cloud by using 
+JESL log4j appender (`com.nastel.jkool.tnt4j.logger.TNT4JAppender`) as follows:
+
+1) Add JESL log4j appender to your log4j configuration
+```
+### Default JESL Appender configuration
+log4j.appender.tnt4j=com.nastel.jkool.tnt4j.logger.TNT4JAppender
+log4j.appender.tnt4j.SourceName=com.jkool.jesl.stream
+log4j.appender.tnt4j.SourceType=APPL
+log4j.appender.tnt4j.MetricsOnException=true
+log4j.appender.tnt4j.MetricsFrequency=60
+log4j.appender.tnt4j.layout=org.apache.log4j.PatternLayout
+log4j.appender.tnt4j.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] %m%n
+
+## JESL Configuration
+log4j.logger.com.jkool.jesl.stream=info
+```
+Configure which categories map to this JESL appender.
+2) Add the following arguments to your java startup
+```
+-Dtnt4j.config=<jesl.home>/log4j/tnt4j.properties -Dtnt4j.token.repository=<jesl.home>/log4j/tnt4j-tokens.properties 
+```
+3) Configure Streaming to jKool Cloud by editing `<jesl.home>/log4j/tnt4j.properties` and replacing `YOUR-ACCESS-TOKEN`
+with your jKool API access token.
+4) Restart your application and messages which map to JESL appender will stream to jKool Cloud.
+
+NOTE: Visit https://github.com/Nastel/TNT4J#log4j-integration for more information on `TNT4JAppender`.
+Optionally you may annotate your log4j messages to provide better context, timing as well as report
+custom metrics.
+
 Streaming TNT4J to jKool Cloud 
 ==============================
 Applications that use TNT4J can be configured to stream events and metrics to jKool Cloud

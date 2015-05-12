@@ -126,12 +126,15 @@ log4j.appender.tnt4j.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] %m%n
 log4j.logger.com.jkool.jesl.stream=info
 ```
 Configure which categories map to this JESL appender.
+
 2) Add the following arguments to your java startup
 ```
 -Dtnt4j.config=<jesl.home>/log4j/tnt4j.properties -Dtnt4j.token.repository=<jesl.home>/log4j/tnt4j-tokens.properties 
 ```
+
 3) Configure Streaming to jKool Cloud by editing `<jesl.home>/log4j/tnt4j.properties` and replacing `YOUR-ACCESS-TOKEN`
 with your jKool API access token.
+
 4) Restart your application and messages which map to JESL appender will stream to jKool Cloud.
 
 NOTE: Visit https://github.com/Nastel/TNT4J#log4j-integration for more information on `TNT4JAppender`.

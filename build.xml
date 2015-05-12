@@ -14,6 +14,7 @@
 	<property name="src"       value="src"/>
 	<property name="lib"       value="lib"/>
 	<property name="config"    value="config"/>
+	<property name="log4j"     value="log4j"/>
 	<property name="sims"      value="sims"/>
 	<property name="scripts"   value="bin"/>
 	<property name="classes"   value="classes"/>
@@ -93,7 +94,11 @@
 		<copy todir="${project-build}/config">
 			<fileset dir="${config}">
 				<include name="**/*.properties"/>
-				<include name="README.md"/>
+			</fileset>
+		</copy>
+		<copy todir="${project-build}/log4j">
+			<fileset dir="${log4j}">
+				<include name="**/*.properties"/>
 			</fileset>
 		</copy>
 		<copy todir="${project-build}">

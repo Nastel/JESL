@@ -148,8 +148,10 @@ Make sure `<jesl.home>/jkool-jesl.jar` and all dependent jar files in `<jesl.hom
 
 #### Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 This allows streaming data to be associated with your private repository.
+<b>NOTE</b>: Make sure your firewall allows outgoing tcp/http connections to http://data.jkoolcloud.com:6580
 
-#### Restart your application and messages which map to JESL appender will stream to jKool Cloud.
+#### Restart your application
+log4j messages which map to JESL `jkoolcloud` appender will stream to jKool Cloud.
 
 #### Login to "My Dashboard" @ https://www.jkoolcloud.com/
 

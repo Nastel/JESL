@@ -112,41 +112,41 @@ Log4J can be configured to stream events and metrics to jKool Cloud by using
 JESL log4j appender (`com.nastel.jkool.tnt4j.logger.TNT4JAppender`) as follows:
 
 1. Add JESL log4j appender to your log4j configuration
-	```
-	### Default JESL Appender configuration
-	log4j.appender.jkoolcloud=com.nastel.jkool.tnt4j.logger.TNT4JAppender
-	log4j.appender.jkoolcloud.SourceName=com.jkool.jesl.stream
-	log4j.appender.jkoolcloud.SourceType=APPL
-	log4j.appender.jkoolcloud.MetricsOnException=true
-	log4j.appender.jkoolcloud.MetricsFrequency=60
-	log4j.appender.jkoolcloud.layout=org.apache.log4j.PatternLayout
-	log4j.appender.jkoolcloud.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] %m%n
+```
+### Default JESL Appender configuration
+log4j.appender.jkoolcloud=com.nastel.jkool.tnt4j.logger.TNT4JAppender
+log4j.appender.jkoolcloud.SourceName=com.jkool.jesl.stream
+log4j.appender.jkoolcloud.SourceType=APPL
+log4j.appender.jkoolcloud.MetricsOnException=true
+log4j.appender.jkoolcloud.MetricsFrequency=60
+log4j.appender.jkoolcloud.layout=org.apache.log4j.PatternLayout
+log4j.appender.jkoolcloud.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] %m%n
 
-	## JESL Configuration
-	log4j.logger.com.jkool.jesl.stream=off
-	log4j.logger.com.nastel.jkool=info
-	log4j.logger.com.jkool.jesl=info
-	```
-	Define categories that you want mapped to `jkoolcloud` appender. Example:
-	```
-	log4j.logger.com.myco.mypackage=info,jkoolcloud
-	```
+## JESL Configuration
+log4j.logger.com.jkool.jesl.stream=off
+log4j.logger.com.nastel.jkool=info
+log4j.logger.com.jkool.jesl=info
+```
+Define categories that you want mapped to `jkoolcloud` appender. Example:
+```
+log4j.logger.com.myco.mypackage=info,jkoolcloud
+```
 
 2. Add the following arguments to your java start-up
-	```
-	-Dtnt4j.config=<jesl.home>/log4j/tnt4j.properties -Dtnt4j.token.repository=<jesl.home>/log4j/tnt4j-tokens.properties 
-	```
+```
+-Dtnt4j.config=<jesl.home>/log4j/tnt4j.properties -Dtnt4j.token.repository=<jesl.home>/log4j/tnt4j-tokens.properties 
+```
 
-	To enable automatic application dump add the following arguments:
-	```
-	-Dtnt4j.dump.on.vm.shutdown=true -Dtnt4j.dump.on.exception=true -Dtnt4j.dump.provider.default=true 
-	```
+To enable automatic application dump add the following arguments:
+```
+-Dtnt4j.dump.on.vm.shutdown=true -Dtnt4j.dump.on.exception=true -Dtnt4j.dump.provider.default=true 
+```
 	
-	Optionally you can add the following parameters to define default data center name and geo location:
-	```
-	-Dtnt4j.source.DATACENTER=YourDataCenterName Dtnt4j.source.GEOADDR=Melville, NY 
-	```
-	Make sure `<jesl.home>/jkool-jesl.jar` and all dependent jar files in `<jesl.home>/lib` are in your class path.
+Optionally you can add the following parameters to define default data center name and geo location:
+```
+-Dtnt4j.source.DATACENTER=YourDataCenterName Dtnt4j.source.GEOADDR=Melville, NY 
+```
+Make sure `<jesl.home>/jkool-jesl.jar` and all dependent jar files in `<jesl.home>/lib` are in your class path.
 
 3. Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 This allows streaming data to be associated with your private repository.

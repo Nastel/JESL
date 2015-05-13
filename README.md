@@ -136,12 +136,10 @@ log4j.logger.com.myco.mypackage=info,jkoolcloud
 ```
 -Dtnt4j.config=<jesl.home>/log4j/tnt4j.properties -Dtnt4j.token.repository=<jesl.home>/log4j/tnt4j-tokens.properties 
 ```
-
 To enable automatic application dump add the following arguments:
 ```
 -Dtnt4j.dump.on.vm.shutdown=true -Dtnt4j.dump.on.exception=true -Dtnt4j.dump.provider.default=true 
 ```
-	
 Optionally you can add the following parameters to define default data center name and geo location:
 ```
 -Dtnt4j.source.DATACENTER=YourDataCenterName Dtnt4j.source.GEOADDR=Melville, NY 

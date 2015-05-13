@@ -3,7 +3,7 @@ JESL allows application developers stream time-series data to jKool Cloud.
 To stream data to jKool Cloud your application must:
 	
 	1. Use TNT4J, or log4J+TNT4JAppender in your application
-	  to log events, activities, metrics
+	   to log events, activities, metrics
 	
 	2. Obtain your jKool account and API access token 
 	   at https://www.jkoolcloud.com
@@ -18,11 +18,11 @@ To stream data to jKool Cloud your application must:
 	
 JESL consists of the following main components:
 
-	1. TNT4J streaming library 
+	1. TNT4J streaming library and `TNT4JAppender` for log4j
 	   (https://github.com/Nastel/TNT4J)
 	
 	2. JESL Simulator -- stream simulated events, activities and metrics
-	   to jKool Cloud. Simulations are defined in xml files.
+	   to jKool Cloud. Simulations are defined in XML files.
 	   (see `sims/tnt4j-sim-template.xml` and `sims/order-process.xml`) 
 	
 	3. JESL Event Sink -- TNT4J Event Sink implementation
@@ -127,16 +127,16 @@ log4j.logger.com.jkool.jesl.stream=off
 log4j.logger.com.nastel.jkool=info
 log4j.logger.com.jkool.jesl=info
 ```
-Define categories that should map to this JESL appender. example:
+Define categories that you want mapped to `jkoolcloud` appender. Example:
 ```
 log4j.logger.com.myco.mypackage=info,jkoolcloud
 ```
 
-2. Add the following arguments to your java startup
+2. Add the following arguments to your java start-up
 ```
 -Dtnt4j.config=<jesl.home>/log4j/tnt4j.properties -Dtnt4j.token.repository=<jesl.home>/log4j/tnt4j-tokens.properties 
 ```
-Make sure all JESl jar files in `<jesl.home>/lib` are your classpath.
+Make sure `<jesl.home>/jkool-jesl.jar` and all dependent jar files in `<jesl.home>/lib` are in your class path.
 
 3. Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 

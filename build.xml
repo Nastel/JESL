@@ -104,6 +104,7 @@
 		<copy todir="${project-build}">
 			<fileset dir="${root}">
 				<include name="README.md"/>
+				<include name="LICENSE"/>
 			</fileset>
 		</copy>
 		<copy todir="${project-build}/sims">

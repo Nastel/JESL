@@ -151,7 +151,7 @@ This allows streaming data to be associated with your private repository.
 <b>NOTE</b>: Make sure your firewall allows outgoing `http` connections to http://data.jkoolcloud.com:6580
 
 #### Restart your application
-log4j messages which map to JESL `jkoolcloud` appender will stream to jKool Cloud.
+log4j messages which map to JESL `jkoolcloud` appender will stream to jKool Cloud @ http://data.jkoolcloud.com:6580
 
 #### Login to "My Dashboard" @ https://www.jkoolcloud.com/
 

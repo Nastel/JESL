@@ -142,7 +142,7 @@ To enable automatic application dump add the following arguments:
 ```
 Optionally you can add the following parameters to define default data center name and geo location:
 ```
--Dtnt4j.source.DATACENTER=YourDataCenterName Dtnt4j.source.GEOADDR=Melville, NY 
+-Dtnt4j.source.DATACENTER=YourDataCenterName -Dtnt4j.source.GEOADDR="Melville, NY" 
 ```
 Make sure `<jesl.home>/jkool-jesl.jar` and all dependent jar files in `<jesl.home>/lib` are in your class path.
 

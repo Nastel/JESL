@@ -43,6 +43,7 @@ import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.core.OpType;
 import com.nastel.jkool.tnt4j.core.PropertySnapshot;
 import com.nastel.jkool.tnt4j.core.UsecTimestamp;
+import com.nastel.jkool.tnt4j.core.ValueTypes;
 import com.nastel.jkool.tnt4j.source.DefaultSourceFactory;
 import com.nastel.jkool.tnt4j.source.Source;
 import com.nastel.jkool.tnt4j.source.SourceType;
@@ -73,6 +74,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	public static final String SIM_XML_ATTR_ID        = "id";
 	public static final String SIM_XML_ATTR_NAME      = "name";
 	public static final String SIM_XML_ATTR_TYPE      = "type";
+	public static final String SIM_XML_ATTR_VALTYPE   = "valtype";
 	public static final String SIM_XML_ATTR_VALUE     = "value";
 	public static final String SIM_XML_ATTR_FQN       = "fqn";
 	public static final String SIM_XML_ATTR_USER      = "user";
@@ -136,7 +138,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				Object value = stats.get(stat);
 				if (value instanceof Number) {
 					TNT4JSimulator.incrementValue(sinkStats, stat, ((Number)value).longValue());
-				} 
+				}
 			}
 		}
 		sinkStats.put(Utils.qualify(this, "tracker-sources"), (long)trackers.size());
@@ -403,9 +405,10 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		if (curSnapshot == null || !SIM_XML_SNAPSHOT.equals(curElement))
 			throw new SAXParseException("<" + SIM_XML_PROP + ">: Must have <" + SIM_XML_SNAPSHOT + "> as parent element", saxLocator);
 
-		String name  = null;
-		String type  = null;
-		String value = null;
+		String name    = null;
+		String type    = null;
+		String value   = null;
+		String valType = null;
 
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
@@ -418,6 +421,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					type = attValue;
 				else if (attName.equals(SIM_XML_ATTR_VALUE))
 					value = attValue;
+				else if (attName.equals(SIM_XML_ATTR_VALTYPE))
+					valType = attValue;
 				else
 					throw new SAXParseException("Unknown <" + SIM_XML_PROP + "> attribute '" + attName + "'", saxLocator);
 			}
@@ -428,27 +433,29 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			TNT4JSimulator.trace(simCurrTime, "Recording Snapshot Property: " + name  + " ...");
 
 			if (StringUtils.isEmpty(value)) {
-				curSnapshot.add(name, "");
+				curSnapshot.add(name, "", valType);
 			}
-			if ("NUMBER".equalsIgnoreCase(type)) {
+			else if ("NUMBER".equalsIgnoreCase(type)) {
 				TNT4JSimulator.warn("Line: " + saxLocator.getLineNumber() + ", Column: " + saxLocator.getColumnNumber()
 									+ ", 'NUMBER' datatype has been deprecated.  Use either 'INTEGER' or 'DECIMAL' for numeric values");
 				Number num = NumberUtils.createNumber(value);
 				if (num instanceof Double || num instanceof Float)
-					curSnapshot.add(name, TNT4JSimulator.varyValue(num.doubleValue()));
+					curSnapshot.add(name, TNT4JSimulator.varyValue(num.doubleValue()), valType);
 				else
-					curSnapshot.add(name, (long)TNT4JSimulator.varyValue(num.doubleValue()));
+					curSnapshot.add(name, (long)TNT4JSimulator.varyValue(num.doubleValue()), valType);
 			}
 			else if ("INTEGER".equalsIgnoreCase(type)) {
 				Long num = Long.parseLong(value);
-				curSnapshot.add(name, (long)TNT4JSimulator.varyValue(num.longValue()));
+				curSnapshot.add(name, (long)TNT4JSimulator.varyValue(num.longValue()), valType);
 			}
 			else if ("DECIMAL".equalsIgnoreCase(type)) {
 				Double num = Double.parseDouble(value);
-				curSnapshot.add(name, TNT4JSimulator.varyValue(num.doubleValue()));
+				curSnapshot.add(name, TNT4JSimulator.varyValue(num.doubleValue()), valType);
 			}
 			else if ("BOOLEAN".equalsIgnoreCase(type)) {
-				curSnapshot.add(name, Boolean.parseBoolean(value));
+				if (StringUtils.isEmpty(valType))
+					valType = "boolean";
+				curSnapshot.add(name, Boolean.parseBoolean(value), valType);
 			}
 			else if ("TIMESTAMP".equalsIgnoreCase(type)) {
 				UsecTimestamp ts = null;
@@ -458,11 +465,14 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				catch (NumberFormatException e) {
 					ts = new UsecTimestamp(value, "yyyy-MM-dd HH:mm:ss.SSSSSS", (String)null);
 				}
-				if (ts != null)
-					curSnapshot.add(name, ts);
+				if (ts != null) {
+					if (StringUtils.isEmpty(valType))
+						valType = ValueTypes.VALUE_TYPE_TIMESTAMP;
+					curSnapshot.add(name, ts, valType);
+				}
 			}
 			else {
-				curSnapshot.add(name, value);
+				curSnapshot.add(name, value, valType);
 			}
 		}
 		catch (Exception e) {

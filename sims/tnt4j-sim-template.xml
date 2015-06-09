@@ -128,9 +128,12 @@
                         BOOLEAN   - value is either "true" or "false"
                         TIMESTAMP - value is a timestamp, specified either as a number of microseconds (10e-6) since epoch,
                                     or a date/time string in the form: yyyy-MM-dd HH:mm:ss.SSSSSS
+            valtype:  type of property value, i.e. how to interpret the value (percentage, counter, etc.)
+                      This can be any string label.  see com.nastel.jkool.tnt4j.core.ValueTypes for a list
+                      of predefined value types.
       -->
     <snapshot name="SystemMetrics">
-      <prop name="MEM_USED" type="INTEGER" value="12345678"/>
+      <prop name="MEM_USED" type="INTEGER" value="12345678" valtype="size"/>
     </snapshot>
   
   </activity>

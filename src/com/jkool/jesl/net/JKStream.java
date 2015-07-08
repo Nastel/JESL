@@ -27,62 +27,64 @@ import java.net.URI;
 public interface JKStream {
 	/**
 	 * Obtain <code>URI</code> associated with this stream.
-	 * 
+	 *
 	 * @return <code>URI</code> associated with this stream.
 	 */
 	URI getURI();
 
 	/**
 	 * Obtain host name associated with the stream
-	 * 
+	 *
 	 * @return Obtain host name associated with the stream
 	 */
 	String getHost();
 
 	/**
 	 * Obtain port number associated with the stream
-	 * 
+	 *
 	 * @return port number associated with the stream
 	 */
 	int getPort();
 
 	/**
 	 * True if stream is via a secure protocol (e.g. SSL), false otherwise
-	 * 
+	 *
 	 * @return true if stream is via a secure protocol (e.g. SSL), false otherwise
 	 */
 	boolean isSecure();
 
 	/**
 	 * Obtain proxy host name associated with the stream
-	 * 
+	 *
 	 * @return Obtain proxy host name associated with the stream, null if not defined
 	 */
 	String getProxyHost();
-	
+
 	/**
 	 * Obtain proxy port number associated with the stream
-	 * 
+	 *
 	 * @return proxy port number associated with the stream, 0 if non defined
 	 */
 	int getProxyPort();
 
 	/**
 	 * Connect the stream to the underlying URI connection
-	 * 
+	 *
+	 * @throws IOException if error establishing connection
 	 */
 	void connect() throws IOException;
-	
+
 	/**
 	 * Connect the stream to the underlying URI connection
-	 * 
+	 *
 	 * @param token access token (security token)
+	 * @throws IOException if error establishing connection
 	 */
 	void connect(String token) throws IOException;
-	
+
 	/**
 	 * True if stream connected, false otherwise
-	 * 
+	 *
 	 * @return true if stream connected, false otherwise
 	 */
 	boolean isConnected();
@@ -90,16 +92,16 @@ public interface JKStream {
 	/**
 	 * Stream message to the underlying stream.
 	 * Message must end with new line '\n'.
-	 * 
+	 *
 	 * @param msg new line terminated message
 	 * @param wantResponse request response back
 	 * @throws IOException if error occurs when sending a message
 	 */
 	void send(String msg, boolean wantResponse) throws IOException;
-	
+
 	/**
 	 * Read a message (reply) from the stream.
-	 * 
+	 *
 	 * @return a message from the stream.
 	 * @throws IOException if error occurs when sending a message
 	 */
@@ -107,7 +109,7 @@ public interface JKStream {
 
 	/**
 	 * Close the stream and release all resources
-	 * 
+	 *
 	 */
 	void close();
 }

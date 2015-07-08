@@ -45,7 +45,7 @@ public class AccessResponse {
 
 	/**
 	 * Create access response with a given access token and status
-	 * 
+	 *
 	 * @param token access token
 	 * @param success flag
 	 */
@@ -56,7 +56,7 @@ public class AccessResponse {
 
 	/**
 	 * Create access response with a given access token and status
-	 * 
+	 *
 	 * @param token access token
 	 * @param success flag
 	 * @param reason success flag reason
@@ -69,7 +69,7 @@ public class AccessResponse {
 
 	/**
 	 * Get user name associated with the response
-	 * 
+	 *
 	 * @return user name associated with the response
 	 */
 	public String getUser() {
@@ -78,7 +78,7 @@ public class AccessResponse {
 
 	/**
 	 * Is access response signify success
-	 * 
+	 *
 	 * @return true if success, false otherwise
 	 */
 	public boolean isSuccess() {
@@ -87,7 +87,7 @@ public class AccessResponse {
 
 	/**
 	 * Get success flag reason message
-	 * 
+	 *
 	 * @return success flag reason message
 	 */
 	public String getReason() {
@@ -96,7 +96,8 @@ public class AccessResponse {
 
 	/**
 	 * Generate access response message
-	 * 
+	 *
+	 * @return access response message
 	 */
 	public String generateMsg() {
 		StringBuilder msg = new StringBuilder();
@@ -115,7 +116,7 @@ public class AccessResponse {
 
 	/**
 	 * Parse and create access response from a given string
-	 * 
+	 *
 	 * @param msg access response message
 	 * @return access response object instance
 	 */
@@ -133,7 +134,7 @@ public class AccessResponse {
 
 	/**
 	 * Is a given string message an access response message
-	 * 
+	 *
 	 * @param msg access response message
 	 * @return true if given string is an access response message, false otherwise
 	 */

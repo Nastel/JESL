@@ -40,7 +40,7 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  */
 public class SimulatedEventSink extends AbstractEventSink {
 	private static final String FILE_PREFIX = "file://";
-	
+
 	private EventFormatter		formatter = new JSONFormatter();
 	private Sink				outSink;
 
@@ -49,7 +49,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 
 		if (!url.startsWith("file://")) {
 			outSink = new JKCloudEventSink(name, url, gwAccessToken, new DefaultFormatter(), null);
-		} else { 
+		} else {
 			String fileName = url.substring(FILE_PREFIX.length());
 			outSink = new FileSink(fileName, true, new DefaultFormatter());
 		}
@@ -77,7 +77,6 @@ public class SimulatedEventSink extends AbstractEventSink {
 
 	/**
 	 * {@inheritDoc}
-	 * @throws InterruptedException 
 	 */
 	@Override
 	protected void _write(Object msg, Object... args) throws IOException, InterruptedException {
@@ -155,7 +154,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 		}
 		return super.getStats(stats);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -163,7 +162,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 	public void resetStats() {
 		super.resetStats();
 		if (outSink instanceof EventSink) {
-			((EventSink)outSink).resetStats();		
+			((EventSink)outSink).resetStats();
 		}
 	}
 }

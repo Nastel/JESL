@@ -34,7 +34,7 @@ import org.apache.http.util.EntityUtils;
 public class HttpMessageUtils {
 	/**
 	 * Obtain entity object which is sent/received over HTTP.
-	 * 
+	 *
 	 * @param message HTTP message
 	 * @return HTTP entity object
 	 */
@@ -48,7 +48,7 @@ public class HttpMessageUtils {
 
 	/**
 	 * Set entity object which are sent/received over HTTP.
-	 * 
+	 *
 	 * @param message HTTP message
 	 * @param entity HTTP entity object
 	 */
@@ -61,7 +61,7 @@ public class HttpMessageUtils {
 
 	/**
 	 * True if HTTP message has content
-	 * 
+	 *
 	 * @param message HTTP message
 	 * @return true if HTTP message has content, false otherwise
 	 */
@@ -71,9 +71,10 @@ public class HttpMessageUtils {
 
 	/**
 	 * Obtain content from HTTP message
-	 * 
+	 *
 	 * @param message HTTP message
 	 * @return bytes associated with HTTP content
+	 * @throws IOException if error reading message content
 	 */
 	public static byte[] getContentBytes(HttpMessage message) throws IOException {
 		HttpEntity entity = getEntity(message);
@@ -84,9 +85,10 @@ public class HttpMessageUtils {
 
 	/**
 	 * Obtain content from HTTP message
-	 * 
+	 *
 	 * @param message HTTP message
 	 * @return string associated with HTTP content
+	 * @throws IOException if error reading message content
 	 */
 	public static String getContentString(HttpMessage message) throws IOException {
 		HttpEntity entity = getEntity(message);
@@ -97,10 +99,11 @@ public class HttpMessageUtils {
 
 	/**
 	 * Obtain content from HTTP message
-	 * 
+	 *
 	 * @param message HTTP message
 	 * @param charset target character set
 	 * @return string associated with HTTP content in the specified character set
+	 * @throws IOException if error reading message content
 	 */
 	public static String getContentString(HttpMessage message, String charset) throws IOException {
 		HttpEntity entity = getEntity(message);
@@ -111,11 +114,12 @@ public class HttpMessageUtils {
 
 	/**
 	 * Set HTTP message content
-	 * 
+	 *
 	 * @param message HTTP message
 	 * @param contentType contentType
 	 * @param content content bytes
 	 * @param contentEncoding content encoding
+	 * @throws IOException if error writing message content
 	 */
 	public static void setContent(HttpMessage message, String contentType, byte[] content, String contentEncoding) throws IOException {
 		ByteArrayEntity httpContent = new ByteArrayEntity(content);
@@ -129,10 +133,11 @@ public class HttpMessageUtils {
 
 	/**
 	 * Set HTTP message content
-	 * 
+	 *
 	 * @param message HTTP message
 	 * @param contentType contentType
 	 * @param content content string
+	 * @throws IOException if error writing message content
 	 */
 	public static void setContent(HttpMessage message, String contentType, String content) throws IOException {
 		setContent(message, contentType, content.getBytes(), null);
@@ -140,11 +145,12 @@ public class HttpMessageUtils {
 
 	/**
 	 * Set HTTP message content
-	 * 
+	 *
 	 * @param message HTTP message
 	 * @param contentType contentType
 	 * @param content content string
 	 * @param charset character set of the content string
+	 * @throws IOException if error writing message content
 	 */
 	public static void setContent(HttpMessage message, String contentType, String content, String charset) throws IOException {
 		setContent(message, contentType + "; charset=" + charset, content.getBytes(charset), charset);

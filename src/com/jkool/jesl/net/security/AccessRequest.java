@@ -41,7 +41,7 @@ public class AccessRequest {
 
 	/**
 	 * Create access request with a given access token
-	 * 
+	 *
 	 * @param token access token
 	 */
 	public AccessRequest(String token) {
@@ -50,7 +50,7 @@ public class AccessRequest {
 
 	/**
 	 * Get access token associated with this request
-	 * 
+	 *
 	 * @return access token associated with this request
 	 */
 	public String getToken() {
@@ -59,7 +59,8 @@ public class AccessRequest {
 
 	/**
 	 * Generate access request message
-	 * 
+	 *
+	 * @return access request message
 	 */
 	public String generateMsg() {
 		StringBuilder msg = new StringBuilder();
@@ -73,7 +74,7 @@ public class AccessRequest {
 
 	/**
 	 * Parse and create access request from a given string
-	 * 
+	 *
 	 * @param msg access request message
 	 * @return access request object instance
 	 */
@@ -91,7 +92,7 @@ public class AccessRequest {
 
 	/**
 	 * Is a given string message an access request message
-	 * 
+	 *
 	 * @param msg access request message
 	 * @return true if given string is an access request message, false otherwise
 	 */

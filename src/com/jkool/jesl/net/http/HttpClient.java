@@ -74,10 +74,10 @@ public class HttpClient implements HttpStream {
 
 	/**
 	 * Create JESL HTTP[S} client stream with given attributes
-	 * 
+	 *
 	 * @param urlStr connection string to specified JESL server
 	 * @param logger event sink used for logging, null if none
-	 * 
+	 * @throws URISyntaxException if invalid connection string
 	 */
 	public HttpClient(String urlStr, EventSink logger) throws URISyntaxException {
 		this(urlStr, null, 0, logger);
@@ -85,12 +85,12 @@ public class HttpClient implements HttpStream {
 
 	/**
 	 * Create JESL HTTP[S} client stream with given attributes
-	 * 
+	 *
 	 * @param urlStr connection string to specified JESL server
 	 * @param proxyHost proxy host name if any, null if none
 	 * @param proxyPort proxy port number if any, 0 of none
 	 * @param logger event sink used for logging, null if none
-	 * 
+	 * @throws URISyntaxException if invalid connection string
 	 */
 	public HttpClient(String urlStr, String proxyHost, int proxyPort, EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);

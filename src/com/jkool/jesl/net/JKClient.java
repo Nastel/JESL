@@ -29,19 +29,19 @@ import com.nastel.jkool.tnt4j.sink.EventSink;
  * Example: http://data.jkoolcloud.com:6580.
  * Applications should use this class to connect to JESL servers
  * to stream events.
- * 
+ *
  * @version $Revision: 1 $
  */
-public class JKClient implements JKStream {	
+public class JKClient implements JKStream {
 	JKStream handle;
 	URI uri;
-	
+
 	/**
 	 * Create JESL client stream with given attributes
-	 * 
+	 *
 	 * @param urlStr connection string to specified JESL server
 	 * @param logger event sink used for logging, null if none
-	 * 
+	 * @throws URISyntaxException if invalid connection string
 	 */
 	public JKClient(String urlStr, EventSink logger) throws URISyntaxException {
 		this(urlStr, null, 0, logger);
@@ -49,12 +49,12 @@ public class JKClient implements JKStream {
 
 	/**
 	 * Create JESL client stream with given attributes
-	 * 
+	 *
 	 * @param urlStr connection string to specified JESL server
 	 * @param proxyHost proxy host name if any, null if none
 	 * @param proxyPort proxy port number if any, 0 of none
 	 * @param logger event sink used for logging, null if none
-	 * 
+	 * @throws URISyntaxException if invalid connection string
 	 */
 	public JKClient(String urlStr, String proxyHost, int proxyPort, EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);

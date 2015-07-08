@@ -22,7 +22,7 @@ import com.jkool.jesl.net.JKStream;
 /**
  * This interface defines JESL HTTP based Stream based on
  * <code>JKStream</code>
- * 
+ *
  * @see JKStream
  *
  * @version $Revision: 1 $
@@ -30,34 +30,37 @@ import com.jkool.jesl.net.JKStream;
 public interface HttpStream extends JKStream {
 	/**
 	 * Send HTTP request
-	 * 
+	 *
 	 * @param request HTTP request message
 	 * @param wantResponse block to wait for response from server
+	 * @throws IOException if error writing request
 	 */
 	void sendRequest(HttpRequest request, boolean wantResponse) throws IOException;
 
 	/**
 	 * Send HTTP request
-	 * 
+	 *
 	 * @param method HTTP method
 	 * @param reqUri request URI
 	 * @param contentType content type
 	 * @param content content message to be sent
 	 * @param wantResponse block to wait for response from server
+	 * @throws IOException if error writing request
 	 */
 	void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws IOException;
 
 	/**
 	 * Get/receive HTTP response
-	 * 
+	 *
 	 * @return HTTP response object
+	 * @throws IOException if error reading response
 	 */
 	HttpResponse getResponse() throws IOException;
-	
+
 	/**
-	 * Create a new response object with 
+	 * Create a new response object with
 	 * a given method and URI
-	 * 
+	 *
 	 * @param method HTTP method
 	 * @param uri associated with HTTP request
 	 * @return HTTP response object
@@ -65,8 +68,8 @@ public interface HttpStream extends JKStream {
 	HttpRequest  newRequest(String method, String uri);
 
 	/**
-	 * Create a new response object with 
-	 * 
+	 * Create a new response object with
+	 *
 	 * @param protocol HTTP protocol
 	 * @param major protocol major version
 	 * @param minor protocol minor version

@@ -27,10 +27,10 @@ public class AuthUtils {
 	/**
 	 * Authenticate with jKool servers using client handle
 	 * and a given access token.
-	 * 
+	 *
 	 * @param client jkool client handle encapsulating connection to jkool servers
 	 * @param token access token to be used for authentication
-	 *
+	 * @throws SecurityException if error validating token
 	 */
 	public static void authenticate(JKStream client, String token) throws SecurityException {
 		String respStr = null;

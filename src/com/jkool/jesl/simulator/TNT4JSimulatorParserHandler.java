@@ -708,7 +708,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				throw new SAXParseException("<" + SIM_XML_ACTIVITY + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined", saxLocator);
 
 			curActivity = curTracker.newActivity();
-			curActivity.appendDefaultSnapshot(false);
 			curActivity.setSource(source);
 			curActivity.setUser(user == null ? source.getUser() : user);
 			curActivity.setStatus(status == null ? ActivityStatus.BEGIN : status);

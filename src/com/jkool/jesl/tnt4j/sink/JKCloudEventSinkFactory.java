@@ -23,6 +23,7 @@ import java.util.Properties;
 import com.nastel.jkool.tnt4j.config.ConfigException;
 import com.nastel.jkool.tnt4j.format.EventFormatter;
 import com.nastel.jkool.tnt4j.format.JSONFormatter;
+import com.nastel.jkool.tnt4j.format.SimpleFormatter;
 import com.nastel.jkool.tnt4j.sink.AbstractEventSinkFactory;
 import com.nastel.jkool.tnt4j.sink.DefaultEventSinkFactory;
 import com.nastel.jkool.tnt4j.sink.EventSink;
@@ -65,17 +66,17 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 
 	@Override
     public EventSink getEventSink(String name) {
-	    return new JKCloudEventSink(name, url, new JSONFormatter(false), eventSinkFactory.getEventSink(name, System.getProperties(), new JSONFormatter()));
+	    return new JKCloudEventSink(name, url, new JSONFormatter(false), eventSinkFactory.getEventSink(name, System.getProperties(), new SimpleFormatter()));
     }
 
 	@Override
     public EventSink getEventSink(String name, Properties props) {
-	    return new JKCloudEventSink(name, url, new JSONFormatter(false), eventSinkFactory.getEventSink(name, props, new JSONFormatter()));
+	    return new JKCloudEventSink(name, url, new JSONFormatter(false), eventSinkFactory.getEventSink(name, props, new SimpleFormatter()));
     }
 
 	@Override
     public EventSink getEventSink(String name, Properties props, EventFormatter frmt) {
-	    return new JKCloudEventSink(name, url,  token, frmt, eventSinkFactory.getEventSink(name, props, new JSONFormatter()));
+	    return new JKCloudEventSink(name, url,  token, frmt, eventSinkFactory.getEventSink(name, props, new SimpleFormatter()));
     }
 
 	@Override

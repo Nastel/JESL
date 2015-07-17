@@ -15,9 +15,9 @@
  */
 
 /**
- * JESL Client connection and streaming API
+ * JESL Syslog Server implementation
  * 
  * @author albert
  * @version 1.0
  */
-package com.jkool.jesl.net;
+package com.jkool.jesl.net.syslogd;

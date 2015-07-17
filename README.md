@@ -236,6 +236,7 @@ JESL requires the following:
 * Apache HTTP Client 4.2.5 (http://hc.apache.org/httpcomponents-client-ga/)
 * Apache HTTP Core 4.3.4 (http://hc.apache.org/httpcomponents-client-ga/)
 * Syslog4j (http://syslog4j.org/)
+* Joda Time (http://www.joda.org/joda-time/)
 
 # Related Projects
 * TrackingFilter (http://nastel.github.io/TrackingFilter/)

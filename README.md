@@ -106,8 +106,18 @@ To see the full set of supported options, run:
 
 	`jksim.bat help`
 
+Streaming Syslog to jKool Cloud 
+===============================
+JESL includes Syslog Daemon implementation. Please follow these steps to stream syslog to `jkoolcloud.com`:
+
+* Obtain jkool cloud account. Edit `config/tnt4j.properties`, locate `com.jkool.jesl.net.syslogd` stanza and provide your API access token.
+* Run JESL syslogd `<jesl-home>/bin/syslogd`. By default syslogd will bind to port `514`. 
+* Configure `syslog/rsyslog` to forward events to JESL syslog daemon (e.g. `*.* @@hostname:514`), where `hostname` is where JESL syslod is running.
+
+That should do it.
+
 Streaming Log4j to jKool Cloud 
-==============================
+===============================
 Log4J can be configured to stream events and metrics to jKool Cloud by using 
 JESL log4j appender (`com.nastel.jkool.tnt4j.logger.log4j.TNT4JAppender`) as follows:
 

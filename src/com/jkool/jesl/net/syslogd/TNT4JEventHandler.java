@@ -20,8 +20,11 @@ import java.net.SocketAddress;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.productivity.java.syslog4j.impl.message.structured.StructuredSyslogMessage;
 import org.productivity.java.syslog4j.server.SyslogServerEventIF;
@@ -60,6 +63,7 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 	private static final ConcurrentHashMap<String, AtomicLong> EVENT_TIMER = new ConcurrentHashMap<String, AtomicLong>();
 
     TrackingLogger logger;
+	Pattern pattern = Pattern.compile("(\\w+)=\"*((?<=\")[^\"]+(?=\")|([^\\s]+))\"*");
 	
 	public TNT4JEventHandler(String source) {
 		logger = TrackingLogger.getInstance(source);
@@ -108,7 +112,7 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 			
 			// process structured event attributes into snapshot
 			Map<?, ?> map = sm.getStructuredData();
-			PropertySnapshot snap = new PropertySnapshot("Syslog", sevent.getApplicationName(), level);
+			PropertySnapshot snap = new PropertySnapshot("SyslogMap", sevent.getApplicationName(), level);
 			snap.addAll(map);
 			tevent.getOperation().addSnapshot(snap);
 		} else {
@@ -126,8 +130,38 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 			tevent.setSource(factory.newSource(map.get("appl.name").toString(), SourceType.APPL, factory.newSource(map.get("server.name").toString(), SourceType.SERVER, rootSource)));						
 		}
 		
+		// extract nme=value pairs if available
+		Map<String, Object> attr = parseVariables(event.getMessage());
+		if (attr != null && attr.size() > 0) {
+			PropertySnapshot snap = new PropertySnapshot("SyslogVars", tevent.getOperation().getResource(), level);
+			snap.addAll(attr);
+			tevent.getOperation().addSnapshot(snap);			
+		}
+		
 		tevent.stop(date.getTime()*1000, getElapsedNanosSinceLastEvent(tevent.getLocation())/1000);
 		logger.tnt(tevent);
+	}
+
+	private Map<String, Object> parseVariables(String message) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		StringTokenizer tokens = new StringTokenizer(message, "[](){}");
+
+		while (tokens.hasMoreTokens()) {
+			String pair = tokens.nextToken();
+			Matcher matcher = pattern.matcher(pair);
+			while (matcher.find()) {
+				String value = matcher.group(2);
+				try {
+					if (Character.isDigit(value.charAt(0))) {
+						map.put(matcher.group(1), Long.parseLong(value));
+						continue;
+					}
+				} catch (Throwable e) {
+				}
+				map.put(matcher.group(1), value);
+			}
+		}
+		return map;
 	}
 
 	private Map<String, Object> parseAttributes(String message) {

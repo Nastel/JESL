@@ -116,6 +116,8 @@ JESL includes Syslog Daemon implementation. Please follow these steps to stream 
 
 That should do it.
 
+<b>NOTE:</b> JESL currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
+
 Streaming Log4j to jKool Cloud 
 ===============================
 Log4J can be configured to stream events and metrics to jKool Cloud by using 

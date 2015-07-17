@@ -23,13 +23,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.productivity.java.syslog4j.impl.message.structured.StructuredSyslogMessage;
 import org.productivity.java.syslog4j.server.SyslogServerEventIF;
 import org.productivity.java.syslog4j.server.SyslogServerIF;
 import org.productivity.java.syslog4j.server.SyslogServerSessionEventHandlerIF;
+import org.productivity.java.syslog4j.server.impl.event.structured.StructuredSyslogServerEvent;
 
 import com.nastel.jkool.tnt4j.TrackingLogger;
 import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.core.OpType;
+import com.nastel.jkool.tnt4j.core.PropertySnapshot;
 import com.nastel.jkool.tnt4j.source.Source;
 import com.nastel.jkool.tnt4j.source.SourceFactory;
 import com.nastel.jkool.tnt4j.source.SourceType;
@@ -81,23 +84,48 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 		Date date = (event.getDate() == null ? new Date() : event.getDate());
 		String facility = getFacilityString(event.getFacility());
 		OpLevel level = getOpLevel(event.getLevel());	
-		Map<String, Object> map = parseAttributes(event.getMessage());
 
 		String fullMessage = new String(event.getRaw());
 		TrackingEvent tevent = logger.newEvent(level, facility, null, fullMessage);
-		
 		tevent.getOperation().setType(OpType.EVENT);
 		tevent.setLocation(event.getHost());
-		tevent.setTag(map.get("server.name").toString());
-		tevent.getOperation().setResource(map.get("appl.name").toString());
-		tevent.getOperation().setPID((Long)map.get("appl.pid"));
-		tevent.getOperation().setTID(tevent.getOperation().getPID());
-		tevent.setCharset(arg1.getConfig().getCharSet());
+		
+		if (event instanceof StructuredSyslogServerEvent) {
+			// RFC 5424 
+			StructuredSyslogServerEvent sevent = (StructuredSyslogServerEvent) event;
+			tevent.getOperation().setResource(sevent.getApplicationName());
+			tevent.getOperation().setPID(Long.parseLong(sevent.getProcessId()));
+			tevent.getOperation().setTID(tevent.getOperation().getPID());
+			
+			// process structured message 
+			StructuredSyslogMessage sm = sevent.getStructuredMessage();
+			tevent.setTag(event.getHost(), sevent.getApplicationName(), sevent.getStructuredMessage().getMessageId());
+			
+			// set the appropriate source
+			SourceFactory factory = logger.getConfiguration().getSourceFactory();
+			Source rootSource = factory.getRootSource().getSource(SourceType.DATACENTER); // get to the datacenter source
+			tevent.setSource(factory.newSource(sevent.getApplicationName(), SourceType.APPL, factory.newSource(event.getHost(), SourceType.SERVER, rootSource)));
+			
+			// process structured event attributes into snapshot
+			Map<?, ?> map = sm.getStructuredData();
+			PropertySnapshot snap = new PropertySnapshot("Syslog", sevent.getApplicationName(), level);
+			snap.addAll(map);
+			tevent.getOperation().addSnapshot(snap);
+		} else {
+			// RFC 3164 
+			Map<String, Object> map = parseAttributes(event.getMessage());
+			tevent.setTag(map.get("server.name").toString(), map.get("appl.name").toString());
+			tevent.getOperation().setResource(map.get("appl.name").toString());
+			tevent.getOperation().setPID((Long)map.get("appl.pid"));
+			tevent.getOperation().setTID(tevent.getOperation().getPID());
+			tevent.setCharset(arg1.getConfig().getCharSet());
 
-		// set the appropriate source
-		SourceFactory factory = logger.getConfiguration().getSourceFactory();
-		Source rootSource = factory.getRootSource().getSource(SourceType.DATACENTER); // get to the datacenter source
-		tevent.setSource(factory.newSource(map.get("appl.name").toString(), SourceType.APPL, factory.newSource(map.get("server.name").toString(), SourceType.SERVER, rootSource)));
+			// set the appropriate source
+			SourceFactory factory = logger.getConfiguration().getSourceFactory();
+			Source rootSource = factory.getRootSource().getSource(SourceType.DATACENTER); // get to the datacenter source
+			tevent.setSource(factory.newSource(map.get("appl.name").toString(), SourceType.APPL, factory.newSource(map.get("server.name").toString(), SourceType.SERVER, rootSource)));						
+		}
+		
 		tevent.stop(date.getTime()*1000, getElapsedNanosSinceLastEvent(tevent.getLocation())/1000);
 		logger.tnt(tevent);
 	}

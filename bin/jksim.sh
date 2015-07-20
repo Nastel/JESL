@@ -16,7 +16,7 @@ if [ "$2" != "" ]; then
 	SIMRUNS=$2
 fi
 
-SIMCP=$SIMDIR..:$SIMDIR../jkool-jesl.jar:$SIMDIR../lib/*
+SIMCP="$SIMDIR..:$SIMDIR../jkool-jesl.jar:$SIMDIR../lib/*"
 SIMMAIN=com.jkool.jesl.simulator.TNT4JSimulator
 TNT4JOPTS="-Dlog4j.configuration=file:$SIMDIR../config/log4j-simulator.properties -Dtnt4j.config=$SIMDIR../config/tnt4j-simulator.properties -Dtnt4j.token.repository=$SIMDIR../config/tnt4j-tokens.properties"
 SIMFILE=$SIMDIR../sims/order-process.xml

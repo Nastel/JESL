@@ -59,10 +59,16 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  */
 public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, SyslogConstants {
     private static final long serialVersionUID = -3115399425996955812L;
+
+    protected static String SNAPSHOT_CAT_SYSLOG_MAP = "SyslogMap";
+    protected static String SNAPSHOT_CAT_SYSLOG_VARS = "SyslogVars";
     
 	private static final ConcurrentHashMap<String, AtomicLong> EVENT_TIMER = new ConcurrentHashMap<String, AtomicLong>();
 
     TrackingLogger logger;
+    /*
+     * Regex pattern to detect name=value pairs.
+     */
 	Pattern pattern = Pattern.compile("(\\w+)=\"*((?<=\")[^\"]+(?=\")|([^\\s]+))\"*");
 	
 	public TNT4JEventHandler(String source) {
@@ -112,7 +118,7 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 			
 			// process structured event attributes into snapshot
 			Map<?, ?> map = sm.getStructuredData();
-			PropertySnapshot snap = new PropertySnapshot("SyslogMap", sevent.getApplicationName(), level);
+			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_MAP, sevent.getApplicationName(), level);
 			snap.addAll(map);
 			tevent.getOperation().addSnapshot(snap);
 		} else {
@@ -133,7 +139,7 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 		// extract nme=value pairs if available
 		Map<String, Object> attr = parseVariables(event.getMessage());
 		if (attr != null && attr.size() > 0) {
-			PropertySnapshot snap = new PropertySnapshot("SyslogVars", tevent.getOperation().getResource(), level);
+			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_VARS, tevent.getOperation().getResource(), level);
 			snap.addAll(attr);
 			tevent.getOperation().addSnapshot(snap);			
 		}
@@ -164,6 +170,12 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 		return map;
 	}
 
+	/**
+	 * Parse syslog attributes into a map
+	 *
+	 * @param message syslog message
+	 * @return syslog attributes such as host, application, pid
+	 */
 	private Map<String, Object> parseAttributes(String message) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		String [] tokens = message.split(":| ");
@@ -228,7 +240,7 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 
 	@Override
     public void sessionClosed(Object arg0, SyslogServerIF arg1, SocketAddress arg2, boolean arg3) {
-		logger.log(OpLevel.INFO, "Session closed: obj={0}, syslog.server.if={1}, socket={2}, timeout={3}", arg0, arg1, arg2, arg3);
+		logger.log(OpLevel.DEBUG, "Session closed: obj={0}, syslog.server.if={1}, socket={2}, timeout={3}", arg0, arg1, arg2, arg3);
     }
 
 	@Override

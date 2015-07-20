@@ -148,6 +148,12 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 		logger.tnt(tevent);
 	}
 
+	/**
+	 * Parse syslog name=value variables
+	 *
+	 * @param message syslog message
+	 * @return syslog name=value variables
+	 */
 	private Map<String, Object> parseVariables(String message) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		StringTokenizer tokens = new StringTokenizer(message, "[](){}");
@@ -156,20 +162,36 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 			String pair = tokens.nextToken();
 			Matcher matcher = pattern.matcher(pair);
 			while (matcher.find()) {
-				String value = matcher.group(2);
-				try {
-					if (Character.isDigit(value.charAt(0))) {
-						map.put(matcher.group(1), Long.parseLong(value));
-						continue;
-					}
-				} catch (Throwable e) {
-				}
-				map.put(matcher.group(1), value);
+				mapToTyped(map, matcher.group(1), matcher.group(2));
 			}
 		}
 		return map;
 	}
 
+	/**
+	 * Test key value pair for numeric, convert and store in map
+	 *
+	 * @param map collection of name, value pairs
+	 * @param key associated with key, value pair
+	 * @param value associated with key, value pair
+	 * 
+	 */
+	private void mapToTyped(Map<String, Object> map, String key, String value) {
+		try {
+			if (Character.isDigit(value.charAt(0))) {
+				map.put(key, Long.valueOf(value));
+				return;
+			}
+		} catch (Throwable e) {
+			try {
+				map.put(key, Double.valueOf(value));
+				return;
+			} catch (Throwable ex) {
+			}
+		}
+		map.put(key, value);
+	}
+	
 	/**
 	 * Parse syslog attributes into a map
 	 *

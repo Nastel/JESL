@@ -124,27 +124,31 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 		} else {
 			// RFC 3164 
 			Map<String, Object> map = parseAttributes(event.getMessage());
-			tevent.setTag(map.get("server.name").toString(), map.get("appl.name").toString());
-			tevent.getOperation().setResource(map.get("appl.name").toString());
-			tevent.getOperation().setPID((Long)map.get("appl.pid"));
-			tevent.getOperation().setTID(tevent.getOperation().getPID());
+			String appName = map.get("server.name").toString();
+			String serverName = map.get("server.name").toString();
+			long pid = (long) map.get("appl.pid");
+			
+			tevent.setTag(serverName, appName);
+			tevent.getOperation().setPID(pid);
+			tevent.getOperation().setTID(pid);
+			tevent.getOperation().setResource(appName);
 			tevent.setCharset(arg1.getConfig().getCharSet());
 
 			// set the appropriate source
 			SourceFactory factory = logger.getConfiguration().getSourceFactory();
 			Source rootSource = factory.getRootSource().getSource(SourceType.DATACENTER); // get to the datacenter source
-			tevent.setSource(factory.newSource(map.get("appl.name").toString(), SourceType.APPL, factory.newSource(map.get("server.name").toString(), SourceType.SERVER, rootSource)));						
+			tevent.setSource(factory.newSource(appName, SourceType.APPL, factory.newSource(serverName, SourceType.SERVER, rootSource)));						
 		}
 		
-		// extract nme=value pairs if available
+		// extract name=value pairs if available
 		Map<String, Object> attr = parseVariables(event.getMessage());
 		if (attr != null && attr.size() > 0) {
 			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_VARS, tevent.getOperation().getResource(), level);
 			snap.addAll(attr);
 			tevent.getOperation().addSnapshot(snap);			
-		}
-		
-		tevent.stop(date.getTime()*1000, getElapsedNanosSinceLastEvent(tevent.getLocation())/1000);
+		}		
+		String locationKey = tevent.getLocation() + "/" + tevent.getOperation().getResource();
+		tevent.stop(date.getTime()*1000, getElapsedNanosSinceLastEvent(locationKey)/1000);
 		logger.tnt(tevent);
 	}
 

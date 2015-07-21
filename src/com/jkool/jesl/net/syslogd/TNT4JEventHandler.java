@@ -63,13 +63,26 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
     protected static String SNAPSHOT_CAT_SYSLOG_MAP = "SyslogMap";
     protected static String SNAPSHOT_CAT_SYSLOG_VARS = "SyslogVars";
     
-	private static final ConcurrentHashMap<String, AtomicLong> EVENT_TIMER = new ConcurrentHashMap<String, AtomicLong>();
+    /*
+    * Timing map maintains the number of nanoseconds since last event for a specific server/application
+    * combo.
+    */
+	private static final ConcurrentHashMap<String, AtomicLong> EVENT_TIMER = new ConcurrentHashMap<String, AtomicLong>(89);
 
-    TrackingLogger logger;
+	static {
+		// add a custom dump provider
+		TrackingLogger.addDumpProvider(new SyslogHandlerDumpProvider(TNT4JEventHandler.class.getName(), EVENT_TIMER));		
+	}
+	
+    /*
+     * Tracking logger instance where all syslog messages are recorded.
+     */
+    private TrackingLogger logger;
+    
     /*
      * Regex pattern to detect name=value pairs.
      */
-	Pattern pattern = Pattern.compile("(\\w+)=\"*((?<=\")[^\"]+(?=\")|([^\\s]+))\"*");
+	private Pattern pattern = Pattern.compile("(\\w+)=\"*((?<=\")[^\"]+(?=\")|([^\\s]+))\"*");
 	
 	public TNT4JEventHandler(String source) {
 		logger = TrackingLogger.getInstance(source);
@@ -124,7 +137,7 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 		} else {
 			// RFC 3164 
 			Map<String, Object> map = parseAttributes(event.getMessage());
-			String appName = map.get("server.name").toString();
+			String appName = map.get("appl.name").toString();
 			String serverName = map.get("server.name").toString();
 			long pid = (long) map.get("appl.pid");
 			

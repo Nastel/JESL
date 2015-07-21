@@ -111,8 +111,8 @@ Streaming Syslog to jKool Cloud
 JESL includes Syslog Daemon implementation. Please follow these steps to stream syslog to `jkoolcloud.com`:
 
 * Obtain jkool cloud account. Edit `config/tnt4j.properties`, locate `com.jkool.jesl.net.syslogd` stanza and provide your API access token.
-* Run JESL syslogd `<jesl-home>/bin/syslogd`. By default syslogd will bind to port `514`. 
-* Configure `syslog/rsyslog` to forward events to JESL syslog daemon (e.g. `*.* @@hostname:514`), where `hostname` is where JESL syslogd is running.
+* Run JESL syslogd `<jesl-home>/bin/syslogd`. By default JESL syslogd will bind to port `5140`. 
+* Configure `syslog/rsyslog` to forward events to JESL syslog daemon (e.g. `*.* @@hostname:5140`), where `hostname` is where JESL syslogd is running.
 
 That should do it.
 

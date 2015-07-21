@@ -40,7 +40,7 @@ public class Syslogd {
 		}
 		
 		if (!options.quiet) {
-			System.out.println("SyslogServer starting: " + SyslogServer.getVersion());
+			System.out.println("Syslogd starting: " + SyslogServer.getVersion());
 			System.out.println("Options: " + options);
 		}
 		
@@ -80,7 +80,7 @@ public class Syslogd {
 		}
 		
 		if (options.source != null) {
-			SyslogServerEventHandlerIF eventHandler = new TNT4JEventHandler(options.source);
+			SyslogServerEventHandlerIF eventHandler = new SyslogTNT4JEventHandler(options.source);
 			syslogServerConfig.addEventHandler(eventHandler);
 		}
 		
@@ -95,7 +95,7 @@ public class Syslogd {
 
 		SyslogServer.getThreadedInstance(options.protocol);
 		if (!options.quiet) {
-			System.out.println("SyslogServer ready: " + SyslogServer.getVersion());
+			System.out.println("Syslogd ready: " + SyslogServer.getVersion());
 		}
 		
 		while(true) {
@@ -111,12 +111,12 @@ public class Syslogd {
 		
 		System.out.println("Syslogd Options:");
 		System.out.println();
-		System.out.println("[-h <host>] [-p <port>] [-o <file>] [-q] <protocol>");
+		System.out.println("[-h <host>] [-p <port>] [-s <source>] [-q] <protocol>");
 		System.out.println();
 		System.out.println("-h <host>    host or IP to bind");
 		System.out.println("-p <port>    port to bind");
 		System.out.println("-t <timeout> socket timeout (in milliseconds)");
-		System.out.println("-o <source>  tnt4j source name (default: " + Syslogd.class.getName() + ")");
+		System.out.println("-s <source>  tnt4j source name (default: " + Syslogd.class.getName() + ")");
 		System.out.println();
 		System.out.println("-q           do not write anything to standard out");
 		System.out.println();
@@ -134,7 +134,7 @@ public class Syslogd {
 			if ("-h".equals(arg)) { if (i == args.length) { options.usage = "Must specify host with -h"; return options; } match = true; options.host = args[i++]; }
 			if ("-p".equals(arg)) { if (i == args.length) { options.usage = "Must specify port with -p"; return options; } match = true; options.port = args[i++]; }
 			if ("-t".equals(arg)) { if (i == args.length) { options.usage = "Must specify value (in milliseconds)"; return options; } match = true; options.timeout = args[i++]; }
-			if ("-o".equals(arg)) { if (i == args.length) { options.usage = "Must specify source with -o"; return options; } match = true; options.source = args[i++]; }
+			if ("-s".equals(arg)) { if (i == args.length) { options.usage = "Must specify source with -s"; return options; } match = true; options.source = args[i++]; }
 			
 			if ("-q".equals(arg)) { match = true; options.quiet = true; }
 			

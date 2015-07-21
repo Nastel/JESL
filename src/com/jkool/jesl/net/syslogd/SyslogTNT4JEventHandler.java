@@ -57,7 +57,7 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  *
  * @version $Revision $
  */
-public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, SyslogConstants {
+public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerIF, SyslogConstants {
     private static final long serialVersionUID = -3115399425996955812L;
 
     protected static String SNAPSHOT_CAT_SYSLOG_MAP = "SyslogMap";
@@ -71,7 +71,7 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
 
 	static {
 		// add a custom dump provider
-		TrackingLogger.addDumpProvider(new SyslogHandlerDumpProvider(TNT4JEventHandler.class.getName(), EVENT_TIMER));		
+		TrackingLogger.addDumpProvider(new SyslogHandlerDumpProvider(SyslogTNT4JEventHandler.class.getName(), EVENT_TIMER));		
 	}
 	
     /*
@@ -84,7 +84,7 @@ public class TNT4JEventHandler implements SyslogServerSessionEventHandlerIF, Sys
      */
 	private Pattern pattern = Pattern.compile("(\\w+)=\"*((?<=\")[^\"]+(?=\")|([^\\s]+))\"*");
 	
-	public TNT4JEventHandler(String source) {
+	public SyslogTNT4JEventHandler(String source) {
 		logger = TrackingLogger.getInstance(source);
 	}
 	

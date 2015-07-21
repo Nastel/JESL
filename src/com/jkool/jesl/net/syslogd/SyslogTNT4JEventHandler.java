@@ -210,7 +210,8 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	}
 	
 	/**
-	 * Parse syslog attributes into a map
+	 * Parse syslog header attributes into a map.
+	 * Message structure: <server> <appl-part>:<message>
 	 *
 	 * @param message syslog message
 	 * @return syslog attributes such as host, application, pid
@@ -218,15 +219,19 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	private Map<String, Object> parseAttributes(String message) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		String [] tokens = message.split(":| ");
-		int first = tokens[1].indexOf("[");
-		int last = tokens[1].indexOf("]");
-		String applName = first >= 0? tokens[1].substring(0, first): tokens[1];
-		
 		map.put("server.name", tokens[0]);
 		map.put("appl.part", tokens[1]);
-		map.put("appl.name", applName);
-		map.put("appl.pid", ((last >= first && (first >= 0))? Long.parseLong(tokens[1].substring(first+1, last)): 0));
 		
+		try {
+			int first = tokens[1].indexOf("[");
+			int last = tokens[1].indexOf("]");
+			String applName = first >= 0? tokens[1].substring(0, first): tokens[1];				
+			map.put("appl.pid", ((last >= first && (first >= 0))? Long.parseLong(tokens[1].substring(first+1, last)): 0));
+			map.put("appl.name", applName);
+		} catch (Throwable ex) {
+			map.put("appl.pid", 0L);
+			map.put("appl.name", tokens[1]);
+		}		
 	    return map;		
 	}
 	
@@ -274,7 +279,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 
 	@Override
     public void exception(Object arg0, SyslogServerIF arg1, SocketAddress arg2, Exception arg3) {
-		logger.log(OpLevel.ERROR, "Sylog exception: obj={0}, syslog.server.if={1}, socket={2}", arg0, arg1, arg2, arg3);
+		logger.log(OpLevel.ERROR, "Syslog exception: obj={0}, syslog.server.if={1}, socket={2}", arg0, arg1, arg2, arg3);
 	}
 
 	@Override

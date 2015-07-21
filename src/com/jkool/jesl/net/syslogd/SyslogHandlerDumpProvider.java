@@ -23,6 +23,14 @@ import com.nastel.jkool.tnt4j.dump.DefaultDumpProvider;
 import com.nastel.jkool.tnt4j.dump.Dump;
 import com.nastel.jkool.tnt4j.dump.DumpCollection;
 
+/**
+ * This class implements a dump handler for syslog event handler {@link SyslogTNT4JEventHandler}.
+ * It dumps the contents of a timing table maintained by the syslog handler. 
+ * The timings maintain the number of nanoseconds since last event for a specific server/application
+ * combo.
+ *
+ * @version $Revision $
+ */
 public class SyslogHandlerDumpProvider extends DefaultDumpProvider{
 	private Map<String, AtomicLong> map;
 	

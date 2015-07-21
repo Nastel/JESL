@@ -23,11 +23,8 @@ import java.util.Properties;
 import com.nastel.jkool.tnt4j.config.ConfigException;
 import com.nastel.jkool.tnt4j.format.EventFormatter;
 import com.nastel.jkool.tnt4j.format.JSONFormatter;
-import com.nastel.jkool.tnt4j.format.SimpleFormatter;
 import com.nastel.jkool.tnt4j.sink.AbstractEventSinkFactory;
-import com.nastel.jkool.tnt4j.sink.DefaultEventSinkFactory;
 import com.nastel.jkool.tnt4j.sink.EventSink;
-import com.nastel.jkool.tnt4j.sink.EventSinkFactory;
 
 /**
  * <p>Concrete implementation of <code>EventSinkFactory</code> interface, which
@@ -44,8 +41,6 @@ import com.nastel.jkool.tnt4j.sink.EventSinkFactory;
 public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	private String token = System.getProperty("tnt4j.sink.factory.socket.token", "");
 	private String url = System.getProperty("tnt4j.sink.factory.socket.url", "http://localhost:6580");
-
-	private EventSinkFactory eventSinkFactory = DefaultEventSinkFactory.getInstance();
 
 	/**
 	 * Create a jKool Cloud Event Sink factory.
@@ -66,17 +61,17 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 
 	@Override
     public EventSink getEventSink(String name) {
-	    return new JKCloudEventSink(name, url, new JSONFormatter(false), eventSinkFactory.getEventSink(name, System.getProperties(), new SimpleFormatter()));
+	    return new JKCloudEventSink(name, url, new JSONFormatter(false));
     }
 
 	@Override
     public EventSink getEventSink(String name, Properties props) {
-	    return new JKCloudEventSink(name, url, new JSONFormatter(false), eventSinkFactory.getEventSink(name, props, new SimpleFormatter()));
+	    return new JKCloudEventSink(name, url, new JSONFormatter(false));
     }
 
 	@Override
     public EventSink getEventSink(String name, Properties props, EventFormatter frmt) {
-	    return new JKCloudEventSink(name, url,  token, frmt, eventSinkFactory.getEventSink(name, props, new SimpleFormatter()));
+	    return new JKCloudEventSink(name, url,  token, frmt);
     }
 
 	@Override

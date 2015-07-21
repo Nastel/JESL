@@ -57,7 +57,6 @@ public class JKCloudEventSink extends AbstractEventSink {
 	public static final String KEY_SENT_MSGS = "sink-sent-messages";
 	public static final String KEY_SERVICE_URL = "sink-service-url";
 
-	private EventSink logSink;
 	private JKClient jkHandle;
 
 	private String url = "localhost";
@@ -78,12 +77,9 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 *            http/https URL to jkool cloud service
 	 * @param frm
 	 *            event formatter associated with this sink
-	 * @param sink
-	 *            piped sink where all events are piped
-	 *
 	 */
-	public JKCloudEventSink(String name, String url, EventFormatter frm, EventSink sink) {
-		this(name, url, null, frm, sink);
+	public JKCloudEventSink(String name, String url, EventFormatter frm) {
+		this(name, url, null, frm);
 	}
 
 	/**
@@ -98,14 +94,11 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 *            api access token
 	 * @param frm
 	 *            event formatter associated with this sink
-	 * @param sink
-	 *            piped sink where all events are piped
 	 *
 	 */
-	public JKCloudEventSink(String name, String url, String token, EventFormatter frm, EventSink sink) {
+	public JKCloudEventSink(String name, String url, String token, EventFormatter frm) {
 		super(name, frm);
 		this.url = url;
-		this.logSink = sink;
 		this.accessToken = token;
 	}
 
@@ -198,7 +191,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	@Override
 	public String toString() {
-		return super.toString() + "(url: " + url + ", jk.handle: " + jkHandle + ", piped.sink: " + logSink + ")";
+		return super.toString() + "(url: " + url + ", jk.handle: " + jkHandle + ")";
 	}
 
 	private void writeLine(String msg) throws IOException {
@@ -221,33 +214,21 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	@Override
 	protected void _log(TrackingEvent event) throws IOException {
-		if (logSink != null && logSink.isSet(event.getSeverity())) {
-			logSink.log(event);
-		}
 		writeLine(getEventFormatter().format(event));
 	}
 
 	@Override
 	protected void _log(TrackingActivity activity) throws IOException {
-		if (logSink != null && logSink.isSet(activity.getSeverity())) {
-			logSink.log(activity);
-		}
 		writeLine(getEventFormatter().format(activity));
 	}
 
 	@Override
 	protected void _log(Source src, OpLevel sev, String msg, Object... args) throws IOException {
-		if (logSink != null && logSink.isSet(sev)) {
-			logSink.log(src, sev, msg, args);
-		}
 		writeLine(getEventFormatter().format(src, sev, msg, args));
 	}
 
 	@Override
 	protected void _log(Snapshot snapshot) throws Exception {
-		if (logSink != null && logSink.isSet(snapshot.getSeverity())) {
-			logSink.log(snapshot);
-		}
 		writeLine(getEventFormatter().format(snapshot));
 	}
 

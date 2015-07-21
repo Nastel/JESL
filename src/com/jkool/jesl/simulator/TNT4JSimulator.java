@@ -377,7 +377,7 @@ public class TNT4JSimulator {
 					simDef.append(line).append("\n");
 				simLoader.close();
 
-				info("jKool Activity Simulator Run starting...");
+				info("jKool Activity Simulator Run starting: file=" + simFileName + ", iterations=" + numIterations);
 				startTime = System.currentTimeMillis();
 
 				if (isTTY && numIterations > 1)
@@ -402,7 +402,7 @@ public class TNT4JSimulator {
 				printMetrics(xmlHandler.getSinkStats(), "Total Sink Statistics");
 			}
 			else if (runType == SimulatorRunType.REPLAY_SIM) {
-				info("jKool Activity Simulator Replay starting...");
+				info("jKool Activity Simulator Replay starting: file=" + jkFileName + ", iterations=" + numIterations);
 
 				connect();
 

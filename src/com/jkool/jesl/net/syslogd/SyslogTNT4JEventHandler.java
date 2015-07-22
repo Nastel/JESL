@@ -133,9 +133,11 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 			
 			// process structured event attributes into snapshot
 			Map<?, ?> map = sm.getStructuredData();
-			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_MAP, sevent.getApplicationName(), level);
-			snap.addAll(map);
-			tevent.getOperation().addSnapshot(snap);
+			if (map != null && !map.isEmpty()) {
+				PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_MAP, sevent.getApplicationName(), level);
+				snap.addAll(map);
+				tevent.getOperation().addSnapshot(snap);
+			}
 		} else {
 			// RFC 3164 
 			Map<String, Object> map = parseAttributes(event);

@@ -110,8 +110,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		String facility = getFacilityString(event.getFacility());
 		OpLevel level = getOpLevel(event.getLevel());	
 
-		String fullMessage = new String(event.getRaw());
-		TrackingEvent tevent = logger.newEvent(level, facility, null, fullMessage);
+		TrackingEvent tevent = logger.newEvent(level, facility, null, event.getMessage());
 		tevent.getOperation().setType(OpType.EVENT);
 		tevent.setLocation(event.getHost());
 		

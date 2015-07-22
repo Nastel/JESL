@@ -138,7 +138,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 			tevent.getOperation().addSnapshot(snap);
 		} else {
 			// RFC 3164 
-			Map<String, Object> map = parseAttributes(event.getMessage());
+			Map<String, Object> map = parseAttributes(event);
 			String appName = map.get("appl.name").toString();
 			String serverName = map.get("server.name").toString();
 			long pid = (long) map.get("appl.pid");
@@ -215,26 +215,35 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	 * Parse syslog header attributes into a map.
 	 * Message structure: <server> <appl-part>:<message>
 	 *
-	 * @param message syslog message
+	 * @param event syslog event
 	 * @return syslog attributes such as host, application, pid
 	 */
-	private Map<String, Object> parseAttributes(String message) {
+	private Map<String, Object> parseAttributes(SyslogServerEventIF event) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		String [] tokens = message.split(":| ");
-		map.put("server.name", tokens[0]);
-		map.put("appl.part", tokens[1]);
+		String message = event.getMessage();
 		
-		try {
-			int first = tokens[1].indexOf("[");
-			int last = tokens[1].indexOf("]");
-			String applName = first >= 0? tokens[1].substring(0, first): tokens[1];				
-			map.put("appl.pid", ((last >= first && (first >= 0))? Long.parseLong(tokens[1].substring(first+1, last)): 0));
-			map.put("appl.name", applName);
-		} catch (Throwable ex) {
+		if (message.indexOf(":") > 0) {
+			String[] tokens = message.split(":| ");
+			map.put("server.name", tokens[0]);
+			map.put("appl.part", tokens[1]);
+
+			try {
+				int first = tokens[1].indexOf("[");
+				int last = tokens[1].indexOf("]");
+				String applName = first >= 0 ? tokens[1].substring(0, first) : tokens[1];
+				map.put("appl.pid",
+				        ((last >= first && (first >= 0)) ? Long.parseLong(tokens[1].substring(first + 1, last)) : 0));
+				map.put("appl.name", applName);
+			} catch (Throwable ex) {
+				map.put("appl.pid", 0L);
+				map.put("appl.name", tokens[1]);
+			}
+		} else {
+			map.put("server.name", event.getHost());
 			map.put("appl.pid", 0L);
-			map.put("appl.name", tokens[1]);
-		}		
-	    return map;		
+			map.put("appl.name", "unknown");
+		}
+		return map;
 	}
 	
 	/**

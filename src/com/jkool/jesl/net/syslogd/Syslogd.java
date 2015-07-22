@@ -85,7 +85,7 @@ public class Syslogd {
 		}
 		
 		if (!options.quiet) {
-			SyslogServerEventHandlerIF eventHandler = new PrintStreamEventHandler(System.out);
+			SyslogServerEventHandlerIF eventHandler = new JsonSyslogServerEventHandler(System.out);
 			syslogServerConfig.addEventHandler(eventHandler);
 		}
 

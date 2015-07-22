@@ -18,10 +18,14 @@ package com.jkool.jesl.net.syslogd;
 import java.io.PrintStream;
 import java.net.SocketAddress;
 import java.util.Date;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.productivity.java.syslog4j.impl.message.structured.StructuredSyslogMessage;
 import org.productivity.java.syslog4j.server.SyslogServerEventIF;
 import org.productivity.java.syslog4j.server.SyslogServerIF;
 import org.productivity.java.syslog4j.server.impl.event.printstream.PrintStreamSyslogServerEventHandler;
+import org.productivity.java.syslog4j.server.impl.event.structured.StructuredSyslogServerEvent;
 import org.productivity.java.syslog4j.util.SyslogUtility;
 
 /**
@@ -30,10 +34,10 @@ import org.productivity.java.syslog4j.util.SyslogUtility;
  *
  * @version $Revision $
  */
-class PrintStreamEventHandler extends PrintStreamSyslogServerEventHandler {
+class JsonSyslogServerEventHandler extends PrintStreamSyslogServerEventHandler {
     private static final long serialVersionUID = 8964244723777923472L;
 
-	public PrintStreamEventHandler(PrintStream out) {
+	public JsonSyslogServerEventHandler(PrintStream out) {
 		super(out);
 	}
 	
@@ -43,7 +47,26 @@ class PrintStreamEventHandler extends PrintStreamSyslogServerEventHandler {
 		String facility = SyslogTNT4JEventHandler.getFacilityString(event.getFacility());
 		String level = SyslogUtility.getLevelString(event.getLevel());
 		String host = event.getHost();
-		
-		this.stream.println("{" + host + "}{" + facility + "}{" + date + "}{" + level + "}{" + event.getMessage() + "}");
+		if (!(event instanceof StructuredSyslogServerEvent)) {
+			this.stream.println("{\"host\":\"" + host
+					+ "\", \"facility\":\"" + facility
+					+ "\", \"timestamp\":\"" + date
+					+ "\", \"level\":\"" + level
+					+ "\", \"msg\":\"" + StringEscapeUtils.escapeJson(event.getMessage()) 
+					+ "\"}");
+		} else {
+			StructuredSyslogServerEvent sevent = (StructuredSyslogServerEvent) event;
+			StructuredSyslogMessage sm = sevent.getStructuredMessage();
+			Map<?, ?> arttrs = sm.getStructuredData();
+			this.stream.println("{\"host\":\"" + host
+					+ "\", \"facility\":\"" + facility
+					+ "\", \"timestamp\":\"" + date
+					+ "\", \"appl\":\"" + sevent.getApplicationName()
+					+ "\", \"pid\":" + (sevent.getProcessId() != null && sevent.getProcessId().isEmpty()? 0: sevent.getProcessId())
+					+ ", \"level\":\"" + level
+					+ "\", \"map.size\":" + ((arttrs != null)? arttrs.size(): 0)
+					+ ", \"msg\":\"" + StringEscapeUtils.escapeJson(event.getMessage()) 
+					+ "\"}");
+		}
 	}	
 }

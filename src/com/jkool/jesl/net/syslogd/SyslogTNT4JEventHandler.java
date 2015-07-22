@@ -119,11 +119,16 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 			// RFC 5424 
 			StructuredSyslogServerEvent sevent = (StructuredSyslogServerEvent) event;
 			tevent.getOperation().setResource(sevent.getApplicationName());
-			tevent.getOperation().setPID(Long.parseLong(sevent.getProcessId()));
+			tevent.getOperation().setPID(0);
+			String pid = sevent.getProcessId();
+			if (pid != null && !pid.isEmpty()) {
+				try {
+					tevent.getOperation().setPID(Long.parseLong(sevent.getProcessId()));	
+				} catch (NumberFormatException e) {}
+			}
 			tevent.getOperation().setTID(tevent.getOperation().getPID());
 			
 			// process structured message 
-			StructuredSyslogMessage sm = sevent.getStructuredMessage();
 			tevent.setTag(event.getHost(), sevent.getApplicationName(), sevent.getStructuredMessage().getMessageId());
 			
 			// set the appropriate source
@@ -132,6 +137,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 			tevent.setSource(factory.newSource(sevent.getApplicationName(), SourceType.APPL, factory.newSource(event.getHost(), SourceType.SERVER, rootSource)));
 			
 			// process structured event attributes into snapshot
+			StructuredSyslogMessage sm = sevent.getStructuredMessage();
 			Map<?, ?> map = sm.getStructuredData();
 			if (map != null && !map.isEmpty()) {
 				PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_MAP, sevent.getApplicationName(), level);
@@ -294,6 +300,9 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	@Override
     public void exception(Object arg0, SyslogServerIF arg1, SocketAddress arg2, Exception arg3) {
 		logger.log(OpLevel.ERROR, "Syslog exception: obj={0}, syslog.server.if={1}, socket={2}", arg0, arg1, arg2, arg3);
+		if (arg3 != null) {
+			arg3.printStackTrace();
+		}
 	}
 
 	@Override

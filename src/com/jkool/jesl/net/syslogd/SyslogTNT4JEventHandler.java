@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,6 +54,9 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  * <tr><td><b>message</b></td>			<td>message</td></tr>
  * </table>
  *
+ * @see SyslogStats
+ * @see SyslogHandlerDumpProvider
+ * 
  * @version $Revision $
  */
 public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerIF, SyslogConstants {
@@ -67,7 +69,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
     * Timing map maintains the number of nanoseconds since last event for a specific server/application
     * combo.
     */
-	private static final ConcurrentHashMap<String, AtomicLong> EVENT_TIMER = new ConcurrentHashMap<String, AtomicLong>(89);
+	private static final ConcurrentHashMap<String, SyslogStats> EVENT_TIMER = new ConcurrentHashMap<String, SyslogStats>(89);
 
 	static {
 		// add a custom dump provider
@@ -262,18 +264,19 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	 * @return elapsed nanoseconds since last event
 	 */
 	protected long getElapsedNanosSinceLastEvent(String key) {
-		AtomicLong last = EVENT_TIMER.get(key);
+		SyslogStats last = EVENT_TIMER.get(key);
 		if (last == null) {
-			EVENT_TIMER.putIfAbsent(key, new AtomicLong(System.nanoTime()));
+			EVENT_TIMER.putIfAbsent(key, new SyslogStats(System.nanoTime()));
 			last = EVENT_TIMER.get(key);
-			last.set(System.nanoTime());
+			last.hit(+1);
 			return 0;
 		}	
-		long lastTimer = last.get();
+		long lastStamp = last.getNanoTime();
 		long now = System.nanoTime();
-		last.compareAndSet(lastTimer, now);
+		last.updateTime(lastStamp, now);
+		last.hit(+1);
 
-		long elapsedNanos = last != null? (now - lastTimer): 0;
+		long elapsedNanos = now - lastStamp;
 		return elapsedNanos < 0? 0: elapsedNanos;
 	}
 

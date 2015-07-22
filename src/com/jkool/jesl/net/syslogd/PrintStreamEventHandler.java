@@ -42,7 +42,8 @@ class PrintStreamEventHandler extends PrintStreamSyslogServerEventHandler {
 		String date = (event.getDate() == null ? new Date() : event.getDate()).toString();
 		String facility = SyslogTNT4JEventHandler.getFacilityString(event.getFacility());
 		String level = SyslogUtility.getLevelString(event.getLevel());
+		String host = event.getHost();
 		
-		this.stream.println("{" + facility + "} " + date + " " + level + " " + event.getMessage());
+		this.stream.println("{" + host + "}{" + facility + "}{" + date + "}{" + level + "}{" + event.getMessage() + "}");
 	}	
 }

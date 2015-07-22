@@ -25,6 +25,8 @@ import com.nastel.jkool.tnt4j.format.EventFormatter;
 import com.nastel.jkool.tnt4j.format.JSONFormatter;
 import com.nastel.jkool.tnt4j.sink.AbstractEventSinkFactory;
 import com.nastel.jkool.tnt4j.sink.EventSink;
+import com.nastel.jkool.tnt4j.sink.EventSinkFactory;
+import com.nastel.jkool.tnt4j.sink.FileEventSinkFactory;
 
 /**
  * <p>Concrete implementation of <code>EventSinkFactory</code> interface, which
@@ -39,8 +41,11 @@ import com.nastel.jkool.tnt4j.sink.EventSink;
  *
  */
 public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
+	private String fileName = null;
 	private String token = System.getProperty("tnt4j.sink.factory.socket.token", "");
 	private String url = System.getProperty("tnt4j.sink.factory.socket.url", "http://localhost:6580");
+	
+	private EventSinkFactory eventSinkFactory = null;
 
 	/**
 	 * Create a jKool Cloud Event Sink factory.
@@ -61,17 +66,20 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 
 	@Override
     public EventSink getEventSink(String name) {
-	    return new JKCloudEventSink(name, url, new JSONFormatter(false));
+		EventSink outSink = eventSinkFactory != null? eventSinkFactory.getEventSink(name, System.getProperties(), new JSONFormatter(false)): null;
+	    return new JKCloudEventSink(name, url, new JSONFormatter(false), outSink);
     }
 
 	@Override
     public EventSink getEventSink(String name, Properties props) {
-	    return new JKCloudEventSink(name, url, new JSONFormatter(false));
+		EventSink outSink = eventSinkFactory != null? eventSinkFactory.getEventSink(name, System.getProperties(), new JSONFormatter(false)): null;
+	    return new JKCloudEventSink(name, url, new JSONFormatter(false), outSink);
     }
 
 	@Override
     public EventSink getEventSink(String name, Properties props, EventFormatter frmt) {
-	    return new JKCloudEventSink(name, url,  token, frmt);
+		EventSink outSink = eventSinkFactory != null? eventSinkFactory.getEventSink(name, props, new JSONFormatter(false)): null;
+	    return new JKCloudEventSink(name, url,  token, frmt, outSink);
     }
 
 	@Override
@@ -84,6 +92,10 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 		super.setConfiguration(settings);
 		url = config.get("Url") != null? config.get("Url").toString(): url;
 		token = config.get("Token") != null? config.get("Token").toString(): token;
+		fileName = config.get("Filename") != null? config.get("Filename").toString(): fileName;
+		if (fileName != null) {
+			eventSinkFactory = new FileEventSinkFactory(fileName);
+		}
 		try {
 			URI uri = new URI(url);
 			url = uri.toString();

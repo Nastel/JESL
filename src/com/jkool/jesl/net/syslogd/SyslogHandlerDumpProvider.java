@@ -17,7 +17,6 @@ package com.jkool.jesl.net.syslogd;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicLong;
 
 import com.nastel.jkool.tnt4j.dump.DefaultDumpProvider;
 import com.nastel.jkool.tnt4j.dump.Dump;
@@ -32,9 +31,9 @@ import com.nastel.jkool.tnt4j.dump.DumpCollection;
  * @version $Revision $
  */
 public class SyslogHandlerDumpProvider extends DefaultDumpProvider{
-	private Map<String, AtomicLong> map;
+	private Map<String, SyslogStats> map;
 	
-	public SyslogHandlerDumpProvider(String name, Map<String, AtomicLong> m) {
+	public SyslogHandlerDumpProvider(String name, Map<String, SyslogStats> m) {
 	    super(name, "SyslogTimings");
 	    this.map = m;
     }
@@ -42,8 +41,9 @@ public class SyslogHandlerDumpProvider extends DefaultDumpProvider{
 	@Override
     public DumpCollection getDump() {
 		Dump dump = new Dump("TimerTable", this);	
-		for (Entry<String, AtomicLong> entry: map.entrySet()) {
-			dump.add(entry.getKey(), System.nanoTime() - entry.getValue().get());
+		for (Entry<String, SyslogStats> entry: map.entrySet()) {
+			dump.add(entry.getKey() + "/hits", entry.getValue().getHits());
+			dump.add(entry.getKey() + "/age.nano", entry.getValue().getAge());
 		}
 	    return dump;
     }

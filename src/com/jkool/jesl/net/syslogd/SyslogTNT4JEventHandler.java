@@ -82,7 +82,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
     private TrackingLogger logger;
     
     /*
-     * Regex pattern to detect name=value pairs.
+     * Regular expression pattern to detect name=value pairs.
      */
 	private Pattern pattern = Pattern.compile("(\\w+)=\"*((?<=\")[^\"]+(?=\")|([^\\s]+))\"*");
 	
@@ -118,31 +118,18 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 			// RFC 5424 
 			StructuredSyslogServerEvent sevent = (StructuredSyslogServerEvent) event;
 			tevent.getOperation().setResource(sevent.getApplicationName());
-			tevent.getOperation().setPID(0);
-			String pid = sevent.getProcessId();
-			if (pid != null && !pid.isEmpty()) {
-				try {
-					tevent.getOperation().setPID(Long.parseLong(sevent.getProcessId()));	
-				} catch (NumberFormatException e) {}
-			}
-			tevent.getOperation().setTID(tevent.getOperation().getPID());
-			
-			// process structured message 
 			tevent.setTag(event.getHost(), sevent.getApplicationName(), sevent.getStructuredMessage().getMessageId());
+			assignPid(sevent, tevent);			
 			
 			// set the appropriate source
 			SourceFactory factory = logger.getConfiguration().getSourceFactory();
-			Source rootSource = factory.getRootSource().getSource(SourceType.DATACENTER); // get to the datacenter source
-			tevent.setSource(factory.newSource(sevent.getApplicationName(), SourceType.APPL, factory.newSource(event.getHost(), SourceType.SERVER, rootSource)));
+			Source rootSource = factory.getRootSource().getSource(SourceType.DATACENTER);
+			tevent.setSource(factory.newSource(sevent.getApplicationName(), 
+					SourceType.APPL, 
+					factory.newSource(event.getHost(), SourceType.SERVER, rootSource)));
 			
 			// process structured event attributes into snapshot
-			StructuredSyslogMessage sm = sevent.getStructuredMessage();
-			Map<?, ?> map = sm.getStructuredData();
-			if (map != null && !map.isEmpty()) {
-				PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_MAP, sevent.getApplicationName(), level);
-				snap.addAll(map);
-				tevent.getOperation().addSnapshot(snap);
-			}
+			extractStructuredData(sevent, tevent);
 		} else {
 			// RFC 3164 
 			Map<String, Object> map = parseAttributes(event);
@@ -159,21 +146,66 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 			// set the appropriate source
 			SourceFactory factory = logger.getConfiguration().getSourceFactory();
 			Source rootSource = factory.getRootSource().getSource(SourceType.DATACENTER); // get to the datacenter source
-			tevent.setSource(factory.newSource(appName, SourceType.APPL, factory.newSource(serverName, SourceType.SERVER, rootSource)));						
+			tevent.setSource(factory.newSource(appName, 
+					SourceType.APPL, 
+					factory.newSource(serverName, SourceType.SERVER, rootSource)));						
 		}
 		
 		// extract name=value pairs if available
-		Map<String, Object> attr = parseVariables(event.getMessage());
-		if (attr != null && attr.size() > 0) {
-			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_VARS, tevent.getOperation().getResource(), level);
-			snap.addAll(attr);
-			tevent.getOperation().addSnapshot(snap);			
-		}		
+		extractVariables(event, tevent);
 		String locationKey = tevent.getLocation() + "/" + tevent.getOperation().getResource();
 		tevent.stop(date.getTime()*1000, getElapsedNanosSinceLastEvent(locationKey)/1000);
 		logger.tnt(tevent);
 	}
 
+	/**
+	 * Extract syslog name/value pairs if available in within the message
+	 *
+	 * @param sevent syslog structured message
+	 * @param tevent tracking event
+	 */
+	private void extractVariables(SyslogServerEventIF event, TrackingEvent tevent) {
+		Map<String, Object> attr = parseVariables(event.getMessage());
+		if (attr != null && attr.size() > 0) {
+			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_VARS, tevent.getOperation().getResource(), tevent.getSeverity());
+			snap.addAll(attr);
+			tevent.getOperation().addSnapshot(snap);			
+		}		
+	}
+	
+	/**
+	 * Extract syslog structured data if available (part of RFC 5424)
+	 *
+	 * @param sevent syslog structured message
+	 * @param tevent tracking event
+	 */
+	private void extractStructuredData(StructuredSyslogServerEvent sevent, TrackingEvent tevent) {
+		StructuredSyslogMessage sm = sevent.getStructuredMessage();
+		Map<?, ?> map = sm.getStructuredData();
+		if (map != null && !map.isEmpty()) {
+			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_MAP, sevent.getApplicationName(), tevent.getSeverity());
+			snap.addAll(map);
+			tevent.getOperation().addSnapshot(snap);
+		}		
+	}
+	
+	/**
+	 * Extract and assign process id
+	 *
+	 * @param sevent syslog structured message
+	 * @param tevent tracking event
+	 */
+	private void assignPid(StructuredSyslogServerEvent sevent, TrackingEvent tevent) {
+		tevent.getOperation().setPID(0);
+		String pid = sevent.getProcessId();
+		if (pid != null && !pid.isEmpty()) {
+			try {
+				tevent.getOperation().setPID(Long.parseLong(sevent.getProcessId()));	
+			} catch (NumberFormatException e) {}
+		}
+		tevent.getOperation().setTID(tevent.getOperation().getPID());		
+	}
+	
 	/**
 	 * Parse syslog name=value variables
 	 *

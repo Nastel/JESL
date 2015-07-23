@@ -52,6 +52,8 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  * <tr><td><b>applname</b></td>			<td>resource name</td></tr>
  * <tr><td><b>pid</b></td>				<td>process ID & thread ID</td></tr>
  * <tr><td><b>message</b></td>			<td>message</td></tr>
+ * <tr><td><b>RFC5424 structures</b></td><td>SyslogMap snapshot</td></tr>
+ * <tr><td><b>name=value pairs</b></td>	<td>SyslogVars snapshot</td></tr>
  * </table>
  *
  * @see SyslogStats

@@ -32,9 +32,10 @@ import org.productivity.java.syslog4j.util.SyslogUtility;
 
 /**
  * This class implements simple syslog event handler that outputs
- * formatted syslog messages to a print stream. The output contains
- * offset.usec which is time since last event in microseconds. This field
- * can be used to play back events in exact same time sequence.
+ * formatted syslog messages to a print stream in JSON format.
+ * The output contains offset.usec which is time since last event in microseconds.
+ * This field can be used to play back events in exact same time sequence. 
+ * Event timestamp is formatted in ISO8601 format with UTC timezone.
  *
  * @version $Revision $
  */

@@ -120,7 +120,9 @@ JESL includes Syslog Daemon implementation. Please follow these steps to stream 
 	* RFC 5424 (e.g. `*.* @@hostname:5140;RSYSLOG_SyslogProtocol23Format`)
 * Send/playback syslog messages from command line (`<jesl-home>/bin/syslog`):
 ```
-syslog -h localhost -p 5140 -f syslogd.json tcpsyslog -h localhost -p 5140 -l error -f user tcp "host appl-name[883]: my syslog mesasge about appl-name pid=883"
+syslog -h localhost -p 5140 -f syslogd.json tcpsyslog -h localhost -p 5140 -l error -f user tcp "host appl-name[883]: my 
+
+syslog mesasge about appl-name pid=883"
 ```
 where `syslogd.json` is JSON output of JESL syslog daemon.
 	

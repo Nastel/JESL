@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.productivity.java.syslog4j.impl.message.structured.StructuredSyslogMessage;
 import org.productivity.java.syslog4j.server.SyslogServerEventIF;
 import org.productivity.java.syslog4j.server.SyslogServerIF;
@@ -30,27 +32,39 @@ import org.productivity.java.syslog4j.util.SyslogUtility;
 
 /**
  * This class implements simple syslog event handler that outputs
- * formatted syslog messages to a print stream.
+ * formatted syslog messages to a print stream. The output contains
+ * offset.usec which is time since last event in microseconds. This field
+ * can be used to play back events in exact same time sequence.
  *
  * @version $Revision $
  */
 class JsonSyslogServerEventHandler extends PrintStreamSyslogServerEventHandler {
     private static final long serialVersionUID = 8964244723777923472L;
 
+    private long lastEvent = 0;
+	DateTimeFormatter fmt = ISODateTimeFormat.dateTime().withZoneUTC();
+    
 	public JsonSyslogServerEventHandler(PrintStream out) {
 		super(out);
 	}
 	
 	@Override
 	public void event(Object session, SyslogServerIF syslogServer, SocketAddress socketAddress, SyslogServerEventIF event) {
-		String date = (event.getDate() == null ? new Date() : event.getDate()).toString();
+		long now = System.nanoTime();
+		long offset = lastEvent == 0? 0: (System.nanoTime() - lastEvent)/1000;
+		lastEvent = now;
+		
+		Date date = (event.getDate() == null ? new Date() : event.getDate());
+		String timestamp = fmt.print(date.getTime());
+		
 		String facility = SyslogTNT4JEventHandler.getFacilityString(event.getFacility());
 		String level = SyslogUtility.getLevelString(event.getLevel());
 		String host = event.getHost();
 		if (!(event instanceof StructuredSyslogServerEvent)) {
-			this.stream.println("{\"host\":\"" + host
+			this.stream.println("{\"offset.usec\":" + offset
+					+ ", \"host\":\"" + host
 					+ "\", \"facility\":\"" + facility
-					+ "\", \"timestamp\":\"" + date
+					+ "\", \"timestamp\":\"" + timestamp
 					+ "\", \"level\":\"" + level
 					+ "\", \"msg\":\"" + StringEscapeUtils.escapeJson(event.getMessage()) 
 					+ "\"}");
@@ -58,9 +72,10 @@ class JsonSyslogServerEventHandler extends PrintStreamSyslogServerEventHandler {
 			StructuredSyslogServerEvent sevent = (StructuredSyslogServerEvent) event;
 			StructuredSyslogMessage sm = sevent.getStructuredMessage();
 			Map<?, ?> arttrs = sm.getStructuredData();
-			this.stream.println("{\"host\":\"" + host
+			this.stream.println("{\"offset.usec\":" + offset
+					+ ", \"host\":\"" + host
 					+ "\", \"facility\":\"" + facility
-					+ "\", \"timestamp\":\"" + date
+					+ "\", \"timestamp\":\"" + timestamp
 					+ "\", \"appl\":\"" + sevent.getApplicationName()
 					+ "\", \"pid\":" + (sevent.getProcessId() != null && sevent.getProcessId().isEmpty()? 0: sevent.getProcessId())
 					+ ", \"level\":\"" + level

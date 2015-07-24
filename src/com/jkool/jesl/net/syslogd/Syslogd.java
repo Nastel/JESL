@@ -32,7 +32,7 @@ import org.productivity.java.syslog4j.util.SyslogUtility;
 public class Syslogd {
 		
 	public static void main(String[] args) throws Exception {
-		Options options = parseOptions(args);
+		ServerOptions options = parseOptions(args);
 
 		if (options.usage != null) {
 			options(options.usage);
@@ -123,8 +123,8 @@ public class Syslogd {
 		System.out.println("protocol     syslog protocol implementation (tcp, udp, ...)");
 	}
 	
-	public static Options parseOptions(String[] args) {
-		Options options = new Options(Syslogd.class.getName());
+	public static ServerOptions parseOptions(String[] args) {
+		ServerOptions options = new ServerOptions(Syslogd.class.getName());
 	
 		int i = 0;
 		while(i < args.length) {
@@ -155,7 +155,7 @@ public class Syslogd {
 	}	
 }
 
-class Options {
+class ServerOptions {
 	public String source = null;
 	public String protocol = null;
 	public boolean quiet = false;
@@ -165,7 +165,7 @@ class Options {
 	public String timeout = null;
 	public String usage = null;
 	
-	public Options(String name) {
+	public ServerOptions(String name) {
 		source = name;
 	}
 	

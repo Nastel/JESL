@@ -55,8 +55,10 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  * <tr><td><b>RFC5424 structures</b></td><td>SyslogMap snapshot</td></tr>
  * <tr><td><b>name=value pairs</b></td>	<td>SyslogVars snapshot</td></tr>
  * </table>
+ * 
  * Event elapsed time is computed based on time since last event from the same
  * source (source is host/application combo).
+ * 
  * @see SyslogStats
  * @see SyslogHandlerDumpProvider
  * 
@@ -152,7 +154,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 
 		// set the appropriate source
 		SourceFactory factory = logger.getConfiguration().getSourceFactory();
-		Source rootSource = factory.getRootSource().getSource(SourceType.DATACENTER); // get to the datacenter source
+		Source rootSource = factory.getRootSource().getSource(SourceType.DATACENTER);
 		tevent.setSource(factory.newSource(appName, 
 				SourceType.APPL, 
 				factory.newSource(serverName, SourceType.SERVER, rootSource)));						

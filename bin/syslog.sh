@@ -2,5 +2,5 @@
 RUNDIR=`pwd`
 
 CLPATH="$RUNDIR/../jkool-jesl.jar:$RUNDIR/../lib/*"
-MAINCL=org.productivity.java.syslog4j.SyslogMain
+MAINCL=com.jkool.jesl.net.syslogd.SyslogSend
 java -classpath $CLPATH $MAINCL $*

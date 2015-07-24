@@ -139,16 +139,55 @@ activity.</p>
 </code></pre>
 
 <h1>
+<a id="streaming-syslog-to-jkool-cloud-" class="anchor" href="#streaming-syslog-to-jkool-cloud-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Streaming Syslog to jKool Cloud </h1>
+
+<p>JESL includes Syslog Daemon implementation. Please follow these steps to stream syslog to <code>jkoolcloud.com</code>:</p>
+
+<ul>
+<li>Obtain jkool cloud account. Edit <code>config/tnt4j.properties</code>, 
+
+<ul>
+<li>Locate <code>com.jkool.jesl.net.syslogd</code> stanza and provide your API access token.</li>
+</ul>
+</li>
+<li>Run JESL syslogd <code>&lt;jesl-home&gt;/bin/syslogd &gt; syslogd.json</code>. 
+
+<ul>
+<li>By default JESL syslogd binds to TCP port <code>5140</code> and writes JSON formatted syslog messages.</li>
+<li>JSON output can be played back using <code>&lt;jesl-home&gt;/bin/syslog</code> utility.</li>
+</ul>
+</li>
+<li>Configure <code>syslog/rsyslog</code> to forward to JESL syslog daemon over TCP (<code>hostname</code> is where JESL syslogd is running)
+
+<ul>
+<li>RFC 3164 (e.g. <code>*.* @@hostname:5140</code>)</li>
+<li>RFC 5424 (e.g. <code>*.* @@hostname:5140;RSYSLOG_SyslogProtocol23Format</code>)</li>
+</ul>
+</li>
+<li>Send/playback syslog messages from command line (<code>&lt;jesl-home&gt;/bin/syslog</code>):</li>
+</ul>
+
+<pre><code>$ syslog -h localhost -p 5140 -f syslogd.json tcp
+$ syslog -h localhost -p 5140 -l error -f user tcp "host appl-name[883]: my syslog mesasge about appl-name pid=883"
+</code></pre>
+
+<p>where <code>syslogd.json</code> is JSON output of JESL syslog daemon.</p>
+
+<p>That should do it.</p>
+
+<p><b>NOTE:</b> JESL currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).</p>
+
+<h1>
 <a id="streaming-log4j-to-jkool-cloud-" class="anchor" href="#streaming-log4j-to-jkool-cloud-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Streaming Log4j to jKool Cloud </h1>
 
 <p>Log4J can be configured to stream events and metrics to jKool Cloud by using 
-JESL log4j appender (<code>com.nastel.jkool.tnt4j.logger.TNT4JAppender</code>) as follows:</p>
+JESL log4j appender (<code>com.nastel.jkool.tnt4j.logger.log4j.TNT4JAppender</code>) as follows:</p>
 
 <h4>
 <a id="add-jesl-log4j-appender-to-your-log4j-configuration" class="anchor" href="#add-jesl-log4j-appender-to-your-log4j-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add JESL log4j appender to your log4j configuration</h4>
 
 <pre><code>### Default JESL Appender configuration
-log4j.appender.jkoolcloud=com.nastel.jkool.tnt4j.logger.TNT4JAppender
+log4j.appender.jkoolcloud=com.nastel.jkool.tnt4j.logger.log4j.TNT4JAppender
 log4j.appender.jkoolcloud.SourceName=com.jkool.jesl.stream
 log4j.appender.jkoolcloud.SourceType=APPL
 log4j.appender.jkoolcloud.MetricsOnException=true
@@ -180,7 +219,7 @@ log4j.logger.com.jkool.jesl=info
 
 <p>Optionally you can add the following parameters to define default data center name and geo location:</p>
 
-<pre><code>-Dtnt4j.source.DATACENTER=YourDataCenterName Dtnt4j.source.GEOADDR=Melville, NY 
+<pre><code>-Dtnt4j.source.DATACENTER=YourDataCenterName -Dtnt4j.source.GEOADDR="Melville, NY" 
 </code></pre>
 
 <p>Make sure <code>&lt;jesl.home&gt;/jkool-jesl.jar</code> and all dependent jar files in <code>&lt;jesl.home&gt;/lib</code> are in your class path.</p>
@@ -273,6 +312,9 @@ JESL Event Sink (<code>com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory</code>)
 <li>TNT4J (<a href="https://github.com/Nastel/TNT4J">https://github.com/Nastel/TNT4J</a>)</li>
 <li>Apache HTTP Client 4.2.5 (<a href="http://hc.apache.org/httpcomponents-client-ga/">http://hc.apache.org/httpcomponents-client-ga/</a>)</li>
 <li>Apache HTTP Core 4.3.4 (<a href="http://hc.apache.org/httpcomponents-client-ga/">http://hc.apache.org/httpcomponents-client-ga/</a>)</li>
+<li>Syslog4j (<a href="http://syslog4j.org/">http://syslog4j.org/</a>)</li>
+<li>Joda Time (<a href="http://www.joda.org/joda-time/">http://www.joda.org/joda-time/</a>)</li>
+<li>GSON (<a href="https://github.com/google/gson">https://github.com/google/gson</a>)</li>
 </ul>
 
 <h1>

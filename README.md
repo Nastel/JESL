@@ -118,10 +118,11 @@ JESL includes Syslog Daemon implementation. Please follow these steps to stream 
 * Configure `syslog/rsyslog` to forward to JESL syslog daemon over TCP (`hostname` is where JESL syslogd is running)
 	* RFC 3164 (e.g. `*.* @@hostname:5140`)
 	* RFC 5424 (e.g. `*.* @@hostname:5140;RSYSLOG_SyslogProtocol23Format`)
-* Send syslog messages from command line:
-	* `<jesl-home>/bin/syslog -h localhost -p 5140 -l error -f user tcp "host appl-name[883]: my syslog mesasge about appl-name pid=883"`
-	* `<jesl-home>/bin/syslog -h localhost -p 5140 -f syslogd.json tcp`
-		* `syslogd.json` is JSON output of JESL syslog daemon.
+* Send/playback syslog messages from command line (`<jesl-home>/bin/syslog`):
+```
+syslog -h localhost -p 5140 -f syslogd.json tcpsyslog -h localhost -p 5140 -l error -f user tcp "host appl-name[883]: my syslog mesasge about appl-name pid=883"
+```
+where `syslogd.json` is JSON output of JESL syslog daemon.
 	
 That should do it.
 

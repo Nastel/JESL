@@ -112,11 +112,17 @@ JESL includes Syslog Daemon implementation. Please follow these steps to stream 
 
 * Obtain jkool cloud account. Edit `config/tnt4j.properties`, 
 	* Locate `com.jkool.jesl.net.syslogd` stanza and provide your API access token.
-* Run JESL syslogd `<jesl-home>/bin/syslogd`. By default JESL syslogd binds to TCP port `5140`. 
+* Run JESL syslogd `<jesl-home>/bin/syslogd > syslogd.json`. 
+	* By default JESL syslogd binds to TCP port `5140` and writes JSON formatted syslog messages.
+	* JSON output can be played back using `<jesl-home>/bin/syslog` utility.
 * Configure `syslog/rsyslog` to forward to JESL syslog daemon over TCP (`hostname` is where JESL syslogd is running)
 	* RFC 3164 (e.g. `*.* @@hostname:5140`)
 	* RFC 5424 (e.g. `*.* @@hostname:5140;RSYSLOG_SyslogProtocol23Format`)
-
+* Send syslog messages from command line:
+	* `<jesl-home>/bin/syslog -h localhost -p 5140 -l error -f user tcp "host appl-name[883]: my syslog mesasge about appl-name pid=883"`
+	* `<jesl-home>/bin/syslog -h localhost -p 5140 -f syslogd.json tcp`
+		* `syslogd.json` is JSON output of JESL syslog daemon.
+	
 That should do it.
 
 <b>NOTE:</b> JESL currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
@@ -240,6 +246,7 @@ JESL requires the following:
 * Apache HTTP Core 4.3.4 (http://hc.apache.org/httpcomponents-client-ga/)
 * Syslog4j (http://syslog4j.org/)
 * Joda Time (http://www.joda.org/joda-time/)
+* GSON (https://github.com/google/gson)
 
 # Related Projects
 * TrackingFilter (http://nastel.github.io/TrackingFilter/)

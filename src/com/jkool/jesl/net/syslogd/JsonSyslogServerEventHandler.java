@@ -77,10 +77,11 @@ class JsonSyslogServerEventHandler extends PrintStreamSyslogServerEventHandler {
 					+ ", \"host\":\"" + host
 					+ "\", \"facility\":\"" + facility
 					+ "\", \"timestamp\":\"" + timestamp
+					+ "\", \"level\":\"" + level
 					+ "\", \"appl\":\"" + sevent.getApplicationName()
+					+ "\", \"mid\":\"" + (sm.getMessageId() != null? sm.getMessageId(): "")
 					+ "\", \"pid\":" + (sevent.getProcessId() != null && sevent.getProcessId().isEmpty()? 0: sevent.getProcessId())
-					+ ", \"level\":\"" + level
-					+ "\", \"map.size\":" + ((arttrs != null)? arttrs.size(): 0)
+					+ ", \"map.size\":" + ((arttrs != null)? arttrs.size(): 0)
 					+ ", \"msg\":\"" + StringEscapeUtils.escapeJson(event.getMessage()) 
 					+ "\"}");
 		}

@@ -31,9 +31,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * This class implements Syslog Client that sends syslog messages
+ * from command line, standard input or an input file.
+ *
+ * @version $Revision $
+ */
 public class SyslogSend {
-	public static boolean CALL_SYSTEM_EXIT_ON_FAILURE = true;
-
 	private static JsonParser jparser = new JsonParser();
 
 	public static void usage(String problem) {
@@ -67,7 +71,7 @@ public class SyslogSend {
 		System.out.println("Notes:");
 		System.out.println();
 		System.out.println("Additional message arguments will be concatenated into the same");
-		System.out.println("syslog message; calling SyslogMain will only send one message per call.");
+		System.out.println("syslog message; will only send one message per call.");
 		System.out.println();
 		System.out.println("If the message argument is ommited, lines will be taken from the");
 		System.out.println("standard input.");
@@ -156,15 +160,15 @@ public class SyslogSend {
 	}
 
 	public static void main(String[] args) throws Exception {
-		main(args, true);
+		sendSyslog(args, true);
 	}
 
-	public static void main(String[] args, boolean shutdown) throws Exception {
+	public static void sendSyslog(String[] args, boolean shutdown) throws Exception {
 		SendOptions sendOptions = parseOptions(args);
 
 		if (sendOptions.usage != null) {
 			usage(sendOptions.usage);
-			if (CALL_SYSTEM_EXIT_ON_FAILURE) {
+			if (shutdown) {
 				System.exit(1);
 			} else {
 				return;
@@ -177,7 +181,7 @@ public class SyslogSend {
 
 		if (!Syslog.exists(sendOptions.protocol)) {
 			usage("Protocol \"" + sendOptions.protocol + "\" not supported");
-			if (CALL_SYSTEM_EXIT_ON_FAILURE) {
+			if (shutdown) {
 				System.exit(2);
 			} else {
 				return;
@@ -222,7 +226,6 @@ public class SyslogSend {
 	private static void sendFromTextFile(SyslogIF syslog, SendOptions sendOptions) throws IOException, InterruptedException {
 		InputStream is = null;
 		int level = SyslogUtility.getLevel(sendOptions.level);
-
 		if (sendOptions.fileName != null) {
 			is = new FileInputStream(sendOptions.fileName);
 

@@ -20,7 +20,7 @@ import com.nastel.jkool.tnt4j.core.OpLevel;
 /**
  * This interface defines basic syslog constants and mappings.
  *
- * @version $Revision $
+ * @version $Revision: 1$
  */
 public interface SyslogConstants {
 	static final int FACILITY_KERN = 0;

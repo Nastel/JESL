@@ -35,7 +35,7 @@ import com.google.gson.JsonParser;
  * This class implements Syslog Client that sends syslog messages
  * from command line, standard input or an input file.
  *
- * @version $Revision $
+ * @version $Revision: 1$
  */
 public class SyslogSend {
 	private static JsonParser jparser = new JsonParser();

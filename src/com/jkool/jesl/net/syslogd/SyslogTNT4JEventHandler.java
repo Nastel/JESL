@@ -52,7 +52,7 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  * <tr><td><b>applname</b></td>			<td>resource name</td></tr>
  * <tr><td><b>pid</b></td>				<td>process ID & thread ID</td></tr>
  * <tr><td><b>message</b></td>			<td>message</td></tr>
- * <tr><td><b>RFC5424 structures</b></td><td>SyslogMap snapshot</td></tr>
+ * <tr><td><b>RFC5424 map</b></td>		<td>SyslogMap snapshot</td></tr>
  * <tr><td><b>name=value pairs</b></td>	<td>SyslogVars snapshot</td></tr>
  * </table>
  * 
@@ -62,7 +62,7 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  * @see SyslogStats
  * @see SyslogHandlerDumpProvider
  * 
- * @version $Revision $
+ * @version $Revision: 1$
  */
 public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerIF, SyslogConstants {
     private static final long serialVersionUID = -3115399425996955812L;
@@ -70,7 +70,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
     protected static String SNAPSHOT_CAT_SYSLOG_MAP = "SyslogMap";
     protected static String SNAPSHOT_CAT_SYSLOG_VARS = "SyslogVars";
     
-    /*
+   /*
     * Timing map maintains the number of nanoseconds since last event for a specific server/application
     * combo.
     */

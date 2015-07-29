@@ -28,7 +28,7 @@ import com.nastel.jkool.tnt4j.dump.DumpCollection;
  * The timings maintain the number of nanoseconds since last event for a specific server/application
  * combo.
  *
- * @version $Revision $
+ * @version $Revision: 1$
  */
 public class SyslogHandlerDumpProvider extends DefaultDumpProvider{
 	private Map<String, SyslogStats> map;

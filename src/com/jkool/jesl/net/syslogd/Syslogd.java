@@ -27,7 +27,7 @@ import org.productivity.java.syslog4j.util.SyslogUtility;
  * This class implements Syslog Server that accepts syslog messages
  * and routes them to system out and TNT4J streaming framework.
  *
- * @version $Revision $
+ * @version $Revision: 1$
  */
 public class Syslogd {
 		

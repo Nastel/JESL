@@ -350,7 +350,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		}	
 		long lastStamp = last.getNanoTime();
 		long now = System.nanoTime();
-		last.updateTime(lastStamp, now);
+		last.updateNanoTime(lastStamp, now);
 		last.hit(+1);
 
 		long elapsedNanos = now - lastStamp;

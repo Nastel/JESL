@@ -43,7 +43,7 @@ public class SyslogHandlerDumpProvider extends DefaultDumpProvider{
 		Dump dump = new Dump("TimerTable", this);	
 		for (Entry<String, SyslogStats> entry: map.entrySet()) {
 			dump.add(entry.getKey() + "/hits", entry.getValue().getHits());
-			dump.add(entry.getKey() + "/age.nano", entry.getValue().getAge());
+			dump.add(entry.getKey() + "/age.nano", entry.getValue().getAgeNanos());
 		}
 	    return dump;
     }

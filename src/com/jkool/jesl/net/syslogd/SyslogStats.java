@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * statistics.
  *
  * @see SyslogTNT4JEventHandler
- * @version $Revision $
+ * @version $Revision: 1$
  */
 class SyslogStats {
 	AtomicLong nanoStamp = new AtomicLong(0);
@@ -36,16 +36,20 @@ class SyslogStats {
 		nanoStamp.set(nanotime);
 	}
 
-	long getAge() {
-		return System.nanoTime() - nanoStamp.get();
+	long getAgeNanos() {
+		return (System.nanoTime() - nanoStamp.get());
 	}
 	
 	long getNanoTime() {
 		return nanoStamp.get();
 	}
 	
-	boolean updateTime(long expected, long update) {
+	boolean updateNanoTime(long expected, long update) {
 		return nanoStamp.compareAndSet(expected, update);		
+	}
+	
+	long hit() {
+		return hitCount.addAndGet(+1);
 	}
 	
 	long hit(long count) {

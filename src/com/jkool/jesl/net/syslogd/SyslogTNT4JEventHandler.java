@@ -35,6 +35,7 @@ import com.nastel.jkool.tnt4j.TrackingLogger;
 import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.core.OpType;
 import com.nastel.jkool.tnt4j.core.PropertySnapshot;
+import com.nastel.jkool.tnt4j.logger.AppenderConstants;
 import com.nastel.jkool.tnt4j.source.Source;
 import com.nastel.jkool.tnt4j.source.SourceFactory;
 import com.nastel.jkool.tnt4j.source.SourceType;
@@ -47,7 +48,7 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  * <table>
  * <tr><td><b>timestamp</b></td>		<td>stop/time</td></tr>
  * <tr><td><b>level</b></td>			<td>severity</td></tr>
- * <tr><td><b>facility</b></td>			<td>event/operation name</td></tr>
+ * <tr><td><b>applname/facility</b></td><td>event/operation name</td></tr>
  * <tr><td><b>host</b></td>				<td>location</td></tr>
  * <tr><td><b>applname</b></td>			<td>resource name</td></tr>
  * <tr><td><b>pid</b></td>				<td>process ID & thread ID</td></tr>
@@ -64,7 +65,7 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  * 
  * @version $Revision: 1$
  */
-public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerIF, SyslogConstants {
+public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerIF, SyslogConstants, AppenderConstants {
     private static final long serialVersionUID = -3115399425996955812L;
 
     protected static String SNAPSHOT_CAT_SYSLOG_MAP = "SyslogMap";
@@ -121,9 +122,9 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		tevent.setCharset(config.getConfig().getCharSet());
 		
 		if (event instanceof StructuredSyslogServerEvent) {
-			processRFC5424((StructuredSyslogServerEvent)event, tevent);
+			processRFC5424(facility, (StructuredSyslogServerEvent)event, tevent);
 		} else {
-			processRFC3164(event, tevent);
+			processRFC3164(facility, event, tevent);
 		}
 		
 		// extract name=value pairs if available
@@ -136,12 +137,13 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	/**
 	 * Process syslog message based on RFC5424
 	 *
+	 * @param facility syslog facility name
 	 * @param event syslog message
 	 * @param tevent tracking event
 	 * 
 	 * @return tracking event
 	 */
-	protected TrackingEvent processRFC3164(SyslogServerEventIF event, TrackingEvent tevent) {
+	protected TrackingEvent processRFC3164(String facility, SyslogServerEventIF event, TrackingEvent tevent) {
 		Map<String, Object> map = parseAttributes(event);
 		String appName = map.get("appl.name").toString();
 		String serverName = map.get("server.name").toString();
@@ -151,6 +153,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		tevent.getOperation().setPID(pid);
 		tevent.getOperation().setTID(pid);
 		tevent.getOperation().setResource(appName);
+		tevent.getOperation().setName(appName + "/" + facility);
 
 		// set the appropriate source
 		SourceFactory factory = logger.getConfiguration().getSourceFactory();
@@ -164,14 +167,16 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	/**
 	 * Process syslog message based on RFC5424
 	 *
+	 * @param facility syslog facility name
 	 * @param sevent syslog structured message
 	 * @param tevent tracking event
 	 * 
 	 * @return tracking event
 	 */
-	protected TrackingEvent processRFC5424(StructuredSyslogServerEvent sevent, TrackingEvent tevent) {
+	protected TrackingEvent processRFC5424(String facility, StructuredSyslogServerEvent sevent, TrackingEvent tevent) {
 		// RFC 5424 
 		tevent.getOperation().setResource(sevent.getApplicationName());
+		tevent.getOperation().setName(sevent.getApplicationName() + "/" + facility);
 		tevent.setTag(sevent.getHost(), sevent.getApplicationName(), sevent.getStructuredMessage().getMessageId());
 		assignPid(sevent, tevent);			
 		
@@ -188,18 +193,52 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	}
 	
 	/**
+	 * Process a given map of key/value pairs into a TNT4J event object {@link TrackingEvent}.
+	 *
+	 * @param attrs a set of name/value pairs
+	 * @param tevent tracking event
+	 *
+	 * @return tnt4j tracking event object
+	 */
+	private TrackingEvent extractSpecialKeys(Map<String, Object> attrs, TrackingEvent tevent) {
+		for (Map.Entry<String, Object> entry: attrs.entrySet()) {
+			String key = entry.getKey();
+			String value = entry.getValue().toString();
+			if (key.equalsIgnoreCase("cid")) {
+				tevent.setCorrelator(value);
+			} else if (key.equalsIgnoreCase("tag")) {
+				tevent.setTag(value);
+			} else if (key.equalsIgnoreCase("loc")) {
+				tevent.setLocation(value);
+			} else if (key.equalsIgnoreCase("res")) {
+				tevent.getOperation().setResource(value);
+			} else if (key.equalsIgnoreCase("usr")) {
+				tevent.getOperation().setUser(value);
+			} else if (key.equalsIgnoreCase("opt")) {
+				tevent.getOperation().setType(OpType.valueOf(value));
+			} else if (key.equalsIgnoreCase("opn")) {
+				tevent.getOperation().setName(value);
+			} 
+		}
+		return tevent;
+	}
+
+	/**
 	 * Extract syslog name/value pairs if available in within the message
 	 *
 	 * @param event syslog event message
 	 * @param tevent tracking event
+	 * @return map of parsed out event attributes (name=value pairs)
 	 */
-	protected void extractVariables(SyslogServerEventIF event, TrackingEvent tevent) {
+	protected Map<String, Object> extractVariables(SyslogServerEventIF event, TrackingEvent tevent) {
 		Map<String, Object> attr = parseVariables(event.getMessage());
 		if (attr != null && attr.size() > 0) {
+			extractSpecialKeys(attr, tevent);
 			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_VARS, tevent.getOperation().getResource(), tevent.getSeverity());
 			snap.addAll(attr);
 			tevent.getOperation().addSnapshot(snap);			
-		}		
+		}	
+		return attr;
 	}
 	
 	/**
@@ -343,15 +382,15 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	protected long getElapsedNanosSinceLastEvent(String key) {
 		SyslogStats last = EVENT_TIMER.get(key);
 		if (last == null) {
-			EVENT_TIMER.putIfAbsent(key, new SyslogStats(System.nanoTime()));
-			last = EVENT_TIMER.get(key);
-			last.hit(+1);
+			last = EVENT_TIMER.putIfAbsent(key, new SyslogStats(System.nanoTime()));
+			last = last == null? EVENT_TIMER.get(key): last;
+			last.hit();
 			return 0;
 		}	
 		long lastStamp = last.getNanoTime();
 		long now = System.nanoTime();
 		last.updateNanoTime(lastStamp, now);
-		last.hit(+1);
+		last.hit();
 
 		long elapsedNanos = now - lastStamp;
 		return elapsedNanos < 0? 0: elapsedNanos;

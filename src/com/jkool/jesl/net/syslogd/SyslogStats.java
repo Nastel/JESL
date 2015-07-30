@@ -40,6 +40,10 @@ class SyslogStats {
 		return (System.nanoTime() - nanoStamp.get());
 	}
 	
+	long getAgeNanos(long nanos) {
+		return (nanos - nanoStamp.get());
+	}
+	
 	long getNanoTime() {
 		return nanoStamp.get();
 	}

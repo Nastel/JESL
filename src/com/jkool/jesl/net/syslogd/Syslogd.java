@@ -26,7 +26,55 @@ import org.productivity.java.syslog4j.util.SyslogUtility;
 /**
  * This class implements Syslog Server that accepts syslog messages
  * and routes them to system out and TNT4J streaming framework.
- *
+ * 
+ * <p>Syslog messages are mapped to TNT4J event structure as follows:</p>
+ * <table>
+ * <tr><th>Syslog Field</th><th>TNT4J Field</th></tr>
+ * <tbody>
+ * <tr><td><b>timestamp</b></td>		<td>stop/time</td></tr>
+ * <tr><td><b>level</b></td>			<td>severity</td></tr>
+ * <tr><td><b>applname/facility</b></td><td>event/operation name</td></tr>
+ * <tr><td><b>host</b></td>				<td>location</td></tr>
+ * <tr><td><b>applname</b></td>			<td>resource name</td></tr>
+ * <tr><td><b>pid</b></td>				<td>process ID & thread ID</td></tr>
+ * <tr><td><b>message</b></td>			<td>message</td></tr>
+ * <tr><td><b>RFC5424 map</b></td>		<td>SyslogMap snapshot</td></tr>
+ * <tr><td><b>name=value pairs</b></td>	<td>SyslogVars snapshot</td></tr>
+ * </tbody>
+ * </table>
+ * 
+ * <p>The following (name=value) pairs have special meaning and mapped to TNT4J tracking events when included in syslog message:</p>
+ * <table>
+ * <tr><th>Tag name</th><th>TNT4J Field</th></tr>
+ * <tbody>
+ * <tr><td><b>usr</b></td><td>User name</td></tr>
+ * <tr><td><b>cid</b></td><td>Correlator for relating events across threads, applications, servers</td></tr>
+ * <tr><td><b>tag</b></td><td>User defined tag</td></tr>
+ * <tr><td><b>loc</b></td><td>Location specifier</td></tr>
+ * <tr><td><b>opn</b></td><td>Event/Operation name</td></tr>
+ * <tr><td><b>opt</b></td><td>Event/Operation Type</td></tr>
+ * <tr><td><b>rsn</b></td><td>Resource name on which operation/event took place</td></tr>
+ * </tbody>
+ * </table>
+ * 
+ * <p>Syslog severity level to TN4J OpLevel mapping</p>
+ * <table>
+ * <tr><th>Syslog Level</th><th>TNT4J Level</th></tr>
+ * <tbody>
+ * <tr><td><b>Emergency</b></td>		<td>HALT</td></tr>
+ * <tr><td><b>Alert</b></td>			<td>FATAL</td></tr>
+ * <tr><td><b>Critical</b></td>			<td>CRITICAL</td></tr>
+ * <tr><td><b>Error</b></td>			<td>ERROR</td></tr>
+ * <tr><td><b>Warning</b></td>			<td>WARNING</td></tr>
+ * <tr><td><b>Notice</b></td>			<td>WARNING</td></tr>
+ * <tr><td><b>Informational</b></td>	<td>INFO</td></tr>
+ * <tr><td><b>Debugging</b></td>		<td>DEBUG</td></tr>
+ * </tbody>
+ * </table>
+ * <p>
+ * Event elapsed time is computed based on time since last event from the same
+ * source (source is host/application combo).
+ * </p>
  * @version $Revision: 1$
  */
 public class Syslogd {

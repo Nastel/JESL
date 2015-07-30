@@ -35,7 +35,6 @@ import com.nastel.jkool.tnt4j.TrackingLogger;
 import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.core.OpType;
 import com.nastel.jkool.tnt4j.core.PropertySnapshot;
-import com.nastel.jkool.tnt4j.logger.AppenderConstants;
 import com.nastel.jkool.tnt4j.source.Source;
 import com.nastel.jkool.tnt4j.source.SourceFactory;
 import com.nastel.jkool.tnt4j.source.SourceType;
@@ -60,12 +59,23 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  * Event elapsed time is computed based on time since last event from the same
  * source (source is host/application combo).
  * 
+ * <p>The following (name=value) pairs have special meaning and mapped to TNT4J tracking events when included in syslog message:</p>
+ * <table>
+ * <tr><td><b>usr</b></td>				<td>User name</td></tr>
+ * <tr><td><b>cid</b></td>				<td>Correlator for relating events across threads, applications, servers</td></tr>
+ * <tr><td><b>tag</b></td>				<td>User defined tag</td></tr>
+ * <tr><td><b>loc</b></td>				<td>Location specifier</td></tr>
+ * <tr><td><b>opn</b></td>			    <td>Event/Operation name</td></tr>
+ * <tr><td><b>opt</b></td>			    <td>Event/Operation Type - Value must be either a member of {@link OpType} or the equivalent numeric value</td></tr>
+ * <tr><td><b>rsn</b></td>				<td>Resource name on which operation/event took place</td></tr>
+ * </table>
+ * 
  * @see SyslogStats
  * @see SyslogHandlerDumpProvider
  * 
  * @version $Revision: 1$
  */
-public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerIF, SyslogConstants, AppenderConstants {
+public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerIF, SyslogConstants {
     private static final long serialVersionUID = -3115399425996955812L;
 
     protected static String SNAPSHOT_CAT_SYSLOG_MAP = "SyslogMap";
@@ -338,8 +348,8 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 				int first = tokens[1].indexOf("[");
 				int last = tokens[1].indexOf("]");
 				String applName = first >= 0 ? tokens[1].substring(0, first) : tokens[1];
-				map.put("appl.pid",
-				        ((last >= first && (first >= 0)) ? Long.parseLong(tokens[1].substring(first + 1, last)) : 0));
+				long pid = ((last >= first && (first >= 0)) ? Long.parseLong(tokens[1].substring(first + 1, last)) : 0);
+				map.put("appl.pid", pid);
 				map.put("appl.name", applName);
 			} catch (Throwable ex) {
 				map.put("appl.pid", 0L);
@@ -360,7 +370,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	 * @return string representation of syslog facility
 	 */
 	public static String getFacilityString(int facility) {
-	    return facility >= FACILITY.length? FACILITY[FACILITY.length-1]: FACILITY[facility];
+	    return ((facility >= 0) && (facility < FACILITY.length))? FACILITY[facility]: FACILITY[FACILITY.length-1];
     }
 
 	/**
@@ -370,7 +380,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	 * @return {@link OpLevel} mapping
 	 */
 	public static OpLevel getOpLevel(int level) {
-	    return level >= LEVELS.length? LEVELS[LEVELS.length-1]: LEVELS[level];
+	    return ((level >= 0) && (level < LEVELS.length))? LEVELS[level]: LEVELS[LEVELS.length-1];
     }
 
 	/**

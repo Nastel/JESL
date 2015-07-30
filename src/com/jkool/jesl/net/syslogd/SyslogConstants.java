@@ -52,6 +52,6 @@ public interface SyslogConstants {
 	        "cron", "authpriv", "ftp", "ntp", "logaudit", "logalert", "clock", "local0", "local1", "local2", "local3",
 	        "local4", "local5", "local6", "local7", "unknown" };
 
-	static final OpLevel[] LEVELS = { OpLevel.FATAL, OpLevel.FAILURE, OpLevel.CRITICAL, OpLevel.ERROR, OpLevel.WARNING,
-	        OpLevel.INFO, OpLevel.INFO, OpLevel.DEBUG };
+	static final OpLevel[] LEVELS = { OpLevel.HALT, OpLevel.FATAL, OpLevel.CRITICAL, OpLevel.ERROR, OpLevel.WARNING,
+	        OpLevel.WARNING, OpLevel.INFO, OpLevel.DEBUG, OpLevel.NONE };
 }

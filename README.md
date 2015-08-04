@@ -248,8 +248,10 @@ JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 
 # Project Dependencies
 JESL requires the following:
-* JDK 1.6+
+* JDK 1.7+
 * TNT4J (https://github.com/Nastel/TNT4J)
+* TNT4J/Log4J 1.2 Appender (https://github.com/Nastel/tnt4j-log4j12)
+* TNT4J/Logback Appender (https://github.com/Nastel/tnt4j-logback)
 * Apache HTTP Client 4.2.5 (http://hc.apache.org/httpcomponents-client-ga/)
 * Apache HTTP Core 4.3.4 (http://hc.apache.org/httpcomponents-client-ga/)
 * Syslog4j (http://syslog4j.org/)
@@ -257,6 +259,9 @@ JESL requires the following:
 * GSON (https://github.com/google/gson)
 
 # Related Projects
+* TNT4J (https://github.com/Nastel/TNT4J)
+* TNT4J/Log4J 1.2 Appender (https://github.com/Nastel/tnt4j-log4j12)
+* TNT4J/Logback Appender (https://github.com/Nastel/tnt4j-logback)
 * TrackingFilter (http://nastel.github.io/TrackingFilter/)
 * PingJMX (http://nastel.github.io/PingJMX/)
 

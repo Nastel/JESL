@@ -30,8 +30,6 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DurationFormatUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 
@@ -59,7 +57,7 @@ public class TNT4JSimulator {
 	private static String			jkAccessToken  = null;
 	private static String			simFileName    = null;
 	private static boolean			uniqueTags     = false;
-	private static Level			traceLevel     = Level.INFO;
+	private static OpLevel			traceLevel     = OpLevel.INFO;
 	private static String			jkFileName     = null;
 	private static int				valuePctChg    = 0;
 	private static Random			ranGen         = new Random();
@@ -83,7 +81,7 @@ public class TNT4JSimulator {
 	}
 
 	public static boolean isDebugEnabled() {
-		return (traceLevel == Level.DEBUG || traceLevel == Level.TRACE);
+		return (traceLevel == OpLevel.DEBUG || traceLevel == OpLevel.TRACE);
 	}
 
 	public static void debug(UsecTimestamp simTime, String msg) {
@@ -95,7 +93,7 @@ public class TNT4JSimulator {
 	}
 
 	public static boolean isTraceEnabled() {
-		return (traceLevel == Level.TRACE);
+		return (traceLevel == OpLevel.TRACE);
 	}
 
 	public static void trace(UsecTimestamp simTime, String msg) {
@@ -181,8 +179,8 @@ public class TNT4JSimulator {
 
 		System.out.println("\nValid arguments:\n");
 		System.out.println("  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-f:<sim_def_file_name>]");
-		System.out.println("                              [-p:<percentage>] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t] \n");
-		System.out.println("  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name> [-t[v]]\n");
+		System.out.println("                              [-p:<percentage>] [-G:<jk_file_name>] [-i:<iterations>] [-u]\n");
+		System.out.println("  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n");
 		System.out.println("  for usage information:  help\n");
 		System.out.println("where:");
 		System.out.println("    -A    -  jKoolCloud access token (required)");
@@ -196,7 +194,6 @@ public class TNT4JSimulator {
 		System.out.println("             (if writing, data is appended to an existing file)");
 		System.out.println("    -i    -  Number of iterations to make on <sim_file_name>");
 		System.out.println("    -u    -  Make message signatures, correlators, and labels unique between iterations");
-		System.out.println("    -t[v] -  Enable tracing (include 'v' for verbose tracing)");
 		System.out.println("\nFor 'run' mode, must specify at least of one: '-T', '-G'");
 
 		System.exit(StringUtils.isEmpty(error) ? 0 : 1);
@@ -247,11 +244,6 @@ public class TNT4JSimulator {
 				jkProtocol = arg.substring(3).toLowerCase();
 				if (!"tcp".equals(jkProtocol) && !"http".equals(jkProtocol) && !"https".equals(jkProtocol))
 					printUsage("Invalid connection protocol for '-C' argument (must be one of: 'tcp', 'http', 'https')");
-			}
-			else if (arg.startsWith("-t")) {
-				if (arg.length() > 2 && arg.charAt(2) != 'v')
-					printUsage("Invalid qualifier for '-t' argument");
-				traceLevel = (arg.length() > 2 ? Level.TRACE : Level.DEBUG);
 			}
 			else if (runType == SimulatorRunType.RUN_SIM || runType == SimulatorRunType.REPLAY_SIM) {
 				if (arg.startsWith("-G:")) {
@@ -347,16 +339,10 @@ public class TNT4JSimulator {
 
 			TrackerConfig simConfig = DefaultConfigFactory.getInstance().getConfig(TNT4JSimulator.class.getName());
 			logger = TrackingLogger.getInstance(simConfig.build());
-			if (isTraceEnabled())
-				logger.set(OpLevel.TRACE, ".*");
-			else if (isDebugEnabled())
-				logger.set(OpLevel.DEBUG, ".*");
-
-			Object logSink = simConfig.getEventSink().getSinkHandle();
-			if (logSink instanceof Logger) {
-				Logger log4jSink = (Logger) logSink;
-				log4jSink.setLevel(traceLevel);
-			}
+			if (logger.isSet(OpLevel.TRACE))
+				traceLevel = OpLevel.TRACE;
+			else if (logger.isSet(OpLevel.DEBUG))
+				traceLevel = OpLevel.DEBUG;
 
 			if (runType == SimulatorRunType.RUN_SIM) {
 				if (StringUtils.isEmpty(simFileName)) {

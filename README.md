@@ -121,7 +121,7 @@ JESL includes Syslog Daemon implementation. Please follow these steps to stream 
 * Send/playback syslog messages from command line (`<jesl-home>/bin/syslog`):
 ```
 $ syslog -h localhost -p 5140 -f syslogd.json tcp
-$ syslog -h localhost -p 5140 -l error -f user tcp "host appl-name[883]: my syslog mesasge about appl-name pid=883"
+$ syslog -h localhost -p 5140 -l error -f user tcp "appl-name[883]: my syslog mesasge about appl-name pid=883"
 ```
 where `syslogd.json` is JSON output of JESL syslog daemon.
 	
@@ -168,6 +168,7 @@ Optionally you can add the following parameters to define default data center na
 -Dtnt4j.source.DATACENTER=YourDataCenterName -Dtnt4j.source.GEOADDR="Melville, NY" 
 ```
 Make sure `<jesl.home>/jkool-jesl.jar` and all dependent jar files in `<jesl.home>/lib` are in your class path.
+Also include TNT4J-LOG4J12 appender libraries under `<jesl.home>/lib/tnt4j-log4j12`.
 
 #### Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 This allows streaming data to be associated with your private repository.

@@ -63,6 +63,7 @@ public class TNT4JSimulator {
 	private static Random			ranGen         = new Random();
 	private static long				numIterations  = 1;
 	private static boolean			generateValues = false;
+	private static long				ttl            = 0L;
 
 	private static JKCloudConnection	gwConn          = null;
 	private static TrackingLogger		logger          = null;
@@ -173,13 +174,17 @@ public class TNT4JSimulator {
 		return iteration;
 	}
 
+	public static long getTTL() {
+		return ttl;
+	}
+
 	private static void printUsage(String error) {
 		if (!StringUtils.isEmpty(error))
 			System.out.println(error);
 
 		System.out.println("\nValid arguments:\n");
 		System.out.println("  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-f:<sim_def_file_name>]");
-		System.out.println("                              [-p:<percentage>] [-G:<jk_file_name>] [-i:<iterations>] [-u]\n");
+		System.out.println("                              [-p:<percentage>] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>\n");
 		System.out.println("  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n");
 		System.out.println("  for usage information:  help\n");
 		System.out.println("where:");
@@ -194,6 +199,10 @@ public class TNT4JSimulator {
 		System.out.println("             (if writing, data is appended to an existing file)");
 		System.out.println("    -i    -  Number of iterations to make on <sim_file_name>");
 		System.out.println("    -u    -  Make message signatures, correlators, and labels unique between iterations");
+		System.out.println("    -t    -  Time-to-live (TTL) for all tracking items, in hours");
+		System.out.println("                > 0 : tracking events are deleted after the specified number of hours");
+		System.out.println("                = 0 : tracking events are deleted based on Retention quota for repository (default)");
+		System.out.println("                < 0 : tracking events are not persisted to data store (only processed by Real-time Grid)");
 		System.out.println("\nFor 'run' mode, must specify at least of one: '-T', '-G'");
 
 		System.exit(StringUtils.isEmpty(error) ? 0 : 1);
@@ -280,6 +289,20 @@ public class TNT4JSimulator {
 						if (valuePctChg < 0 || valuePctChg > 100)
 							printUsage("Percentage for varying values ('-p' argument) must be in the range [0,100)");
 					}
+					else if (arg.startsWith("-t:")) {
+						String ttlStr = arg.substring(3);
+						try {
+							ttl = Long.parseLong(ttlStr);
+							if (ttl > 0L)
+								ttl *= 3600;
+						}
+						catch (NumberFormatException e) {
+							if (StringUtils.isEmpty(ttlStr))
+								printUsage("Missing <ttl_hours> for '-t' argument");
+							else
+								printUsage("Invalid <ttl_hours> for '-t' argument (" + arg.substring(3) + ")");
+						}
+					}
 					else if (arg.equals("-u")) {
 						uniqueTags = true;
 					}
@@ -363,7 +386,7 @@ public class TNT4JSimulator {
 					simDef.append(line).append("\n");
 				simLoader.close();
 
-				info("jKool Activity Simulator Run starting: file=" + simFileName + ", iterations=" + numIterations);
+				info("jKool Activity Simulator Run starting: file=" + simFileName + ", iterations=" + numIterations + ", ttl.sec=" + ttl);
 				startTime = System.currentTimeMillis();
 
 				if (isTTY && numIterations > 1)

@@ -393,6 +393,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				category = null;
 
 			curSnapshot = new PropertySnapshot(category, name, severity, simCurrTime);
+			curSnapshot.setTTL(TNT4JSimulator.getTTL());
 		}
 		catch (Exception e) {
 			if (e instanceof SAXException)
@@ -708,6 +709,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				throw new SAXParseException("<" + SIM_XML_ACTIVITY + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined", saxLocator);
 
 			curActivity = curTracker.newActivity();
+			curActivity.setTTL(TNT4JSimulator.getTTL());
 			curActivity.setSource(source);
 			curActivity.setUser(user == null ? source.getUser() : user);
 			curActivity.setStatus(status == null ? ActivityStatus.BEGIN : status);
@@ -787,6 +789,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 		TrackingEvent event = curTracker.newEvent(severity, type, name, null, null, (String)null, (Object[])null);
 
+		event.setTTL(TNT4JSimulator.getTTL());
 		event.setLocation(curActivity.getLocation());
 		event.getOperation().setPID(curActivity.getPID());
 		event.getOperation().setTID(curActivity.getTID());

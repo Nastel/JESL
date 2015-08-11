@@ -18,6 +18,7 @@ package com.jkool.jesl.simulator.tnt4j;
 import java.util.Properties;
 
 import com.jkool.jesl.simulator.TNT4JSimulator;
+import com.nastel.jkool.tnt4j.core.TTL;
 import com.nastel.jkool.tnt4j.format.EventFormatter;
 import com.nastel.jkool.tnt4j.sink.EventSink;
 import com.nastel.jkool.tnt4j.sink.EventSinkFactory;
@@ -29,6 +30,7 @@ import com.nastel.jkool.tnt4j.sink.EventSinkFactory;
  * @version $Revision $
  */
 public class SimulatedEventSinkFactory implements EventSinkFactory {
+	private long ttl = TTL.TTL_CONTEXT;
 
 	public SimulatedEventSinkFactory() {
 	}
@@ -49,5 +51,15 @@ public class SimulatedEventSinkFactory implements EventSinkFactory {
 	@Override
 	public EventSink getEventSink(String name, Properties props, EventFormatter frmt) {
 		return getEventSink(name);
+	}
+
+	@Override
+	public long getTTL() {
+		return ttl;
+	}
+
+	@Override
+	public void setTTL(long ttl) {
+		this.ttl = ttl;
 	}
 }

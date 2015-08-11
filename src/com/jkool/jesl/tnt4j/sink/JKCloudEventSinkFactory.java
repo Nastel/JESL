@@ -67,19 +67,19 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	@Override
     public EventSink getEventSink(String name) {
 		EventSink outSink = eventSinkFactory != null? eventSinkFactory.getEventSink(name, System.getProperties(), new JSONFormatter(false)): null;
-	    return new JKCloudEventSink(name, url, new JSONFormatter(false), outSink);
+	    return configureSink(new JKCloudEventSink(name, url, new JSONFormatter(false), outSink));
     }
 
 	@Override
     public EventSink getEventSink(String name, Properties props) {
 		EventSink outSink = eventSinkFactory != null? eventSinkFactory.getEventSink(name, System.getProperties(), new JSONFormatter(false)): null;
-	    return new JKCloudEventSink(name, url, new JSONFormatter(false), outSink);
+	    return configureSink(new JKCloudEventSink(name, url, new JSONFormatter(false), outSink));
     }
 
 	@Override
     public EventSink getEventSink(String name, Properties props, EventFormatter frmt) {
 		EventSink outSink = eventSinkFactory != null? eventSinkFactory.getEventSink(name, props, new JSONFormatter(false)): null;
-	    return new JKCloudEventSink(name, url,  token, frmt, outSink);
+	    return configureSink(new JKCloudEventSink(name, url,  token, frmt, outSink));
     }
 
 	@Override
@@ -95,6 +95,7 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 		fileName = config.get("Filename") != null? config.get("Filename").toString(): fileName;
 		if (fileName != null) {
 			eventSinkFactory = new FileEventSinkFactory(fileName);
+			eventSinkFactory.setTTL(getTTL());
 		}
 		try {
 			URI uri = new URI(url);

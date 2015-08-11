@@ -111,8 +111,8 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void _log(Source src, OpLevel sev, String msg, Object... args) throws Exception {
-		writeFormattedMsg(formatter.format(src, msg, args));
+	protected void _log(long ttl, Source src, OpLevel sev, String msg, Object... args) throws Exception {
+		writeFormattedMsg(formatter.format(ttl, src, msg, args));
 	}
 
 	/**

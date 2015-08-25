@@ -248,7 +248,7 @@ JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 
 # Project Dependencies
 JESL requires the following:
-* JDK 1.7+
+* JDK 1.6+
 * TNT4J (https://github.com/Nastel/TNT4J)
 * TNT4J/Log4J 1.2 Appender (https://github.com/Nastel/tnt4j-log4j12)
 * TNT4J/Logback Appender (https://github.com/Nastel/tnt4j-logback)

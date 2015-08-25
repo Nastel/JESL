@@ -157,7 +157,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		Map<String, Object> map = parseAttributes(event);
 		String appName = map.get("appl.name").toString();
 		String serverName = map.get("server.name").toString();
-		long pid = (long) map.get("appl.pid");
+		Long pid = (Long) map.get("appl.pid");
 		
 		tevent.setTag(serverName, appName);
 		tevent.getOperation().setPID(pid);

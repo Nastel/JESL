@@ -22,9 +22,6 @@
                   For SERVER and NETADDR, if names are set to "?", simulator will use local host information
           user:   User to identify with source (e.g. user that application is running under).
           url:    URL for source
-          info:   information describing this source, e.g. operation system type and version.  If this field is
-                  not specified and simulator is using local host information, it will fill this field in based
-                  on local OS.
        
        If name and addr attributes are left out, simulator will create a source record based on local host
   -->

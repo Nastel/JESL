@@ -78,7 +78,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	public static final String SIM_XML_ATTR_VALUE     = "value";
 	public static final String SIM_XML_ATTR_FQN       = "fqn";
 	public static final String SIM_XML_ATTR_USER      = "user";
-	public static final String SIM_XML_ATTR_INFO      = "info";
 	public static final String SIM_XML_ATTR_URL       = "url";
 	public static final String SIM_XML_ATTR_MIME      = "mime";
 	public static final String SIM_XML_ATTR_ENC       = "enc";
@@ -241,7 +240,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 		int    id     = 0;
 		String fqn    = null;
-		String info   = null;
 		String url    = null;
 		String user   = null;
 		String server = null;
@@ -260,8 +258,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					user = attValue;
 				else if (attName.equals(SIM_XML_ATTR_URL))
 					url = attValue;
-				else if (attName.equals(SIM_XML_ATTR_INFO))
-					info = attValue;
 				else
 					throw new SAXParseException("Unknown <" + SIM_XML_SOURCE + "> attribute " + attName, saxLocator);
 			}
@@ -298,8 +294,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					InetAddress hostAddr = InetAddress.getLocalHost();
 					server = hostAddr.getHostName();
 					ip     = hostAddr.getHostAddress();
-					if (StringUtils.isEmpty(info))
-						info = System.getProperty("os.name") + " " + System.getProperty("os.version");
 				}
 				else if (StringUtils.isEmpty(server)) {
 					InetAddress hostAddr = InetAddress.getByName(ip);
@@ -331,7 +325,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 
 			Source src = DefaultSourceFactory.getInstance().newFromFQN(fqn);
-			src.setInfo(info);
 			if (!StringUtils.isEmpty(user))
 				src.setUser(user);
 			if (!StringUtils.isEmpty(url))

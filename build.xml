@@ -99,6 +99,8 @@
 		<delete dir="${project-build}"/>
 		<echo message="Deleting old archives" level="info"/>
 		<delete dir="${project-build}" includes="*.jar,*-all.zip"/>
+		<echo message="Deleting compiled classes" level="info"/>
+		<delete dir="${classes}"/>
 	</target>
 
 	<target name="jesl" depends="init,compile" description="build JESL package">

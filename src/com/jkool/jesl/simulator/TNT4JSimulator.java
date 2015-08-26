@@ -184,7 +184,7 @@ public class TNT4JSimulator {
 
 		System.out.println("\nValid arguments:\n");
 		System.out.println("  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-f:<sim_def_file_name>]");
-		System.out.println("                              [-p:<percentage>] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>\n");
+		System.out.println("                              [-p:<percentage>] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>]\n");
 		System.out.println("  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n");
 		System.out.println("  for usage information:  help\n");
 		System.out.println("where:");

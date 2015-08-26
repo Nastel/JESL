@@ -117,16 +117,19 @@ JESL includes Syslog Daemon implementation. Please follow these steps to stream 
 
 * Obtain jkool cloud account. Edit `config/tnt4j.properties`, 
 	* Locate `com.jkool.jesl.net.syslogd` stanza and provide your API access token.
-* Run JESL syslogd `<jesl-home>/bin/syslogd > syslogd.json`. 
-	* By default JESL syslogd binds to TCP port `5140` and writes JSON formatted syslog messages.
-	* JSON output can be played back using `<jesl-home>/bin/syslog` utility.
-* Configure `syslog/rsyslog` to forward to JESL syslog daemon over TCP (`hostname` is where JESL syslogd is running)
+* Run JESL syslogd `<jesl-home>/bin/jsyslogd > jsyslogd.json`. 
+	* By default JESL `jsyslogd` binds to TCP port `5140` and writes JSON formatted syslog messages.
+	* JSON output can be played back using `<jesl-home>/bin/jsyslog` utility.
+* Configure `syslog/rsyslog` to forward to JESL syslog daemon over TCP (`hostname` is where JESL `jsyslogd` is running)
 	* RFC 3164 (e.g. `*.* @@hostname:5140`)
 	* RFC 5424 (e.g. `*.* @@hostname:5140;RSYSLOG_SyslogProtocol23Format`)
-* Send/playback syslog messages from command line (`<jesl-home>/bin/syslog`):
+* Send syslog messages from command line (`<jesl-home>/bin/jsyslog`):
 ```
-$ syslog -h localhost -p 5140 -f syslogd.json tcp
-$ syslog -h localhost -p 5140 -l error -f user tcp "appl-name[883]: my syslog mesasge about appl-name pid=883"
+$ jsyslog -h localhost -p 5140 -l error -f user tcp "appl-name[883]: my syslog mesasge about appl-name pid=883"
+```
+* Playback syslog JSON messages from command line (`<jesl-home>/bin/jsyslog`):
+```
+$ jsyslog -h localhost -p 5140 -f jsyslogd.json tcp
 ```
 where `syslogd.json` is JSON output of JESL syslog daemon.
 	

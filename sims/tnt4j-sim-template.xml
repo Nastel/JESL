@@ -41,6 +41,22 @@
   -->
   <msg id="1" mime="text/plain">This is the message payload</msg>
 
+  <!-- Each item type below can have custom properties. The property values are specified by nested
+       <prop> elements.  The attributes of a property are:
+          name:     name of property.  This is required.
+          value:    value for property.
+          type:     data type of property, which is one of:
+                      STRING    - value is a character string (default)
+                      INTEGER   - value is an integer
+                      DECIMAL   - value is a decimal number (floating point value)
+                      BOOLEAN   - value is either "true" or "false"
+                      TIMESTAMP - value is a timestamp, specified either as a number of microseconds (10e-6) since epoch,
+                                  or a date/time string in the form: yyyy-MM-dd HH:mm:ss.SSSSSS
+          valtype:  type of property value, i.e. how to interpret the value (percentage, counter, etc.)
+                    This can be any string label.  see com.nastel.jkool.tnt4j.core.ValueTypes for a list
+                    of predefined value types.
+  -->
+  
   <!-- Defines an activity.  An activity is a collection of related events and sub-activities. <activity> elements can
        contain <event> elements, other <activity> elements, and <snapshot> elements.
        
@@ -67,7 +83,7 @@
          Supported attributes for sleep are:
             msec:     millisecond delay
             usec:     microsecond delay
-    -->
+  -->
   <activity name="Process Payment" source="1" pid="5432" tid="4"
             sev="CRITICAL" cc="WARNING" exc="Host not available">
   
@@ -114,21 +130,7 @@
             sev:      severity of event.  One of:
                           TRACE, DEBUG, INFO, SUCCESS, WARNING, ERROR, FAILURE,
                           CRITICAL, FATAL, HALT
-
-        The property values are specified by nested <prop> elements.  The attributes of a snapshot property are:
-            name:     name of property.  This is required.
-            value:    value for property.
-            type:     data type of property, which is one of:
-                        STRING    - value is a character string (default)
-                        INTEGER   - value is an integer
-                        DECIMAL   - value is a decimal number (floating point value)
-                        BOOLEAN   - value is either "true" or "false"
-                        TIMESTAMP - value is a timestamp, specified either as a number of microseconds (10e-6) since epoch,
-                                    or a date/time string in the form: yyyy-MM-dd HH:mm:ss.SSSSSS
-            valtype:  type of property value, i.e. how to interpret the value (percentage, counter, etc.)
-                      This can be any string label.  see com.nastel.jkool.tnt4j.core.ValueTypes for a list
-                      of predefined value types.
-      -->
+    -->
     <snapshot name="SystemMetrics">
       <prop name="MEM_USED" type="INTEGER" value="12345678" valtype="size"/>
     </snapshot>

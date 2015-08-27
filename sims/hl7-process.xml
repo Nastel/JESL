@@ -2,19 +2,19 @@
 <tnt4j-simulator>
 
   <source id="1" fqn="APPL=EmergencyRoom#SERVER=CareTrends01#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
-          info="Redhat5 Server" user="webuser" url="https://www.sample.com/orders/parts"/>
+          user="webuser" url="https://www.sample.com/orders/parts"/>
   <source id="2" fqn="APPL=HospitalADT#SERVER=AdminDischargeServer#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=New York, NY"
-          info="Ubuntu12.04 Server" user="ebay-proc"/>
+          user="ebay-proc"/>
   <source id="3" fqn="APPL=InsuranceBilling#SERVER=BillingServer#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=New York, NY"
-          info="z/OS" user="SYSPRC"/>
+          user="SYSPRC"/>
   <source id="4" fqn="APPL=Administration#SERVER=CareTrends4#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=New York, NY"
-          info="Windows 2012 Server" user="system"/>
+          user="system"/>
   <source id="5" fqn="APPL=Discharge#SERVER=CareTrends5#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=New York, NY"
-          info="Windows 2012 Server" user="system"/>
+          user="system"/>
   <source id="6" fqn="APPL=Medicare#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Washington#GEOADDR=New York, NY"
-          info="IBM AIX 5 Alpha" user="mqm"/>
+          user="mqm"/>
   <source id="7" fqn="APPL=Accounting#SERVER=AccountingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=New York, NY"
-          info="Windows 2012 WebSphere Server" user="mqm"/>
+          user="mqm"/>
   
   <msg id="1">Patient Accepted</msg>
   <msg id="2">Vitals taken</msg>

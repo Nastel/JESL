@@ -188,7 +188,7 @@ public class TNT4JSimulator {
 		System.out.println("  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n");
 		System.out.println("  for usage information:  help\n");
 		System.out.println("where:");
-		System.out.println("    -A    -  jKoolCloud access token (required)");
+		System.out.println("    -A    -  jKoolCloud access token (required with '-T')");
 		System.out.println("    -T    -  Host name or IP address of jKoolCloud service");
 		System.out.println("             (if not specified, data is not sent to jKoolCloud service)");
 		System.out.println("    -P    -  Port jKoolCloud service is listening on (default: 6500)");
@@ -330,11 +330,11 @@ public class TNT4JSimulator {
 		}
 
 		if (runType == SimulatorRunType.RUN_SIM) {
-			if (StringUtils.isEmpty(jkAccessToken))
-				printUsage("Must specify '-A'");
-
 			if (StringUtils.isEmpty(jkHost) && StringUtils.isEmpty(jkFileName))
 				printUsage("Must specify one of '-T' or '-G'");
+
+			if (StringUtils.isEmpty(jkAccessToken) && !StringUtils.isEmpty(jkHost))
+				printUsage("Must specify '-A'");
 		}
 
 		if (runType == SimulatorRunType.REPLAY_SIM) {

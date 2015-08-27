@@ -2,19 +2,19 @@
 <tnt4j-simulator>
 
   <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
-          info="Redhat5 Server" user="webuser" url="https://www.sample.com/orders/parts"/>
+          user="webuser" url="https://www.sample.com/orders/parts"/>
   <source id="2" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=Los Angeles, CA"
-          info="Ubuntu12.04 Server" user="ebay-proc"/>
+          user="ebay-proc"/>
   <source id="3" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=London, England"
-          info="z/OS" user="SYSPRC"/>
+          user="SYSPRC"/>
   <source id="4" fqn="APPL=VerifyCredit#SERVER=CreditServerVISA#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=Paris, France"
-          info="Windows 2012 Server" user="system"/>
+          user="system"/>
   <source id="5" fqn="APPL=ShipProduct#SERVER=SupplyChainServer#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=Miami, Florida"
-          info="Windows 2012 Server" user="system"/>
+          user="system"/>
   <source id="6" fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Washington#GEOADDR=Washington, Virginia"
-          info="IBM AIX 5 Alpha" user="mqm"/>
+          user="mqm"/>
   <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=Las Vegas, Nevada"
-          info="Windows 2012 WebSphere Server" user="mqm"/>
+          user="mqm"/>
   
   <msg id="1">AMAZON ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr.</msg>
   <msg id="2">Verify ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr</msg>

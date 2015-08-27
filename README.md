@@ -253,8 +253,9 @@ JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 JESL requires the following:
 * JDK 1.6+
 * TNT4J (https://github.com/Nastel/TNT4J)
-* TNT4J/Log4J 1.2 Appender (https://github.com/Nastel/tnt4j-log4j12)
-* TNT4J/Logback Appender (https://github.com/Nastel/tnt4j-logback)
+* TNT4J-Syslogd (https://github.com/Nastel/tnt4j-syslogd)
+* TNT4J-Log4J12 Appender (https://github.com/Nastel/tnt4j-log4j12)
+* TNT4J-Logback Appender (https://github.com/Nastel/tnt4j-logback)
 * Apache HTTP Client 4.2.5 (http://hc.apache.org/httpcomponents-client-ga/)
 * Apache HTTP Core 4.3.4 (http://hc.apache.org/httpcomponents-client-ga/)
 * Syslog4j (http://syslog4j.org/)
@@ -263,8 +264,9 @@ JESL requires the following:
 
 # Related Projects
 * TNT4J (https://github.com/Nastel/TNT4J)
-* TNT4J/Log4J 1.2 Appender (https://github.com/Nastel/tnt4j-log4j12)
-* TNT4J/Logback Appender (https://github.com/Nastel/tnt4j-logback)
+* TNT4J-Syslogd (https://github.com/Nastel/tnt4j-syslogd)
+* TNT4J-Log4J12 Appender (https://github.com/Nastel/tnt4j-log4j12)
+* TNT4J-Logback Appender (https://github.com/Nastel/tnt4j-logback)
 * TrackingFilter (http://nastel.github.io/TrackingFilter/)
 * PingJMX (http://nastel.github.io/PingJMX/)
 

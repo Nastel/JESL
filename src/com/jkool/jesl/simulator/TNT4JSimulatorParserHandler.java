@@ -790,7 +790,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		if (!StringUtils.isEmpty(valStr))
 			severity = OpLevel.valueOf(valStr);
 
-		curEvent = curTracker.newEvent(severity, type, name, null, null, (String)null, (Object[])null);
+		curEvent = curTracker.newEvent(severity, type, name, (String)null, (String)null, (String)null, (Object[])null);
 
 		curEvent.setTTL(TNT4JSimulator.getTTL());
 		curEvent.setLocation(curActivity.getLocation());

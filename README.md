@@ -123,9 +123,13 @@ JESL includes Syslog Daemon implementation. Please follow these steps to stream 
 * Configure `syslog/rsyslog` to forward to JESL syslog daemon over TCP (`hostname` is where JESL `jksysd` is running)
 	* RFC 3164 (e.g. `*.* @@hostname:5140`)
 	* RFC 5424 (e.g. `*.* @@hostname:5140;RSYSLOG_SyslogProtocol23Format`)
-* Send syslog messages from command line (`<jesl-home>/bin/jksys`):
+* Sending syslog messages from command line (`<jesl-home>/bin/jksys`):
 ```
 $ jksys -h localhost -p 5140 -l error -f user tcp "appl-name[883]: my syslog mesasge about appl-name pid=883"
+```
+* Sending PCI messages from command line (`<jesl-home>/bin/jksys`):
+```
+$ jksys -h localhost -p 5140 -l error -f user tcp "#pci(userId=john,eventType=audit,status=success,origination=CreditCards,affectedResource=Payment)"
 ```
 * Playback syslog JSON messages from command line (`<jesl-home>/bin/jksys`):
 ```

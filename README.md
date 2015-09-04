@@ -184,6 +184,7 @@ Also include TNT4J-LOG4J12 appender libraries under `<jesl.home>/lib/tnt4j-log4j
 
 #### Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 This allows streaming data to be associated with your private repository.
+
 <b>NOTE</b>: Make sure your firewall allows outgoing `http` connections to http://data.jkoolcloud.com:6580
 
 #### Restart your application

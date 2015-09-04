@@ -16,7 +16,7 @@ To stream data to jKool Cloud your application must:
 	   using JESL Event Sink (requires API access token).
 	   See (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
 	
-JESL package consists of the following components:
+JESL package includes the following components:
 
 	1. TNT4J streaming library with SLF4j support (https://github.com/Nastel/TNT4J)
 	   
@@ -24,7 +24,7 @@ JESL package consists of the following components:
 	
 	3. TNT4J Appender for Logback (https://github.com/Nastel/tnt4j-logback)	 
 	
-	4. Syslog Daemon for streaming syslog to jkoolcloud.com.
+	4. TNT4J Syslog for streaming syslog to jkoolcloud.com. ((https://github.com/Nastel/tnt4j-syslogd)
 	
 	5. JESL Simulator -- stream simulated events, activities and metrics
 	   to jKool Cloud. Simulations are defined in XML files.
@@ -227,7 +227,8 @@ JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 	source.factory: com.nastel.jkool.tnt4j.source.SourceFactoryImpl
 	source.factory.GEOADDR: NewYork
 	source.factory.DATACENTER: HQDC
-	source.factory.RootFQN: SERVER=?#DATACENTER=?#GEOADDR=?	
+	source.factory.RootFQN: SERVER=?#DATACENTER=?#GEOADDR=?
+	source.factory.RootSSN: tnt4j-myapp
 	
 	tracker.factory: com.nastel.jkool.tnt4j.tracker.DefaultTrackerFactory
 	dump.sink.factory: com.nastel.jkool.tnt4j.dump.DefaultDumpSinkFactory

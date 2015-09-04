@@ -257,24 +257,18 @@ JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 JESL requires the following:
 * JDK 1.6+
 * TNT4J (https://github.com/Nastel/TNT4J)
-* TNT4J-Syslogd (https://github.com/Nastel/tnt4j-syslogd)
-* TNT4J-Log4J12 Appender (https://github.com/Nastel/tnt4j-log4j12)
-* TNT4J-Logback Appender (https://github.com/Nastel/tnt4j-logback)
 * Apache HTTP Client 4.2.5 (http://hc.apache.org/httpcomponents-client-ga/)
 * Apache HTTP Core 4.3.4 (http://hc.apache.org/httpcomponents-client-ga/)
-* Syslog4j (http://syslog4j.org/)
 * Joda Time (http://www.joda.org/joda-time/)
 * GSON (https://github.com/google/gson)
 
 # Related Projects
 * TNT4J (https://github.com/Nastel/TNT4J)
-* TNT4J-Syslogd (https://github.com/Nastel/tnt4j-syslogd)
 * TNT4J-Log4J12 Appender (https://github.com/Nastel/tnt4j-log4j12)
 * TNT4J-Logback Appender (https://github.com/Nastel/tnt4j-logback)
-* TrackingFilter (http://nastel.github.io/TrackingFilter/)
-* PingJMX (http://nastel.github.io/PingJMX/)
+* TNT4J-Servlet-Filter (http://nastel.github.io/tnt4j-servlet-filter/)
+* TNT4J-Stream-JMX (http://nastel.github.io/tnt4j-stream-jmx/)
+* TNT4J-Syslogd (https://github.com/Nastel/tnt4j-syslogd)
 
 # Available Integrations
-* TNT4J (https://github.com/Nastel/TNT4J)
-* Log4J (http://logging.apache.org/log4j/1.2/)
 * jkoolcloud.com (https://www.jkoolcloud.com)

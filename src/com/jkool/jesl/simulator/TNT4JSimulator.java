@@ -178,6 +178,10 @@ public class TNT4JSimulator {
 		return ttl;
 	}
 
+	public static String newUUID() {
+		return logger.newUUID();
+	}
+
 	private static void printUsage(String error) {
 		if (!StringUtils.isEmpty(error))
 			System.out.println(error);

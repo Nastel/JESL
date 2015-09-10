@@ -155,7 +155,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		for (int i = 1; i < valLabels.length; i += 2) {
 			String valLabel = valLabels[i];
 			if (StringUtils.isEmpty(valLabel))
-				newStr = newStr.replace("%%", Utils.newUUID());
+				newStr = newStr.replace("%%", TNT4JSimulator.newUUID());
 			else {
 				Long val = genValues.get(valLabel);
 				if (val == null) {
@@ -198,7 +198,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			tagSuffix = "@" + String.valueOf(Utils.currentTimeUsec()) + "@" + TNT4JSimulator.getIteration();
 
 			for (Message m : messageIds.values())
-				m.setTrackingId(Utils.newUUID());
+				m.setTrackingId(TNT4JSimulator.newUUID());
 		}
 	}
 
@@ -263,7 +263,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					throw new SAXParseException("Unknown <" + SIM_XML_SOURCE + "> attribute " + attName, saxLocator);
 			}
 
-			if (id == 0)
+			if (id <= 0)
 				throw new SAXParseException("<" + SIM_XML_SOURCE + "> element has missing or invalid " + SIM_XML_ATTR_ID + " attribute ", saxLocator);
 
 			if (sourceIds.containsKey(id))
@@ -337,13 +337,13 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			TrackerConfig srcCfg = DefaultConfigFactory.getInstance().getConfig(fqn);
 			srcCfg.setSource(src);
 
-			srcCfg.setProperty("Url",   TNT4JSimulator.getConnectUrl());
+			srcCfg.setProperty("Url", TNT4JSimulator.getConnectUrl());
 
 			String token = TNT4JSimulator.getAccessToken();
 			if (!StringUtils.isEmpty(token))
 				srcCfg.setProperty("Token", token);
 
-			Tracker tracker = trackerFactory.getInstance(srcCfg);
+			Tracker tracker = trackerFactory.getInstance(srcCfg.build());
 			trackers.put(fqn, tracker);
 		}
 		catch (Exception e) {
@@ -534,7 +534,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 			curMsg = messageIds.get(id);
 			if (curMsg == null) {
-				curMsg = new Message(Utils.newUUID());
+				curMsg = new Message(TNT4JSimulator.newUUID());
 				messageIds.put(id, curMsg);
 			}
 
@@ -700,7 +700,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				}
 			}
 
-			if (!sourceIds.containsKey(srcId))
+			if (srcId <= 0)
 				throw new SAXParseException("<" + SIM_XML_ACTIVITY + "> attribute '" + SIM_XML_ATTR_SOURCE + "' is missing", saxLocator);
 
 			Source source = sourceIds.get(srcId);
@@ -735,7 +735,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			if (!StringUtils.isEmpty(exc))
 				curActivity.setException(exc);
 			if (!ArrayUtils.isEmpty(corrs))
-				curActivity.setCorrelator(corrs[0]);
+				curActivity.setCorrelator(corrs);
 
 			TNT4JSimulator.debug(simCurrTime, "Started activity: " + name);
 			curActivity.start(curActivityStart);
@@ -768,15 +768,15 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	}
 
 	private void runEvent(Attributes attributes) throws SAXException {
-		if (curActivity == null || !SIM_XML_ACTIVITY.equals(curElement))
-			throw new SAXParseException("<" + SIM_XML_EVENT + ">: Must have <" + SIM_XML_ACTIVITY+ "> as parent element", saxLocator);
-
 		TNT4JSimulator.trace(simCurrTime, "Started event ...");
 
 		String name = attributes.getValue(SIM_XML_ATTR_NAME);
 
 		if (StringUtils.isEmpty(name))
 			throw new SAXParseException("<" + SIM_XML_EVENT + ">: '" + SIM_XML_ATTR_NAME + "' must be specified", saxLocator);
+
+		if (simCurrTime == null)
+			simCurrTime = new UsecTimestamp();
 
 		OpType     type     = OpType.EVENT;
 		OpLevel    severity = OpLevel.SUCCESS;
@@ -790,17 +790,21 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		if (!StringUtils.isEmpty(valStr))
 			severity = OpLevel.valueOf(valStr);
 
-		curEvent = curTracker.newEvent(severity, type, name, (String)null, (String)null, (String)null, (Object[])null);
-
-		curEvent.setTTL(TNT4JSimulator.getTTL());
-		curEvent.setLocation(curActivity.getLocation());
-		curEvent.getOperation().setPID(curActivity.getPID());
-		curEvent.getOperation().setTID(curActivity.getTID());
-		curEvent.getOperation().setResource(curActivity.getResource());
-		curEvent.getOperation().setUser(curActivity.getUser());
-
-		long elapsed  = 0L;
-		int  msgId    = 0;
+		int        srcId   = 0;
+		OpLevel    sev     = null;
+		OpCompCode cc      = null;
+		int        rc      = 0;
+		long       pid     = 0L;
+		long       tid     = 0L;
+		String     exc     = null;
+		String     loc     = null;
+		String     res     = null;
+		String     user    = null;
+		String[]   corrs   = null;
+		String[]   labels  = null;
+		long       elapsed = 0L;
+		int        msgId   = 0;
+		long       msgAge = 0L;
 
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
@@ -816,35 +820,38 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				else if (attName.equals(SIM_XML_ATTR_SEVERITY)) {
 					// handled above
 				}
+				else if (attName.equals(SIM_XML_ATTR_SOURCE)) {
+					srcId = Integer.parseInt(attValue);
+					if (srcId <= 0)
+						throw new SAXParseException("Invalid <" + SIM_XML_EVENT + "> attribute '" + attName + "', must be > 0", saxLocator);
+				}
 				else if (attName.equals(SIM_XML_ATTR_CC)) {
-					curEvent.getOperation().setCompCode(OpCompCode.valueOf(attValue));
+					cc = OpCompCode.valueOf(attValue);
 				}
 				else if (attName.equals(SIM_XML_ATTR_RC)) {
-					curEvent.getOperation().setReasonCode(Integer.parseInt(attValue));
+					rc = Integer.parseInt(attValue);
 				}
 				else if (attName.equals(SIM_XML_ATTR_PID)) {
-					long pid = Long.parseLong(attValue);
+					pid = Long.parseLong(attValue);
 					if (pid <= 0L)
-						throw new SAXParseException("Invalid <" + SIM_XML_ACTIVITY + "> attribute '" + attName + "', must be > 0", saxLocator);
-					curEvent.getOperation().setPID(pid);
+						throw new SAXParseException("Invalid <" + SIM_XML_EVENT + "> attribute '" + attName + "', must be > 0", saxLocator);
 				}
 				else if (attName.equals(SIM_XML_ATTR_TID)) {
-					long tid = Long.parseLong(attValue);
+					tid = Long.parseLong(attValue);
 					if (tid <= 0L)
-						throw new SAXParseException("Invalid <" + SIM_XML_ACTIVITY + "> attribute '" + attName + "', must be > 0", saxLocator);
-					curEvent.getOperation().setTID(tid);
+						throw new SAXParseException("Invalid <" + SIM_XML_EVENT + "> attribute '" + attName + "', must be > 0", saxLocator);
 				}
 				else if (attName.equals(SIM_XML_ATTR_EXC)) {
-					curEvent.getOperation().setException(attValue);
+					exc = attValue;
 				}
 				else if (attName.equals(SIM_XML_ATTR_LOC)) {
-					curEvent.setLocation(attValue);
+					loc = attValue;
 				}
 				else if (attName.equals(SIM_XML_ATTR_RES)) {
-					curEvent.getOperation().setResource(attValue);
+					res = attValue;
 				}
 				else if (attName.equals(SIM_XML_ATTR_USER)) {
-					curEvent.getOperation().setUser(attValue);
+					user = attValue;
 				}
 				else if (attName.equals(SIM_XML_ATTR_ELAPSED)) {
 					elapsed = Long.parseLong(attValue);
@@ -852,28 +859,25 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 						throw new SAXParseException("<" + SIM_XML_EVENT + ">: '" + SIM_XML_ATTR_ELAPSED + "' must be >= 0", saxLocator);
 				}
 				else if (attName.equals(SIM_XML_ATTR_MSGAGE)) {
-					long msgAge = Long.parseLong(attValue);
+					msgAge = Long.parseLong(attValue);
 					if (msgAge < 0L)
-						throw new SAXParseException("Invalid <" + SIM_XML_ACTIVITY + "> attribute '" + attName + "', must be >= 0", saxLocator);
-					curEvent.setMessageAge((long)TNT4JSimulator.varyValue(msgAge));
+						throw new SAXParseException("Invalid <" + SIM_XML_EVENT + "> attribute '" + attName + "', must be >= 0", saxLocator);
 				}
 				else if (attName.equals(SIM_XML_ATTR_TAGS)) {
-					String[] labels = attValue.split(",");
+					labels = attValue.split(",");
 					for (int l = 0; l < labels.length; l++) {
 						if (TNT4JSimulator.isGenerateValues())
 							labels[l] = generateValues(labels[l]);
 						labels[l] += tagSuffix;
 					}
-					curEvent.setTag(labels[0]);
 				}
 				else if (attName.equals(SIM_XML_ATTR_CORRS)) {
-					String[] corrs = attValue.split(",");
+					corrs = attValue.split(",");
 					for (int c = 0; c < corrs.length; c++) {
 						if (TNT4JSimulator.isGenerateValues())
 							corrs[c] = generateValues(corrs[c]);
 						corrs[c] += tagSuffix;
 					}
-					curEvent.setCorrelator(corrs[0]);
 				}
 				else if (attName.equals(SIM_XML_ATTR_MSG)) {
 					msgId = Integer.parseInt(attValue);
@@ -882,6 +886,63 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					throw new SAXParseException("Unknown <" + SIM_XML_EVENT + "> attribute '" + attName + "'", saxLocator);
 				}
 			}
+
+			if (srcId <= 0 && curActivity == null)
+				throw new SAXParseException("<" + SIM_XML_EVENT + "> attribute '" + SIM_XML_ATTR_SOURCE + "' is missing for event without parent activity", saxLocator);
+
+			Source source = (curActivity != null ? curActivity.getSource() : null);
+			if (srcId > 0) {
+				source = sourceIds.get(srcId);
+				if (source == null)
+					throw new SAXParseException("<" + SIM_XML_EVENT + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined", saxLocator);
+
+				curTracker = trackers.get(source.getFQName());
+				if (curTracker == null)
+					throw new SAXParseException("<" + SIM_XML_ACTIVITY + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined", saxLocator);
+			}
+
+			if (source == null || curTracker == null)
+				throw new SAXParseException("<" + SIM_XML_EVENT + "> attribute '" + SIM_XML_ATTR_SOURCE + "' is missing for event without parent activity", saxLocator);
+
+			curEvent = curTracker.newEvent(severity, type, name, (String)null, (String)null, (String)null, (Object[])null);
+
+			if (curActivity != null) {
+				curEvent.setLocation(curActivity.getLocation());
+				curEvent.getOperation().setPID(curActivity.getPID());
+				curEvent.getOperation().setTID(curActivity.getTID());
+				curEvent.getOperation().setResource(curActivity.getResource());
+				curEvent.getOperation().setUser(curActivity.getUser());
+			}
+
+			curEvent.setTTL(TNT4JSimulator.getTTL());
+			curEvent.getOperation().setSeverity(sev == null ? OpLevel.SUCCESS : sev);
+			curEvent.getOperation().setCompCode(cc == null ? OpCompCode.SUCCESS : cc);
+			if (srcId > 0)
+				curEvent.setSource(source);
+			if (!StringUtils.isEmpty(user))
+				curEvent.getOperation().setUser(user);
+			else if (curActivity == null)
+				curEvent.getOperation().setUser(source.getUser());
+			if (pid > 0L)
+				curEvent.getOperation().setPID(pid);
+			if (tid > 0L)
+				curEvent.getOperation().setTID(tid);
+			if (!StringUtils.isEmpty(name))
+				curEvent.getOperation().setName(name);
+			if (!StringUtils.isEmpty(loc))
+				curEvent.setLocation(loc);
+			if (!StringUtils.isEmpty(res))
+				curEvent.getOperation().setResource(res);
+			if (rc != 0)
+				curEvent.getOperation().setReasonCode(rc);
+			if (!StringUtils.isEmpty(exc))
+				curEvent.getOperation().setException(exc);
+			if (!ArrayUtils.isEmpty(corrs))
+				curEvent.setCorrelator(corrs);
+			if (!ArrayUtils.isEmpty(labels))
+				curEvent.setTag(labels);
+			if (msgAge > 0L)
+				curEvent.setMessageAge((long)TNT4JSimulator.varyValue(msgAge));
 
 			elapsed = (long)TNT4JSimulator.varyValue(elapsed);
 
@@ -950,7 +1011,14 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			stopActivity();
 		}
 		else if (name.equals(SIM_XML_EVENT)) {
-			curActivity.tnt(curEvent);
+			if (curActivity != null) {
+				curActivity.tnt(curEvent);
+			}
+			else {
+				Tracker tracker = trackers.get(curEvent.getSource().getFQName());
+				if (tracker != null)
+					tracker.tnt(curEvent);
+			}
 			curEvent = null;
 		}
 

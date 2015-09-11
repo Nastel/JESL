@@ -200,6 +200,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			for (Message m : messageIds.values())
 				m.setTrackingId(TNT4JSimulator.newUUID());
 		}
+
+		simCurrTime = new UsecTimestamp();
 	}
 
 	/**
@@ -613,6 +615,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		if (!SIM_XML_ROOT.equals(curElement))
 			throw new SAXParseException("<" + SIM_XML_ACTIVITY + ">: must have <" + SIM_XML_ROOT + "> as parent element", saxLocator);
 
+		if (simCurrTime == null)
+			simCurrTime = new UsecTimestamp();
+
 		TNT4JSimulator.trace(simCurrTime, "Started activity ...");
 
 		TrackingActivity parentActivity = curActivity;
@@ -620,9 +625,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		activeActivities.push(curActivity);
 
 		curActivity = null;
-
-		if (simCurrTime == null)
-			simCurrTime = new UsecTimestamp();
 
 		curActivityStart = new UsecTimestamp(simCurrTime);
 

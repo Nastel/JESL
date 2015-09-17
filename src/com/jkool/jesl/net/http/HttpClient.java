@@ -46,6 +46,7 @@ import com.jkool.jesl.net.ssl.SSLContextFactory;
 import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.sink.DefaultEventSinkFactory;
 import com.nastel.jkool.tnt4j.sink.EventSink;
+import com.nastel.jkool.tnt4j.utils.Utils;
 
 /**
  * This class provides HTTP[S] connection to the specified JESK server based on given URL.
@@ -140,7 +141,6 @@ public class HttpClient implements HttpStream {
 	@Override
 	public synchronized void connect() throws IOException {
 		try {
-			logger.log(OpLevel.DEBUG, "Connecting to {0}{1}", uri, (httpProxy != null ? " via proxy " + httpProxy : ""));
 		    if (secure) {
 		    	SSLSocketFactory ssf = null;
 		    	if (!StringUtils.isEmpty(sslKeystore)) {
@@ -163,9 +163,10 @@ public class HttpClient implements HttpStream {
 			connReq = connMgr.requestConnection(route, null);
 			connection = connReq.getConnection(0, null);
 			connection.open(route, null, new BasicHttpParams());
+			logger.log(OpLevel.DEBUG, "Connected to {0}{1}", uri, (httpProxy != null ? " via proxy " + httpProxy : ""));
 		} catch (Exception e) {
 			close();
-			throw new IOException("Failed to connect to uri=" + uri, e);
+			throw new IOException("Failed to connect to uri=" + uri + ", reason=" + e.getMessage(), e);
 		}
 	}
 
@@ -176,8 +177,8 @@ public class HttpClient implements HttpStream {
 	public synchronized void connect(String token) throws IOException {
 		connect();
 		if (!StringUtils.isEmpty(token)) {
-			logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token={1}", this, token);
 			AuthUtils.authenticate(this, token);
+			logger.log(OpLevel.DEBUG, "Authenticated connection={0} with token={1}", this, Utils.hide(token, "x", 4));
 		}
 	}
 
@@ -289,11 +290,11 @@ public class HttpClient implements HttpStream {
 	public synchronized void close() {
 		if (connection != null) {
 			try {
-				logger.log(OpLevel.DEBUG, "Closing connection to {0}", uri);
 				connMgr.releaseConnection(connection, 0, TimeUnit.MILLISECONDS);
 				connMgr.closeIdleConnections(0, TimeUnit.MILLISECONDS);
 				connMgr.shutdown();
 				connection.close();
+				logger.log(OpLevel.DEBUG, "Closed connection to {0}", uri);
 			} catch (Throwable err) {
 			}
 		}

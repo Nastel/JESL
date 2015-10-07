@@ -17,7 +17,7 @@
 	<property name="log4j"     value="log4j"/>
 	<property name="sims"      value="sims"/>
 	<property name="scripts"   value="bin"/>
-	<property name="classes"   value="classes"/>
+	<property name="classes"   value="${project-build}/classes"/>
 	<property name="doc"       value="${project-build}/doc"/>
 	<property name="jar"       value="${project-build}/jkool-jesl.jar"/>
 	<property name="docpkg"    value="com.jkool.jesl.*"/>

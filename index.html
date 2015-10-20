@@ -5,7 +5,7 @@
     <title>JESL by Nastel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
@@ -25,7 +25,7 @@
 <p>JESL allows application developers stream time-series data to jKool Cloud.
 To stream data to jKool Cloud your application must:</p>
 
-<pre><code>1. Use TNT4J, or log4J+TNT4JAppender in your application
+<pre><code>1. Use TNT4J, or slf4j/log4j/Logback  in your application
    to log events, activities, metrics
 
 2. Obtain your jKool account and API access token 
@@ -40,16 +40,21 @@ To stream data to jKool Cloud your application must:</p>
    See (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
 </code></pre>
 
-<p>JESL consists of the following main components:</p>
+<p>JESL package includes the following components:</p>
 
-<pre><code>1. TNT4J streaming library and `TNT4JAppender` for log4j
-   (https://github.com/Nastel/TNT4J)
+<pre><code>1. TNT4J streaming library with SLF4j support (https://github.com/Nastel/TNT4J)
 
-2. JESL Simulator -- stream simulated events, activities and metrics
+2. TNT4J Appender for Log4J 1.2 (https://github.com/Nastel/tnt4j-log4j12)    
+
+3. TNT4J Appender for Logback (https://github.com/Nastel/tnt4j-logback)  
+
+4. TNT4J Syslog for streaming syslog to jkoolcloud.com. ((https://github.com/Nastel/tnt4j-syslogd)
+
+5. JESL Simulator -- stream simulated events, activities and metrics
    to jKool Cloud. Simulations are defined in XML files.
    (see `sims/tnt4j-sim-template.xml` and `sims/order-process.xml`) 
 
-3. JESL Event Sink -- TNT4J Event Sink implementation
+6. JESL Event Sink -- TNT4J Event Sink implementation
    to stream events to jKool Cloud.
 </code></pre>
 
@@ -150,28 +155,41 @@ activity.</p>
 <li>Locate <code>com.jkool.jesl.net.syslogd</code> stanza and provide your API access token.</li>
 </ul>
 </li>
-<li>Run JESL syslogd <code>&lt;jesl-home&gt;/bin/syslogd &gt; syslogd.json</code>. 
+<li>Run JESL syslogd <code>&lt;jesl-home&gt;/bin/jksysd &gt; jksysd.json</code>. 
 
 <ul>
-<li>By default JESL syslogd binds to TCP port <code>5140</code> and writes JSON formatted syslog messages.</li>
-<li>JSON output can be played back using <code>&lt;jesl-home&gt;/bin/syslog</code> utility.</li>
+<li>By default JESL <code>jksysd</code> binds to TCP port <code>5140</code> and writes JSON formatted syslog messages.</li>
+<li>JSON output can be played back using <code>&lt;jesl-home&gt;/bin/jksys</code> utility.</li>
 </ul>
 </li>
-<li>Configure <code>syslog/rsyslog</code> to forward to JESL syslog daemon over TCP (<code>hostname</code> is where JESL syslogd is running)
+<li>Configure <code>syslog/rsyslog</code> to forward to JESL syslog daemon over TCP (<code>hostname</code> is where JESL <code>jksysd</code> is running)
 
 <ul>
 <li>RFC 3164 (e.g. <code>*.* @@hostname:5140</code>)</li>
 <li>RFC 5424 (e.g. <code>*.* @@hostname:5140;RSYSLOG_SyslogProtocol23Format</code>)</li>
 </ul>
 </li>
-<li>Send/playback syslog messages from command line (<code>&lt;jesl-home&gt;/bin/syslog</code>):</li>
+<li>Sending syslog messages from command line (<code>&lt;jesl-home&gt;/bin/jksys</code>):</li>
 </ul>
 
-<pre><code>$ syslog -h localhost -p 5140 -f syslogd.json tcp
-$ syslog -h localhost -p 5140 -l error -f user tcp "host appl-name[883]: my syslog mesasge about appl-name pid=883"
+<pre><code>$ jksys -h localhost -p 5140 -l error -f user tcp "appl-name[883]: my syslog mesasge about appl-name pid=883"
 </code></pre>
 
-<p>where <code>syslogd.json</code> is JSON output of JESL syslog daemon.</p>
+<ul>
+<li>Sending PCI messages from command line (<code>&lt;jesl-home&gt;/bin/jksys</code>):</li>
+</ul>
+
+<pre><code>$ jksys -h localhost -p 5140 -l error -f user tcp "#pci(userId=john,eventType=audit,status=success,origination=CreditCards,affectedResource=Payment)"
+</code></pre>
+
+<ul>
+<li>Playback syslog JSON messages from command line (<code>&lt;jesl-home&gt;/bin/jksys</code>):</li>
+</ul>
+
+<pre><code>$ jksys -h localhost -p 5140 -f jksysd.json tcp
+</code></pre>
+
+<p>where <code>jksysd.json</code> is JSON output of JESL syslog daemon.</p>
 
 <p>That should do it.</p>
 
@@ -222,13 +240,15 @@ log4j.logger.com.jkool.jesl=info
 <pre><code>-Dtnt4j.source.DATACENTER=YourDataCenterName -Dtnt4j.source.GEOADDR="Melville, NY" 
 </code></pre>
 
-<p>Make sure <code>&lt;jesl.home&gt;/jkool-jesl.jar</code> and all dependent jar files in <code>&lt;jesl.home&gt;/lib</code> are in your class path.</p>
+<p>Make sure <code>&lt;jesl.home&gt;/jkool-jesl.jar</code> and all dependent jar files in <code>&lt;jesl.home&gt;/lib</code> are in your class path.
+Also include TNT4J-LOG4J12 appender libraries under <code>&lt;jesl.home&gt;/lib/tnt4j-log4j12</code>.</p>
 
 <h4>
 <a id="edit-jeslhomelog4jtnt4jproperties-and-replace-your-access-token-with-your-jkool-api-access-token" class="anchor" href="#edit-jeslhomelog4jtnt4jproperties-and-replace-your-access-token-with-your-jkool-api-access-token" aria-hidden="true"><span class="octicon octicon-link"></span></a>Edit <code>&lt;jesl.home&gt;/log4j/tnt4j.properties</code> and replace <code>YOUR-ACCESS-TOKEN</code> with your jKool API access token.</h4>
 
-<p>This allows streaming data to be associated with your private repository.
-<b>NOTE</b>: Make sure your firewall allows outgoing <code>http</code> connections to <a href="http://data.jkoolcloud.com:6580">http://data.jkoolcloud.com:6580</a></p>
+<p>This allows streaming data to be associated with your private repository.</p>
+
+<p><b>NOTE</b>: Make sure your firewall allows outgoing <code>http</code> connections to <a href="http://data.jkoolcloud.com:6580">http://data.jkoolcloud.com:6580</a></p>
 
 <h4>
 <a id="restart-your-application" class="anchor" href="#restart-your-application" aria-hidden="true"><span class="octicon octicon-link"></span></a>Restart your application</h4>
@@ -243,7 +263,7 @@ log4j.logger.com.jkool.jesl=info
 Optionally you may annotate your log4j messages to provide better context, timing as well as report
 user defined metrics. Example: </p>
 
-<div class="highlight highlight-java"><pre>logger<span class="pl-k">.</span>info(<span class="pl-s"><span class="pl-pds">"</span>Starting a tnt4j activity #beg=Test, #app=<span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">Log4JTest</span><span class="pl-k">.</span>class<span class="pl-k">.</span>getName());
+<div class="highlight highlight-source-java"><pre>logger<span class="pl-k">.</span>info(<span class="pl-s"><span class="pl-pds">"</span>Starting a tnt4j activity #beg=Test, #app=<span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">Log4JTest</span><span class="pl-k">.</span>class<span class="pl-k">.</span>getName());
 logger<span class="pl-k">.</span>warn(<span class="pl-s"><span class="pl-pds">"</span>First log message #app=<span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">Log4JTest</span><span class="pl-k">.</span>class<span class="pl-k">.</span>getName() <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>, #msg='1 Test warning message'<span class="pl-pds">"</span></span>);
 logger<span class="pl-k">.</span>error(<span class="pl-s"><span class="pl-pds">"</span>Second log message #app=<span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">Log4JTest</span><span class="pl-k">.</span>class<span class="pl-k">.</span>getName() <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>, #msg='2 Test error message'<span class="pl-pds">"</span></span>, <span class="pl-k">new</span> <span class="pl-smi">Exception</span>(<span class="pl-s"><span class="pl-pds">"</span>test exception<span class="pl-pds">"</span></span>));
 logger<span class="pl-k">.</span>info(<span class="pl-s"><span class="pl-pds">"</span>Ending a tnt4j activity #end=Test, #app=<span class="pl-pds">"</span></span> <span class="pl-k">+</span> <span class="pl-smi">Log4JTest</span><span class="pl-k">.</span>class<span class="pl-k">.</span>getName() <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span> #%i/order-no=<span class="pl-pds">"</span></span> <span class="pl-k">+</span> orderNo);</pre></div>
@@ -275,7 +295,8 @@ JESL Event Sink (<code>com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory</code>)
     source.factory: com.nastel.jkool.tnt4j.source.SourceFactoryImpl
     source.factory.GEOADDR: NewYork
     source.factory.DATACENTER: HQDC
-    source.factory.RootFQN: SERVER=?#DATACENTER=?#GEOADDR=? 
+    source.factory.RootFQN: SERVER=?#DATACENTER=?#GEOADDR=?
+    source.factory.RootSSN: tnt4j-myapp
 
     tracker.factory: com.nastel.jkool.tnt4j.tracker.DefaultTrackerFactory
     dump.sink.factory: com.nastel.jkool.tnt4j.dump.DefaultDumpSinkFactory
@@ -312,7 +333,6 @@ JESL Event Sink (<code>com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory</code>)
 <li>TNT4J (<a href="https://github.com/Nastel/TNT4J">https://github.com/Nastel/TNT4J</a>)</li>
 <li>Apache HTTP Client 4.2.5 (<a href="http://hc.apache.org/httpcomponents-client-ga/">http://hc.apache.org/httpcomponents-client-ga/</a>)</li>
 <li>Apache HTTP Core 4.3.4 (<a href="http://hc.apache.org/httpcomponents-client-ga/">http://hc.apache.org/httpcomponents-client-ga/</a>)</li>
-<li>Syslog4j (<a href="http://syslog4j.org/">http://syslog4j.org/</a>)</li>
 <li>Joda Time (<a href="http://www.joda.org/joda-time/">http://www.joda.org/joda-time/</a>)</li>
 <li>GSON (<a href="https://github.com/google/gson">https://github.com/google/gson</a>)</li>
 </ul>
@@ -321,16 +341,18 @@ JESL Event Sink (<code>com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory</code>)
 <a id="related-projects" class="anchor" href="#related-projects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Related Projects</h1>
 
 <ul>
-<li>TrackingFilter (<a href="http://nastel.github.io/TrackingFilter/">http://nastel.github.io/TrackingFilter/</a>)</li>
-<li>PingJMX (<a href="http://nastel.github.io/PingJMX/">http://nastel.github.io/PingJMX/</a>)</li>
+<li>TNT4J (<a href="https://github.com/Nastel/TNT4J">https://github.com/Nastel/TNT4J</a>)</li>
+<li>TNT4J-Log4J12 Appender (<a href="https://github.com/Nastel/tnt4j-log4j12">https://github.com/Nastel/tnt4j-log4j12</a>)</li>
+<li>TNT4J-Logback Appender (<a href="https://github.com/Nastel/tnt4j-logback">https://github.com/Nastel/tnt4j-logback</a>)</li>
+<li>TNT4J-Servlet-Filter (<a href="http://nastel.github.io/tnt4j-servlet-filter/">http://nastel.github.io/tnt4j-servlet-filter/</a>)</li>
+<li>TNT4J-Stream-JMX (<a href="http://nastel.github.io/tnt4j-stream-jmx/">http://nastel.github.io/tnt4j-stream-jmx/</a>)</li>
+<li>TNT4J-Syslogd (<a href="https://github.com/Nastel/tnt4j-syslogd">https://github.com/Nastel/tnt4j-syslogd</a>)</li>
 </ul>
 
 <h1>
 <a id="available-integrations" class="anchor" href="#available-integrations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Available Integrations</h1>
 
 <ul>
-<li>TNT4J (<a href="https://github.com/Nastel/TNT4J">https://github.com/Nastel/TNT4J</a>)</li>
-<li>Log4J (<a href="http://logging.apache.org/log4j/1.2/">http://logging.apache.org/log4j/1.2/</a>)</li>
 <li>jkoolcloud.com (<a href="https://www.jkoolcloud.com">https://www.jkoolcloud.com</a>)</li>
 </ul>
 
@@ -345,4 +367,3 @@ JESL Event Sink (<code>com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory</code>)
   
   </body>
 </html>
-

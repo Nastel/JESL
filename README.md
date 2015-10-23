@@ -214,7 +214,7 @@ Configure your TNT4J source as follows (using `tnt4j.properties` file):
 	; event sink configuration: destination and data format
 	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
 	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
-	event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com:6580
+	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com:6585
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
 	....
@@ -226,7 +226,7 @@ JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 {
 	source: com.myco.myappl
 	source.factory: com.nastel.jkool.tnt4j.source.SourceFactoryImpl
-	source.factory.GEOADDR: NewYork
+	source.factory.GEOADDR: New York
 	source.factory.DATACENTER: HQDC
 	source.factory.RootFQN: SERVER=?#DATACENTER=?#GEOADDR=?
 	source.factory.RootSSN: tnt4j-myapp
@@ -237,7 +237,7 @@ JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 	; event sink configuration: destination and data format
 	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
 	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
-	event.sink.factory.EventSinkFactory.Url: http://data.jkoolcloud.com:6580
+	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com:6585
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
 
@@ -270,6 +270,7 @@ JESL requires the following:
 * TNT4J-Logback Appender (https://github.com/Nastel/tnt4j-logback)
 * TNT4J-Servlet-Filter (http://nastel.github.io/tnt4j-servlet-filter/)
 * TNT4J-Stream-JMX (http://nastel.github.io/tnt4j-stream-jmx/)
+* TNT4J-Stream-GC (http://nastel.github.io/tnt4j-stream-gc/)
 * TNT4J-Syslogd (https://github.com/Nastel/tnt4j-syslogd)
 
 # Available Integrations

@@ -793,7 +793,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			severity = OpLevel.valueOf(valStr);
 
 		int        srcId   = 0;
-		OpLevel    sev     = null;
 		OpCompCode cc      = null;
 		int        rc      = 0;
 		long       pid     = 0L;
@@ -917,7 +916,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 
 			curEvent.setTTL(TNT4JSimulator.getTTL());
-			curEvent.getOperation().setSeverity(sev == null ? OpLevel.SUCCESS : sev);
+			curEvent.getOperation().setSeverity(severity == null ? OpLevel.SUCCESS : severity);
 			curEvent.getOperation().setCompCode(cc == null ? OpCompCode.SUCCESS : cc);
 			if (srcId > 0)
 				curEvent.setSource(source);

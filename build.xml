@@ -20,6 +20,7 @@
 	<property name="classes"   value="${project-build}/classes"/>
 	<property name="doc"       value="${project-build}/doc"/>
 	<property name="jar"       value="${project-build}/jkool-jesl.jar"/>
+	<property name="pkg"       value="${project-build}/jkool-jesl"/>
 	<property name="docpkg"    value="com.jkool.jesl.*"/>
 
 	<target name="init">
@@ -112,6 +113,19 @@
 				<attribute name="Main-Class" value="com.jkool.jesl.simulator.TNT4JSimulator"/>
 			</manifest>
 		</jar>
+
+		<echo message="Creating ${pkg}-${version}-all.jar" level="info"/>
+		<zip destfile="${pkg}-${version}-all.jar">
+			<zipgroupfileset dir="lib" includes="http*.jar"/>
+			<zipgroupfileset dir="${project-build}" includes="jkool-jesl.jar"/>
+		</zip> 
+		
+		<echo message="Creating ${pkg}-all.jar" level="info"/>
+		<zip destfile="${pkg}-all.jar">
+			<zipgroupfileset dir="lib" includes="http*.jar"/>
+			<zipgroupfileset dir="${project-build}" includes="jkool-jesl.jar"/>
+		</zip> 
+		
 		<copy todir="${project-build}/config">
 			<fileset dir="${config}">
 				<include name="**/*.properties"/>

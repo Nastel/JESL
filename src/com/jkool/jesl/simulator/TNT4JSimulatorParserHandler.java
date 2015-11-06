@@ -481,6 +481,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			if (StringUtils.isEmpty(valType))
 				valType = ValueTypes.VALUE_TYPE_TIMESTAMP;
 		}
+		else if ("STRING".equalsIgnoreCase(type)) {
+			propValue = value.toString();
+		}
 		else if (!StringUtils.isEmpty(type)) {
 			throw new SAXParseException("<" + SIM_XML_PROP + ">: invalid type: " + type, saxLocator);
 		}

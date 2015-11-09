@@ -358,8 +358,11 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	}
 
 	private void recordSnapshot(Attributes attributes) throws SAXException {
-		if (curActivity == null || !SIM_XML_ACTIVITY.equals(curElement))
-			throw new SAXParseException("<" + SIM_XML_SNAPSHOT + ">: must have <" + SIM_XML_ACTIVITY + "> as parent element", saxLocator);
+		if ((curActivity == null || !SIM_XML_ACTIVITY.equals(curElement))
+				&& (curEvent == null || !SIM_XML_EVENT.equals(curElement))) {
+			throw new SAXParseException("<" + SIM_XML_SNAPSHOT + ">: must have <" + SIM_XML_ACTIVITY
+										+ "> or <" + SIM_XML_EVENT + "> as parent element", saxLocator);
+		}
 
 		String  name     = null;
 		String  category = null;
@@ -1008,7 +1011,10 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			curMsg = null;
 		}
 		else if (name.equals(SIM_XML_SNAPSHOT)) {
-			curActivity.add(curSnapshot);
+			if (curEvent != null)
+				curEvent.getOperation().addSnapshot(curSnapshot);
+			else
+				curActivity.add(curSnapshot);
 			curSnapshot = null;
 		}
 		else if (name.equals(SIM_XML_ACTIVITY)) {

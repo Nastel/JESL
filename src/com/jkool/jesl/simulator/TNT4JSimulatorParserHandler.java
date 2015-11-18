@@ -19,7 +19,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -46,7 +45,6 @@ import com.nastel.jkool.tnt4j.core.UsecTimestamp;
 import com.nastel.jkool.tnt4j.core.ValueTypes;
 import com.nastel.jkool.tnt4j.source.DefaultSourceFactory;
 import com.nastel.jkool.tnt4j.source.Source;
-import com.nastel.jkool.tnt4j.source.SourceType;
 import com.nastel.jkool.tnt4j.tracker.DefaultTrackerFactory;
 import com.nastel.jkool.tnt4j.tracker.Tracker;
 import com.nastel.jkool.tnt4j.tracker.TrackingActivity;
@@ -241,12 +239,10 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		if (!SIM_XML_ROOT.equals(curElement))
 			throw new SAXParseException("<" + SIM_XML_SOURCE + ">: must have <" + SIM_XML_ROOT + "> as parent element", saxLocator);
 
-		int    id     = 0;
-		String fqn    = null;
-		String url    = null;
-		String user   = null;
-		String server = null;
-		String ip     = null;
+		int    id   = 0;
+		String fqn  = null;
+		String url  = null;
+		String user = null;
 
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
@@ -276,56 +272,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 			if (sourceNames.containsKey(fqn))
 				throw new SAXParseException("<" + SIM_XML_SOURCE + "> duplicate " + SIM_XML_ATTR_FQN + " attribute: " + fqn, saxLocator);
-
-			String[] srcComps = fqn.split("#");
-			for (int c = 0; c < srcComps.length; c++) {
-				String[] comp = srcComps[c].split("=");
-				if (comp.length != 2)
-					throw new SAXParseException("<" + SIM_XML_SOURCE + "> malformed " + SIM_XML_ATTR_FQN + " attribute ", saxLocator);
-
-				SourceType srcType = SourceType.valueOf(comp[0]);
-				String     srcName = (comp[1].equals("?") ? null : comp[1]);
-
-				if (srcType == SourceType.SERVER)
-					server = srcName;
-				else if (srcType == SourceType.NETADDR)
-					ip = srcName;
-			}
-
-			if (StringUtils.isEmpty(server) || StringUtils.isEmpty(ip)) {
-				if (StringUtils.isEmpty(server) && StringUtils.isEmpty(ip)) {
-					InetAddress hostAddr = InetAddress.getLocalHost();
-					server = hostAddr.getHostName();
-					ip     = hostAddr.getHostAddress();
-				}
-				else if (StringUtils.isEmpty(server)) {
-					InetAddress hostAddr = InetAddress.getByName(ip);
-					server = hostAddr.getHostName();
-				}
-				if (StringUtils.isEmpty(ip)) {
-					InetAddress hostAddr = InetAddress.getByName(server);
-					ip = hostAddr.getHostAddress();
-				}
-
-				StringBuilder sb = new StringBuilder();
-				for (int c = 0; c < srcComps.length; c++) {
-					String[] comp = srcComps[c].split("=");
-					SourceType srcType = SourceType.valueOf(comp[0]);
-					String     srcName = comp[1];
-
-					if (c > 0)
-						sb.append("#");
-					sb.append(srcType).append("=");
-					if (srcType == SourceType.SERVER)
-						sb.append(server);
-					else if (srcType == SourceType.NETADDR)
-						sb.append(ip);
-					else
-						sb.append(srcName);
-				}
-
-				fqn = sb.toString();
-			}
 
 			Source src = DefaultSourceFactory.getInstance().newFromFQN(fqn);
 			if (!StringUtils.isEmpty(user))

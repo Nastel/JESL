@@ -39,6 +39,7 @@ import com.nastel.jkool.tnt4j.config.DefaultConfigFactory;
 import com.nastel.jkool.tnt4j.config.TrackerConfig;
 import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.core.UsecTimestamp;
+import com.nastel.jkool.tnt4j.utils.Utils;
 
 /**
  * JESL Activity Simulator which uses TNT4J to simulate application activities and transactions.
@@ -55,12 +56,12 @@ public class TNT4JSimulator {
 	private static String			jkHost         = null;
 	private static int				jkPort         = 6500;
 	private static String			jkAccessToken  = null;
-	private static String			simFileName    = null;
+	private static String			simFileName    = "";
 	private static boolean			uniqueTags     = false;
 	private static boolean			uniqueCorrs    = false;
 	private static boolean			uniqueIds    = false;
 	private static OpLevel			traceLevel     = OpLevel.INFO;
-	private static String			jkFileName     = null;
+	private static String			jkFileName     = "";
 	private static int				valuePctChg    = 0;
 	private static Random			ranGen         = new Random();
 	private static long				numIterations  = 1;
@@ -226,8 +227,8 @@ public class TNT4JSimulator {
 	}
 
 	private static void printUsedArgs() {
-		System.out.format("Arguments: runype=%s, url=%s://%s:%d, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s\n", 
-				runType, jkProtocol, jkHost, jkPort, generateValues, uniqueTags, uniqueCorrs, uniqueIds, valuePctChg, simFileName);
+		System.out.format("Arguments: runype=%s, url=%s://%s:%d, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s, jkFile=%s\n", 
+				runType, jkProtocol, jkHost, jkPort, generateValues, uniqueTags, uniqueCorrs, uniqueIds, valuePctChg, simFileName, jkFileName);
 	}
 	private static void processArgs(String[] args) {
 		if (args.length == 0)
@@ -426,7 +427,7 @@ public class TNT4JSimulator {
 
 					theParser.parse(new InputSource(new StringReader(simDef.toString())), xmlHandler);
 
-					if (jkFileName != null) {
+					if (!Utils.isEmpty(jkFileName)) {
 						PrintWriter gwFile = new PrintWriter(new FileOutputStream(jkFileName, true));
 						gwFile.println("");
 						gwFile.close();
@@ -441,9 +442,7 @@ public class TNT4JSimulator {
 			}
 			else if (runType == SimulatorRunType.REPLAY_SIM) {
 				info("jKool Activity Simulator Replay starting: file=" + jkFileName + ", iterations=" + numIterations);
-
 				connect();
-
 				startTime = System.currentTimeMillis();
 
 				// Determine number of lines in file

@@ -57,6 +57,8 @@ public class TNT4JSimulator {
 	private static String			jkAccessToken  = null;
 	private static String			simFileName    = null;
 	private static boolean			uniqueTags     = false;
+	private static boolean			uniqueCorrs    = false;
+	private static boolean			uniqueIds    = false;
 	private static OpLevel			traceLevel     = OpLevel.INFO;
 	private static String			jkFileName     = null;
 	private static int				valuePctChg    = 0;
@@ -135,6 +137,14 @@ public class TNT4JSimulator {
 		return uniqueTags;
 	}
 
+	public static boolean useUniqueCorrs() {
+	    return uniqueCorrs;
+    }
+	
+	public static boolean useUniqueIds() {
+	    return uniqueIds;
+    }
+	
 	public static boolean isGenerateValues() {
 		return generateValues;
 	}
@@ -202,7 +212,10 @@ public class TNT4JSimulator {
 		System.out.println("    -G    -  Read/Write jKoolCloud service messages from/to <jk_file_name>");
 		System.out.println("             (if writing, data is appended to an existing file)");
 		System.out.println("    -i    -  Number of iterations to make on <sim_file_name>");
-		System.out.println("    -u    -  Make message signatures, correlators, and labels unique between iterations");
+		System.out.println("    -u    -  Make tags, correlators, ids unique between iterations");
+		System.out.println("    -ut   -  Make tags unique between iterations");
+		System.out.println("    -uc   -  Make correlators unique between iterations");
+		System.out.println("    -ui   -  Make tracking ids unique between iterations");
 		System.out.println("    -t    -  Time-to-live (TTL) for all tracking items, in hours");
 		System.out.println("                > 0 : tracking events are deleted after the specified number of hours");
 		System.out.println("                = 0 : tracking events are deleted based on Retention quota for repository (default)");
@@ -210,9 +223,12 @@ public class TNT4JSimulator {
 		System.out.println("\nFor 'run' mode, must specify at least of one: '-T', '-G'");
 
 		System.exit(StringUtils.isEmpty(error) ? 0 : 1);
-
 	}
 
+	private static void printUsedArgs() {
+		System.out.format("Arguments: runype=%s, url=%s://%s:%d, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s\n", 
+				runType, jkProtocol, jkHost, jkPort, generateValues, uniqueTags, uniqueCorrs, uniqueIds, valuePctChg, simFileName);
+	}
 	private static void processArgs(String[] args) {
 		if (args.length == 0)
 			printUsage("Missing simulation type");
@@ -307,8 +323,16 @@ public class TNT4JSimulator {
 								printUsage("Invalid <ttl_hours> for '-t' argument (" + arg.substring(3) + ")");
 						}
 					}
-					else if (arg.equals("-u")) {
+					else if (arg.equals("-ut")) {
 						uniqueTags = true;
+					} else if (arg.equals("-uc")) {
+						uniqueCorrs = true;
+					} else if (arg.equals("-ui")) {
+						uniqueIds = true;
+					} else if (arg.equals("-u")) {
+						uniqueTags = true;
+						uniqueCorrs = true;
+						uniqueIds = true;
 					}
 					else if (arg.equals("-g")) {
 						generateValues = true;
@@ -351,6 +375,7 @@ public class TNT4JSimulator {
 			if (StringUtils.isEmpty(jkFileName))
 				printUsage("Missing XML file name");
 		}
+		printUsedArgs();		
 	}
 
 	public static void main(String[] args) {

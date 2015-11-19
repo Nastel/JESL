@@ -20,4 +20,4 @@ CLPATH="$RUNDIR..:$RUNDIR../jkool-jesl.jar:$RUNDIR../lib/*"
 MAINCL=com.jkool.jesl.simulator.TNT4JSimulator
 TNT4JOPTS="-Dorg.slf4j.simpleLogger.defaultLogLevel=info -Dtnt4j.config=$RUNDIR../config/tnt4j-simulator.properties -Dtnt4j.token.repository=$RUNDIR../config/tnt4j-tokens.properties"
 SIMFILE=$RUNDIR../sims/order-process.xml
-java $TNT4JOPTS -classpath $CLPATH $MAINCL $SIMCMD -A:$ACCTKN -f:$SIMFILE -T:data.jkoolcloud.com -P:6585 -C:HTTPS -i:$SIMRUNS -p:25 -u
+java $TNT4JOPTS -classpath $CLPATH $MAINCL $SIMCMD -A:$ACCTKN -f:$SIMFILE -T:data.jkoolcloud.com -P:6585 -C:HTTPS -i:$SIMRUNS -p:10 -uc -ui

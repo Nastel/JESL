@@ -121,6 +121,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private StringBuilder		curElmtValue = new StringBuilder();
 
 	private String tagSuffix     = "";
+	private String corSuffix     = "";
 
 	private Locator saxLocator = null;
 
@@ -194,11 +195,17 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 		if (TNT4JSimulator.useUniqueTags()) {
 			tagSuffix = "@" + String.valueOf(Utils.currentTimeUsec()) + "@" + TNT4JSimulator.getIteration();
-
-			for (Message m : messageIds.values())
-				m.setTrackingId(TNT4JSimulator.newUUID());
 		}
-
+		
+		if (TNT4JSimulator.useUniqueIds()) {
+			for (Message m : messageIds.values()) {
+				m.setTrackingId(TNT4JSimulator.newUUID());
+			}
+		}
+		
+		if (TNT4JSimulator.useUniqueCorrs()) {
+			corSuffix = "@" + String.valueOf(Utils.currentTimeUsec()) + "@" + TNT4JSimulator.getIteration();
+		}
 		simCurrTime = new UsecTimestamp();
 	}
 
@@ -646,7 +653,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					for (int c = 0; c < corrs.length; c++) {
 						if (TNT4JSimulator.isGenerateValues())
 							corrs[c] = generateValues(corrs[c]);
-						corrs[c] += tagSuffix;
+						if (!Utils.isEmpty(corSuffix)) {
+							corrs[c] += corSuffix;
+						}
 					}
 				}
 				else {
@@ -821,7 +830,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					for (int l = 0; l < labels.length; l++) {
 						if (TNT4JSimulator.isGenerateValues())
 							labels[l] = generateValues(labels[l]);
-						labels[l] += tagSuffix;
+						if (!Utils.isEmpty(tagSuffix)) {
+							labels[l] += tagSuffix;
+						}
 					}
 				}
 				else if (attName.equals(SIM_XML_ATTR_CORRS)) {
@@ -829,7 +840,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					for (int c = 0; c < corrs.length; c++) {
 						if (TNT4JSimulator.isGenerateValues())
 							corrs[c] = generateValues(corrs[c]);
-						corrs[c] += tagSuffix;
+						if (!Utils.isEmpty(corSuffix)) {
+							corrs[c] += corSuffix;
+						}
 					}
 				}
 				else if (attName.equals(SIM_XML_ATTR_MSG)) {

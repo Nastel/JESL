@@ -10,5 +10,5 @@ set CLPATH=%RUNDIR%..;%RUNDIR%../jkool-jesl.jar;%RUNDIR%../lib/*;%RUNDIR%../lib/
 set MAINCL=com.jkool.jesl.simulator.TNT4JSimulator
 set TNT4JOPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=info -Dtnt4j.config=%RUNDIR%../config/tnt4j-simulator.properties -Dtnt4j.token.repository=%RUNDIR%../config/tnt4j-tokens.properties
 set SIMFILE=%RUNDIR%\..\sims\order-process.xml
-java %TNT4JOPTS% -classpath %CLPATH% %MAINCL% %SIMCMD% -A:%ACCTKN% -f:%SIMFILE% -T:data.jkoolcloud.com -P:6585 -C:HTTPS -u -p:25 -i:%SIMRUNS%
+java %TNT4JOPTS% -classpath %CLPATH% %MAINCL% %SIMCMD% -A:%ACCTKN% -f:%SIMFILE% -T:data.jkoolcloud.com -P:6585 -C:HTTPS -p:10 -i:%SIMRUNS% -uc -ui
 endlocal

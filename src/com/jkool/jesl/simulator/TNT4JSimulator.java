@@ -154,6 +154,46 @@ public class TNT4JSimulator {
 		return valuePctChg != 0;
 	}
 
+	public static long varyValue(long value) {
+		if (value == 0 || valuePctChg == 0)
+			return value;
+
+		// nextInt returns value in range [0,n).  We want values in range [-n,n).
+		double percentChg = (ranGen.nextInt(valuePctChg*2) - valuePctChg) / 100.0;
+
+		// let's keep a lid on variations
+		if (percentChg > 0.99)
+			percentChg = 0.99;
+		if (percentChg < -0.99)
+			percentChg = -0.99;
+
+		long newValue = (long) (value * (1.0+percentChg));
+		if (newValue < 0.0 && value > 0.0)
+			newValue = 0;
+
+		return newValue;
+	}
+	
+	public static long varyValue(int value) {
+		if (value == 0 || valuePctChg == 0)
+			return value;
+
+		// nextInt returns value in range [0,n).  We want values in range [-n,n).
+		double percentChg = (ranGen.nextInt(valuePctChg*2) - valuePctChg) / 100.0;
+
+		// let's keep a lid on variations
+		if (percentChg > 0.99)
+			percentChg = 0.99;
+		if (percentChg < -0.99)
+			percentChg = -0.99;
+
+		int newValue = (int) (value * (1.0+percentChg));
+		if (newValue < 0 && value > 0)
+			newValue = 0;
+
+		return newValue;
+	}
+	
 	public static double varyValue(double value) {
 		if (value == 0 || valuePctChg == 0)
 			return value;

@@ -21,7 +21,9 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Stack;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -119,6 +121,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private UsecTimestamp		simCurrTime;
 	private String				curElement;
 	private StringBuilder		curElmtValue = new StringBuilder();
+	private Random 				rand = new Random();
 
 	private String tagSuffix     = "";
 	private String corSuffix     = "";
@@ -329,11 +332,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				if (attName.equals(SIM_XML_ATTR_NAME)) {
 					name = attValue;
 					TNT4JSimulator.trace(simCurrTime, "Recording Snapshot: " + attValue + " ...");
-				}
-				else if (attName.equals(SIM_XML_ATTR_CAT)) {
+				} else if (attName.equals(SIM_XML_ATTR_CAT)) {
 					category = attValue;
-				}
-				else if (attName.equals(SIM_XML_ATTR_SEVERITY)) {
+				} else if (attName.equals(SIM_XML_ATTR_SEVERITY)) {
 					severity = OpLevel.valueOf(attValue);
 				}
 				else {
@@ -410,14 +411,15 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		Object propValue = value;
 
 		if ("INTEGER".equalsIgnoreCase(type)) {
-			Long num = Long.parseLong(value);
+			Integer num = Integer.parseInt(generateFromRange(type, value));
+			propValue = (int)TNT4JSimulator.varyValue(num.intValue());
+		}  else if ("LONG".equalsIgnoreCase(type)) {
+			Long num = Long.parseLong(generateFromRange(type, value));
 			propValue = (long)TNT4JSimulator.varyValue(num.longValue());
-		}
-		else if ("DECIMAL".equalsIgnoreCase(type)) {
-			Double num = Double.parseDouble(value);
+		} else if ("DECIMAL".equalsIgnoreCase(type)) {
+			Double num = Double.parseDouble(generateFromRange(type, value));
 			propValue = TNT4JSimulator.varyValue(num.doubleValue());
-		}
-		else if ("BOOLEAN".equalsIgnoreCase(type)) {
+		} else if ("BOOLEAN".equalsIgnoreCase(type)) {
 			if (StringUtils.isEmpty(valType))
 				valType = "boolean";
 			propValue = Boolean.parseBoolean(value);
@@ -992,6 +994,51 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		}
 
 		curElement = activeElements.pop();
+	}
+
+	long nextLong(Random rng, long n) {
+		if (n <= 0)
+			throw new IllegalArgumentException("n must be positive");
+
+		long bits, val;
+		do {
+			bits = (rng.nextLong() << 1) >>> 1;
+			val = bits % n;
+		} while (bits - val + (n - 1) < 0L);
+		return val;
+	}
+
+	public String generateFromRange(String type, String in) {
+		if (in.indexOf('[') == 0 && in.indexOf(']') > 0) {
+			StringTokenizer tk = new StringTokenizer(in, "[:]");
+			if (type.equalsIgnoreCase("INTEGER")) {
+				int min = Integer.parseInt(tk.nextToken());
+				int max = Integer.parseInt(tk.nextToken());
+				int range = max - min + 1;
+				int randomNum = rand.nextInt(range) + min;
+				return String.valueOf(randomNum);
+			} else if (type.equalsIgnoreCase("LONG")) {
+				long min = Long.parseLong(tk.nextToken());
+				long max = Long.parseLong(tk.nextToken());
+				long range = max - min + 1;
+				long randomNum = nextLong(rand, range) + min;
+				return String.valueOf(randomNum);
+			} else if (type.equalsIgnoreCase("DECIMAL")  || type.equalsIgnoreCase("FLOAT") || type.equalsIgnoreCase("DOUBLE")) {
+				double min = Double.parseDouble(tk.nextToken());
+				double max = Double.parseDouble(tk.nextToken());
+				double range = max - min + 1;
+				double randomNum = nextLong(rand, (long) range) + min;
+				double rdnFloat = randomNum + rand.nextDouble();
+				return String.valueOf(rdnFloat);
+			} else if (type.equalsIgnoreCase("BOOLEAN")) {
+				int min = Integer.parseInt(tk.nextToken());
+				int max = Integer.parseInt(tk.nextToken());
+				int range = max - min + 1;
+				int randomNum = rand.nextInt(range) + min;
+				return String.valueOf(randomNum > min);
+			}
+		}
+		return in;
 	}
 
 	/**

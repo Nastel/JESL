@@ -350,8 +350,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 			curSnapshot = new PropertySnapshot(category, name, severity, simCurrTime);
 			curSnapshot.setTTL(TNT4JSimulator.getTTL());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			if (e instanceof SAXException)
 				throw (SAXException)e;
 			throw new SAXException("Failed processing definition for snapshot '" + name + "': " + e, e);
@@ -399,8 +398,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				curEvent.getOperation().addProperty(prop);
 			else if (SIM_XML_ACTIVITY.equals(curElement))
 				curActivity.addProperty(prop);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			if (e instanceof SAXException)
 				throw (SAXException)e;
 			throw new SAXException("Failed processing definition for snapshot '" + name + "': " + e, e);
@@ -413,7 +411,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		if ("INTEGER".equalsIgnoreCase(type)) {
 			Integer num = Integer.parseInt(generateFromRange(type, value));
 			propValue = (int)TNT4JSimulator.varyValue(num.intValue());
-		}  else if ("LONG".equalsIgnoreCase(type)) {
+		} else if ("LONG".equalsIgnoreCase(type)) {
 			Long num = Long.parseLong(generateFromRange(type, value));
 			propValue = (long)TNT4JSimulator.varyValue(num.longValue());
 		} else if ("DECIMAL".equalsIgnoreCase(type)) {
@@ -423,8 +421,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			if (StringUtils.isEmpty(valType))
 				valType = "boolean";
 			propValue = Boolean.parseBoolean(value);
-		}
-		else if ("TIMESTAMP".equalsIgnoreCase(type)) {
+		} else if ("TIMESTAMP".equalsIgnoreCase(type)) {
 			try {
 				try {
 					propValue = new UsecTimestamp((long)TNT4JSimulator.varyValue(Long.parseLong(value)));
@@ -438,14 +435,11 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 			if (StringUtils.isEmpty(valType))
 				valType = ValueTypes.VALUE_TYPE_TIMESTAMP;
-		}
-		else if ("STRING".equalsIgnoreCase(type)) {
+		} else if ("STRING".equalsIgnoreCase(type)) {
 			propValue = value.toString();
-		}
-		else if (!StringUtils.isEmpty(type)) {
+		} else if (!StringUtils.isEmpty(type)) {
 			throw new SAXParseException("<" + SIM_XML_PROP + ">: invalid type: " + type, saxLocator);
 		}
-
 		return new Property(name, propValue, valType);
 	}
 
@@ -707,8 +701,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 			if (parentActivity != null)
 				parentActivity.add(curActivity);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			if (e instanceof SAXException)
 				throw (SAXException)e;
 			throw new SAXException("Failed processing event '" + name + "': " + e, e);
@@ -777,57 +770,43 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 				if (attName.equals(SIM_XML_ATTR_NAME)) {
 					// handled above
-				}
-				else if (attName.equals(SIM_XML_ATTR_TYPE)) {
+				} else if (attName.equals(SIM_XML_ATTR_TYPE)) {
 					// handled above
-				}
-				else if (attName.equals(SIM_XML_ATTR_SEVERITY)) {
+				} else if (attName.equals(SIM_XML_ATTR_SEVERITY)) {
 					// handled above
-				}
-				else if (attName.equals(SIM_XML_ATTR_SOURCE)) {
+				} else if (attName.equals(SIM_XML_ATTR_SOURCE)) {
 					srcId = Integer.parseInt(attValue);
 					if (srcId <= 0)
 						throw new SAXParseException("Invalid <" + SIM_XML_EVENT + "> attribute '" + attName + "', must be > 0", saxLocator);
-				}
-				else if (attName.equals(SIM_XML_ATTR_CC)) {
+				} else if (attName.equals(SIM_XML_ATTR_CC)) {
 					cc = OpCompCode.valueOf(attValue);
-				}
-				else if (attName.equals(SIM_XML_ATTR_RC)) {
+				} else if (attName.equals(SIM_XML_ATTR_RC)) {
 					rc = Integer.parseInt(attValue);
-				}
-				else if (attName.equals(SIM_XML_ATTR_PID)) {
+				} else if (attName.equals(SIM_XML_ATTR_PID)) {
 					pid = Long.parseLong(attValue);
 					if (pid <= 0L)
 						throw new SAXParseException("Invalid <" + SIM_XML_EVENT + "> attribute '" + attName + "', must be > 0", saxLocator);
-				}
-				else if (attName.equals(SIM_XML_ATTR_TID)) {
+				} else if (attName.equals(SIM_XML_ATTR_TID)) {
 					tid = Long.parseLong(attValue);
 					if (tid <= 0L)
 						throw new SAXParseException("Invalid <" + SIM_XML_EVENT + "> attribute '" + attName + "', must be > 0", saxLocator);
-				}
-				else if (attName.equals(SIM_XML_ATTR_EXC)) {
+				} else if (attName.equals(SIM_XML_ATTR_EXC)) {
 					exc = attValue;
-				}
-				else if (attName.equals(SIM_XML_ATTR_LOC)) {
+				} else if (attName.equals(SIM_XML_ATTR_LOC)) {
 					loc = attValue;
-				}
-				else if (attName.equals(SIM_XML_ATTR_RES)) {
+				} else if (attName.equals(SIM_XML_ATTR_RES)) {
 					res = attValue;
-				}
-				else if (attName.equals(SIM_XML_ATTR_USER)) {
+				} else if (attName.equals(SIM_XML_ATTR_USER)) {
 					user = attValue;
-				}
-				else if (attName.equals(SIM_XML_ATTR_ELAPSED)) {
+				} else if (attName.equals(SIM_XML_ATTR_ELAPSED)) {
 					elapsed = Long.parseLong(attValue);
 					if (elapsed < 0L)
 						throw new SAXParseException("<" + SIM_XML_EVENT + ">: '" + SIM_XML_ATTR_ELAPSED + "' must be >= 0", saxLocator);
-				}
-				else if (attName.equals(SIM_XML_ATTR_MSGAGE)) {
+				} else if (attName.equals(SIM_XML_ATTR_MSGAGE)) {
 					msgAge = Long.parseLong(attValue);
 					if (msgAge < 0L)
 						throw new SAXParseException("Invalid <" + SIM_XML_EVENT + "> attribute '" + attName + "', must be >= 0", saxLocator);
-				}
-				else if (attName.equals(SIM_XML_ATTR_TAGS)) {
+				} else if (attName.equals(SIM_XML_ATTR_TAGS)) {
 					labels = attValue.split(",");
 					for (int l = 0; l < labels.length; l++) {
 						if (TNT4JSimulator.isGenerateValues())
@@ -836,8 +815,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 							labels[l] += tagSuffix;
 						}
 					}
-				}
-				else if (attName.equals(SIM_XML_ATTR_CORRS)) {
+				} else if (attName.equals(SIM_XML_ATTR_CORRS)) {
 					corrs = attValue.split(",");
 					for (int c = 0; c < corrs.length; c++) {
 						if (TNT4JSimulator.isGenerateValues())
@@ -846,11 +824,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 							corrs[c] += corSuffix;
 						}
 					}
-				}
-				else if (attName.equals(SIM_XML_ATTR_MSG)) {
+				} else if (attName.equals(SIM_XML_ATTR_MSG)) {
 					msgId = Integer.parseInt(attValue);
-				}
-				else {
+				} else {
 					throw new SAXParseException("Unknown <" + SIM_XML_EVENT + "> attribute '" + attName + "'", saxLocator);
 				}
 			}
@@ -932,8 +908,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			curEvent.stop(simCurrTime, elapsed);
 
 			TNT4JSimulator.debug(simCurrTime, "Ran event: " + name + ", elapsed.usec=" + elapsed);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			if (e instanceof SAXException)
 				throw (SAXException)e;
 			throw new SAXException("Failed processing event '" + name + "': " + e, e);

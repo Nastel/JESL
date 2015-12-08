@@ -16,11 +16,11 @@
   <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=Las Vegas, Nevada"
           user="mqm"/>
   
-  <msg id="1">AMAZON ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr.</msg>
-  <msg id="2">Verify ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr</msg>
-  <msg id="3">Process Payment ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr</msg>
-  <msg id="4">Ship ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr</msg>
-  <msg id="5">Confirm ProductId=28372373, Title: Crash Proof: Author: Robert Prechter Jr</msg>
+  <msg id="1">AMAZON ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="2">Verify ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="3">Process Payment ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="4">Ship ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="5">Confirm ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
   
   <activity name="AcceptOrder" source="1" pid="5432" tid="4">
     <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="OrderId:123"/>
@@ -33,45 +33,45 @@
       <prop name="ShippingCost" type="DECIMAL" value="15.25" valtype="currency.usd"/>
     </snapshot>
     <snapshot name="CPU" cat="Java">
-      <prop name="Count" type="INTEGER" value="8" valtype="size"/>
+      <prop name="Count" type="LONG" value="8" valtype="size"/>
       <prop name="TotalCpuUsec" type="DECIMAL" value="46800.3" valtype="age.usec"/>
       <prop name="TotalCpuUserUsec" type="DECIMAL" value="46800.3" valtype="age.usec"/>
     </snapshot>
     <snapshot name="Thread" cat="Java">
-      <prop name="Count" type="INTEGER" value="69" valtype="size"/>
-      <prop name="DaemonCount" type="INTEGER" value="15" valtype="size"/>
-      <prop name="StartedCount" type="INTEGER" value="71" valtype="size"/>
-      <prop name="PeakCount" type="INTEGER" value="69" valtype="size"/>
-      <prop name="BlockedCount" type="INTEGER" value="69" valtype="size"/>
-      <prop name="WaitedCount" type="INTEGER" value="4" valtype="size"/>
-      <prop name="BlockedUsec" type="INTEGER" value="35000" valtype="age.usec"/>
-      <prop name="WaitUsec" type="INTEGER" value="32493000" valtype="age.usec"/>
+      <prop name="Count" type="LONG" value="69" valtype="size"/>
+      <prop name="DaemonCount" type="LONG" value="15" valtype="size"/>
+      <prop name="StartedCount" type="LONG" value="71" valtype="size"/>
+      <prop name="PeakCount" type="LONG" value="69" valtype="size"/>
+      <prop name="BlockedCount" type="LONG" value="69" valtype="size"/>
+      <prop name="WaitedCount" type="LONG" value="4" valtype="size"/>
+      <prop name="BlockedUsec" type="LONG" value="35000" valtype="age.usec"/>
+      <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
     </snapshot>
     <snapshot name="Memory" cat="Java">
-      <prop name="MaxBytes" type="INTEGER" value="7635533824" valtype="size"/>
-      <prop name="TotalBytes" type="INTEGER" value="514523136" valtype="size"/>
-      <prop name="FreeBytes" type="INTEGER" value="450058552" valtype="size"/>
-      <prop name="UsedBytes" type="INTEGER" value="64464584" valtype="size"/>
-      <prop name="Usage" type="INTEGER" value="12" valtype="percent"/>
+      <prop name="MaxBytes" type="LONG" value="7635533824" valtype="size"/>
+      <prop name="TotalBytes" type="LONG" value="514523136" valtype="size"/>
+      <prop name="FreeBytes" type="LONG" value="450058552" valtype="size"/>
+      <prop name="UsedBytes" type="LONG" value="64464584" valtype="size"/>
+      <prop name="Usage" type="LONG" value="12" valtype="percent"/>
     </snapshot>
     <snapshot name="PS Scavenge" cat="GarbageCollector">
-      <prop name="Count" type="INTEGER" value="1" valtype="size"/>
-      <prop name="Time" type="INTEGER" value="9" valtype="age.msec"/>
+      <prop name="Count" type="LONG" value="1" valtype="size"/>
+      <prop name="Time" type="LONG" value="9" valtype="age.msec"/>
       <prop name="isValid" type="BOOLEAN" value="true"/>
     </snapshot>
     <snapshot name="PS MarkSweep" cat="GarbageCollector">
-      <prop name="Count" type="INTEGER" value="10" valtype="size"/>
-      <prop name="Time" type="INTEGER" value="12200" valtype="age.msec"/>
+      <prop name="Count" type="LONG" value="10" valtype="size"/>
+      <prop name="Time" type="LONG" value="12200" valtype="age.msec"/>
       <prop name="isValid" type="BOOLEAN" value="true"/>
     </snapshot>
     <snapshot name="Activity" cat="Java">
       <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
-      <prop name="SlackUsec" type="INTEGER" value="1399" valtype="age.usec"/>
+      <prop name="SlackUsec" type="LONG" value="1399" valtype="age.usec"/>
       <prop name="WallUsec" type="DECIMAL" value="3.25116001E7" valtype="age.usec"/>
-      <prop name="BlockedCount" type="INTEGER" value="1090" valtype="size"/>
-      <prop name="WaitedCount" type="INTEGER" value="547" valtype="size"/>
-      <prop name="BlockedUsec" type="INTEGER" value="3000" valtype="age.usec"/>
-      <prop name="WaitUsec" type="INTEGER" value="32493000" valtype="age.usec"/>
+      <prop name="BlockedCount" type="LONG" value="1090" valtype="size"/>
+      <prop name="WaitedCount" type="LONG" value="547" valtype="size"/>
+      <prop name="BlockedUsec" type="LONG" value="3000" valtype="age.usec"/>
+      <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
       <prop name="OverheadUsec" type="DECIMAL" value="962.175" valtype="age.usec"/>
     </snapshot>
   </activity>
@@ -97,11 +97,11 @@
   <sleep msec="891"/>
     
   <activity name="ProcessFraudAlerts" source="6" pid="3423" tid="548">
-    <event name="EvaluateFraud" type="RECEIVE" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1" corrs="OrderId:123"/>
+    <event name="EvaluateFraud" type="RECEIVE" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1" sev="WARNING" exc="Possible fraud" corrs="OrderId:123"/>
   </activity>
 
   <activity name="PaymentProcess" source="3" pid="8154" tid="12" sev="WARNING">
-    <event name="ReadOrder" type="RECEIVE" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" sev="ERROR" corrs="OrderId:123"/>
+    <event name="ReadOrder" type="RECEIVE" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" sev="ERROR" corrs="OrderId:123" exc="SQLException: unknown column custid"/>
     <sleep msec="11"/>
     <event name="SendShipment" type="SEND" elapsed="293" res="SHIP.ORDERS.QUEUE" msg="4"/>
   </activity>
@@ -127,40 +127,40 @@
       <prop name="TotalCpuUserUsec" type="DECIMAL" value="62400.4" valtype="age.usec"/>
     </snapshot>
     <snapshot name="Thread" cat="Java">
-      <prop name="Count" type="INTEGER" value="69" valtype="size"/>
-      <prop name="DaemonCount" type="INTEGER" value="15" valtype="size"/>
-      <prop name="StartedCount" type="INTEGER" value="71" valtype="size"/>
-      <prop name="PeakCount" type="INTEGER" value="69" valtype="size"/>
-      <prop name="BlockedCount" type="INTEGER" value="76" valtype="size"/>
-      <prop name="WaitedCount" type="INTEGER" value="6" valtype="size"/>
-      <prop name="BlockedUsec" type="INTEGER" value="36000" valtype="age.usec"/>
-      <prop name="WaitUsec" type="INTEGER" value="8075000" valtype="age.usec"/>
+      <prop name="Count" type="LONG" value="69" valtype="size"/>
+      <prop name="DaemonCount" type="LONG" value="15" valtype="size"/>
+      <prop name="StartedCount" type="LONG" value="71" valtype="size"/>
+      <prop name="PeakCount" type="LONG" value="69" valtype="size"/>
+      <prop name="BlockedCount" type="LONG" value="76" valtype="size"/>
+      <prop name="WaitedCount" type="LONG" value="6" valtype="size"/>
+      <prop name="BlockedUsec" type="LONG" value="36000" valtype="age.usec"/>
+      <prop name="WaitUsec" type="LONG" value="8075000" valtype="age.usec"/>
     </snapshot>
     <snapshot name="Memory" cat="Java">
-      <prop name="MaxBytes" type="INTEGER" value="7635533824" valtype="size"/>
-      <prop name="TotalBytes" type="INTEGER" value="514523136" valtype="size"/>
-      <prop name="FreeBytes" type="INTEGER" value="428179112" valtype="size"/>
-      <prop name="UsedBytes" type="INTEGER" value="86344024" valtype="size"/>
-      <prop name="Usage" type="INTEGER" value="16" valtype="percent"/>
+      <prop name="MaxBytes" type="LONG" value="7635533824" valtype="size"/>
+      <prop name="TotalBytes" type="LONG" value="514523136" valtype="size"/>
+      <prop name="FreeBytes" type="LONG" value="428179112" valtype="size"/>
+      <prop name="UsedBytes" type="LONG" value="86344024" valtype="size"/>
+      <prop name="Usage" type="LONG" value="16" valtype="percent"/>
     </snapshot>
     <snapshot name="PS Scavenge" cat="GarbageCollector">
-      <prop name="Count" type="INTEGER" value="1378" valtype="size"/>
-      <prop name="Time" type="INTEGER" value="734737" valtype="age.msec"/>
+      <prop name="Count" type="LONG" value="1378" valtype="size"/>
+      <prop name="Time" type="LONG" value="734737" valtype="age.msec"/>
       <prop name="isValid" type="BOOLEAN" value="true"/>
     </snapshot>
     <snapshot name="PS MarkSweep" cat="GarbageCollector">
-      <prop name="Count" type="INTEGER" value="213" valtype="size"/>
-      <prop name="Time" type="INTEGER" value="272881" valtype="age.msec"/>
+      <prop name="Count" type="LONG" value="213" valtype="size"/>
+      <prop name="Time" type="LONG" value="272881" valtype="age.msec"/>
       <prop name="isValid" type="BOOLEAN" value="true"/>
     </snapshot>
     <snapshot name="Activity" cat="Java">
       <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
-      <prop name="SlackUsec" type="INTEGER" value="-6600" valtype="age.usec"/>
+      <prop name="SlackUsec" type="LONG" value="-6600" valtype="age.usec"/>
       <prop name="WallUsec" type="DECIMAL" value="201600.1" valtype="age.usec"/>
-      <prop name="BlockedCount" type="INTEGER" value="7382" valtype="size"/>
-      <prop name="WaitedCount" type="INTEGER" value="12312" valtype="size"/>
-      <prop name="BlockedUsec" type="INTEGER" value="17812828" valtype="age.usec"/>
-      <prop name="WaitUsec" type="INTEGER" value="186000" valtype="age.usec"/>
+      <prop name="BlockedCount" type="LONG" value="7382" valtype="size"/>
+      <prop name="WaitedCount" type="LONG" value="12312" valtype="size"/>
+      <prop name="BlockedUsec" type="LONG" value="17812828" valtype="age.usec"/>
+      <prop name="WaitUsec" type="LONG" value="186000" valtype="age.usec"/>
       <prop name="OverheadUsec" type="DECIMAL" value="181.7" valtype="age.usec"/>
     </snapshot>
   </activity>

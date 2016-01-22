@@ -37,6 +37,7 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.conn.BasicClientConnectionManager;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.protocol.BasicHttpContext;
 
 import com.jkool.jesl.net.http.apache.HttpRequestImpl;
 import com.jkool.jesl.net.http.apache.HttpResponseImpl;
@@ -162,9 +163,9 @@ public class HttpClient implements HttpStream {
 			}
 			connReq = connMgr.requestConnection(route, null);
 			connection = connReq.getConnection(0, null);
-			connection.open(route, null, new BasicHttpParams());
+			connection.open(route, new BasicHttpContext(), new BasicHttpParams());
 			logger.log(OpLevel.DEBUG, "Connected to {0}{1}", uri, (httpProxy != null ? " via proxy " + httpProxy : ""));
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			close();
 			throw new IOException("Failed to connect to uri=" + uri + ", reason=" + e.getMessage(), e);
 		}

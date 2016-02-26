@@ -6,11 +6,11 @@ To stream data to jKool Cloud your application must:
 	   to log events, activities, metrics
 	
 	2. Obtain your jKool account and API access token 
-	   at https://www.jkoolcloud.com
+	   at https://www.jkoolcloud.com. API access token is required to stream
+	   data to your jKool Cloud repository.
 	
 	3. Use JESL Event Sink implementation (contained in this project) 
-	   within your tnt4j configuration. API access token will be required
-	   to stream data to jKool Cloud.
+	   within your tnt4j configuration. (Requires API access token)
 	
 	4. Configure your application for streaming to jKool Cloud 
 	   using JESL Event Sink (requires API access token).
@@ -58,13 +58,13 @@ files to use as a template and create the necessary activity elements.
 The simulator can be run in one of two modes:
 
 	1. Simulation (simulation type: `run`)
-	   Runs default simulation file (`sims/order-process.xml`) and sends the tracking data to
-	   the JESL Event Sink and/or writes the tracking data to the
-	   specified file.  In this mode, the simulator can be configured to
-	   run the simulation file a specified number of iterations, optionally
-	   generating unique correlators and tags for each iteration of
-	   the simulation file (appends a unique value to end of defined
-	   correlator and tags in simulation definition file).
+	   Runs a user specified simulation file (e.g. `sims/order-process.xml`) 
+	   and sends the tracking data to the JESL Event Sink and/or writes 
+	   the tracking data to the specified file.  In this mode, the simulator 
+	   can be configured to run the simulation file a specified number of iterations,
+	   optionally generating unique correlators and tags for each iteration of
+	   the simulation file (appends a unique value to end of defined correlator 
+	   and tags in simulation definition file).
 	
 	2. Replay (simulation type: `replay`)
 	   Reads previously-saved tracking data from the specified file
@@ -73,14 +73,16 @@ The simulator can be run in one of two modes:
 The simplest way to run the simulator is to execute the file `jksim.bat`
 (or `jksim.sh`) as follows:
 
-	Windows: `jksim.bat <access_token> [<iterations>]`
-	Unix: `jksim.sh <access_token> [<iterations>]`
+	`jksim -A:api-access-token -f:sim-file -i:iterations`
+	Example: `jksim -A:MY-TOKEN -f:../sims/order-process.xml -i:5`
 		
-`<iterations>` is the number of iterations for a given simulation (1 default).
+`api-access-token` is your API access token obtained during registration with jKool.
+`sim-file` simulation file that defines all interactions, events, metrics.
+Sample simulation files are located under `<jesl>/sims/` folder (e.g. `<jesl>/sims/order-process.xml`). 
+`iterations` is the number of iterations for a given simulation (1 default).
 
-<b>NOTE:</b> You will need to alter `jksim` scripts to specify
-custom simulator parameters such as simulation type as well as options described
-further in this document.
+<b>NOTE:</b> You will may to alter `jksim` shell script to specify custom simulator 
+parameters such as simulation type as well as other advanced options.
 
 The simulator also contains options for allowing the data values used for some of
 the tracking component attributes to be altered to provide unique values for these

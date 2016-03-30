@@ -567,8 +567,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	}
 
 	private void startActivity(Attributes attributes) throws SAXException {
-		if (!SIM_XML_ROOT.equals(curElement))
-			throw new SAXParseException("<" + SIM_XML_ACTIVITY + ">: must have <" + SIM_XML_ROOT + "> as parent element", saxLocator);
+	//	if (!SIM_XML_ROOT.equals(curElement))
+	//		throw new SAXParseException("<" + SIM_XML_ACTIVITY + ">: must have <" + SIM_XML_ROOT + "> as parent element", saxLocator);
 
 		if (simCurrTime == null)
 			simCurrTime = new UsecTimestamp();
@@ -709,7 +709,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	}
 
 	private void stopActivity() throws SAXException {
-		long elapsed = simCurrTime.difference(curActivityStart);
+		long elapsed = simCurrTime.difference(curActivity.getStartTime());  
 		curActivity.stop(simCurrTime, elapsed);
 		TNT4JSimulator.debug(simCurrTime, "Stopped activity " + curActivity.getName() + ", elapsed.usec: " + elapsed);
 

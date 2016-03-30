@@ -33,21 +33,8 @@
 			  </activity>
 			  <activity name="RESPONSE_AVAILABLE_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="" source="1">
 			      <event name="REQUEST" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1"></event>
-			  </activity>
-		  </activity>
-		  <activity name="FRONT_END_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
-		  	<activity name="PAGE_RENDER_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
-		  	  	<event name="ONLOAD" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1"></event>
-		  	</activity>
-		  	<activity name="DOCUMENT_READY_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
-		  		<activity name="DOCUMENT_PROCESSING_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
-		  		  	<event name="PROCESSING" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1"></event>
-		  		</activity>
-		  		<activity name="DOCUMENT_DOWNLOAD_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
-		  		    <event name="RESPONSE" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1"></event>
-		  		</activity>
-		  	</activity>
-		  </activity>
+
+		 
   
   <activity name="AcceptOrder" source="1" pid="5432" tid="4">
     <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="OrderId:123,SessionId:789,RequestId:456"/>
@@ -192,5 +179,20 @@
     </snapshot>
   </activity>
   </activity>
+   </activity>
+		  <activity name="FRONT_END_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
+		  	<activity name="PAGE_RENDER_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
+		  	  	<event name="ONLOAD" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1"></event>
+		  	</activity>
+		  	<activity name="DOCUMENT_READY_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
+		  		<activity name="DOCUMENT_PROCESSING_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
+		  		  	<event name="PROCESSING" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1"></event>
+		  		</activity>
+		  		<activity name="DOCUMENT_DOWNLOAD_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
+		  		    <event name="RESPONSE" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1"></event>
+		  		</activity>
+		  	</activity>
+		  </activity>
+		  </activity>
   </activity>
 </tnt4j-simulator>

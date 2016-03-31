@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <tnt4j-simulator>
 
-  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
+  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=53.07897,-0.14008"
           user="webuser" url="https://www.sample.com/orders/parts"/>
-  <source id="2" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=Los Angeles, CA"
+  <source id="2" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=34.05223,-118.24368"
           user="ebay-proc"/>
-  <source id="3" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=London, England"
+  <source id="3" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=51.50853,-0.12574"
           user="SYSPRC"/>
-  <source id="4" fqn="APPL=VerifyCredit#SERVER=CreditServerVISA#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=Paris, France"
+  <source id="4" fqn="APPL=VerifyCredit#SERVER=CreditServerVISA#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=48.85341,2.3488"
           user="system"/>
-  <source id="5" fqn="APPL=ShipProduct#SERVER=SupplyChainServer#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=Miami, Florida"
+  <source id="5" fqn="APPL=ShipProduct#SERVER=SupplyChainServer#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=25.77427,-80.19366"
           user="system"/>
-  <source id="6" fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Washington#GEOADDR=Washington, Virginia"
+  <source id="6" fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Washington#GEOADDR=38.89511,-77.03637"
           user="mqm"/>
-  <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=Las Vegas, Nevada"
+  <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=36.17497,-115.13722"
           user="mqm"/>
 
   
@@ -28,13 +28,23 @@
 	  <activity name="END_USER_RESPONSE_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
 		  <activity name="FIRST_BYTE_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
 			  <activity name="SERVER_CONNECTION_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
-				  <event name="APPCACHE" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1"></event>
+				  <event name="APPCACHE" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">
+				  	<prop name="browser" type="STRING" value="Chrome"/>
+				  	<prop name="browserVersion" type="NUMBER" value="49"/>
+				  	<prop name="platform" type="STRING" value="Win32"/>
+				  	<prop name="queryString" type="STRING" value=""/>
+				  </event>
 				  <event name="TCP" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1"></event>
 				  <event name="DNS" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1"></event>
 			  </activity>
 			  <activity name="RESPONSE_AVAILABLE_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="" source="1">
 				   	<event name="REQUEST" sev="SUCCESS" type="SEND" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456, OrderId:123" source="1"></event>
-				    <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="OrderId:123,SessionId:789,RequestId:456"/>
+				    <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="OrderId:123,SessionId:789,RequestId:456">
+				    	<prop name="method1" type="LONG" value="390" valtype="age.usec"/>
+				  		<prop name="method2" type="LONG" value="10" valtype="age.usec"/>
+				  		<prop name="method3" type="LONG" value="15" valtype="age.usec"/>
+				  		<prop name="method4" type="LONG" value="50" valtype="age.usec"/>
+				    </event>
 				    <event name="ValidateOrder" type="SEND" elapsed="823" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="OrderId:123,SessionId:789,RequestId:456"/>
 				    <sleep usec="121"/>
 				  	<sleep msec="163"/>

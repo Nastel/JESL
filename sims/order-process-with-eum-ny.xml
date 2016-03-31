@@ -56,7 +56,7 @@
 				    <event name="PrepareShippingSlip" type="EVENT" elapsed="4821"/>
 				    <sleep msec="835"/>
 				    <event name="SendConfirmation" type="SEND" elapsed="142" msg="5"/>
-				    <event name="RESPONSE_START" sev="RECEIVE" type="RECEIVE" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456, OrderId:123" source="1"></event>
+				    <event name="RESPONSE_START" sev="SUCCESS" type="RECEIVE" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456, OrderId:123" source="1"></event>
    				</activity>
    		  </activity>
 		  <activity name="FRONT_END_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:789,RequestId:456" source="1">

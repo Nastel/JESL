@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<tnt4j-simulator>
+
+  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=Hong Kong, China"
+          user="webuser" url="https://www.sample.com/orders/parts"/>
+  <source id="2" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=Los Angeles, CA"
+          user="ebay-proc"/>
+  <source id="3" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=London, England"
+          user="SYSPRC"/>
+  <source id="4" fqn="APPL=VerifyCredit#SERVER=CreditServerVISA#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=Paris, France"
+          user="system"/>
+  <source id="5" fqn="APPL=ShipProduct#SERVER=SupplyChainServer#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=Miami, Florida"
+          user="system"/>
+  <source id="6" fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Washington#GEOADDR=Washington, Virginia"
+          user="mqm"/>
+  <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=Las Vegas, Nevada"
+          user="mqm"/>
+
+  
+  <msg id="1">AMAZON ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="2">Verify ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="3">Process Payment ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="4">Ship ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="5">Confirm ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  
+  
+  <activity name="EUM_SUMMARY" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1">
+	  <activity name="END_USER_RESPONSE_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1">
+		  <activity name="FIRST_BYTE_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1">
+			  <activity name="SERVER_CONNECTION_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1">
+				  <event name="APPCACHE" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1"></event>
+				  <event name="TCP" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1"></event>
+				  <event name="DNS" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1"></event>
+			  </activity>
+			  <activity name="RESPONSE_AVAILABLE_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="" source="1">
+				   	<event name="REQUEST" sev="SUCCESS" type="SEND" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234, OrderId:789" source="1"></event>
+				    <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="OrderId:789,SessionId:567,RequestId:234"/>
+				    <event name="ValidateOrder" type="SEND" elapsed="823" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="OrderId:789,SessionId:567,RequestId:234"/>
+				    <sleep usec="121"/>
+				  	<sleep msec="163"/>
+				    <event name="ValidateAndVerify" type="RECEIVE" elapsed="626" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="OrderId:789,SessionId:567,RequestId:234"/>
+				    <event name="Credit" type="SEND" elapsed="2323" res="CREDIT.ORDERS.QUEUE" msg="2" corrs="OrderId:789,SessionId:567,RequestId:234"/>
+				    <event name="ValidateCredit" type="RECEIVE" elapsed="2782" res="CREDIT.ORDERS.QUEUE" msg="2" corrs="OrderId:789,SessionId:567,RequestId:234"/>
+				    <event name="Validated" type="SEND" elapsed="7189" res="ROUTE.ORDERS.QUEUE" msg="1" corrs="OrderId:789,SessionId:567,RequestId:234"/>
+				    <event name="ReadAndRoute" type="RECEIVE" elapsed="626" res="ROUTE.ORDERS.QUEUE" msg="1" corrs="OrderId:789,SessionId:567,RequestId:234"/>
+				    <event name="ProcessPayment" type="SEND" elapsed="128" res="PAYMENT.ORDERS.QUEUE" msg="3" corrs="OrderId:789,SessionId:567,RequestId:234"/>
+				    <event name="PossibleFraud" type="SEND" elapsed="234" res="FRAUD.ORDERS.QUEUE" msg="1" corrs="OrderId:789,SessionId:567,RequestId:234"/>
+				    <sleep msec="891"/>
+				    <event name="EvaluateFraud" type="RECEIVE" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1" sev="WARNING" exc="Possible fraud" corrs="OrderId:789"/>
+				    <event name="ReadOrder" type="RECEIVE" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" sev="ERROR" corrs="OrderId:789,SessionId:567,RequestId:234" exc="SQLException: unknown column custid"/>
+				    <sleep msec="11"/>
+				    <event name="SendShipment" type="SEND" elapsed="293" res="SHIP.ORDERS.QUEUE" msg="4"/>
+				    <sleep msec="512"/>
+				    <event name="ReadOrderContents" type="RECEIVE" elapsed="32679" res="SHIP.ORDERS.QUEUE" msg="4" msgage="7272" corrs="OrderId:789,SessionId:567,RequestId:234"/>
+				    <sleep msec="412"/>
+				    <event name="PrepareShippingSlip" type="EVENT" elapsed="4821"/>
+				    <sleep msec="835"/>
+				    <event name="SendConfirmation" type="SEND" elapsed="142" msg="5"/>
+				    <event name="RESPONSE_START" sev="SUCCESS" type="RECEIVE" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234, OrderId:789" source="1"></event>
+   				</activity>
+   		  </activity>
+		  <activity name="FRONT_END_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1">
+		  	<activity name="PAGE_RENDER_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1">
+		  	  	<event name="ONLOAD" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1"></event>
+		  	</activity>
+		  	<activity name="DOCUMENT_READY_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1">
+		  		<activity name="DOCUMENT_PROCESSING_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1">
+		  		  	<event name="PROCESSING" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1"></event>
+		  		</activity>
+		  		<activity name="DOCUMENT_DOWNLOAD_TIME" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1">
+		  		    <event name="RESPONSE" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:567,RequestId:234" source="1"></event>
+		  		</activity>
+		  	</activity>
+		  </activity>
+		  </activity>
+  </activity>
+</tnt4j-simulator>

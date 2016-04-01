@@ -834,7 +834,10 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			if (srcId <= 0 && curActivity == null)
 				throw new SAXParseException("<" + SIM_XML_EVENT + "> attribute '" + SIM_XML_ATTR_SOURCE + "' is missing for event without parent activity", saxLocator);
 
-			Source source = (curActivity != null ? curActivity.getSource() : null);
+			curEvent = curTracker.newEvent(severity, type, name, (String)null, (String)null, (String)null, (Object[])null);
+			Source source = (curEvent != null ? curEvent.getSource() : null);
+			if (source == null)
+				source = (curActivity != null ? curActivity.getSource() : null);
 			if (srcId > 0) {
 				source = sourceIds.get(srcId);
 				if (source == null)
@@ -848,7 +851,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			if (source == null || curTracker == null)
 				throw new SAXParseException("<" + SIM_XML_EVENT + "> attribute '" + SIM_XML_ATTR_SOURCE + "' is missing for event without parent activity", saxLocator);
 
-			curEvent = curTracker.newEvent(severity, type, name, (String)null, (String)null, (String)null, (Object[])null);
+	//		curEvent = curTracker.newEvent(severity, type, name, (String)null, (String)null, (String)null, (Object[])null);
 
 			if (curActivity != null) {
 				curEvent.setLocation(curActivity.getLocation());

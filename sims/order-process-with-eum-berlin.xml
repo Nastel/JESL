@@ -75,12 +75,13 @@
 				  	<prop name="platform" type="STRING" value="Win32"/>
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
-				   	<event name="REQUEST" source="1" sev="SUCCESS" type="SEND" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:234,RequestId:567, OrderId:444" ></event>
+				   	<event name="REQUEST" source="1" sev="SUCCESS" type="SEND" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:234,RequestId:567, OrderId:444" >
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="client"/>
+					</event>
 				    <event name="ReceiveOrder" source="1" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="OrderId:444,SessionId:234,RequestId:567">
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
@@ -263,12 +264,13 @@
 					<prop name="platform" type="STRING" value="Win32"/>
 					<prop name="queryString" type="STRING" value=""/>
 					<prop name="cs" type="STRING" value="server"/>
-		  		    <event name="RESPONSE" source="1" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:234,RequestId:567"></event>
+		  		    <event name="RESPONSE" source="1" sev="SUCCESS" elapsed="999" loc="11.0.0.2" user="webuser" corrs="SessionId:234,RequestId:567">
 		  		    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="client"/>
+					</event>
 		  		</activity>
 		  	</activity>
 		  </activity>

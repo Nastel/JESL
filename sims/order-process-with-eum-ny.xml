@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <tnt4j-simulator>
 
-  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.72#DATACENTER=DC1#GEOADDR=53.07897,-0.14008"
+  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.72#DATACENTER=DC1#GEOADDR=40.84288,-73.29289"
           user="webuser" url="https://www.sample.com/orders/parts"/>
   <source id="2" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=34.05223,-118.24368"
           user="ebay-proc"/>
@@ -55,12 +55,13 @@
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
 				  </event>
-				  <event name="TCP" source="1" sev="SUCCESS" elapsed="999" loc="11.0.0.72.2" user="webuser" corrs="SessionId:123,RequestId:376"></event>
+				  <event name="TCP" source="1" sev="SUCCESS" elapsed="999" loc="11.0.0.72.2" user="webuser" corrs="SessionId:123,RequestId:376">
 				  	<prop name="browser" type="STRING" value="Chrome"/>
 				  	<prop name="browserVersion" type="INTEGER" value="49"/>
 				  	<prop name="platform" type="STRING" value="Win32"/>
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
+				  </event>
 				  <event name="DNS" source="1" sev="SUCCESS" elapsed="999" loc="11.0.0.72" user="webuser" corrs="SessionId:123,RequestId:376">
 				  	<prop name="browser" type="STRING" value="Chrome"/>
 				  	<prop name="browserVersion" type="INTEGER" value="49"/>
@@ -75,12 +76,13 @@
 				  	<prop name="platform" type="STRING" value="Win32"/>
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
-				   	<event name="REQUEST" source="1" sev="SUCCESS" type="SEND" elapsed="999" loc="11.0.0.72" user="webuser" corrs="SessionId:123,RequestId:376, OrderId:333" ></event>
+				   	<event name="REQUEST" source="1" sev="SUCCESS" type="SEND" elapsed="999" loc="11.0.0.72" user="webuser" corrs="SessionId:123,RequestId:376, OrderId:333" >
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="client"/>
+					</event>
 				    <event name="ReceiveOrder" source="1" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="OrderId:333,SessionId:123,RequestId:376">
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>

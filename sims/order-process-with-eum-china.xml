@@ -55,12 +55,13 @@
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
 				  </event>
-				  <event name="TCP" source="1" sev="SUCCESS" elapsed="999" loc="11.0.0.55" user="webuser" corrs="SessionId:567,RequestId:890"></event>
+				  <event name="TCP" source="1" sev="SUCCESS" elapsed="999" loc="11.0.0.55" user="webuser" corrs="SessionId:567,RequestId:890">
 				  	<prop name="browser" type="STRING" value="Chrome"/>
 				  	<prop name="browserVersion" type="INTEGER" value="49"/>
 				  	<prop name="platform" type="STRING" value="Win32"/>
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
+				  </event>
 				  <event name="DNS" source="1" sev="SUCCESS" elapsed="999" loc="11.0.0.55" user="webuser" corrs="SessionId:567,RequestId:890">
 				  	<prop name="browser" type="STRING" value="Chrome"/>
 				  	<prop name="browserVersion" type="INTEGER" value="49"/>
@@ -75,12 +76,13 @@
 				  	<prop name="platform" type="STRING" value="Win32"/>
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
-				   	<event name="REQUEST" source="1" sev="SUCCESS" type="SEND" elapsed="999" loc="11.0.0.55" user="webuser" corrs="SessionId:567,RequestId:890, OrderId:222" ></event>
+				   	<event name="REQUEST" source="1" sev="SUCCESS" type="SEND" elapsed="999" loc="11.0.0.55" user="webuser" corrs="SessionId:567,RequestId:890, OrderId:222" >
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="client"/>
+				    </event>
 				    <event name="ReceiveOrder" source="1" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="OrderId:222,SessionId:567,RequestId:890">
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>

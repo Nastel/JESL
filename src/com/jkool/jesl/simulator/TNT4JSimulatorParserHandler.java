@@ -25,6 +25,8 @@ import java.util.Random;
 import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -114,7 +116,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private Stack<String>				activeElements   = new Stack<String>();
 
 	private HashMap<String,Long> genValues = new HashMap<String,Long>();
-	private Map<String, String> vars = new HashMap<String, String>();
+	private ConcurrentMap<String, String> vars = new ConcurrentHashMap<String, String>();
 	StrSubstitutor sub = new StrSubstitutor(vars);
 	
 	private Message				curMsg;
@@ -268,10 +270,11 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			if (StringUtils.isEmpty(name))
 				throw new SAXParseException("<" + SIM_XML_VAR + ">: must specify '" + SIM_XML_ATTR_NAME + "'", saxLocator);
 
-			vars.put(name, value);
-			System.setProperty(name,  value);
-			TNT4JSimulator.trace(simCurrTime, "Defining " + curElement + " variable: [" + name  + "=" + value +"] ...");
-
+			String key = vars.putIfAbsent(name, value);
+			if (key != null) {
+				TNT4JSimulator.trace(simCurrTime, "Skipping duplicate variable: '" + name  + "=" + value + "'");
+			}
+			TNT4JSimulator.trace(simCurrTime, "Defining variable: '" + name  + "=" + value +"'");
 		} catch (Exception e) {
 			if (e instanceof SAXException)
 				throw (SAXException)e;
@@ -977,6 +980,10 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		}
 	}
 
+	public void setVar(String name, String value) {
+		vars.put(name, value);
+	}
+	
 	/**
 	 * Resolve variable given name to a global variable.
 	 * Global variables are referenced using: ${var} convention.

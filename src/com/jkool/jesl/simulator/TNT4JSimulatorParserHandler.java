@@ -28,6 +28,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -67,6 +68,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	public static final String SIM_XML_MSG          = "msg";
 	public static final String SIM_XML_SNAPSHOT     = "snapshot";
 	public static final String SIM_XML_PROP         = "prop";
+	public static final String SIM_XML_VAR          = "var";
 	public static final String SIM_XML_ACTIVITY     = "activity";
 	public static final String SIM_XML_EVENT        = "event";
 	public static final String SIM_XML_SLEEP        = "sleep";
@@ -112,7 +114,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private Stack<String>				activeElements   = new Stack<String>();
 
 	private HashMap<String,Long> genValues = new HashMap<String,Long>();
-
+	private Map<String, String> vars = new HashMap<String, String>();
+	StrSubstitutor sub = new StrSubstitutor(vars);
+	
 	private Message				curMsg;
 	private TrackingActivity	curActivity;
 	private TrackingEvent		curEvent;
@@ -235,11 +239,44 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			runEvent(attributes);
 		else if (name.equals(SIM_XML_SLEEP))
 			pauseSimulator(attributes);
+		else if (name.equals(SIM_XML_VAR))
+			defineVar(attributes);
 		else
 			throw new SAXParseException("Unrecognized element <" + name + ">", saxLocator);
 
 		activeElements.push(curElement);
 		curElement = name;
+	}
+
+	private void defineVar(Attributes attributes) throws SAXException {
+		String name    = null;
+		String value   = null;
+
+		try {
+			for (int i = 0; i < attributes.getLength(); i++) {
+				String attName  = attributes.getQName(i);
+				String attValue = expandEnvVars(attributes.getValue(i));
+
+				if (attName.equals(SIM_XML_ATTR_NAME))
+					name = attValue;
+				else if (attName.equals(SIM_XML_ATTR_VALUE))
+					value = attValue;
+				else
+					throw new SAXParseException("Unknown <" + SIM_XML_PROP + "> attribute '" + attName + "'", saxLocator);
+			}
+
+			if (StringUtils.isEmpty(name))
+				throw new SAXParseException("<" + SIM_XML_VAR + ">: must specify '" + SIM_XML_ATTR_NAME + "'", saxLocator);
+
+			vars.put(name, value);
+			System.setProperty(name,  value);
+			TNT4JSimulator.trace(simCurrTime, "Defining " + curElement + " variable: [" + name  + "=" + value +"] ...");
+
+		} catch (Exception e) {
+			if (e instanceof SAXException)
+				throw (SAXException)e;
+			throw new SAXException("Failed processing definition for variable '" + name + "': " + e, e);
+		}
 	}
 
 	private void recordSource(Attributes attributes) throws SAXException {
@@ -257,7 +294,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
 				String attName  = attributes.getQName(i);
-				String attValue = attributes.getValue(i);
+				String attValue = expandEnvVars(attributes.getValue(i));
 
 				if (attName.equals(SIM_XML_ATTR_ID))
 					id = Integer.parseInt(attValue);
@@ -327,7 +364,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
 				String attName  = attributes.getQName(i);
-				String attValue = attributes.getValue(i);
+				String attValue = expandEnvVars(attributes.getValue(i));
 
 				if (attName.equals(SIM_XML_ATTR_NAME)) {
 					name = attValue;
@@ -371,7 +408,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
 				String attName  = attributes.getQName(i);
-				String attValue = attributes.getValue(i);
+				String attValue = expandEnvVars(attributes.getValue(i));
 
 				if (attName.equals(SIM_XML_ATTR_NAME))
 					name = attValue;
@@ -401,7 +438,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		} catch (Exception e) {
 			if (e instanceof SAXException)
 				throw (SAXException)e;
-			throw new SAXException("Failed processing definition for snapshot '" + name + "': " + e, e);
+			throw new SAXException("Failed processing definition for property '" + name + "': " + e, e);
 		}
 	}
 
@@ -460,7 +497,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
 				String attName  = attributes.getQName(i);
-				String attValue = attributes.getValue(i);
+				String attValue = expandEnvVars(attributes.getValue(i));
 
 				if (attName.equals(SIM_XML_ATTR_ID)) {
 					id = Integer.parseInt(attValue);
@@ -600,7 +637,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
 				String attName  = attributes.getQName(i);
-				String attValue = attributes.getValue(i);
+				String attValue = expandEnvVars(attributes.getValue(i));
 
 				if (attName.equals(SIM_XML_ATTR_NAME)) {
 					name = attValue;
@@ -728,7 +765,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private void runEvent(Attributes attributes) throws SAXException {
 		TNT4JSimulator.trace(simCurrTime, "Started event ...");
 
-		String name = attributes.getValue(SIM_XML_ATTR_NAME);
+		String name = expandEnvVars(attributes.getValue(SIM_XML_ATTR_NAME));
 
 		if (StringUtils.isEmpty(name))
 			throw new SAXParseException("<" + SIM_XML_EVENT + ">: '" + SIM_XML_ATTR_NAME + "' must be specified", saxLocator);
@@ -740,11 +777,11 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		OpLevel    severity = OpLevel.SUCCESS;
 		String     valStr;
 
-		valStr = attributes.getValue(SIM_XML_ATTR_TYPE);
+		valStr = expandEnvVars(attributes.getValue(SIM_XML_ATTR_TYPE));
 		if (!StringUtils.isEmpty(valStr))
 			type = OpType.valueOf(valStr);
 
-		valStr = attributes.getValue(SIM_XML_ATTR_SEVERITY);
+		valStr = expandEnvVars(attributes.getValue(SIM_XML_ATTR_SEVERITY));
 		if (!StringUtils.isEmpty(valStr))
 			severity = OpLevel.valueOf(valStr);
 
@@ -766,7 +803,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
 				String attName  = attributes.getQName(i);
-				String attValue = attributes.getValue(i);
+				String attValue = expandEnvVars(attributes.getValue(i));
 
 				if (attName.equals(SIM_XML_ATTR_NAME)) {
 					// handled above
@@ -924,7 +961,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 		for (i = 0; i < attributes.getLength(); i++) {
 			String attName  = attributes.getQName(i);
-			String attValue = attributes.getValue(i);
+			String attValue = expandEnvVars(attributes.getValue(i));
 
 			if (attName.equals(SIM_XML_ATTR_MSEC))
 				usec = Long.parseLong(attValue) * 1000L;
@@ -940,6 +977,17 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		}
 	}
 
+	/**
+	 * Resolve variable given name to a global variable.
+	 * Global variables are referenced using: ${var} convention.
+	 *
+	 * @param text object to use
+	 * @return resolved variable or itself if not a variable
+	 */
+	public String expandEnvVars(String text) {        
+		return StrSubstitutor.replaceSystemProperties(sub.replace(text));
+	}
+		
 	/**
 	 * {@inheritDoc}
 	 */

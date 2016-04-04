@@ -69,7 +69,7 @@
 				  	<prop name="cs" type="STRING" value="client"/>
 				  </event>
 			  </activity>
-			  <activity name="RESPONSE_AVAILABLE_TIME" source="1" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="">
+			  <activity name="RESPONSE_AVAILABLE_TIME" source="1" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:234,RequestId:567">
 			  		<prop name="browser" type="STRING" value="Chrome"/>
 				  	<prop name="browserVersion" type="INTEGER" value="49"/>
 				  	<prop name="platform" type="STRING" value="Win32"/>
@@ -147,6 +147,14 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
 				    </event>
+				    <event name="ReadOrder" type="RECEIVE" source="3" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" sev="ERROR" corrs="OrderId:444,SessionId:234,RequestId:567" exc="SQLException: unknown column custid">
+				    	<prop name="browser" type="STRING" value="Chrome"/>
+					  	<prop name="browserVersion" type="INTEGER" value="49"/>
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="queryString" type="STRING" value=""/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
+					</event>
 				    <event name="PossibleFraud" type="SEND" source="7" elapsed="234" res="FRAUD.ORDERS.QUEUE" msg="1" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
@@ -156,24 +164,16 @@
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
 				    </event>
 				    <sleep msec="891"/>
-				    <event name="EvaluateFraud" type="RECEIVE" source="6" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1" sev="WARNING" exc="Possible fraud" corrs="OrderId:444">
+				    <event name="EvaluateFraud" type="RECEIVE" source="6" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1" sev="WARNING" exc="Possible fraud" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
-					 </event>					    
-				    <event name="ReadOrder" type="RECEIVE" source="3" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" sev="ERROR" corrs="OrderId:444,SessionId:234,RequestId:567" exc="SQLException: unknown column custid">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
-					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
-					  	<prop name="cs" type="STRING" value="server"/>
-					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
-					</event>					    
+					 </event>					    					    
 				    <sleep msec="11"/>
-				    <event name="SendShipment" type="SEND" source="3" elapsed="293" res="SHIP.ORDERS.QUEUE" msg="4">
+				    <event name="SendShipment" type="SEND" source="3" elapsed="293" res="SHIP.ORDERS.QUEUE" msg="4" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -191,7 +191,7 @@
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
 					</event>					    
 				    <sleep msec="412"/>
-				    <event name="PrepareShippingSlip" type="EVENT" source="5" elapsed="4821">
+				    <event name="PrepareShippingSlip" type="EVENT" source="5" elapsed="4821" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -200,7 +200,7 @@
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
 					</event>
 				    <sleep msec="835"/>
-				    <event name="SendConfirmation" type="SEND" source="5" elapsed="142" msg="5">
+				    <event name="SendConfirmation" type="SEND" source="5" elapsed="142" msg="5" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>

@@ -123,7 +123,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
 					</event>					    
-				    <event name="Validated" type="SEND" source="4"  elapsed="7189" res="ROUTE.ORDERS.QUEUE" msg="1" corrs="OrderId:444,SessionId:234,RequestId:567">
+				    <event name="Validated" type="SEND" source="4"  elapsed="7189" res="ROUTE.ORDERS.QUEUE" msg="2" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -131,7 +131,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>					 
 					</event>
-				    <event name="ReadAndRoute" type="RECEIVE" source="7" elapsed="626" res="ROUTE.ORDERS.QUEUE" msg="1" corrs="OrderId:444,SessionId:234,RequestId:567">
+				    <event name="ReadAndRoute" type="RECEIVE" source="7" elapsed="626" res="ROUTE.ORDERS.QUEUE" msg="2" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -139,7 +139,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
 					</event>
-				    <event name="ProcessPayment" type="SEND" source="7" elapsed="128" res="PAYMENT.ORDERS.QUEUE" msg="3" corrs="OrderId:444,SessionId:234,RequestId:567">
+				    <event name="ProcessPayment" type="SEND" source="7" elapsed="128" res="PAYMENT.ORDERS.QUEUE" msg="2" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -147,7 +147,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
 				    </event>
-				    <event name="ReadOrder" type="RECEIVE" source="3" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" sev="ERROR" corrs="OrderId:444,SessionId:234,RequestId:567" exc="SQLException: unknown column custid">
+				    <event name="ReadOrder" type="RECEIVE" source="3" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="2" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -155,7 +155,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
 					</event>
-				    <event name="PossibleFraud" type="SEND" source="7" elapsed="234" res="FRAUD.ORDERS.QUEUE" msg="1" corrs="OrderId:444,SessionId:234,RequestId:567">
+				    <event name="PossibleFraud" type="SEND" source="3" elapsed="234" res="FRAUD.ORDERS.QUEUE" msg="2" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -164,7 +164,7 @@
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
 				    </event>
 				    <sleep msec="891"/>
-				    <event name="EvaluateFraud" type="RECEIVE" source="6" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1" sev="WARNING" exc="Possible fraud" corrs="OrderId:444,SessionId:234,RequestId:567">
+				    <event name="EvaluateFraud" type="RECEIVE" source="6" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="2" sev="SUCCESS" exc="Possible fraud" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -173,7 +173,7 @@
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
 					 </event>					    					    
 				    <sleep msec="11"/>
-				    <event name="SendShipment" type="SEND" source="3" elapsed="293" res="SHIP.ORDERS.QUEUE" msg="4" corrs="OrderId:444,SessionId:234,RequestId:567">
+				    <event name="SendShipment" type="SEND" source="3" elapsed="293" res="SHIP.ORDERS.QUEUE" msg="2" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -182,7 +182,7 @@
 					    <prop name="methodStack" type="STRING" value="method1:333, method2:333, method3:333" valtype="age.usec"/>
 					</event>
 				    <sleep msec="512"/>
-				    <event name="ReadOrderContents" type="RECEIVE" source="5" elapsed="32679" res="SHIP.ORDERS.QUEUE" msg="4" msgage="7272" corrs="OrderId:444,SessionId:234,RequestId:567">
+				    <event name="ReadOrderContents" type="RECEIVE" source="5" elapsed="32679" res="SHIP.ORDERS.QUEUE" msg="2" msgage="7272" corrs="OrderId:444,SessionId:234,RequestId:567">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>

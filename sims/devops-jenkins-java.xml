@@ -18,7 +18,7 @@
           user="perfusr"/>
 
   
-  <msg id="1">Compiling myJava.java</msg>
+  <msg id="1">Compiling MyAppl.java</msg>
   <msg id="2">Compiling Utils.java</msg>
   <msg id="3">Compiling Tools.java</msg>
   <msg id="4">Creating package myappl.jar</msg>

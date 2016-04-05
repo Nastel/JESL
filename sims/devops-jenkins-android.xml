@@ -5,6 +5,7 @@
   <var name="pver"  value="1.1"/>
   <var name="build" value="15"/>
   <var name="mainApp" value="myAndroidApp"/>
+  <var name="utils" value="AndroidUtils"/>
   <var name="feature1" value="Voice"/>
   <var name="feature2" value="Video"/>
 
@@ -22,7 +23,7 @@
 
   
   <msg id="1">Compiling ${mainApp}.java</msg>
-  <msg id="2">Compiling Utils.java</msg>
+  <msg id="2">Compiling ${utils}.java</msg>
   <msg id="3">Compiling Tools.java</msg>
   <msg id="4">Creating package ${mainApp}.jar</msg>
   <msg id="5">Creating package utils.jar</msg>
@@ -47,7 +48,7 @@
   
   <activity name="Build" sev="SUCCESS" loc="11.0.0.2" user="jenkins" res="Project-${pname}" source="1">
     <event name="Gradle" type="CALL" elapsed="233" res="com/nastel/test/${mainApp}.java" msg="1" sev="SUCCESS"/>  
-    <event name="Gradle" type="CALL" elapsed="342" res="com/nastel/test/AndroidUtils.java" msg="2" sev="SUCCESS"/>  
+    <event name="Gradle" type="CALL" elapsed="342" res="com/nastel/test/${utils}.java" msg="2" sev="SUCCESS"/>  
     <event name="Gradle" type="CALL" elapsed="554" res="com/nastel/test/MobileTools.java" msg="3" sev="SUCCESS"/>  
 	<event name="Gradle" type="CALL" elapsed="554" res="com/nastel/test/VoiceTools.java" msg="22" sev="WARNING" exc="Deprecated API usage"/>  
     <event name="BuildEnd" type="SEND" elapsed="322" res="Project-${pname}" msg="11" sev="SUCCESS" corrs="{pname}-${pver}-b${build}"/>  

@@ -15,6 +15,39 @@
           user="mqm"/>
   <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=36.17497,-115.13722"
           user="mqm"/>
+  <var name="appCache"  value="1"/>
+  <var name="tcp"  value="2"/>
+  <var name="dns"  value="3"/>
+  <var name="request"  value="4"/>
+  <var name="receiveOrder"  value="5"/>
+  <var name="validateOrder"  value="6"/>
+  <var name="validateAndVerify"  value="7"/>
+  <var name="credit"  value="8"/>
+  <var name="validateCredit"  value="9"/>
+  <var name="validated"  value="10"/>
+  <var name="readAndRoute"  value="11"/>
+  <var name="processPayment"  value="12"/>
+  <var name="readOrder"  value="13"/>
+  <var name="possibleFraud"  value="14"/>
+  <var name="evaluateFraud"  value="15"/>
+  <var name="sendShipment"  value="16"/>
+  <var name="readOrderContents"  value="17"/>
+  <var name="prepareShippingSlip"  value="18"/>
+  <var name="sendConfirmation"  value="19"/>             
+  <var name="responseStart"  value="20"/>          
+  <var name="onLoad"  value="21"/>          
+  <var name="processing"  value="22"/>          
+  <var name="response"  value="23"/>      
+  <var name="zero" value="0"/>     
+  <var name="documentReadyTime" value="processing + response"/> 
+  <var name="pageRenderTime" value="onLoad + zero"/> 
+  <var name="frontEndTime" value="pageRenderTime + documentReadyTime"/>
+  <var name="documentProcessingTime" value="processing + zero"/>
+  <var name="documentDownloadTime" value="response + zero"/>
+  <var name="serverConnectionTime" value="appCache + tcp + dns"/>
+  <var name="responseAvailableTime" value="receiveOrder + validateOrder + validateAndVerify + credit + validateCredit + validated + readAndRoute + processPayment + readOrder + possibleFraud + evaluateFraud + sendShipment + readOrderContents + prepareShippingSlip + sendConfirmation"/>
+  <var name="firstByteTime" value="serverConnectionTime + responseAvailableTime"/>
+  <var name="endUserResponseTime" value="frontEndTime + firstByteTime"/>
 
   
   <msg id="1">AMAZON ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
@@ -30,6 +63,15 @@
 	 <prop name="platform" type="STRING" value="Win32"/>
 	 <prop name="queryString" type="STRING" value=""/>
 	 <prop name="cs" type="STRING" value="client"/>
+	 <prop name="END_USER_RESPONSE_TIME" type="INTEGER" value="${endUserResponseTime}"/>
+	 <prop name="FRONT_END_TIME" type="INTEGER" value="${frontEndTime}"/>
+	 <prop name="PAGE_RENDER_TIME" type="INTEGER" value="${onLoad}"/>
+	 <prop name="DOCUMENT_PROCESSING_TIME" type="INTEGER" value="${documentProcessingTime}"/>
+	 <prop name="DOCUMENT_DOWNLOAD_TIME" type="INTEGER" value="${documentDownloadTime}"/>
+	 <prop name="SERVER_CONNECTION_TIME" type="INTEGER" value="${serverConnectionTime}"/>
+	 <prop name="RESPONSE_AVAILABLE_TIME" type="INTEGER" value="${responseAvailableTime}"/>
+	 <prop name="DOCUMENT_READY_TIME" type="INTEGER" value="${documentReadyTime}"/>
+	 <prop name="FIRST_BYTE_TIME" type="INTEGER" value="${firstByteTime}"/>
 	  <activity name="END_USER_RESPONSE_TIME" source="1" sev="SUCCESS" loc="11.0.0.2" user="webuser" corrs="SessionId:234,RequestId:567">
 	  	  <prop name="browser" type="STRING" value="Chrome"/>
 		  <prop name="browserVersion" type="INTEGER" value="49"/>

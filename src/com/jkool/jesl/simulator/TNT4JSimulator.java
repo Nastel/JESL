@@ -239,13 +239,14 @@ public class TNT4JSimulator {
 
 		System.out.println("\nValid arguments:\n");
 		System.out.println("  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-f:<sim_def_file_name>]");
-		System.out.println("                              [-p:<percentage>] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>]\n");
+		System.out.println("                              [-p:<percentage>] [-V:name=value] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>]\n");
 		System.out.println("  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n");
 		System.out.println("  for usage information:  help\n");
 		System.out.println("where:");
 		System.out.println("    -A    -  jKoolCloud access token (required with '-T')");
 		System.out.println("    -T    -  Host name or IP address of jKoolCloud service");
 		System.out.println("             (if not specified, data is not sent to jKoolCloud service)");
+		System.out.println("    -V    -  Define a global variable (property) name=value pair");
 		System.out.println("    -P    -  Port jKoolCloud service is listening on (default: 6500)");
 		System.out.println("    -C    -  Connection type to use for jKoolCloud service (default: tcp)");
 		System.out.println("    -f    -  Use <sim_def_file_name> as simulation configuration");
@@ -270,7 +271,7 @@ public class TNT4JSimulator {
 		System.out.format("Arguments: runype=%s, url=%s://%s:%d, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s, jkFile=%s\n", 
 				runType, jkProtocol, jkHost, jkPort, generateValues, uniqueTags, uniqueCorrs, uniqueIds, valuePctChg, simFileName, jkFileName);
 	}
-	private static void processArgs(String[] args) {
+	private static void processArgs(TNT4JSimulatorParserHandler xmlHandler, String[] args) {
 		if (args.length == 0)
 			printUsage("Missing simulation type");
 
@@ -296,33 +297,36 @@ public class TNT4JSimulator {
 				jkAccessToken = arg.substring(3);
 				if (StringUtils.isEmpty(jkAccessToken))
 					printUsage("Missing <access_token> for '-A' argument");
-			}
-			else if (arg.startsWith("-T:")) {
+			} else if (arg.startsWith("-V:")) {
+				String [] var = arg.substring(3).split("=");
+				if (var.length == 2) {
+					System.out.println("Defining variable: '" + var[0] + "=" + var[1] + "'");
+					xmlHandler.setVar(var[0], var[1]);
+				} else {
+					printUsage("Variable must have name=value pair");
+				}
+			} else if (arg.startsWith("-T:")) {
 				jkHost = arg.substring(3);
 				if (StringUtils.isEmpty(jkHost))
 					printUsage("Missing <jk_host> for '-T' argument");
-			}
-			else if (arg.startsWith("-P:")) {
+			} else if (arg.startsWith("-P:")) {
 				try {
 					jkPort = Integer.parseInt(arg.substring(3));
 				}
 				catch (NumberFormatException e) {
 					printUsage("Missing or invalid <jk_port> for '-P' argument");
 				}
-			}
-			else if (arg.startsWith("-C:")) {
+			} else if (arg.startsWith("-C:")) {
 				jkProtocol = arg.substring(3).toLowerCase();
 				if (!"tcp".equals(jkProtocol) && !"http".equals(jkProtocol) && !"https".equals(jkProtocol))
 					printUsage("Invalid connection protocol for '-C' argument (must be one of: 'tcp', 'http', 'https')");
-			}
-			else if (runType == SimulatorRunType.RUN_SIM || runType == SimulatorRunType.REPLAY_SIM) {
+			} else if (runType == SimulatorRunType.RUN_SIM || runType == SimulatorRunType.REPLAY_SIM) {
 				if (arg.startsWith("-G:")) {
 					jkFileName = arg.substring(3);
 					if (StringUtils.isEmpty(jkFileName))
 						printUsage("Missing <jk_file_name> for '-G' argument");
 					jkProtocol = "file";
-				}
-				else if (runType == SimulatorRunType.RUN_SIM) {
+				} else if (runType == SimulatorRunType.RUN_SIM) {
 					if (arg.startsWith("-f:")) {
 						simFileName = arg.substring(3);
 						if (StringUtils.isEmpty(simFileName))
@@ -341,16 +345,14 @@ public class TNT4JSimulator {
 						}
 						if (numIterations <= 0)
 							printUsage("<iterations> for '-i' argument must be > 0");
-					}
-					else if (arg.startsWith("-p:")) {
+					} else if (arg.startsWith("-p:")) {
 						String percentStr = arg.substring(3);
 						if (StringUtils.isEmpty(percentStr))
 							printUsage("Missing <percentage> for '-p' argument");
 						valuePctChg = Integer.parseInt(percentStr);
 						if (valuePctChg < 0 || valuePctChg > 100)
 							printUsage("Percentage for varying values ('-p' argument) must be in the range [0,100)");
-					}
-					else if (arg.startsWith("-t:")) {
+					} else if (arg.startsWith("-t:")) {
 						String ttlStr = arg.substring(3);
 						try {
 							ttl = Long.parseLong(ttlStr);
@@ -363,8 +365,7 @@ public class TNT4JSimulator {
 							else
 								printUsage("Invalid <ttl_hours> for '-t' argument (" + arg.substring(3) + ")");
 						}
-					}
-					else if (arg.equals("-ut")) {
+					} else if (arg.equals("-ut")) {
 						uniqueTags = true;
 					} else if (arg.equals("-uc")) {
 						uniqueCorrs = true;
@@ -374,19 +375,15 @@ public class TNT4JSimulator {
 						uniqueTags = true;
 						uniqueCorrs = true;
 						uniqueIds = true;
-					}
-					else if (arg.equals("-g")) {
+					} else if (arg.equals("-g")) {
 						generateValues = true;
-					}
-					else {
+					} else {
 						invalidArg = true;
 					}
-				}
-				else {
+				} else {
 					invalidArg = true;
 				}
-			}
-			else {
+			} else {
 				invalidArg = true;
 			}
 
@@ -428,7 +425,7 @@ public class TNT4JSimulator {
 			SAXParser                   theParser     = parserFactory.newSAXParser();
 			TNT4JSimulatorParserHandler xmlHandler    = new TNT4JSimulatorParserHandler();
 
-			processArgs(args);
+			processArgs(xmlHandler, args);
 
 			TrackerConfig simConfig = DefaultConfigFactory.getInstance().getConfig(TNT4JSimulator.class.getName());
 			logger = TrackingLogger.getInstance(simConfig.build());

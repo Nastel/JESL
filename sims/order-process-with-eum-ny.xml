@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <tnt4j-simulator>
 
-  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.72#DATACENTER=DC1#GEOADDR=40.84288,-73.29289"
+  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.72#DATACENTER=DC14#GEOADDR=40.84288,-73.29289"
           user="webuser" url="https://www.sample.com/orders/parts"/>
   <source id="2" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=34.05223,-118.24368"
           user="ebay-proc"/>

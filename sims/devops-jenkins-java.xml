@@ -41,21 +41,21 @@
   <msg id="21">High: Remote Code Execution during object de-serialization</msg>
  
   
-  <activity name="Build" sev="SUCCESS" loc="11.0.0.2" user="jenkins" res="Project-${pname}" source="1">
+  <activity name="Build" sev="SUCCESS" loc="11.0.0.2" user="jenkins" res="${pname}-${pver}-b${build}" source="1">
     <event name="Maven" type="CALL" elapsed="233" res="com/nastel/test/MyAppl.java" msg="1" sev="SUCCESS"/>  
     <event name="Maven" type="CALL" elapsed="342" res="com/nastel/test/Utils.java" msg="2" sev="SUCCESS"/>  
     <event name="Maven" type="CALL" elapsed="554" res="com/nastel/test/Tools.java" msg="3" sev="SUCCESS"/>  
     <event name="BuildEnd" type="SEND" elapsed="322" res="Project-${pname}" msg="11" sev="SUCCESS" corrs="{pname}-${pver}-b${build}"/>  
   </activity>
   
-  <activity name="Package" sev="SUCCESS" loc="11.0.0.10" user="mavenusr" res="Project-${pname}" source="2">
+  <activity name="Package" sev="SUCCESS" loc="11.0.0.10" user="mavenusr" res="${pname}-${pver}-b${build}" source="2">
     <event name="JarStart" type="RECEIVE" elapsed="423" res="Project-${pname}" msg="11" sev="SUCCESS" corrs="{pname}-${pver}-b${build}"/>  
     <event name="Jar" type="CALL" elapsed="233" res="myappl.jar" msg="4" sev="SUCCESS" />  
     <event name="Jar" type="CALL" elapsed="4234" res="utils.jar" msg="5" sev="SUCCESS" />  
     <event name="JarEnd" type="SEND" elapsed="423" res="Project-${pname}" msg="13" sev="SUCCESS" corrs="{pname}-${pver}-b${build}"/>  
   </activity>
   
-  <activity name="Deploy" sev="WARNING" loc="162.123.74.18" user="depl-usr" res="Project-${pname}" source="3">
+  <activity name="Deploy" sev="WARNING" loc="162.123.74.18" user="depl-usr" res="${pname}-${pver}-b${build}" source="3">
     <event name="DeployStart" type="RECEIVE" elapsed="423" res="Project-${pname}" msg="13" sev="SUCCESS" corrs="{pname}-${pver}-b${build}" />  
     <event name="Vulnerability" type="EVENT" elapsed="2342" res="commons-collections-3.2.2.jar" msg="6" sev="WARNING" tags="CWE-502" />  
     <event name="Vulnerability" type="EVENT" elapsed="3212" res="commons-collections-3.2.2.jar" msg="21" sev="CRITICAL" tags="CVE-2015-4852,CVE-2015-7501" />  
@@ -65,14 +65,14 @@
     <event name="DeployEnd" type="SEND" elapsed="543" res="Project-${pname}" msg="15" sev="WARNING" corrs="{pname}-${pver}-b${build}" />  
   </activity>
   
-  <activity name="AcceptanceTest" sev="WARNING" loc="182.175.23.34" user="qausr" res="Project-${pname}" source="4">
+  <activity name="AcceptanceTest" sev="WARNING" loc="182.175.23.34" user="qausr" res="${pname}-${pver}-b${build}" source="4">
     <event name="AcceptanceStart" type="RECEIVE" elapsed="423" res="Project-${pname}" msg="15" sev="SUCCESS" corrs="{pname}-${pver}-b${build}"/>  
     <event name="RunTest1" type="CALL" elapsed="33432" res="myAppl-MySQL" msg="8" sev="SUCCESS"/>  
     <event name="RunTest2" type="CALL" elapsed="23478" res="myAppl-Oracle" msg="9" sev="ERROR" tags="ORA-01017" exc="Failed to run test 13: SQLException(ORA-01017)"/>  
     <event name="AcceptanceEnd" type="SEND" elapsed="645" res="Project-${pname}" msg="17" sev="WARNING" exc="Completed with errors" corrs="{pname}-${pver}-b${build}"/>  
   </activity>
 
-  <activity name="PerformanceTest" sev="WARNING" loc="162.159.122.123" user="perfusr" res="Project-${pname}" source="5">
+  <activity name="PerformanceTest" sev="WARNING" loc="162.159.122.123" user="perfusr" res="${pname}-${pver}-b${build}" source="5">
     <event name="PerfTestStart" type="RECEIVE" elapsed="543" res="Project-${pname}" msg="17" sev="SUCCESS" corrs="{pname}-${pver}-b${build}"/>  
     <event name="ResponseTimeTest-MySQL" type="CALL" elapsed="3737" res="myAppl-MySQL" msg="10" sev="SUCCESS"/>  
     <event name="ResponseTimeTest-Oracle" type="CALL" elapsed="23478" res="myAppl-Oracle" msg="9" tags="ORA-01403" sev="WARNING" exc="Timeout: SQLException(ORA-01403)" />  

@@ -187,14 +187,14 @@
 				  	<prop name="platform" type="STRING" value="Win32"/>
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
-				   	<event name="REQUEST" source="1" sev="SUCCESS" type="SEND" elapsed="${request}" loc="${netAddr}" user="webuser" corrs="${corrs}, ${orderId}" >
+				   	<event name="REQUEST" source="1" sev="SUCCESS" type="SEND" elapsed="${request}" loc="${netAddr}" user="webuser" >
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="client"/>
 					</event>
-				    <event name="ReceiveOrder" source="1" type="RECEIVE" elapsed="${receiveOrder}" res="order database" msg="1" corrs="${orderId},${corrs}">
+				    <event name="ReceiveOrder" source="1" type="RECEIVE" elapsed="${receiveOrder}" res="order database" msg="1">
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -202,7 +202,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="parseOrderFields:${receiveOrderMethod1},calculateOrderFields:${receiveOrderMethod2},saveOrder:${receiveOrderMethod3}" valtype="age.usec"/>			    
 					</event>
-				    <event name="ValidateOrder" source="1" type="SEND" elapsed="${validateOrder}" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="${orderId},${corrs}">
+				    <event name="ValidateOrder" source="1" type="SEND" elapsed="${validateOrder}" res="VALIDATE.ORDERS.QUEUE" msg="2">
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -212,7 +212,7 @@
 					</event>
 				    <sleep usec="121"/>
 				  	<sleep msec="163"/>
-				    <event name="ValidateAndVerify" source="2" type="RECEIVE" elapsed="${validateAndVerify}" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="${orderId},${corrs}">
+				    <event name="ValidateAndVerify" source="2" type="RECEIVE" elapsed="${validateAndVerify}" res="VALIDATE.ORDERS.QUEUE" msg="2">
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -220,7 +220,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="verifyCreditCard:${validateAndVerifyMethod1},verifyExpirationDate:${validateAndVerifyMethod2},verifyPaypal:${validateAndVerifyMethod3}" valtype="age.usec"/>				 
 					</event>
-				    <event name="Credit" type="SEND" source="2" elapsed="${credit}" res="CREDIT.ORDERS.QUEUE" msg="2" corrs="${orderId},${corrs}">
+				    <event name="Credit" type="SEND" source="2" elapsed="${credit}" res="CREDIT.ORDERS.QUEUE" msg="2">
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -228,7 +228,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="saveCreditCard:${creditMethod1},saveBillingAddress:${creditMethod2},saveBillingTo:${creditMethod3}" valtype="age.usec"/>		
 					</event>
-				    <event name="ValidateCredit" type="RECEIVE" source="4" elapsed="${validateCredit}" res="CREDIT.ORDERS.QUEUE" msg="2" corrs="${orderId},${corrs}">
+				    <event name="ValidateCredit" type="RECEIVE" source="4" elapsed="${validateCredit}" res="CREDIT.ORDERS.QUEUE" msg="2">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -236,7 +236,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="validateCreditCardNumber:${validateCreditMethod1},validateCreditCardAddress:${validateCreditMethod2},validateCreditCardExpirationDate:${validateCreditMethod3}" valtype="age.usec"/>			
 					</event>					    
-				    <event name="Validated" type="SEND" source="4"  elapsed="${validated}" res="ROUTE.ORDERS.QUEUE" msg="2" corrs="${orderId},${corrs}">
+				    <event name="Validated" type="SEND" source="4"  elapsed="${validated}" res="ROUTE.ORDERS.QUEUE" msg="2">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -244,7 +244,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="flagOrderValid:${validatedMethod1},sendToRoutingQueue:${validatedMethod2}" valtype="age.usec"/>
 					</event>
-				    <event name="ReadAndRoute" type="RECEIVE" source="7" elapsed="${readAndRoute}" res="ROUTE.ORDERS.QUEUE" msg="2" corrs="${orderId},${corrs}">
+				    <event name="ReadAndRoute" type="RECEIVE" source="7" elapsed="${readAndRoute}" res="ROUTE.ORDERS.QUEUE" msg="2">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -252,7 +252,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="readOrder:${readAndRouteMethod1},identifyProcessingQueue:${readAndRouteMethod2},sendToProcessingQueue:${readAndRouteMethod3}" valtype="age.usec"/>			
 					</event>
-				    <event name="ProcessPayment" type="SEND" source="7" elapsed="${processPayment}" res="PAYMENT.ORDERS.QUEUE" msg="2" corrs="${orderId},${corrs}">
+				    <event name="ProcessPayment" type="SEND" source="7" elapsed="${processPayment}" res="PAYMENT.ORDERS.QUEUE" msg="2">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -260,7 +260,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="receivePayment:${processPaymentMethod1},processPayment:${processPaymentMethod2},sendToFraudEvaluation:${processPaymentMethod3}" valtype="age.usec"/>		   
 				    </event>
-				    <event name="ReadOrder" type="RECEIVE" source="3" elapsed="${readOrder}" res="PAYMENT.ORDERS.QUEUE" msg="2" corrs="${orderId},${corrs}">
+				    <event name="ReadOrder" type="RECEIVE" source="3" elapsed="${readOrder}" res="PAYMENT.ORDERS.QUEUE" msg="2">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -268,7 +268,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="readOrder:${readOrderMethod1},parseOrder:${readOrderMethod2}" valtype="age.usec"/>				
 					</event>
-				    <event name="PossibleFraud" type="SEND" source="3" elapsed="${possibleFraud}" res="FRAUD.ORDERS.QUEUE" msg="2" corrs="${orderId},${corrs}">
+				    <event name="PossibleFraud" type="SEND" source="3" elapsed="${possibleFraud}" res="FRAUD.ORDERS.QUEUE" msg="2">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -277,7 +277,7 @@
 					    <prop name="methodStack" type="STRING" value="fraudDetectLevel1:${possibleFraudMethod1},fraudDetectLevel2:${possibleFraudMethod2},sendToFraudOrShippingQueue:${possibleFraudMethod3}" valtype="age.usec"/>		    
 					</event>
 				    <sleep msec="891"/>
-				    <event name="EvaluateFraud" type="RECEIVE" source="6" elapsed="${evaluateFraud}" res="FRAUD.ORDERS.QUEUE" msg="2" sev="SUCCESS" exc="Possible fraud" corrs="${orderId},${corrs}">
+				    <event name="EvaluateFraud" type="RECEIVE" source="6" elapsed="${evaluateFraud}" res="FRAUD.ORDERS.QUEUE" msg="2" sev="SUCCESS" exc="Possible fraud">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -286,7 +286,7 @@
 					    <prop name="methodStack" type="STRING" value="processFraudData:${evaluateFraudMethod1},saveFraudData:${evaluateFraudMethod2},alertFraudDept:${evaluateFraudMethod3}" valtype="age.usec"/>				 
 					</event>					    					    
 				    <sleep msec="11"/>
-				    <event name="SendShipment" type="SEND" source="3" elapsed="${sendShipment}" res="SHIP.ORDERS.QUEUE" msg="2" corrs="${orderId},${corrs}">
+				    <event name="SendShipment" type="SEND" source="3" elapsed="${sendShipment}" res="SHIP.ORDERS.QUEUE" msg="2">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -295,7 +295,7 @@
 					    <prop name="methodStack" type="STRING" value="validateShippingData:${sendShipmentMethod1},determineShippingMethod:${sendShipmentMethod2},sendToWarehouse:${sendShipmentMethod3}" valtype="age.usec"/>
 					</event>
 				    <sleep msec="512"/>
-				    <event name="ReadOrderContents" type="RECEIVE" source="5" elapsed="${readOrderContents}" res="SHIP.ORDERS.QUEUE" msg="2" msgage="7272" corrs="${orderId},${corrs}">
+				    <event name="ReadOrderContents" type="RECEIVE" source="5" elapsed="${readOrderContents}" res="SHIP.ORDERS.QUEUE" msg="2" msgage="7272">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -304,7 +304,7 @@
 					    <prop name="methodStack" type="STRING" value="parseOrderData:${readOrderContentsMethod1},parseShippingData:${readOrderContentsMethod2},updateOrderReadyToShip:${readOrderContentsMethod3}" valtype="age.usec"/>	
 					</event>					    
 				    <sleep msec="412"/>
-				    <event name="PrepareShippingSlip" type="EVENT" source="5" elapsed="${prepareShippingSlip}" corrs="${orderId},${corrs}">
+				    <event name="PrepareShippingSlip" type="EVENT" source="5" elapsed="${prepareShippingSlip}">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -313,7 +313,7 @@
 					    <prop name="methodStack" type="STRING" value="gatherShippingInformation:${prepareShippingSlipMethod1},printShippingSlip:${prepareShippingSlipMethod2},updateOrderShipped:${prepareShippingSlipMethod3}" valtype="age.usec"/>					
 					</event>
 				    <sleep msec="835"/>
-				    <event name="SendConfirmation" type="SEND" source="5" elapsed="${sendConfirmation}" msg="5" corrs="${orderId},${corrs}">
+				    <event name="SendConfirmation" type="SEND" source="5" elapsed="${sendConfirmation}" msg="5">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
@@ -321,7 +321,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="gatherShippingInformation:${sendConfirmationMethod1},sendConfirmation:${sendConfirmationMethod2}" valtype="age.usec"/>
 					</event>
-				    <event name="RESPONSE_START" source="1" sev="SUCCESS" type="RECEIVE" elapsed="${responseStart}" loc="${netAddr}" user="webuser" corrs="${corrs}, ${orderId}">
+				    <event name="RESPONSE_START" source="1" sev="SUCCESS" type="RECEIVE" elapsed="${responseStart}" loc="${netAddr}" user="webuser">
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>

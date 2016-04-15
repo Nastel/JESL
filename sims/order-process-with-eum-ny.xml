@@ -19,29 +19,29 @@
   <var name="netAddr"  value="11.0.0.72"/> 
   <var name="corrs" value="SessionId:123,RequestId:376"/>
   <var name="orderId" value="OrderId:333"/>
-  <var name="appCache"  value="1"/>
-  <var name="tcp"  value="2"/>
-  <var name="dns"  value="3"/>
-  <var name="request"  value="4"/>
-  <var name="receiveOrder"  value="5"/>
-  <var name="validateOrder"  value="6"/>
-  <var name="validateAndVerify"  value="7"/>
-  <var name="credit"  value="8"/>
-  <var name="validateCredit"  value="9"/>
-  <var name="validated"  value="10"/>
-  <var name="readAndRoute"  value="11"/>
-  <var name="processPayment"  value="12"/>
-  <var name="readOrder"  value="13"/>
-  <var name="possibleFraud"  value="14"/>
-  <var name="evaluateFraud"  value="15"/>
-  <var name="sendShipment"  value="16"/>
-  <var name="readOrderContents"  value="17"/>
-  <var name="prepareShippingSlip"  value="18"/>
-  <var name="sendConfirmation"  value="19"/>             
-  <var name="responseStart"  value="20"/>          
-  <var name="onLoad"  value="21"/>          
-  <var name="processing"  value="22"/>          
-  <var name="response"  value="23"/>      
+   <var name="appCache"  value="27"/>
+  <var name="tcp"  value="77"/>
+  <var name="dns"  value="103"/>
+  <var name="request"  value="205"/>
+  <var name="receiveOrder"  value="11"/>
+  <var name="validateOrder"  value="66"/>
+  <var name="validateAndVerify"  value="77"/>
+  <var name="credit"  value="201"/>
+  <var name="validateCredit"  value="34"/>
+  <var name="validated"  value="3"/>
+  <var name="readAndRoute"  value="75"/>
+  <var name="processPayment"  value="86"/>
+  <var name="readOrder"  value="17"/>
+  <var name="possibleFraud"  value="2"/>
+  <var name="evaluateFraud"  value="1"/>
+  <var name="sendShipment"  value="3"/>
+  <var name="readOrderContents"  value="18"/>
+  <var name="prepareShippingSlip"  value="2"/>
+  <var name="sendConfirmation"  value="3"/>             
+  <var name="responseStart"  value="3"/>          
+  <var name="onLoad"  value="44"/>          
+  <var name="processing"  value="6"/>          
+  <var name="response"  value="2"/>      
   <var name="zero" value="0"/>     
   <var name="documentReadyTime" value="processing + response"/> 
   <var name="pageRenderTime" value="onLoad + zero"/> 
@@ -49,7 +49,7 @@
   <var name="documentProcessingTime" value="processing + zero"/>
   <var name="documentDownloadTime" value="response + zero"/>
   <var name="serverConnectionTime" value="appCache + tcp + dns"/>
-  <var name="responseAvailableTime" value="receiveOrder + validateOrder + validateAndVerify + credit + validateCredit + validated + readAndRoute + processPayment + readOrder + possibleFraud + evaluateFraud + sendShipment + readOrderContents + prepareShippingSlip + sendConfirmation"/>
+  <var name="responseAvailableTime" value="request + responseStart + receiveOrder + validateOrder + validateAndVerify + credit + validateCredit + validated + readAndRoute + processPayment + readOrder + possibleFraud + evaluateFraud + sendShipment + readOrderContents + prepareShippingSlip + sendConfirmation"/>
   <var name="firstByteTime" value="serverConnectionTime + responseAvailableTime"/>
   <var name="endUserResponseTime" value="frontEndTime + firstByteTime"/>
   
@@ -210,8 +210,6 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="validateItemStockAvailable:${validateOrderMethod1}" valtype="age.usec"/>
 					</event>
-				    <sleep usec="121"/>
-				  	<sleep msec="163"/>
 				    <event name="ValidateAndVerify" source="2" type="RECEIVE" elapsed="${validateAndVerify}" res="queue::VALIDATE.ORDERS.QUEUE" msg="2" >
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
@@ -276,7 +274,6 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="fraudDetectLevel1:${possibleFraudMethod1},fraudDetectLevel2:${possibleFraudMethod2},sendToFraudOrShippingQueue:${possibleFraudMethod3}" valtype="age.usec"/>		    
 					</event>
-				    <sleep msec="891"/>
 				    <event name="EvaluateFraud" type="RECEIVE" source="6" elapsed="${evaluateFraud}" res="queue::FRAUD.ORDERS.QUEUE" msg="2" sev="SUCCESS" exc="Possible fraud" >
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
@@ -285,7 +282,6 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="processFraudData:${evaluateFraudMethod1},saveFraudData:${evaluateFraudMethod2},alertFraudDept:${evaluateFraudMethod3}" valtype="age.usec"/>				 
 					</event>					    					    
-				    <sleep msec="11"/>
 				    <event name="SendShipment" type="SEND" source="3" elapsed="${sendShipment}" res="queue::SHIP.ORDERS.QUEUE" msg="2" >
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
@@ -294,7 +290,6 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="validateShippingData:${sendShipmentMethod1},determineShippingMethod:${sendShipmentMethod2},sendToWarehouse:${sendShipmentMethod3}" valtype="age.usec"/>
 					</event>
-				    <sleep msec="512"/>
 				    <event name="ReadOrderContents" type="RECEIVE" source="5" elapsed="${readOrderContents}" res="queue::SHIP.ORDERS.QUEUE" msg="2" msgage="7272" >
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
@@ -303,7 +298,6 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="parseOrderData:${readOrderContentsMethod1},parseShippingData:${readOrderContentsMethod2},updateOrderReadyToShip:${readOrderContentsMethod3}" valtype="age.usec"/>	
 					</event>					    
-				    <sleep msec="412"/>
 				    <event name="PrepareShippingSlip" type="EVENT" source="5" elapsed="${prepareShippingSlip}" >
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
@@ -312,7 +306,6 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="gatherShippingInformation:${prepareShippingSlipMethod1},printShippingSlip:${prepareShippingSlipMethod2},updateOrderShipped:${prepareShippingSlipMethod3}" valtype="age.usec"/>					
 					</event>
-				    <sleep msec="835"/>
 				    <event name="SendConfirmation" type="SEND" source="5" elapsed="${sendConfirmation}" msg="5" >
 				    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>

@@ -19,28 +19,28 @@
   <var name="netAddr"  value="11.0.0.2"/> 
   <var name="corrs" value="SessionId:234,RequestId:567"/>
   <var name="orderId" value="OrderId:444"/>
-  <var name="appCache"  value="25"/>
-  <var name="tcp"  value="75"/>
-  <var name="dns"  value="100"/>
-  <var name="request"  value="200"/>
-  <var name="receiveOrder"  value="10"/>
-  <var name="validateOrder"  value="60"/>
-  <var name="validateAndVerify"  value="70"/>
+  <var name="appCache"  value="19"/>
+  <var name="tcp"  value="69"/>
+  <var name="dns"  value="85"/>
+  <var name="request"  value="106"/>
+  <var name="receiveOrder"  value="12"/>
+  <var name="validateOrder"  value="61"/>
+  <var name="validateAndVerify"  value="77"/>
   <var name="credit"  value="20"/>
   <var name="validateCredit"  value="30"/>
   <var name="validated"  value="1"/>
   <var name="readAndRoute"  value="74"/>
-  <var name="processPayment"  value="85"/>
-  <var name="readOrder"  value="15"/>
+  <var name="processPayment"  value="69"/>
+  <var name="readOrder"  value="14"/>
   <var name="possibleFraud"  value="3"/>
   <var name="evaluateFraud"  value="2"/>
   <var name="sendShipment"  value="6"/>
-  <var name="readOrderContents"  value="17"/>
+  <var name="readOrderContents"  value="18"/>
   <var name="prepareShippingSlip"  value="1"/>
-  <var name="sendConfirmation"  value="2"/>             
-  <var name="responseStart"  value="2"/>          
-  <var name="onLoad"  value="43"/>          
-  <var name="processing"  value="5"/>          
+  <var name="sendConfirmation"  value="3"/>             
+  <var name="responseStart"  value="3"/>          
+  <var name="onLoad"  value="44"/>          
+  <var name="processing"  value="4"/>          
   <var name="response"  value="1"/>      
   <var name="zero" value="0"/>     
   <var name="documentReadyTime" value="processing + response"/> 

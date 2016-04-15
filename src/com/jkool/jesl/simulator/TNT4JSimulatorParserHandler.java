@@ -259,11 +259,36 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			for (int i = 0; i < attributes.getLength(); i++) {
 				String attName  = attributes.getQName(i);
 				String attValue = expandEnvVars(attributes.getValue(i));
+				double valueNext = 0;
+				double totalValue = 0;
+				String symbol = null;
 
 				if (attName.equals(SIM_XML_ATTR_NAME))
 					name = attValue;
 				else if (attName.equals(SIM_XML_ATTR_VALUE))
+				{
 					value = attValue;
+					// If addition or multiplication are specified, then do the math. 
+					// For now, only one or the other is permitted.
+					if (value.indexOf("+") > 0 && (value.indexOf("*") > 0))
+						throw new SAXParseException ("Either multiplicaton or addition but not both are allowed", saxLocator);
+					else if ((value.indexOf("+") > 0 && (value.indexOf("*") < 0)) || (value.indexOf("*") > 0 && (value.indexOf("+") < 0)))
+					{
+						symbol = (value.indexOf("+") > 0) ? "+" : "*";
+						totalValue = symbol.equals("*") ? 1 : 0;
+						while (value.indexOf(symbol) > 0)
+						{
+							valueNext = Double.parseDouble(vars.get(value.substring(0, value.indexOf(symbol) - 1)));
+							if (symbol.equals("+"))
+								totalValue = totalValue + valueNext;
+							else 
+								totalValue = totalValue * valueNext;
+							value = value.substring(value.indexOf(symbol) + 2, value.length());
+						}
+						totalValue = symbol.equals("*") ? totalValue * Double.parseDouble(value) :  totalValue + Double.parseDouble(vars.get(value.substring(0, value.length())));
+						value = "" + totalValue;
+					}	
+				}
 				else
 					throw new SAXParseException("Unknown <" + SIM_XML_PROP + "> attribute '" + attName + "'", saxLocator);
 			}
@@ -941,7 +966,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 			elapsed = TNT4JSimulator.varyValue(elapsed);
 
-			if (msgId != null) {
+			if (msgId != null && msgId > 0) {
 				Message eventMsg = messageIds.get(msgId.intValue());
 				if (eventMsg == null) {
 					throw new SAXParseException("Undefined " + SIM_XML_ATTR_MSG + " '" + msgId + "' for <" + SIM_XML_EVENT + ">", saxLocator);

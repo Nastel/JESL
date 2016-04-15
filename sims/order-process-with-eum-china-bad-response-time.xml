@@ -19,29 +19,29 @@
   <var name="netAddr"  value="11.0.0.55"/> 
   <var name="corrs" value="SessionId:567,RequestId:890"/>
   <var name="orderId" value="OrderId:222"/>
- <var name="appCache"  value="30"/>
-  <var name="tcp"  value="50"/>
-  <var name="dns"  value="90"/>
-  <var name="request"  value="100"/>
-  <var name="receiveOrder"  value="5"/>
-  <var name="validateOrder"  value="50"/>
-  <var name="validateAndVerify"  value="71"/>
-  <var name="credit"  value="21"/>
-  <var name="validateCredit"  value="32"/>
-  <var name="validated"  value="1"/>
-  <var name="readAndRoute"  value="72"/>
-  <var name="processPayment"  value="2040"/>
-  <var name="readOrder"  value="16"/>
-  <var name="possibleFraud"  value="4"/>
-  <var name="evaluateFraud"  value="2"/>
-  <var name="sendShipment"  value="6"/>
-  <var name="readOrderContents"  value="17"/>
-  <var name="prepareShippingSlip"  value="1"/>
-  <var name="sendConfirmation"  value="2"/>             
-  <var name="responseStart"  value="2"/>          
-  <var name="onLoad"  value="46"/>          
-  <var name="processing"  value="5"/>          
-  <var name="response"  value="1"/>      
+ <var name="appCache"  value="30001"/>
+  <var name="tcp"  value="50384"/>
+  <var name="dns"  value="90111"/>
+  <var name="request"  value="100202"/>
+  <var name="receiveOrder"  value="5302"/>
+  <var name="validateOrder"  value="50028"/>
+  <var name="validateAndVerify"  value="71112"/>
+  <var name="credit"  value="21221"/>
+  <var name="validateCredit"  value="32576"/>
+  <var name="validated"  value="1001"/>
+  <var name="readAndRoute"  value="72290"/>
+  <var name="processPayment"  value="3040020"/>
+  <var name="readOrder"  value="16666"/>
+  <var name="possibleFraud"  value="444"/>
+  <var name="evaluateFraud"  value="221"/>
+  <var name="sendShipment"  value="656"/>
+  <var name="readOrderContents"  value="17049"/>
+  <var name="prepareShippingSlip"  value="1305"/>
+  <var name="sendConfirmation"  value="2302"/>             
+  <var name="responseStart"  value="2394"/>          
+  <var name="onLoad"  value="46039"/>          
+  <var name="processing"  value="5354"/>          
+  <var name="response"  value="1003"/>      
   <var name="zero" value="0"/>     
   <var name="documentReadyTime" value="processing + response"/> 
   <var name="pageRenderTime" value="onLoad + zero"/> 

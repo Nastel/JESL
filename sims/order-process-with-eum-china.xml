@@ -15,6 +15,8 @@
           user="mqm"/>
   <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15-Nevada#GEOADDR=36.17497,-115.13722"
           user="mqm"/>
+  <source id="8" fqn="APPL=WebClient#SERVER=None#NETADDR=199.178.172.12#DATACENTER=None#GEOADDR=22.28552,114.15769"
+          user="mqm"/>
           
   <var name="netAddr"  value="11.0.0.55"/> 
   <var name="corrs" value="SessionId:567,RequestId:890"/>
@@ -24,6 +26,7 @@
   <var name="dns"  value="100675"/>
   <var name="request"  value="200322"/>
   <var name="receiveOrder"  value="10324"/>
+  <var name="saveOrder"  value="1200"/>
   <var name="validateOrder"  value="55098"/>
   <var name="validateAndVerify"  value="70342"/>
   <var name="credit"  value="20111"/>
@@ -60,10 +63,12 @@
   <var name="receiveOrderMethod1"  value="receiveOrder * .3"/>
   <var name="receiveOrderMethod2"  value="receiveOrder * .2"/>
   <var name="receiveOrderMethod3"  value="receiveOrder * .5"/>
+  
+  <var name="saveOrderMethod1"  value="receiveOrder * .3"/>
+  <var name="saveOrderMethod2"  value="receiveOrder * .2"/>
+  <var name="saveOrderMethod3"  value="receiveOrder * .5"/>
  
-  <var name="validateOrderMethod1"  value="validateOrder * .1"/>
-  <var name="validateOrderMethod2"  value="validateOrder * .1"/>
-  <var name="validateOrderMethod3"  value="validateOrder * .8"/>
+  <var name="validateOrderMethod1"  value="validateOrder * 1.0"/>
     
   <var name="validateAndVerifyMethod1"  value="validateAndVerify * .2"/>
   <var name="validateAndVerifyMethod2"  value="validateAndVerify * .2"/>
@@ -78,8 +83,7 @@
   <var name="validateCreditMethod3"  value="validateCredit * .4"/>
       
   <var name="validatedMethod1"  value="validated * .3"/>
-  <var name="validatedMethod2"  value="validated * .3"/>
-  <var name="validatedMethod3"  value="validated * .4"/>
+  <var name="validatedMethod2"  value="validated * .7"/>
       
   <var name="readAndRouteMethod1"  value="readAndRoute * .5"/>
   <var name="readAndRouteMethod2"  value="readAndRoute * .4"/>
@@ -90,8 +94,7 @@
   <var name="processPaymentMethod3"  value="processPayment * .3"/>
       
   <var name="readOrderMethod1"  value="readOrder * .2"/>
-  <var name="readOrderMethod2"  value="readOrder * .2"/>
-  <var name="readOrderMethod3"  value="readOrder * .5"/>
+  <var name="readOrderMethod2"  value="readOrder * .8"/>
       
   <var name="possibleFraudMethod1"  value="possibleFraud * .5"/>
   <var name="possibleFraudMethod2"  value="possibleFraud * .1"/>
@@ -127,7 +130,7 @@
   <msg id="6">Malformed expression</msg>
   
   
-  <activity name="EUM_SMRY" source="1" sev="SUCCESS" loc="${netAddr}" user="webuser" >
+  <activity name="EUM_SMRY" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >
   	 <prop name="browser" type="STRING" value="Chrome"/>
 	 <prop name="browserVersion" type="INTEGER" value="49"/>
 	 <prop name="platform" type="STRING" value="Win32"/>
@@ -142,38 +145,38 @@
 	 <prop name="RESPONSE_AVAILABLE_TIME" type="DECIMAL" value="${responseAvailableTime}"/>
 	 <prop name="DOCUMENT_READY_TIME" type="DECIMAL" value="${documentReadyTime}"/>
 	 <prop name="FIRST_BYTE_TIME" type="DECIMAL" value="${firstByteTime}"/>
-	 <activity name="END_USER_RESPONSE_TIME" source="1" sev="SUCCESS" loc="${netAddr}" user="webuser" >
+	 <activity name="END_USER_RESPONSE_TIME" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >
 	  	  <prop name="browser" type="STRING" value="Chrome"/>
 		  <prop name="browserVersion" type="INTEGER" value="49"/>
 		  <prop name="platform" type="STRING" value="Win32"/>
 		  <prop name="queryString" type="STRING" value=""/>
 		  <prop name="cs" type="STRING" value="client"/>
-		  <activity name="FIRST_BYTE_TIME" source="1" sev="SUCCESS" loc="${netAddr}" user="webuser" >
+		  <activity name="FIRST_BYTE_TIME" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >
 		  	  <prop name="browser" type="STRING" value="Chrome"/>
 			  <prop name="browserVersion" type="INTEGER" value="49"/>
 			  <prop name="platform" type="STRING" value="Win32"/>
 			  <prop name="queryString" type="STRING" value=""/>
 			  <prop name="cs" type="STRING" value="client"/>
-			  <activity name="SERVER_CONNECTION_TIME" source="1" sev="SUCCESS" loc="${netAddr}" user="webuser" >
+			  <activity name="SERVER_CONNECTION_TIME" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >
 			  	  <prop name="browser" type="STRING" value="Chrome"/>
 				  <prop name="browserVersion" type="INTEGER" value="49"/>
 				  <prop name="platform" type="STRING" value="Win32"/>
 				  <prop name="queryString" type="STRING" value=""/>
 				  <prop name="cs" type="STRING" value="client"/>
-				  <event name="APPCACHE" source="1" sev="SUCCESS" elapsed="${appCache}" loc="${netAddr}" user="webuser" >
+				  <event name="APPCACHE" source="8" sev="SUCCESS" elapsed="${appCache}" loc="${netAddr}" user="webuser" >
 				  	<prop name="browser" type="STRING" value="Chrome"/>
 				  	<prop name="browserVersion" type="INTEGER" value="49"/>
 				  	<prop name="platform" type="STRING" value="Win32"/>
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
 				  </event>
-				  <event name="TCP" source="1" sev="SUCCESS" elapsed="${tcp}" loc="${netAddr}" user="webuser" ></event>
+				  <event name="TCP" source="8" sev="SUCCESS" elapsed="${tcp}" loc="${netAddr}" user="webuser" ></event>
 				  	<prop name="browser" type="STRING" value="Chrome"/>
 				  	<prop name="browserVersion" type="INTEGER" value="49"/>
 				  	<prop name="platform" type="STRING" value="Win32"/>
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
-				  <event name="DNS" source="1" sev="SUCCESS" elapsed="${dns}" loc="${netAddr}" user="webuser" >
+				  <event name="DNS" source="8" sev="SUCCESS" elapsed="${dns}" loc="${netAddr}" user="webuser" >
 				  	<prop name="browser" type="STRING" value="Chrome"/>
 				  	<prop name="browserVersion" type="INTEGER" value="49"/>
 				  	<prop name="platform" type="STRING" value="Win32"/>
@@ -181,161 +184,127 @@
 				  	<prop name="cs" type="STRING" value="client"/>
 				  </event>
 			  </activity>
-			  <activity name="RESPONSE_AVAILABLE_TIME" source="1" sev="SUCCESS" loc="${netAddr}" user="webuser" >
+			  <activity name="RESPONSE_AVAILABLE_TIME" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >
 			  		<prop name="browser" type="STRING" value="Chrome"/>
 				  	<prop name="browserVersion" type="INTEGER" value="49"/>
 				  	<prop name="platform" type="STRING" value="Win32"/>
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
-				   	<event name="REQUEST" source="1" sev="SUCCESS" type="SEND" elapsed="${request}" loc="${netAddr}" user="webuser"  >
+				   	<event name="REQUEST" source="8" sev="SUCCESS" type="SEND" elapsed="${request}" loc="${netAddr}" res="queue::INCOMING.ORDERS.QUEUE" user="webuser" msg="2">
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="client"/>
 					</event>
-				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" res="database::order database" msg="1">
-					   	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
+				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE" msg="2">
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
-					    <prop name="methodStack" type="STRING" value="parseOrderFields:${receiveOrderMethod1},calculateOrderFields:${receiveOrderMethod2},saveOrder:${receiveOrderMethod3}" valtype="age.usec"/>			    
+					    <prop name="methodStack" type="STRING" value="parseOrderFields:${receiveOrderMethod1},calculateOrderFields:${receiveOrderMethod2},lookupOrderFields:${receiveOrderMethod3}" valtype="age.usec"/>		
+					    <prop name="connectionType" type="STRING" value="jdbc"/>	    
+					</event>
+					<event name="SaveOrder" source="1" elapsed="${saveOrder}" type="EVENT" res="database::order database" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="saveBilling:${saveOrderMethod1},saveShipping:${saveOrderMethod2},savePayment:${saveOrderMethod3}" valtype="age.usec"/>		
+					    <prop name="connectionType" type="STRING" value="jdbc"/>	    
 					</event>
 				    <event name="ValidateOrder" source="1" type="SEND" elapsed="${validateOrder}" res="queue::VALIDATE.ORDERS.QUEUE" msg="2">
-					   	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="validateItemStockAvailable:${validateOrderMethod1}" valtype="age.usec"/>
+					   	<prop name="connectionType" type="STRING" value="jmx"/>
 					</event>
 				    <event name="ValidateAndVerify" source="2" type="RECEIVE" elapsed="${validateAndVerify}" res="queue::VALIDATE.ORDERS.QUEUE" msg="2">
-					   	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
-					    <prop name="methodStack" type="STRING" value="verifyCreditCard:${validateAndVerifyMethod1},verifyExpirationDate:${validateAndVerifyMethod2},verifyPaypal:${validateAndVerifyMethod3}" valtype="age.usec"/>				 
+					    <prop name="methodStack" type="STRING" value="verifyCreditCard:${validateAndVerifyMethod1},verifyExpirationDate:${validateAndVerifyMethod2},verifyPaypal:${validateAndVerifyMethod3}" valtype="age.usec"/>	
+					    <prop name="connectionType" type="STRING" value="jmx"/>			 
 					</event>
 				    <event name="Credit" type="SEND" source="2" elapsed="${credit}" res="queue::CREDIT.ORDERS.QUEUE" msg="2">
-					   	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
-					    <prop name="methodStack" type="STRING" value="saveCreditCard:${creditMethod1},saveBillingAddress:${creditMethod2},saveBillingTo:${creditMethod3}" valtype="age.usec"/>		
+					    <prop name="methodStack" type="STRING" value="saveCreditCard:${creditMethod1},saveBillingAddress:${creditMethod2},saveBillingTo:${creditMethod3}" valtype="age.usec"/>	
+					    <prop name="connectionType" type="STRING" value="jmx"/>	
 					</event>
 				    <event name="ValidateCredit" type="RECEIVE" source="4" elapsed="${validateCredit}" res="queue::CREDIT.ORDERS.QUEUE" msg="2">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
-					    <prop name="methodStack" type="STRING" value="validateCreditCardNumber:${validateCreditMethod1},validateCreditCardAddress:${validateCreditMethod2},validateCreditCardExpirationDate:${validateCreditMethod3}" valtype="age.usec"/>			
+					    <prop name="methodStack" type="STRING" value="validateCreditCardNumber:${validateCreditMethod1},validateCreditCardAddress:${validateCreditMethod2},validateCreditCardExpirationDate:${validateCreditMethod3}" valtype="age.usec"/>		
+					    <prop name="connectionType" type="STRING" value="jmx"/>	
 					</event>					    
 				    <event name="Validated" type="SEND" source="4"  elapsed="${validated}" res="queue::ROUTE.ORDERS.QUEUE" msg="2">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="flagOrderValid:${validatedMethod1},sendToRoutingQueue:${validatedMethod2}" valtype="age.usec"/>
+					    <prop name="connectionType" type="STRING" value="jmx"/>
 					</event>
 				    <event name="ReadAndRoute" type="RECEIVE" source="7" elapsed="${readAndRoute}" res="queue::ROUTE.ORDERS.QUEUE" msg="2">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
-					    <prop name="methodStack" type="STRING" value="readOrder:${readAndRouteMethod1},identifyProcessingQueue:${readAndRouteMethod2},sendToProcessingQueue:${readAndRouteMethod3}" valtype="age.usec"/>			
+					    <prop name="methodStack" type="STRING" value="readOrder:${readAndRouteMethod1},identifyProcessingQueue:${readAndRouteMethod2},sendToProcessingQueue:${readAndRouteMethod3}" valtype="age.usec"/>		
+					    <prop name="connectionType" type="STRING" value="jmx"/>	
 					</event>
 				    <event name="ProcessPayment" type="SEND" source="7" elapsed="${processPayment}" res="queue::PAYMENT.ORDERS.QUEUE" msg="2">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
-					    <prop name="methodStack" type="STRING" value="receivePayment:${processPaymentMethod1},processPayment:${processPaymentMethod2},sendToFraudEvaluation:${processPaymentMethod3}" valtype="age.usec"/>		   
+					    <prop name="methodStack" type="STRING" value="receivePayment:${processPaymentMethod1},processPayment:${processPaymentMethod2},sendToFraudEvaluation:${processPaymentMethod3}" valtype="age.usec"/>		 
+					    <prop name="connectionType" type="STRING" value="jmx"/>  
 				    </event>
 				    <event name="ReadOrder" type="RECEIVE" source="3" elapsed="${readOrder}" res="queue::PAYMENT.ORDERS.QUEUE" msg="2">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
-					    <prop name="methodStack" type="STRING" value="readOrder:${readOrderMethod1},parseOrder:${readOrderMethod2}" valtype="age.usec"/>				
+					    <prop name="methodStack" type="STRING" value="readOrder:${readOrderMethod1},parseOrder:${readOrderMethod2}" valtype="age.usec"/>	
+					    <prop name="connectionType" type="STRING" value="jmx"/>			
 					</event>
 				    <event name="PossibleFraud" type="SEND" source="3" elapsed="${possibleFraud}" res="queue::FRAUD.ORDERS.QUEUE" msg="2">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
-					    <prop name="methodStack" type="STRING" value="fraudDetectLevel1:${possibleFraudMethod1},fraudDetectLevel2:${possibleFraudMethod2},sendToFraudOrShippingQueue:${possibleFraudMethod3}" valtype="age.usec"/>		    
+					    <prop name="methodStack" type="STRING" value="fraudDetectLevel1:${possibleFraudMethod1},fraudDetectLevel2:${possibleFraudMethod2},sendToFraudOrShippingQueue:${possibleFraudMethod3}" valtype="age.usec"/>		 
+					    <prop name="connectionType" type="STRING" value="jmx"/>   
 					</event>
 				    <event name="EvaluateFraud" type="RECEIVE" source="6" elapsed="${evaluateFraud}" res="queue::FRAUD.ORDERS.QUEUE" msg="2" sev="SUCCESS" exc="Possible fraud">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
-					    <prop name="methodStack" type="STRING" value="processFraudData:${evaluateFraudMethod1},saveFraudData:${evaluateFraudMethod2},alertFraudDept:${evaluateFraudMethod3}" valtype="age.usec"/>				 
+					    <prop name="methodStack" type="STRING" value="processFraudData:${evaluateFraudMethod1},saveFraudData:${evaluateFraudMethod2},alertFraudDept:${evaluateFraudMethod3}" valtype="age.usec"/>
+					    <prop name="connectionType" type="STRING" value="jmx"/>				 
 					</event>					    					    
 				    <event name="SendShipment" type="SEND" source="3" elapsed="${sendShipment}" res="queue::SHIP.ORDERS.QUEUE" msg="2">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="validateShippingData:${sendShipmentMethod1},determineShippingMethod:${sendShipmentMethod2},sendToWarehouse:${sendShipmentMethod3}" valtype="age.usec"/>
+					    <prop name="connectionType" type="STRING" value="jmx"/>
 					</event>
 				    <event name="ReadOrderContents" type="RECEIVE" source="5" elapsed="${readOrderContents}" res="queue::SHIP.ORDERS.QUEUE" msg="2" msgage="7272">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="parseOrderData:${readOrderContentsMethod1},parseShippingData:${readOrderContentsMethod2},updateOrderReadyToShip:${readOrderContentsMethod3}" valtype="age.usec"/>	
+					    <prop name="connectionType" type="STRING" value="jmx"/>
 					</event>					    
 				    <event name="PrepareShippingSlip" type="EVENT" source="5" elapsed="${prepareShippingSlip}">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="gatherShippingInformation:${prepareShippingSlipMethod1},printShippingSlip:${prepareShippingSlipMethod2},updateOrderShipped:${prepareShippingSlipMethod3}" valtype="age.usec"/>					
 					</event>
-				    <event name="SendConfirmation" type="SEND" source="5" elapsed="${sendConfirmation}" msg="5">
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
+				    <event name="RESPONSE_START" source="8"  msg="2" sev="SUCCESS" type="SEND" elapsed="${responseStart}">
 					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="server"/>
-					    <prop name="methodStack" type="STRING" value="gatherShippingInformation:${sendConfirmationMethod1},sendConfirmation:${sendConfirmationMethod2}" valtype="age.usec"/>
-					</event>
-				    <event name="RESPONSE_START" source="1" sev="SUCCESS" type="RECEIVE" elapsed="${responseStart}" loc="${netAddr}" user="webuser" >
-				    	<prop name="browser" type="STRING" value="Chrome"/>
-					  	<prop name="browserVersion" type="INTEGER" value="49"/>
-					  	<prop name="platform" type="STRING" value="Win32"/>
-					  	<prop name="queryString" type="STRING" value=""/>
-					  	<prop name="cs" type="STRING" value="client"/>
 					 </event>
    				</activity>
    		  </activity>
-		  <activity name="FRONT_END_TIME" source="1" sev="SUCCESS" loc="${netAddr}" user="webuser" >
+		  <activity name="FRONT_END_TIME" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >
 		  	<prop name="browser" type="STRING" value="Chrome"/>
 			<prop name="browserVersion" type="INTEGER" value="49"/>
 			<prop name="platform" type="STRING" value="Win32"/>
 			<prop name="queryString" type="STRING" value=""/>
 			<prop name="cs" type="STRING" value="client"/>
-		  	<activity name="PAGE_RENDER_TIME" source="1" sev="SUCCESS" loc="${netAddr}" user="webuser" >
+		  	<activity name="PAGE_RENDER_TIME" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >
 		  		<prop name="browser" type="STRING" value="Chrome"/>
 				<prop name="browserVersion" type="INTEGER" value="49"/>
 				<prop name="platform" type="STRING" value="Win32"/>
 				<prop name="queryString" type="STRING" value=""/>
 				<prop name="cs" type="STRING" value="client"/>
-		  	  	<event name="ONLOAD" source="1" sev="SUCCESS" elapsed="${onLoad}" loc="${netAddr}" user="webuser" >
+		  	  	<event name="ONLOAD" source="8" sev="SUCCESS" elapsed="${onLoad}" loc="${netAddr}" user="webuser" >
 		  	  		 <prop name="browser" type="STRING" value="Chrome"/>
 					 <prop name="browserVersion" type="INTEGER" value="49"/>
 					 <prop name="platform" type="STRING" value="Win32"/>
@@ -343,26 +312,26 @@
 					 <prop name="cs" type="STRING" value="client"/>
 		  	  	</event>
 		  	</activity>
-		  	<activity name="DOCUMENT_READY_TIME" source="1" sev="SUCCESS" loc="${netAddr}" user="webuser" >
+		  	<activity name="DOCUMENT_READY_TIME" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >
 		  		<prop name="browser" type="STRING" value="Chrome"/>
 				<prop name="browserVersion" type="INTEGER" value="49"/>
 				<prop name="platform" type="STRING" value="Win32"/>
 				<prop name="queryString" type="STRING" value=""/>
 				<prop name="cs" type="STRING" value="server"/>
-		  		<activity name="DOCUMENT_PROCESSING_TIME" source="1" sev="SUCCESS" loc="${netAddr}" user="webuser" >
+		  		<activity name="DOCUMENT_PROCESSING_TIME" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >
 		  			 <prop name="browser" type="STRING" value="Chrome"/>
 					 <prop name="browserVersion" type="INTEGER" value="49"/>
 					 <prop name="platform" type="STRING" value="Win32"/>
 					 <prop name="queryString" type="STRING" value=""/>
 					 <prop name="cs" type="STRING" value="client"/>
-		  		  	<event name="PROCESSING" source="1" sev="SUCCESS" elapsed="${processing}" loc="${netAddr}" user="webuser" >
+		  		  	<event name="PROCESSING" source="8" sev="SUCCESS" elapsed="${processing}" loc="${netAddr}" user="webuser" >
 			  		     <prop name="browser" type="STRING" value="Chrome"/>
 						 <prop name="browserVersion" type="INTEGER" value="49"/>
 						 <prop name="platform" type="STRING" value="Win32"/>
 						 <prop name="queryString" type="STRING" value=""/>
 						 <prop name="cs" type="STRING" value="client"/>
 		  		  	</event>
-		  		  	<event name="JAVASCRIPT_ERROR" source="1" sev="ERROR" elapsed="0"  msg="6"  exc="Malformed expression" loc="${netAddr}" user="webuser" >
+		  		  	<event name="JAVASCRIPT_ERROR" source="8" sev="ERROR" elapsed="0"  msg="6"  exc="Malformed expression" loc="${netAddr}" user="webuser" >
 						  <prop name="browser" type="STRING" value="Chrome"/>
 						  <prop name="browserVersion" type="INTEGER" value="49"/>
 						  <prop name="platform" type="STRING" value="Win32"/>
@@ -370,13 +339,13 @@
 						  <prop name="cs" type="STRING" value="client"/>
   					</event>
 		  		</activity>
-		  		<activity name="DOCUMENT_DOWNLOAD_TIME" source="1" sev="SUCCESS" loc="${netAddr}" user="webuser" >
+		  		<activity name="DOCUMENT_DOWNLOAD_TIME" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >
 		  			<prop name="browser" type="STRING" value="Chrome"/>
 					<prop name="browserVersion" type="INTEGER" value="49"/>
 					<prop name="platform" type="STRING" value="Win32"/>
 					<prop name="queryString" type="STRING" value=""/>
 					<prop name="cs" type="STRING" value="server"/>
-		  		    <event name="RESPONSE" source="1" sev="SUCCESS" elapsed="${response}" loc="${netAddr}" user="webuser" >
+		  		    <event name="RESPONSE" source="8" sev="SUCCESS" elapsed="${response}" loc="${netAddr}" user="webuser" >
 		  		    	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>

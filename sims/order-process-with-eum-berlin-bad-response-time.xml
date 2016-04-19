@@ -190,14 +190,14 @@
 				  	<prop name="platform" type="STRING" value="Win32"/>
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
-				   	<event name="REQUEST" source="8" sev="SUCCESS" type="SEND" elapsed="${request}" loc="${netAddr}" res="queue::INCOMING.ORDERS.QUEUE" user="webuser" msg="2">
+				   	<event name="REQUEST" source="8" sev="SUCCESS" type="SEND" elapsed="${request}" loc="${netAddr}" res="queue::INCOMING.ORDERS.QUEUE.BERLIN" user="webuser" msg="2">
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="client"/>
 					</event>
-				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE" msg="2">
+				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2">
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="parseOrderFields:${receiveOrderMethod1},calculateOrderFields:${receiveOrderMethod2},lookupOrderFields:${receiveOrderMethod3}" valtype="age.usec"/>		

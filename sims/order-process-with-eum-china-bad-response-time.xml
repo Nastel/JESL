@@ -46,7 +46,7 @@
   <var name="processing"  value="5354"/>          
   <var name="response"  value="1003"/>      
   <var name="zero" value="0000"/>
-  <var name="sleep" value="2822"/>     
+  <var name="sleep" value="3913"/>     
   <var name="documentReadyTime" value="processing + response"/> 
   <var name="pageRenderTime" value="onLoad + zero"/> 
   <var name="frontEndTime" value="pageRenderTime + documentReadyTime"/>

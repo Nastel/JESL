@@ -45,14 +45,15 @@
   <var name="onLoad"  value="44432"/>          
   <var name="processing"  value="4450"/>          
   <var name="response"  value="1003"/>      
-  <var name="zero" value="0"/>     
+  <var name="zero" value="0000"/>
+  <var name="sleep" value="2842"/>     
   <var name="documentReadyTime" value="processing + response"/> 
   <var name="pageRenderTime" value="onLoad + zero"/> 
   <var name="frontEndTime" value="pageRenderTime + documentReadyTime"/>
   <var name="documentProcessingTime" value="processing + zero"/>
   <var name="documentDownloadTime" value="response + zero"/>
   <var name="serverConnectionTime" value="appCache + tcp + dns"/>
-  <var name="responseAvailableTime" value="request + responseStart + receiveOrder + validateOrder + validateAndVerify + credit + validateCredit + validated + readAndRoute + processPayment + readOrder + possibleFraud + evaluateFraud + sendShipment + readOrderContents + prepareShippingSlip + sendConfirmation"/>
+  <var name="responseAvailableTime" value="responseStart + request + receiveOrder + saveOrder + sleep + validateOrder + validateAndVerify + credit + validateCredit + validated + readAndRoute + processPayment + readOrder + possibleFraud + evaluateFraud + sendShipment + readOrderContents + prepareShippingSlip"/>
   <var name="firstByteTime" value="serverConnectionTime + responseAvailableTime"/>
   <var name="endUserResponseTime" value="frontEndTime + firstByteTime"/>
   
@@ -215,6 +216,7 @@
 					    <prop name="methodStack" type="STRING" value="validateItemStockAvailable:${validateOrderMethod1}" valtype="age.usec"/>
 					   	<prop name="connectionType" type="STRING" value="jmx"/>
 					</event>
+					<sleep usec="131"/>
 				    <event name="ValidateAndVerify" source="2" type="RECEIVE" elapsed="${validateAndVerify}" res="queue::VALIDATE.ORDERS.QUEUE" msg="2">
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
@@ -227,6 +229,7 @@
 					    <prop name="methodStack" type="STRING" value="saveCreditCard:${creditMethod1},saveBillingAddress:${creditMethod2},saveBillingTo:${creditMethod3}" valtype="age.usec"/>	
 					    <prop name="connectionType" type="STRING" value="jmx"/>	
 					</event>
+					<sleep usec="160"/>
 				    <event name="ValidateCredit" type="RECEIVE" source="4" elapsed="${validateCredit}" res="queue::CREDIT.ORDERS.QUEUE" msg="2">
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
@@ -239,6 +242,7 @@
 					    <prop name="methodStack" type="STRING" value="flagOrderValid:${validatedMethod1},sendToRoutingQueue:${validatedMethod2}" valtype="age.usec"/>
 					    <prop name="connectionType" type="STRING" value="jmx"/>
 					</event>
+					<sleep usec="179"/>
 				    <event name="ReadAndRoute" type="RECEIVE" source="7" elapsed="${readAndRoute}" res="queue::ROUTE.ORDERS.QUEUE" msg="2">
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
@@ -251,6 +255,7 @@
 					    <prop name="methodStack" type="STRING" value="receivePayment:${processPaymentMethod1},processPayment:${processPaymentMethod2},sendToFraudEvaluation:${processPaymentMethod3}" valtype="age.usec"/>		 
 					    <prop name="connectionType" type="STRING" value="jmx"/>  
 				    </event>
+				    <sleep usec="220"/>
 				    <event name="ReadOrder" type="RECEIVE" source="3" elapsed="${readOrder}" res="queue::PAYMENT.ORDERS.QUEUE" msg="2">
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
@@ -263,18 +268,21 @@
 					    <prop name="methodStack" type="STRING" value="fraudDetectLevel1:${possibleFraudMethod1},fraudDetectLevel2:${possibleFraudMethod2},sendToFraudOrShippingQueue:${possibleFraudMethod3}" valtype="age.usec"/>		 
 					    <prop name="connectionType" type="STRING" value="jmx"/>   
 					</event>
+					<sleep usec="910"/>
 				    <event name="EvaluateFraud" type="RECEIVE" source="6" elapsed="${evaluateFraud}" res="queue::FRAUD.ORDERS.QUEUE" msg="2" sev="SUCCESS" exc="Possible fraud">
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="processFraudData:${evaluateFraudMethod1},saveFraudData:${evaluateFraudMethod2},alertFraudDept:${evaluateFraudMethod3}" valtype="age.usec"/>
 					    <prop name="connectionType" type="STRING" value="jmx"/>				 
-					</event>					    					    
+					</event>		
+					<sleep usec="60"/>			    					    
 				    <event name="SendShipment" type="SEND" source="3" elapsed="${sendShipment}" res="queue::SHIP.ORDERS.QUEUE" msg="2">
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="validateShippingData:${sendShipmentMethod1},determineShippingMethod:${sendShipmentMethod2},sendToWarehouse:${sendShipmentMethod3}" valtype="age.usec"/>
 					    <prop name="connectionType" type="STRING" value="jmx"/>
 					</event>
+					<sleep usec="748"/>
 				    <event name="ReadOrderContents" type="RECEIVE" source="5" elapsed="${readOrderContents}" res="queue::SHIP.ORDERS.QUEUE" msg="2" msgage="7272">
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
@@ -286,6 +294,7 @@
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="gatherShippingInformation:${prepareShippingSlipMethod1},printShippingSlip:${prepareShippingSlipMethod2},updateOrderShipped:${prepareShippingSlipMethod3}" valtype="age.usec"/>					
 					</event>
+					<sleep usec="454"/>
 				    <event name="RESPONSE_START" source="8"  msg="2" sev="SUCCESS" type="SEND" elapsed="${responseStart}">
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>

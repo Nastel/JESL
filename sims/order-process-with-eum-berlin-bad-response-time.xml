@@ -205,7 +205,7 @@
 					    <prop name="connectionType" type="STRING" value="jdbc"/>	    
 					</event>
 					<event name="SaveOrder" source="1" elapsed="${saveOrder}" type="EVENT" res="database::order database" msg="2">
-					  	<prop name="platform" type="STRING" value="Win32"/>
+ 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="saveBilling:${saveOrderMethod1},saveShipping:${saveOrderMethod2},savePayment:${saveOrderMethod3}" valtype="age.usec"/>		
 					    <prop name="connectionType" type="STRING" value="jdbc"/>	    

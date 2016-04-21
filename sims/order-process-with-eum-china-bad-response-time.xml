@@ -378,7 +378,7 @@
 		  			<prop name="browser" type="STRING" value="Chrome"/>
 					<prop name="browserVersion" type="INTEGER" value="49"/>
 					<prop name="platform" type="STRING" value="Win32"/>
-					<prop name="queryString" type="STRING" value=""/>
+					<prop name="queryString" type="STRING" value=""/> 
 					<prop name="cs" type="STRING" value="server"/>
 		  		    <event name="RESPONSE" source="8" sev="SUCCESS" elapsed="${response}" loc="${netAddr}" user="webuser" >
 		  		    	<prop name="browser" type="STRING" value="Chrome"/>

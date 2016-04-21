@@ -299,6 +299,32 @@
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					 </event>
+					 <snapshot name="CPU" cat="Java">
+					    <prop name="Count" type="INTEGER" value="8" valtype="size"/>
+					    <prop name="TotalCpuUsec" type="DECIMAL" value="78000.5" valtype="age.usec"/>
+					    <prop name="TotalCpuUserUsec" type="DECIMAL" value="62400.4" valtype="age.usec"/>
+					  </snapshot>
+					  <snapshot name="Thread" cat="Java">
+					    <prop name="Count" type="LONG" value="69" valtype="size"/>
+					    <prop name="DaemonCount" type="LONG" value="15" valtype="size"/>
+					    <prop name="StartedCount" type="LONG" value="71" valtype="size"/>
+					    <prop name="PeakCount" type="LONG" value="69" valtype="size"/>
+					    <prop name="BlockedCount" type="LONG" value="76" valtype="size"/>
+					    <prop name="WaitedCount" type="LONG" value="6" valtype="size"/>
+					    <prop name="BlockedUsec" type="LONG" value="36000" valtype="age.usec"/>
+					    <prop name="WaitUsec" type="LONG" value="8075000" valtype="age.usec"/>
+					  </snapshot>
+					  <snapshot name="Memory" cat="Java">
+					    <prop name="MaxBytes" type="LONG" value="7635533824" valtype="size"/>
+					    <prop name="TotalBytes" type="LONG" value="514523136" valtype="size"/>
+					    <prop name="FreeBytes" type="LONG" value="428179112" valtype="size"/>
+					    <prop name="UsedBytes" type="LONG" value="86344024" valtype="size"/>
+					    <prop name="Usage" type="LONG" value="16" valtype="percent"/>
+					  </snapshot>
+					  <snapshot name="JMX" cat="JMX">
+					    <prop name="queue" type="STRING" value="PAYMENT.ORDERS.QUEUE"/>
+					    <prop name="hitRatio" type="INTEGER" value="10" valtype="per-hour"/>
+					  </snapshot>
    				</activity>
    		  </activity>
 		  <activity name="FRONT_END_TIME" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >

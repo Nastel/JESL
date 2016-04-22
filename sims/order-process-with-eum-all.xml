@@ -93,9 +93,10 @@
   <var name="possibleFraudSleep" value="100000 bet 800000"/>
   <var name="evaluateFraudSleep" value="100000 bet 800000"/>
   <var name="sendShipmentSleep" value="100000 bet 800000"/>
-  <var name="prepareShippingSlipSleep" value="100000 bet 800000"/>             
+  <var name="prepareShippingSlipSleep" value="100000 bet 800000"/>           
+  <var name="requestSleep" value="100000 bet 800000"/>     
                 
-  <var name="responseAvailableTimeSleep" value="validateOrderSleep + creditSleep + validatedSleep + processPaymentSleep + possibleFraudSleep + evaluateFraudSleep + sendShipmentSleep + prepareShippingSlipSleep"/>      
+  <var name="responseAvailableTimeSleep" value="requestSleep + validateOrderSleep + creditSleep + validatedSleep + processPaymentSleep + possibleFraudSleep + evaluateFraudSleep + sendShipmentSleep + prepareShippingSlipSleep"/>      
   <var name="documentReadyTime" value="processing + response"/> 
   <var name="pageRenderTime" value="onLoad + zero"/> 
   <var name="frontEndTime" value="pageRenderTime + documentReadyTime"/>
@@ -247,6 +248,7 @@
 					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="client"/>
 					</event>
+					<sleep usec="${requestSleep}"/>
 					<!-- Bad in Berlin -->
 					<!-->event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" cc="ERROR" exc="Queue full, re-routing to dead letter queue." res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2"-->
 				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2">

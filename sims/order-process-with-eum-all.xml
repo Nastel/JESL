@@ -27,8 +27,23 @@
           user="mqm"/>
   <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15-Nevada#GEOADDR=36.17497,-115.13722"
           user="mqm"/>
+  <!-- Berlin -->
   <source id="8" fqn="APPL=WebClient#NETADDR=192.178.172.12#GEOADDR=52.52437,13.21053"
           user="mqm"/>
+
+  <!-- China 
+  <source id="8" fqn="APPL=WebClient#NETADDR=199.178.172.12#GEOADDR=22.28552,114.15769"
+          user="mqm"/>
+  -->
+  <!-- London
+  <source id="8" fqn="APPL=WebClient#NETADDR=163.178.172.12#GEOADDR=51.50853,-0.12574"
+          user="mqm"/>
+  -->
+  <!-- NY 
+  <source id="8" fqn="APPL=WebClient#NETADDR=133.178.172.12#GEOADDR=40.84288,-73.29289"
+          user="mqm"/>
+  -->
+
      
   <!-- Berlin -->     
   <var name="netAddr"  value="11.0.0.2"/> 

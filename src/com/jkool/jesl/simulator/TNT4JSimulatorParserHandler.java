@@ -138,6 +138,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private DefaultTrackerFactory	trackerFactory = new DefaultTrackerFactory();
 	private HashMap<String,Tracker>	trackers       = new HashMap<String,Tracker>();
 	private Tracker					curTracker     = null;
+	private Random random = new Random();
 
 	public Map<String,Long> getSinkStats() {
 		TreeMap<String,Long> sinkStats = new TreeMap<String,Long>();
@@ -272,6 +273,12 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					// For now, only one or the other is permitted.
 					if (value.indexOf("+") > 0 && (value.indexOf("*") > 0))
 						throw new SAXParseException ("Either multiplicaton or addition but not both are allowed", saxLocator);
+					else if (value.indexOf("bet") > 0)
+					{
+						int min = Integer.parseInt(value.substring(0, value.indexOf("bet") - 1));
+						int max = Integer.parseInt(value.substring(value.indexOf("bet") + 4, value.length()));
+						value = "" + (random.nextInt(max - min + 1) + min);
+					}
 					else if ((value.indexOf("+") > 0 && (value.indexOf("*") < 0)) || (value.indexOf("*") > 0 && (value.indexOf("+") < 0)))
 					{
 						symbol = (value.indexOf("+") > 0) ? "+" : "*";

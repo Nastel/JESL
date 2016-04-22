@@ -3,6 +3,18 @@
  
   <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC11-Berlin#GEOADDR=52.52437,13.41053"
           user="webuser" url="https://www.sample.com/orders/parts"/>
+  <!-- 
+  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer101#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769"
+          user="webuser" url="https://www.sample.com/orders/parts"/>
+   -->  
+   <!-- 
+  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer102#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574"
+          user="webuser" url="https://www.sample.com/orders/parts"/>
+   -->
+  <!-- 
+  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer103#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289"
+          user="webuser" url="https://www.sample.com/orders/parts"/>        
+  -->       
   <source id="2" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368"
           user="ebay-proc"/>
   <source id="3" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5-London#GEOADDR=51.50853,-0.12574"
@@ -17,15 +29,39 @@
           user="mqm"/>
   <source id="8" fqn="APPL=WebClient#NETADDR=192.178.172.12#GEOADDR=52.52437,13.21053"
           user="mqm"/>
-          
+     
+  <!-- Berlin -->     
   <var name="netAddr"  value="11.0.0.2"/> 
   <var name="corrs" value="SessionId:234,RequestId:567"/>
   <var name="orderId" value="OrderId:444"/>
+  
+  <!-- China 
+  <var name="netAddr"  value="11.0.0.55"/> 
+  <var name="corrs" value="SessionId:567,RequestId:890"/>
+  <var name="orderId" value="OrderId:222"/>
+  -->
+  
+  <!-- London 
+  <var name="netAddr"  value="11.0.0.32"/> 
+  <var name="corrs" value="SessionId:890,RequestId:952"/>
+  <var name="orderId" value="OrderId:555"/> 
+  -->
+  
+  <!-- NY 
+  <var name="netAddr"  value="11.0.0.72"/> 
+  <var name="corrs" value="SessionId:123,RequestId:376"/>
+  <var name="orderId" value="OrderId:333"/>
+  -->
+  
   <var name="appCache"  value="10000 bet 20000"/>
   <var name="tcp"  value="65000 bet 75000"/>
+  <!-- Bad in New York -->
+  <!-->var name="tcp"  value="4041001"/-->
   <var name="dns"  value="70000 bet 80000"/>
   <var name="request"  value="100000 bet 120000"/>
   <var name="receiveOrder"  value="14000 bet 18000"/>
+  <!-- Bad in Berlin -->
+  <!-- >var name="receiveOrder"  value="3300100"/-->
   <var name="saveOrder"  value="1200 bet 80000"/>
   <var name="validateOrder"  value="60000 bet 80000"/>
   <var name="validateAndVerify"  value="75000 bet 110000"/>
@@ -34,6 +70,8 @@
   <var name="validated"  value="1000 bet 10000"/>
   <var name="readAndRoute"  value="74000 bet 100000"/>
   <var name="processPayment"  value="60000 bet 120000"/>
+  <!-- Bad in China -->
+  <!-- >var name="processPayment"  value="3040020"/-->
   <var name="readOrder"  value="14000 bet 70000"/>
   <var name="possibleFraud"  value="50000 bet 100000"/>
   <var name="evaluateFraud"  value="100000 bet 150000"/>
@@ -43,7 +81,7 @@
   <var name="sendConfirmation"  value="1000 bet 10000"/>             
   <var name="responseStart"  value="1000 bet 10000"/>          
   <var name="onLoad"  value="60000 bet 80000"/>          
-  <var name="processing"  value="40000 80000"/>          
+  <var name="processing"  value="40000 bet 80000"/>          
   <var name="response"  value="10000 bet 50000"/>      
   <var name="zero" value="0000"/>
   
@@ -209,6 +247,8 @@
 					  	<prop name="queryString" type="STRING" value=""/>
 					  	<prop name="cs" type="STRING" value="client"/>
 					</event>
+					<!-- Bad in Berlin -->
+					<!-->event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" cc="ERROR" exc="Queue full, re-routing to dead letter queue." res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2"-->
 				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2">
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
@@ -310,6 +350,35 @@
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					 </event>
+					 <!-- Bad in China -->
+					 <!-- 
+					 <snapshot name="CPU" cat="Java">
+					    <prop name="Count" type="INTEGER" value="8" valtype="size"/>
+					    <prop name="TotalCpuUsec" type="DECIMAL" value="78000.5" valtype="age.usec"/>
+					    <prop name="TotalCpuUserUsec" type="DECIMAL" value="62400.4" valtype="age.usec"/>
+					 </snapshot>
+					 <snapshot name="Thread" cat="Java">
+					    <prop name="Count" type="LONG" value="69" valtype="size"/>
+					    <prop name="DaemonCount" type="LONG" value="15" valtype="size"/>
+					    <prop name="StartedCount" type="LONG" value="71" valtype="size"/>
+					    <prop name="PeakCount" type="LONG" value="69" valtype="size"/>
+					    <prop name="BlockedCount" type="LONG" value="76" valtype="size"/>
+					    <prop name="WaitedCount" type="LONG" value="6" valtype="size"/>
+					    <prop name="BlockedUsec" type="LONG" value="36000" valtype="age.usec"/>
+					    <prop name="WaitUsec" type="LONG" value="8075000" valtype="age.usec"/>
+					 </snapshot>
+					 <snapshot name="Memory" cat="Java">
+					    <prop name="MaxBytes" type="LONG" value="7635533824" valtype="size"/>
+					    <prop name="TotalBytes" type="LONG" value="514523136" valtype="size"/>
+					    <prop name="FreeBytes" type="LONG" value="428179112" valtype="size"/>
+					    <prop name="UsedBytes" type="LONG" value="86344024" valtype="size"/>
+					    <prop name="Usage" type="LONG" value="16" valtype="percent"/>
+					 </snapshot>
+					 <snapshot name="JMX" cat="JMX">
+					    <prop name="queue" type="STRING" value="PAYMENT.ORDERS.QUEUE"/>
+					    <prop name="hitRatio" type="INTEGER" value="10" valtype="per-hour"/>
+					 </snapshot>
+					 -->
    				</activity>
    		  </activity>
 		  <activity name="FRONT_END_TIME" source="8" sev="SUCCESS" loc="${netAddr}" user="webuser" >

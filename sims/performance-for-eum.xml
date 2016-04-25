@@ -18,7 +18,7 @@
   <var name="memoryMaxBytes"  value="7045000000"/>
   <var name="memoryTotalBytes"  value="502300000"/>
   <var name="memoryFreeBytes"  value="400870000"/>
-  <var name="memoryUsedBytes"  value="75380000"/>
+  <var name="memoryUsedBytes"  value="75380000"/>  
   <var name="memoryUsage"  value="10 bet 20"/>
   <var name="jmxHitRatio"  value="100 bet 200"/>
   <!-- Bad in China -->

@@ -15,10 +15,10 @@
   <var name="threadWaitedCount"  value="1 bet 10"/>
   <var name="threadBlockedUsec"  value="30000 bet 40000"/>
   <var name="threadWaitUsec"  value="8000000 bet 9000000"/>
-  <var name="memoryMaxBytes"  value="7045000000"/>
-  <var name="memoryTotalBytes"  value="502300000"/>
-  <var name="memoryFreeBytes"  value="400870000"/>
-  <var name="memoryUsedBytes"  value="75380000"/>  
+  <var name="memoryMaxBytes"  value="7000000000 bet 8000000000"/>
+  <var name="memoryTotalBytes"  value="500000000 bet 600000000"/>
+  <var name="memoryFreeBytes"  value="400000000 bet 500000000"/>
+  <var name="memoryUsedBytes"  value="70000000 bet 80000000"/>  
   <var name="memoryUsage"  value="10 bet 20"/>
   <var name="jmxHitRatio"  value="100 bet 200"/>
   <!-- Bad in China -->

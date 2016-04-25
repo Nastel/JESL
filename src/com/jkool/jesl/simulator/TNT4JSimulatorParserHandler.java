@@ -19,6 +19,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -275,9 +276,22 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 						throw new SAXParseException ("Either multiplicaton or addition but not both are allowed", saxLocator);
 					else if (value.indexOf("bet") > 0)
 					{
-						int min = Integer.parseInt(value.substring(0, value.indexOf("bet") - 1));
-						int max = Integer.parseInt(value.substring(value.indexOf("bet") + 4, value.length()));
-						value = "" + (random.nextInt(max - min + 1) + min);
+						if ((value.substring(value.indexOf("bet") + 4, value.length()).length() > 9))
+						{
+							BigInteger min = new BigInteger(value.substring(0, value.indexOf("bet") - 1));
+							BigInteger max = new BigInteger(value.substring(value.indexOf("bet") + 4, value.length()));
+							BigInteger diff = max.subtract(min);
+							diff = diff.add(new BigInteger("1"));
+							BigInteger rnd =  new BigInteger(diff.bitLength(), random);
+							BigInteger finalVal = rnd.add(min);
+							value = "" + finalVal;
+						}
+						else
+						{
+							int min = Integer.parseInt(value.substring(0, value.indexOf("bet") - 1));
+							int max = Integer.parseInt(value.substring(value.indexOf("bet") + 4, value.length()));
+							value = "" + (random.nextInt(max - min + 1) + min);
+						}
 					}
 					else if ((value.indexOf("+") > 0 && (value.indexOf("*") < 0)) || (value.indexOf("*") > 0 && (value.indexOf("+") < 0)))
 					{

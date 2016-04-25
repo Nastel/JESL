@@ -245,6 +245,9 @@
 				  	<prop name="queryString" type="STRING" value=""/>
 				  	<prop name="cs" type="STRING" value="client"/>
 				   	<event name="REQUEST" source="8" sev="SUCCESS" type="SEND" elapsed="${request}" loc="${netAddr}" res="queue::INCOMING.ORDERS.QUEUE.BERLIN" corrs="${corrs}" user="webuser" msg="2">
+<!-- 					<event name="REQUEST" source="8" sev="SUCCESS" type="SEND" elapsed="${request}" loc="${netAddr}" res="queue::INCOMING.ORDERS.QUEUE.CHINA" corrs="${corrs}" user="webuser" msg="2"> -->
+<!-- 					<event name="REQUEST" source="8" sev="SUCCESS" type="SEND" elapsed="${request}" loc="${netAddr}" res="queue::INCOMING.ORDERS.QUEUE.LONDON" corrs="${corrs}" user="webuser" msg="2"> -->
+<!-- 					<event name="REQUEST" source="8" sev="SUCCESS" type="SEND" elapsed="${request}" loc="${netAddr}" res="queue::INCOMING.ORDERS.QUEUE.NY" corrs="${corrs}" user="webuser" msg="2"> -->
 					   	<prop name="browser" type="STRING" value="Chrome"/>
 					  	<prop name="browserVersion" type="INTEGER" value="49"/>
 					  	<prop name="platform" type="STRING" value="Win32"/>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <tnt4j-simulator>
 
-  <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15-Nevada#GEOADDR=36.17497,-115.13722"
+  <source id="7" fqn="SERVER=MQServer#NETADDR=145.178.172.12#DATACENTER=DC15-Nevada#GEOADDR=36.17497,-115.13722"
           user="mqm"/>
+ 
+  <var name="netAddr"  value="145.178.172.12"/>
  
   <var name="cpuCount"  value="5 bet 15"/>
   <var name="cpuTotalCpuUsec"  value="75000 bet 85000"/>

@@ -22,7 +22,7 @@
   <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15-Nevada#GEOADDR=36.17497,-115.13722"
           user="mqm"/>
   <!-- Berlin -->
-  <source id="8" fqn="APPL=WebClient#NETADDR=192.178.172.12#GEOADDR=52.52437,13.21053"
+  <source id="8" fqn="APPL=WebClient#NETADDR=192.178.172.12#GEOADDR=53.57532,10.01534"
           user="mqm"/>
   <!-- China   -->
 <!--   <source id="8" fqn="APPL=WebClient#NETADDR=199.178.172.12#GEOADDR=22.28552,114.15769" -->
@@ -124,9 +124,9 @@
  
   <var name="validateOrderMethod1"  value="validateOrder * 1.0"/>
     
-  <var name="validateAndVerifyMethod1"  value="validateAndVerify * .2"/>
+  <var name="validateAndVerifyMethod1"  value="validateAndVerify * .1"/>
   <var name="validateAndVerifyMethod2"  value="validateAndVerify * .2"/>
-  <var name="validateAndVerifyMethod3"  value="validateAndVerify * 7.6"/>
+  <var name="validateAndVerifyMethod3"  value="validateAndVerify * .7"/>
       
   <var name="creditMethod1"  value="credit * .8"/>
   <var name="creditMethod2"  value="credit * .1"/>
@@ -256,7 +256,7 @@
 					</event>
 					<sleep usec="${requestSleep}"/>
 					<!-- Bad in Berlin -->
-<!-- 					<event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" cc="ERROR" exc="Queue full, re-routing to dead letter queue." res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2" corrs="${corrs}" > -->
+<!-- 					<event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" cc="ERROR" sev="ERROR" exc="Queue full, re-routing to dead letter queue." res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2" corrs="${corrs}" > -->
 				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2" corrs="${corrs}" >
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
@@ -399,13 +399,13 @@
 						 <prop name="queryString" type="STRING" value=""/>
 						 <prop name="cs" type="STRING" value="client"/>
 		  		  	</event>
-		  		  	<event name="JAVASCRIPT_ERROR" source="8" sev="ERROR" elapsed="0"  msg="6"  exc="Malformed expression" loc="${netAddr}" corrs="${corrs}" user="webuser" >
-						  <prop name="browser" type="STRING" value="Chrome"/>
-						  <prop name="browserVersion" type="INTEGER" value="49"/>
-						  <prop name="platform" type="STRING" value="Win32"/>
-						  <prop name="queryString" type="STRING" value=""/>
-						  <prop name="cs" type="STRING" value="client"/>
-  					</event>
+<!-- 		  		  	<event name="JAVASCRIPT_ERROR" source="8" sev="ERROR" elapsed="0"  msg="6"  exc="Malformed expression" loc="${netAddr}" corrs="${corrs}" user="webuser" > -->
+<!-- 						  <prop name="browser" type="STRING" value="Chrome"/> -->
+<!-- 						  <prop name="browserVersion" type="INTEGER" value="49"/> -->
+<!-- 						  <prop name="platform" type="STRING" value="Win32"/> -->
+<!-- 						  <prop name="queryString" type="STRING" value=""/> -->
+<!-- 						  <prop name="cs" type="STRING" value="client"/> -->
+<!--   					</event> -->
 		  		</activity>
 		  		<activity name="DOCUMENT_DOWNLOAD_TIME" source="8" sev="SUCCESS" loc="${netAddr}" corrs="${corrs}" user="webuser" >
 		  			<prop name="browser" type="STRING" value="Chrome"/>

@@ -50,7 +50,7 @@
 		  <prop name="Usage" type="LONG" value="${memoryUsage}" valtype="percent"/>
 	  </snapshot>
 	  <snapshot name="JMX" cat="JMX">
-		  <prop name="queue" type="STRING" value="PAYMENT.ORDERS.QUEUE"/>
+		  <prop name="database" type="STRING" value="database::billing database"/>
 		  <prop name="hitRatio" type="INTEGER" value="${jmxHitRatio}" valtype="per-hour"/>
 	  </snapshot>
   </activity>

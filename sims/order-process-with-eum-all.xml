@@ -73,6 +73,7 @@
   <var name="validated"  value="1000 bet 10000"/>
   <var name="readAndRoute"  value="74000 bet 100000"/>
   <var name="processPayment"  value="60000 bet 120000"/>
+  <var name="updatePayment"  value="80000 bet 120000"/>
   <!-- Bad in China -->
 <!--   <var name="processPayment"  value="3040020"/> -->
   <var name="readOrder"  value="14000 bet 70000"/>
@@ -106,7 +107,7 @@
   <var name="documentProcessingTime" value="processing + zero"/>
   <var name="documentDownloadTime" value="response + zero"/>
   <var name="serverConnectionTime" value="appCache + tcp + dns"/>
-  <var name="responseAvailableTime" value="responseStart + request + receiveOrder + saveOrder + responseAvailableTimeSleep + validateOrder + validateAndVerify + credit + validateCredit + validated + readAndRoute + processPayment + readOrder + possibleFraud + evaluateFraud + sendShipment + readOrderContents + prepareShippingSlip"/>
+  <var name="responseAvailableTime" value="responseStart + request + receiveOrder + saveOrder + responseAvailableTimeSleep + validateOrder + validateAndVerify + credit + validateCredit + validated + readAndRoute + processPayment + updatePayment + readOrder + possibleFraud + evaluateFraud + sendShipment + readOrderContents + prepareShippingSlip"/>
   <var name="firstByteTime" value="serverConnectionTime + responseAvailableTime"/>
   <var name="endUserResponseTime" value="frontEndTime + firstByteTime"/>
   
@@ -146,6 +147,10 @@
   <var name="processPaymentMethod1"  value="processPayment * .3"/>
   <var name="processPaymentMethod2"  value="processPayment * .4"/>
   <var name="processPaymentMethod3"  value="processPayment * .3"/>
+  
+  <var name="updatePaymentMethod1"  value="processPayment * .3"/>
+  <var name="updatePaymentMethod2"  value="processPayment * .4"/>
+  <var name="updatePaymentMethod3"  value="processPayment * .3"/>
       
   <var name="readOrderMethod1"  value="readOrder * .2"/>
   <var name="readOrderMethod2"  value="readOrder * .8"/>
@@ -317,6 +322,12 @@
 					    <prop name="methodStack" type="STRING" value="receivePayment:${processPaymentMethod1},processPayment:${processPaymentMethod2},sendToFraudEvaluation:${processPaymentMethod3}" valtype="age.usec"/>		 
 					    <prop name="connectionType" type="STRING" value="jmx"/>  
 				    </event>
+				    <event name="UpdatePayment" source="7" elapsed="${updatePayment}" type="EVENT" res="database::billing database" corrs="${corrs}" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="createCredit:${updatePaymentMethod1},updateOrderPaid:${updatePaymentMethod2},updateShippingReady:${updatePaymentMethod3}" valtype="age.usec"/>		
+					    <prop name="connectionType" type="STRING" value="jdbc"/>	    
+					</event>
 					<sleep usec="${processPaymentSleep}"/>
 				    <event name="ReadOrder" type="RECEIVE" source="3" elapsed="${readOrder}" res="queue::PAYMENT.ORDERS.QUEUE" corrs="${corrs}" msg="2">
 					  	<prop name="platform" type="STRING" value="Win32"/>

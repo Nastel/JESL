@@ -64,7 +64,7 @@
   <var name="request"  value="100000 bet 120000"/>
   <var name="receiveOrder"  value="14000 bet 18000"/>
   <!-- Bad in Berlin -->
-<!--   <var name="receiveOrder"  value="3300100"/> -->
+<!--   <var name="receiveOrder"  value="4300100"/> -->
   <var name="saveOrder"  value="1200 bet 80000"/>
   <var name="validateOrder"  value="60000 bet 80000"/>
   <var name="validateAndVerify"  value="75000 bet 110000"/>
@@ -258,6 +258,9 @@
 					<!-- Bad in Berlin -->
 <!-- 					<event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" cc="ERROR" sev="ERROR" exc="Queue full, re-routing to dead letter queue." res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2" corrs="${corrs}" > -->
 				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2" corrs="${corrs}" >
+<!-- 				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.CHINA" msg="2" corrs="${corrs}" > -->
+<!-- 				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.LONDON" msg="2" corrs="${corrs}" > -->
+<!-- 				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.NY" msg="2" corrs="${corrs}" > -->
 					  	<prop name="platform" type="STRING" value="Win32"/>
 					  	<prop name="cs" type="STRING" value="server"/>
 					    <prop name="methodStack" type="STRING" value="parseOrderFields:${receiveOrderMethod1},calculateOrderFields:${receiveOrderMethod2},lookupOrderFields:${receiveOrderMethod3}" valtype="age.usec"/>		

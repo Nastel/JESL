@@ -26,7 +26,7 @@
   <!-- Bad in China -->
 <!--   <var name="jmxHitRatio"  value="10"/> -->
   
-  <activity name="PERFORMANCE" source="7" sev="SUCCESS" loc="${netAddr}">
+  <activity name="PERFORMANCE" source="7" sev="INFO" loc="${netAddr}">
 	  <snapshot name="CPU" cat="Java">
 		  <prop name="Count" type="INTEGER" value="${cpuCount}" valtype="size"/>
 		  <prop name="TotalCpuUsec" type="DECIMAL" value="${cpuTotalCpuUsec}" valtype="age.usec"/>

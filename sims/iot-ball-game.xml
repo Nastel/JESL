@@ -7,7 +7,7 @@
   <msg id="2">basketball, ID:5599514342147f03003ce94f</msg>
   <msg id="3">basketball, ID:5599514f42147f03003ce951</msg>
   
-  <activity name="Miami-vs-Rockets" source="1" pid="5432" tid="4" sev="SUCCESS" loc="Dallas, Texas">
+  <activity name="Miami-vs-Rockets" source="1" pid="5432" tid="4" sev="INFO" loc="Dallas, Texas">
     <event name="Throw" elapsed="1465" res="Bobs-Ball" msg="1" user="Miami/Mike-Johnson" type="SEND" tags="Miami">
 		<prop name="jersey" type="INTEGER" value="15" valtype="id"/>
 		<snapshot name="ShotStats" cat="Shots">
@@ -41,7 +41,7 @@
   
   <sleep msec="2000"/>
 
-   <activity name="Miami-vs-Pacers" source="1" pid="747" tid="34" sev="SUCCESS" loc="Miami, FL">
+   <activity name="Miami-vs-Pacers" source="1" pid="747" tid="34" sev="INFO" loc="Miami, FL">
     <event name="Throw" elapsed="1465" res="Pacers-Ball" msg="2" user="Pacers/Bob-Dilan" type="SEND" tags="Pacers">
 		<prop name="jersey" type="INTEGER" value="32" valtype="id"/>
 		<snapshot name="ShotStats" cat="Shots">
@@ -87,7 +87,7 @@
    
   <sleep msec="2000"/>
  
-   <activity name="Bulls-vs-Knicks" source="1" pid="76347" tid="87" sev="SUCCESS" loc="New York, NY">
+   <activity name="Bulls-vs-Knicks" source="1" pid="76347" tid="87" sev="INFO" loc="New York, NY">
     <event name="Throw" elapsed="1738" res="Bulls-Ball" msg="3" user="Knicks/Glen-Hanson" type="SEND" tags="Knicks">
 		<prop name="jersey" type="INTEGER" value="17" valtype="id"/>
 		<snapshot name="ShotStats" cat="Shots">

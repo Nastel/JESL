@@ -66,7 +66,7 @@
           status:     status of application.  One of:
                           END, EXCEPTION
           sev:        severity of event.  One of:
-                          TRACE, DEBUG, INFO, SUCCESS, WARNING, ERROR, FAILURE,
+                          TRACE, DEBUG, INFO, NOTICE, WARNING, ERROR, FAILURE,
                           CRITICAL, FATAL, HALT
           pid:        id of process activity occurred in
           tid:        id of thread activity occurred in
@@ -95,7 +95,7 @@
                           CALL, EVENT, START, STOP, OPEN, CLOSE, SEND, RECEIVE,
                           INQUIRE, SET, BROWSE, REQUEST, RESPONSE, ADD, REMOVE, CLEAR
           sev:        severity of event.  One of:
-                          TRACE, DEBUG, INFO, SUCCESS, WARNING, ERROR, FAILURE,
+                          TRACE, DEBUG, INFO, NOTICE, WARNING, ERROR, FAILURE,
                           CRITICAL, FATAL, HALT
           cc:         completion code for event.  One of:
                           SUCCESS, WARNING, ERROR
@@ -115,7 +115,7 @@
           user
           res
     -->
-    <event name="validate cc" type="REQUEST" sev="SUCCESS" cc="SUCCESS" elapsed="47621"
+    <event name="validate cc" type="REQUEST" sev="INFO" cc="SUCCESS" elapsed="47621"
            res="https://cc.com/validate" msg="1"/>
     
     <sleep msec="100"/>
@@ -128,7 +128,7 @@
             name:     name of the snapshot.  This is required.
             cat:      category of snapshot.
             sev:      severity of event.  One of:
-                          TRACE, DEBUG, INFO, SUCCESS, WARNING, ERROR, FAILURE,
+                          TRACE, DEBUG, INFO, NOTICE, WARNING, ERROR, FAILURE,
                           CRITICAL, FATAL, HALT
     -->
     <snapshot name="SystemMetrics">

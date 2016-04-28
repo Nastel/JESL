@@ -1041,6 +1041,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	public OpLevel getLevel(String valStr) {
 		if (valStr.equalsIgnoreCase(OpLevel.ANY_LEVEL)) {
 			return OpLevel.anyLevel();
+		} else if (valStr.equalsIgnoreCase("SUCCESS")) {
+			return OpLevel.INFO;
 		}
 		return OpLevel.valueOf(valStr);		
 	}

@@ -762,7 +762,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			curActivity.setSource(source);
 			curActivity.setUser(user == null ? source.getUser() : user);
 			curActivity.setStatus(status == null ? ActivityStatus.BEGIN : status);
-			curActivity.setSeverity(sev == null ? OpLevel.SUCCESS : sev);
+			curActivity.setSeverity(sev == null ? OpLevel.INFO : sev);
 			curActivity.setCompCode(cc == null ? OpCompCode.SUCCESS : cc);
 			if (pid > 0L)
 				curActivity.setPID(pid);
@@ -824,7 +824,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			simCurrTime = new UsecTimestamp();
 
 		OpType     type     = OpType.EVENT;
-		OpLevel    severity = OpLevel.SUCCESS;
+		OpLevel    severity = OpLevel.INFO;
 		String     valStr;
 
 		valStr = expandEnvVars(attributes.getValue(SIM_XML_ATTR_TYPE));
@@ -956,7 +956,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 
 			curEvent.setTTL(TNT4JSimulator.getTTL());
-			curEvent.getOperation().setSeverity(severity == null ? OpLevel.SUCCESS : severity);
+			curEvent.getOperation().setSeverity(severity == null ? OpLevel.INFO : severity);
 			curEvent.getOperation().setCompCode(cc == null ? OpCompCode.SUCCESS : cc);
 			if (srcId > 0)
 				curEvent.setSource(source);

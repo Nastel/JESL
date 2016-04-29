@@ -27,7 +27,7 @@
   <msg id="2">Compiling ${utils}.java</msg>
   <msg id="3">Compiling ${tools}.java</msg>
   <msg id="4">Creating package ${mainApp}.jar</msg>
-  <msg id="5">Creating package utils.jar</msg>
+  <msg id="5">Creating package ${utils}.jar</msg>
   <msg id="6">High: CWE-502: Deserialization of Untrusted Data. Apache Commons Collections Java library insecurely deserializes data</msg>
   <msg id="7">Verified, no known vulnerabilities</msg>
   <msg id="8">Deploying modules 1-20</msg>
@@ -58,7 +58,7 @@
   <activity name="Package" sev="INFO" loc="11.0.0.10" user="jenkins" res="${pname}-${pver}-b${build}" source="2">
     <event name="JarStart" type="RECEIVE" elapsed="423" res="Project-${pname}" msg="11" sev="INFO" corrs="{pname}-${pver}-b${build}"/>  
     <event name="Jar" type="CALL" elapsed="233" res="${mainApp}.jar" msg="4" sev="INFO" />  
-    <event name="Jar" type="CALL" elapsed="4234" res="utils.jar" msg="5" sev="INFO" />  
+    <event name="Jar" type="CALL" elapsed="4234" res="${utils}.jar" msg="5" sev="INFO" />  
     <event name="JarEnd" type="SEND" elapsed="423" res="Project-${pname}" msg="13" sev="INFO" corrs="{pname}-${pver}-b${build}"/>  
   </activity>
   

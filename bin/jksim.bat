@@ -1,10 +1,10 @@
 @echo off
 setlocal
 set RUNDIR=%~p0
-
-set CLPATH="%RUNDIR%..;%RUNDIR%../jkool-jesl.jar;%RUNDIR%../lib/*;%RUNDIR%../lib/slf4j-simple/*"
+set RUNCMD=run
+set CLPATH=%RUNDIR%..;%RUNDIR%..\jkool-jesl.jar;%RUNDIR%../lib/*
 set MAINCL=com.jkool.jesl.simulator.TNT4JSimulator
-set TNT4JOPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=info -Dtnt4j.config="%RUNDIR%../config/tnt4j-simulator.properties" -Dtnt4j.token.repository="%RUNDIR%../config/tnt4j-tokens.properties"
-
-java %TNT4JOPTS% -classpath %CLPATH% %MAINCL% run -T:data.jkoolcloud.com -P:6585 -C:HTTPS -p:10 -uc -ui %*
+set TNT4JOPTS=-Dlog4j.configuration=file:%RUNDIR%..\config\log4j-simulator.properties -Dtnt4j.config=%RUNDIR%..\config\tnt4j-simulator.properties -Dtnt4j.token.repository=%RUNDIR%..\config\tnt4j-tokens.properties
+set RUNFILE=%RUNDIR%\..\sims\order-process.xml
+java %TNT4JOPTS% -classpath %CLPATH% %MAINCL% %RUNCMD% -A:token -f:%RUNFILE% -T:test.jkoolcloud.com -P:6580 -C:HTTP -u -p:98 -i:1
 endlocal

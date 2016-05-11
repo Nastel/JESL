@@ -21,9 +21,11 @@
   <msg id="3">Process Payment ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
   <msg id="4">Ship ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
   <msg id="5">Confirm ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="6">SELECT * FROM ORDERS WHERE order_id = 123</msg>
   
   <activity name="AcceptOrder" source="1" pid="5432" tid="4">
     <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="OrderId:123"/>
+    <event name="SQL.execute" type="CALL" elapsed="7187" sev="ANY" res="jdbc://oracle/ora1/order_db" msg="6" corrs="OrderId:123"/>
     <event name="ValidateOrder" type="SEND" elapsed="823" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="OrderId:123"/>
     <sleep usec="121"/>
     <snapshot name="ShopingCart" cat="Orders">

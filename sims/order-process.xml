@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <tnt4j-simulator>
 
+  <var name="custid" 	value="848383"/>
+  <var name="prodid" 	value="8380203"/>
+  <var name="prodname" 	value="iPhone"/>
+  <var name="orderid" 	value="OrderId:123"/>
+  <var name="orderdb" 	value="jdbc://oracle/ora1/order_db"/>
+
   <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
           user="webuser" url="https://www.sample.com/orders/parts"/>
   <source id="2" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=Los Angeles, CA"
@@ -16,17 +22,19 @@
   <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=Las Vegas, Nevada"
           user="mqm"/>
   
-  <msg id="1">AMAZON ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
-  <msg id="2">Verify ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
-  <msg id="3">Process Payment ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
-  <msg id="4">Ship ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
-  <msg id="5">Confirm ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
-  <msg id="6">SELECT * FROM ORDERS WHERE order_id = 123</msg>
+  <msg id="1">AMAZON ProductId=${prodid}, Productname=${prodname}, CustomerID=${custid}</msg>
+  <msg id="2">Verify ProductId=${prodid}, Productname=${prodname}, CustomerID=${custid}</msg>
+  <msg id="3">Process Payment ProductId=${prodid}, Productname=${prodname}, CustomerID=${custid}</msg>
+  <msg id="4">Ship ProductId=${prodid}, Productname=${prodname}, CustomerID=${custid}</msg>
+  <msg id="5">Confirm ProductId=${prodid}, Productname=${prodname}, CustomerID=${custid}</msg>
+  <msg id="6">SELECT * FROM ORDERS WHERE order_id = ${orderid} and customer_id = ${custid}</msg>
+  <msg id="7">SELECT * FROM PRODUCTS WHERE product_id = ${prodid}</msg>
   
   <activity name="AcceptOrder" source="1" pid="5432" tid="4">
-    <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="OrderId:123"/>
-    <event name="SQL.execute" type="CALL" elapsed="7187" sev="ANY" res="jdbc://oracle/ora1/order_db" msg="6" corrs="OrderId:123"/>
-    <event name="ValidateOrder" type="SEND" elapsed="823" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="OrderId:123"/>
+    <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="${orderid}"/>
+    <event name="SQL.execute" type="CALL" elapsed="7187" sev="ANY" res="${orderdb}" msg="6" corrs="${orderid}"/>
+	<event name="SQL.execute" type="CALL" elapsed="5472" sev="ANY" res="${orderdb}" msg="7" corrs="${orderid}"/>
+    <event name="ValidateOrder" type="SEND" elapsed="823" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="${orderid}"/>
     <sleep usec="121"/>
     <snapshot name="ShopingCart" cat="Orders">
       <prop name="ProductCount" type="INTEGER" value="2" valtype="size"/>
@@ -81,29 +89,29 @@
   <sleep msec="163"/>
 
   <activity name="ValidateOrder" source="2" pid="7373" tid="15">
-    <event name="ValidateAndVerify" type="RECEIVE" elapsed="626" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="OrderId:123"/>
-    <event name="Credit" type="SEND" elapsed="2323" res="CREDIT.ORDERS.QUEUE" msg="2" corrs="OrderId:123"/>
+    <event name="ValidateAndVerify" type="RECEIVE" elapsed="626" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="${orderid}"/>
+    <event name="Credit" type="SEND" elapsed="2323" res="CREDIT.ORDERS.QUEUE" msg="2" corrs="${orderid}"/>
   </activity>
 
   <activity name="CreditValidate" source="4" pid="432" tid="64">
-    <event name="ValidateCredit" type="RECEIVE" elapsed="2782" res="CREDIT.ORDERS.QUEUE" msg="2" corrs="OrderId:123"/>
-    <event name="Validated" type="SEND" elapsed="7189" res="ROUTE.ORDERS.QUEUE" msg="1" corrs="OrderId:123"/>
+    <event name="ValidateCredit" type="RECEIVE" elapsed="2782" res="CREDIT.ORDERS.QUEUE" msg="2" corrs="${orderid}"/>
+    <event name="Validated" type="SEND" elapsed="7189" res="ROUTE.ORDERS.QUEUE" msg="1" corrs="${orderid}"/>
   </activity>
 
   <activity name="RouteOrder" source="7" pid="67126" tid="43">
-    <event name="ReadAndRoute" type="RECEIVE" elapsed="626" res="ROUTE.ORDERS.QUEUE" msg="1" corrs="OrderId:123"/>
-    <event name="ProcessPayment" type="SEND" elapsed="128" res="PAYMENT.ORDERS.QUEUE" msg="3" corrs="OrderId:123"/>
-    <event name="PossibleFraud" type="SEND" elapsed="234" res="FRAUD.ORDERS.QUEUE" msg="1" corrs="OrderId:123"/>
+    <event name="ReadAndRoute" type="RECEIVE" elapsed="626" res="ROUTE.ORDERS.QUEUE" msg="1" corrs="${orderid}"/>
+    <event name="ProcessPayment" type="SEND" elapsed="128" res="PAYMENT.ORDERS.QUEUE" msg="3" corrs="${orderid}"/>
+    <event name="PossibleFraud" type="SEND" elapsed="234" res="FRAUD.ORDERS.QUEUE" msg="1" corrs="${orderid}"/>
   </activity>
     
   <sleep msec="891"/>
     
   <activity name="ProcessFraudAlerts" source="6" pid="3423" tid="548">
-    <event name="EvaluateFraud" type="RECEIVE" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1" sev="WARNING" exc="Possible fraud" corrs="OrderId:123"/>
+    <event name="EvaluateFraud" type="RECEIVE" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1" sev="WARNING" exc="Possible fraud" corrs="${orderid}"/>
   </activity>
 
   <activity name="PaymentProcess" source="3" pid="8154" tid="12" sev="WARNING">
-    <event name="ReadOrder" type="RECEIVE" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" sev="ERROR" corrs="OrderId:123" exc="SQLException: unknown column custid"/>
+    <event name="ReadOrder" type="RECEIVE" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" sev="ERROR" corrs="${orderid}" exc="SQLException: unknown column custid"/>
     <sleep msec="11"/>
     <event name="SendShipment" type="SEND" elapsed="293" res="SHIP.ORDERS.QUEUE" msg="4"/>
   </activity>
@@ -111,7 +119,7 @@
   <sleep msec="512"/>
     
   <activity name="ShipOrders" source="5" pid="39572" tid="183">
-    <event name="ReadOrderContents" type="RECEIVE" elapsed="32679" res="SHIP.ORDERS.QUEUE" msg="4" msgage="7272" corrs="OrderId:123"/>
+    <event name="ReadOrderContents" type="RECEIVE" elapsed="32679" res="SHIP.ORDERS.QUEUE" msg="4" msgage="7272" corrs="${orderid}"/>
     <sleep msec="412"/>
     <event name="PrepareShippingSlip" type="EVENT" elapsed="4821"/>
     <sleep msec="835"/>

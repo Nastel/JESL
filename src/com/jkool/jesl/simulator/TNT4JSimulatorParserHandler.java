@@ -994,9 +994,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				}
 
 				curEvent.setTrackingId(eventMsg.getTrackingId());
-				curEvent.setMessage(eventMsg.getMessage());
-			} else if (msgtext != null){
-				curEvent.setMessage(msgtext);
+				curEvent.setMessage(expandEnvVars(eventMsg.getMessage()));
+			} else if (msgtext != null) {
+				curEvent.setMessage(expandEnvVars(msgtext));
 			}
 
 			curEvent.start(simCurrTime);

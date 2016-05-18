@@ -243,15 +243,15 @@ public class TNT4JSimulator {
 		System.out.println("  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n");
 		System.out.println("  for usage information:  help\n");
 		System.out.println("where:");
-		System.out.println("    -A    -  jKoolCloud access token (required with '-T')");
-		System.out.println("    -T    -  Host name or IP address of jKoolCloud service");
-		System.out.println("             (if not specified, data is not sent to jKoolCloud service)");
+		System.out.println("    -A    -  jKool streaming access token (required with '-T')");
+		System.out.println("    -T    -  Host name or IP address of jKool streaming data service");
+		System.out.println("             (if not specified, data is not sent to jKool service)");
 		System.out.println("    -V    -  Define a global variable (property) name=value pair");
-		System.out.println("    -P    -  Port jKoolCloud service is listening on (default: SSL 443)");
-		System.out.println("    -C    -  Connection type to use for jKoolCloud service (default: https)");
+		System.out.println("    -P    -  Port jKool data streaming service is listening on (default: SSL 443)");
+		System.out.println("    -C    -  Connection type to use for jKool data streaming service (default: https)");
 		System.out.println("    -f    -  Use <sim_def_file_name> as simulation configuration");
 		System.out.println("    -p    -  Vary all numeric values by +/- <percentage>");
-		System.out.println("    -G    -  Read/Write jKoolCloud service messages from/to <jk_file_name>");
+		System.out.println("    -G    -  Read/Write jKool service messages from/to <jk_file_name>");
 		System.out.println("             (if writing, data is appended to an existing file)");
 		System.out.println("    -i    -  Number of iterations to make on <sim_file_name>");
 		System.out.println("    -u    -  Make tags, correlators, ids unique between iterations");
@@ -268,8 +268,8 @@ public class TNT4JSimulator {
 	}
 
 	private static void printUsedArgs() {
-		System.out.format("Arguments: runype=%s, url=%s://%s:%d, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s, jkFile=%s\n", 
-				runType, jkProtocol, jkHost, jkPort, generateValues, uniqueTags, uniqueCorrs, uniqueIds, valuePctChg, simFileName, jkFileName);
+		System.out.format("Arguments: runype=%s, url=%s, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s, jkFile=%s\n", 
+				runType, getConnectUrl(), generateValues, uniqueTags, uniqueCorrs, uniqueIds, valuePctChg, simFileName, jkFileName);
 	}
 	
 	protected static void processArgs(TNT4JSimulatorParserHandler xmlHandler, String[] args) {

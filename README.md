@@ -187,10 +187,10 @@ Also include TNT4J-LOG4J12 appender libraries under `<jesl.home>/lib/tnt4j-log4j
 #### Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 This allows streaming data to be associated with your private repository.
 
-<b>NOTE</b>: Make sure your firewall allows outgoing `http` connections to http://data.jkoolcloud.com:6580
+<b>NOTE</b>: Make sure your firewall allows outgoing `https` connections to https://data.jkoolcloud.com
 
 #### Restart your application
-log4j messages which map to JESL `jkoolcloud` appender will stream to jKool Cloud @ http://data.jkoolcloud.com:6580
+log4j messages which map to JESL `jkoolcloud` appender will stream to jKool Cloud @ https://data.jkoolcloud.com
 
 #### Login to "My Dashboard" @ https://www.jkoolcloud.com/
 
@@ -216,7 +216,7 @@ Configure your TNT4J source as follows (using `tnt4j.properties` file):
 	; event sink configuration: destination and data format
 	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
 	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
-	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com:6585
+	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
 	....
@@ -239,7 +239,7 @@ JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 	; event sink configuration: destination and data format
 	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
 	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
-	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com:6585
+	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
 

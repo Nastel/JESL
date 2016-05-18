@@ -52,9 +52,9 @@ public class TNT4JSimulator {
 	public enum SimulatorRunType {RUN_SIM, REPLAY_SIM}
 
 	private static SimulatorRunType	runType        = SimulatorRunType.RUN_SIM;
-	private static String			jkProtocol     = "tcp";
+	private static String			jkProtocol     = "https";
 	private static String			jkHost         = null;
-	private static int				jkPort         = 6500;
+	private static int				jkPort         = 443;
 	private static String			jkAccessToken  = null;
 	private static String			simFileName    = "";
 	private static boolean			uniqueTags     = false;
@@ -247,8 +247,8 @@ public class TNT4JSimulator {
 		System.out.println("    -T    -  Host name or IP address of jKoolCloud service");
 		System.out.println("             (if not specified, data is not sent to jKoolCloud service)");
 		System.out.println("    -V    -  Define a global variable (property) name=value pair");
-		System.out.println("    -P    -  Port jKoolCloud service is listening on (default: 6500)");
-		System.out.println("    -C    -  Connection type to use for jKoolCloud service (default: tcp)");
+		System.out.println("    -P    -  Port jKoolCloud service is listening on (default: SSL 443)");
+		System.out.println("    -C    -  Connection type to use for jKoolCloud service (default: https)");
 		System.out.println("    -f    -  Use <sim_def_file_name> as simulation configuration");
 		System.out.println("    -p    -  Vary all numeric values by +/- <percentage>");
 		System.out.println("    -G    -  Read/Write jKoolCloud service messages from/to <jk_file_name>");

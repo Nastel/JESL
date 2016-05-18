@@ -271,7 +271,8 @@ public class TNT4JSimulator {
 		System.out.format("Arguments: runype=%s, url=%s://%s:%d, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s, jkFile=%s\n", 
 				runType, jkProtocol, jkHost, jkPort, generateValues, uniqueTags, uniqueCorrs, uniqueIds, valuePctChg, simFileName, jkFileName);
 	}
-	private static void processArgs(TNT4JSimulatorParserHandler xmlHandler, String[] args) {
+	
+	protected static void processArgs(TNT4JSimulatorParserHandler xmlHandler, String[] args) {
 		if (args.length == 0)
 			printUsage("Missing simulation type");
 

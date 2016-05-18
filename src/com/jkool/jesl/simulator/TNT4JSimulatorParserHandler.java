@@ -72,6 +72,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	public static final String SIM_XML_SNAPSHOT     = "snapshot";
 	public static final String SIM_XML_PROP         = "prop";
 	public static final String SIM_XML_VAR          = "var";
+	public static final String SIM_XML_OPTION       = "option";
 	public static final String SIM_XML_ACTIVITY     = "activity";
 	public static final String SIM_XML_EVENT        = "event";
 	public static final String SIM_XML_SLEEP        = "sleep";
@@ -246,6 +247,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			pauseSimulator(attributes);
 		else if (name.equals(SIM_XML_VAR))
 			defineVar(attributes);
+		else if (name.equals(SIM_XML_OPTION))
+			defineOption(attributes);
 		else
 			throw new SAXParseException("Unrecognized element <" + name + ">", saxLocator);
 
@@ -253,78 +256,111 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		curElement = name;
 	}
 
-	private void defineVar(Attributes attributes) throws SAXException {
-		String name    = null;
-		String value   = null;
+	protected String processVarValue(String value) throws SAXParseException {
+		double valueNext = 0;
+		double totalValue = 0;
+		String symbol = null;
+
+		// If addition or multiplication are specified, then do the math.
+		// For now, only one or the other is permitted.
+		if (value.indexOf("+") > 0 && (value.indexOf("*") > 0))
+			throw new SAXParseException("Either multiplicaton or addition but not both are allowed", saxLocator);
+		else if (value.indexOf("bet") > 0) {
+			if ((value.substring(value.indexOf("bet") + 4, value.length()).length() > 9)) {
+				BigInteger min = new BigInteger(value.substring(0, value.indexOf("bet") - 1));
+				BigInteger max = new BigInteger(value.substring(value.indexOf("bet") + 4, value.length()));
+				BigInteger diff = max.subtract(min);
+				diff = diff.add(new BigInteger("1"));
+				BigInteger rnd = new BigInteger(diff.bitLength(), random);
+				BigInteger finalVal = rnd.add(min);
+				value = "" + finalVal;
+			} else {
+				int min = Integer.parseInt(value.substring(0, value.indexOf("bet") - 1));
+				int max = Integer.parseInt(value.substring(value.indexOf("bet") + 4, value.length()));
+				value = "" + (random.nextInt(max - min + 1) + min);
+			}
+		} else if ((value.indexOf("+") > 0 && (value.indexOf("*") < 0))
+		        || (value.indexOf("*") > 0 && (value.indexOf("+") < 0))) {
+			symbol = (value.indexOf("+") > 0) ? "+" : "*";
+			totalValue = symbol.equals("*") ? 1 : 0;
+			while (value.indexOf(symbol) > 0) {
+				valueNext = Double.parseDouble(vars.get(value.substring(0, value.indexOf(symbol) - 1)));
+				if (symbol.equals("+"))
+					totalValue = totalValue + valueNext;
+				else
+					totalValue = totalValue * valueNext;
+				value = value.substring(value.indexOf(symbol) + 2, value.length());
+			}
+			totalValue = symbol.equals("*") ? totalValue * Double.parseDouble(value) : totalValue
+			        + Double.parseDouble(vars.get(value.substring(0, value.length())));
+			value = "" + totalValue;
+		}
+		return value;
+	}
+	
+	private void defineOption(Attributes attributes) throws SAXException {
+		String name = null;
+		String value = null;
 
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
-				String attName  = attributes.getQName(i);
+				String attName = attributes.getQName(i);
 				String attValue = expandEnvVars(attributes.getValue(i));
-				double valueNext = 0;
-				double totalValue = 0;
-				String symbol = null;
 
 				if (attName.equals(SIM_XML_ATTR_NAME))
 					name = attValue;
-				else if (attName.equals(SIM_XML_ATTR_VALUE))
-				{
+				else if (attName.equals(SIM_XML_ATTR_VALUE)) {
 					value = attValue;
-					// If addition or multiplication are specified, then do the math. 
-					// For now, only one or the other is permitted.
-					if (value.indexOf("+") > 0 && (value.indexOf("*") > 0))
-						throw new SAXParseException ("Either multiplicaton or addition but not both are allowed", saxLocator);
-					else if (value.indexOf("bet") > 0)
-					{
-						if ((value.substring(value.indexOf("bet") + 4, value.length()).length() > 9))
-						{
-							BigInteger min = new BigInteger(value.substring(0, value.indexOf("bet") - 1));
-							BigInteger max = new BigInteger(value.substring(value.indexOf("bet") + 4, value.length()));
-							BigInteger diff = max.subtract(min);
-							diff = diff.add(new BigInteger("1"));
-							BigInteger rnd =  new BigInteger(diff.bitLength(), random);
-							BigInteger finalVal = rnd.add(min);
-							value = "" + finalVal;
-						}
-						else
-						{
-							int min = Integer.parseInt(value.substring(0, value.indexOf("bet") - 1));
-							int max = Integer.parseInt(value.substring(value.indexOf("bet") + 4, value.length()));
-							value = "" + (random.nextInt(max - min + 1) + min);
-						}
-					}
-					else if ((value.indexOf("+") > 0 && (value.indexOf("*") < 0)) || (value.indexOf("*") > 0 && (value.indexOf("+") < 0)))
-					{
-						symbol = (value.indexOf("+") > 0) ? "+" : "*";
-						totalValue = symbol.equals("*") ? 1 : 0;
-						while (value.indexOf(symbol) > 0)
-						{
-							valueNext = Double.parseDouble(vars.get(value.substring(0, value.indexOf(symbol) - 1)));
-							if (symbol.equals("+"))
-								totalValue = totalValue + valueNext;
-							else 
-								totalValue = totalValue * valueNext;
-							value = value.substring(value.indexOf(symbol) + 2, value.length());
-						}
-						totalValue = symbol.equals("*") ? totalValue * Double.parseDouble(value) :  totalValue + Double.parseDouble(vars.get(value.substring(0, value.length())));
-						value = "" + totalValue;
-					}	
+					String[] args = value.split(",");
+					TNT4JSimulator.processArgs(this, args);
+				} else {
+					throw new SAXParseException("Unknown <" + SIM_XML_PROP + "> attribute '" + attName + "'",
+					        saxLocator);
 				}
-				else
-					throw new SAXParseException("Unknown <" + SIM_XML_PROP + "> attribute '" + attName + "'", saxLocator);
 			}
 
 			if (StringUtils.isEmpty(name))
-				throw new SAXParseException("<" + SIM_XML_VAR + ">: must specify '" + SIM_XML_ATTR_NAME + "'", saxLocator);
+				throw new SAXParseException("<" + SIM_XML_VAR + ">: must specify '" + SIM_XML_ATTR_NAME + "'",
+				        saxLocator);
+			TNT4JSimulator.trace(simCurrTime, "Defining option: '" + name + "=" + value + "'");
+		} catch (Exception e) {
+			if (e instanceof SAXException)
+				throw (SAXException) e;
+			throw new SAXException("Failed processing definition for option '" + name + "': " + e, e);
+		}
+	}
+
+	private void defineVar(Attributes attributes) throws SAXException {
+		String name = null;
+		String value = null;
+
+		try {
+			for (int i = 0; i < attributes.getLength(); i++) {
+				String attName = attributes.getQName(i);
+				String attValue = expandEnvVars(attributes.getValue(i));
+
+				if (attName.equals(SIM_XML_ATTR_NAME))
+					name = attValue;
+				else if (attName.equals(SIM_XML_ATTR_VALUE)) {
+					value = processVarValue(attValue);
+				} else {
+					throw new SAXParseException("Unknown <" + SIM_XML_PROP + "> attribute '" + attName + "'",
+					        saxLocator);
+				}
+			}
+
+			if (StringUtils.isEmpty(name))
+				throw new SAXParseException("<" + SIM_XML_VAR + ">: must specify '" + SIM_XML_ATTR_NAME + "'",
+				        saxLocator);
 
 			String key = vars.putIfAbsent(name, value);
 			if (key != null) {
-				TNT4JSimulator.trace(simCurrTime, "Skipping duplicate variable: '" + name  + "=" + value + "'");
+				TNT4JSimulator.trace(simCurrTime, "Skipping duplicate variable: '" + name + "=" + value + "'");
 			}
-			TNT4JSimulator.trace(simCurrTime, "Defining variable: '" + name  + "=" + value +"'");
+			TNT4JSimulator.trace(simCurrTime, "Defining variable: '" + name + "=" + value + "'");
 		} catch (Exception e) {
 			if (e instanceof SAXException)
-				throw (SAXException)e;
+				throw (SAXException) e;
 			throw new SAXException("Failed processing definition for variable '" + name + "': " + e, e);
 		}
 	}

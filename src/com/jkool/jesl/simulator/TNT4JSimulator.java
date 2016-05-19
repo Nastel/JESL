@@ -23,7 +23,6 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.Map;
 import java.util.Random;
-import java.util.Scanner;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -438,13 +437,10 @@ public class TNT4JSimulator {
 			if (runType == SimulatorRunType.RUN_SIM) {
 				if (StringUtils.isEmpty(simFileName)) {
 					simFileName = "tnt4j-sim.xml";
-					System.out.print("Simulation definition file name [" + simFileName + "]: ");
-					Scanner input = new Scanner(System.in);
-					String fileName = input.nextLine();
+					String fileName = System.console().readLine("Simulation file [" + simFileName + "]: ");
 
 					if (!StringUtils.isEmpty(fileName))
 						simFileName = fileName;
-					input.close();
 				}
 
 				StringBuffer simDef = new StringBuffer();

@@ -19,6 +19,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -352,10 +353,20 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			if (StringUtils.isEmpty(name))
 				throw new SAXParseException("<" + SIM_XML_VAR + ">: must specify '" + SIM_XML_ATTR_NAME + "'",
 				        saxLocator);
-
-			String key = vars.putIfAbsent(name, value);
-			if (key != null) {
-				TNT4JSimulator.trace(simCurrTime, "Skipping duplicate variable: '" + name + "=" + value + "'");
+			
+			if (value.equalsIgnoreCase("=?")) {
+				// requires input if not defined
+				String oVal = vars.get(name);
+				if (oVal == null) {
+					value = processVarValue(readFromConsole("\nDefine variable " + name + ":"));
+				} else {
+					TNT4JSimulator.trace(simCurrTime, "Skipping duplicate variable: '" + name + "=" + value + "', existing.value='" + oVal +"'");
+				}
+			}
+			
+			String eVal = vars.putIfAbsent(name, value);
+			if (eVal != null) {
+				TNT4JSimulator.trace(simCurrTime, "Skipping duplicate variable: '" + name + "=" + value + "', existing.value='" + eVal +"'");
 			}
 			TNT4JSimulator.trace(simCurrTime, "Defining variable: '" + name + "=" + value + "'");
 		} catch (Exception e) {
@@ -363,6 +374,10 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				throw (SAXException) e;
 			throw new SAXException("Failed processing definition for variable '" + name + "': " + e, e);
 		}
+	}
+
+	private String readFromConsole(String ask) throws IOException {
+		return System.console().readLine(ask);
 	}
 
 	private void recordSource(Attributes attributes) throws SAXException {

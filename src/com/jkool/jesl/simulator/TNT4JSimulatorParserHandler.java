@@ -19,7 +19,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -358,7 +357,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				// requires input if not defined
 				String oVal = vars.get(name);
 				if (oVal == null) {
-					value = processVarValue(readFromConsole("\nDefine variable " + name + ":"));
+					value = processVarValue(TNT4JSimulator.readFromConsole("\nDefine variable [" + name + "]:"));
 				} else {
 					TNT4JSimulator.trace(simCurrTime, "Skipping duplicate variable: '" + name + "=" + value + "', existing.value='" + oVal +"'");
 				}
@@ -376,9 +375,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		}
 	}
 
-	private String readFromConsole(String ask) throws IOException {
-		return System.console().readLine(ask);
-	}
 
 	private void recordSource(Attributes attributes) throws SAXException {
 		if (TNT4JSimulator.getIteration() > 1L)

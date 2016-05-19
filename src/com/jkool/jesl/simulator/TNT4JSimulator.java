@@ -71,6 +71,10 @@ public class TNT4JSimulator {
 	private static TrackingLogger		logger          = null;
 	private static long					iteration       = 0L;
 
+	public static String readFromConsole(String prompt) throws IOException {
+		return System.console().readLine(prompt);
+	}
+	
 	public static void error(String msg, Throwable e) {
 		logger.tnt(OpLevel.ERROR, null, null, msg, e);
 	}
@@ -437,7 +441,7 @@ public class TNT4JSimulator {
 			if (runType == SimulatorRunType.RUN_SIM) {
 				if (StringUtils.isEmpty(simFileName)) {
 					simFileName = "tnt4j-sim.xml";
-					String fileName = System.console().readLine("Simulation file [" + simFileName + "]: ");
+					String fileName = readFromConsole("Simulation file [" + simFileName + "]: ");
 
 					if (!StringUtils.isEmpty(fileName))
 						simFileName = fileName;

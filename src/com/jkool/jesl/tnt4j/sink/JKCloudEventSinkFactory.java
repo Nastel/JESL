@@ -78,7 +78,7 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 
 	@Override
     public EventSink getEventSink(String name, Properties props, EventFormatter frmt) {
-		EventSink outSink = eventSinkFactory != null? eventSinkFactory.getEventSink(name, props, new JSONFormatter(false)): null;
+		EventSink outSink = eventSinkFactory != null? eventSinkFactory.getEventSink(name, props, frmt): null;
 	    return configureSink(new JKCloudEventSink(name, url,  token, frmt, outSink));
     }
 

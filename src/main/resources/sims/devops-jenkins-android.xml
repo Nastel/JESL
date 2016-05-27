@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<tnt4j-simulator>
+
+  <var name="pname"	value="Android"/>
+  <var name="pver"  value="1.1"/>
+  <var name="build" value="15"/>
+  <var name="mainApp" value="myAndroidApp"/>
+  <var name="utils" value="AndroidUtils"/>
+  <var name="tools" value="MobileTools"/>
+  <var name="feature1" value="Voice"/>
+  <var name="feature2" value="Video"/>
+
+  
+  <source id="1" fqn="APPL=Jenkins#SERVER=JenkinsServer#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
+          user="jenkinsusr"/>
+  <source id="2" fqn="APPL=Gradle#SERVER=GradleServer#NETADDR=11.0.0.11#DATACENTER=DC2#GEOADDR=New York, NY"
+          user="mavenusr"/>
+  <source id="3" fqn="APPL=Deploy#SERVER=DeployServer#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=New York, NY"
+          user="deployusr"/>
+  <source id="4" fqn="APPL=EndUserTest#SERVER=QAStaging#NETADDR=182.175.23.35#DATACENTER=DC10#GEOADDR=New York, NY"
+          user="qauser"/>
+  <source id="5" fqn="APPL=Publish#SERVER=AppStore#NETADDR=162.159.122.125#DATACENTER=Washington#GEOADDR=New York, NY"
+          user="perfusr"/>
+
+  
+  <msg id="1">Compiling ${mainApp}.java</msg>
+  <msg id="2">Compiling ${utils}.java</msg>
+  <msg id="3">Compiling ${tools}.java</msg>
+  <msg id="4">Creating package ${mainApp}.jar</msg>
+  <msg id="5">Creating package ${utils}.jar</msg>
+  <msg id="6">High: CWE-502: Deserialization of Untrusted Data. Apache Commons Collections Java library insecurely deserializes data</msg>
+  <msg id="7">Verified, no known vulnerabilities</msg>
+  <msg id="8">Deploying modules 1-20</msg>
+  <msg id="9">Deploying modules 20-30</msg>
+  <msg id="10">Running response time test/queries against MySQL</msg>
+  <msg id="11">Maven finished project build</msg>
+  <msg id="12">Packaging all class files: com/nastel/test</msg>
+  <msg id="13">Finished packaging all class files: com/nastel/test</msg>
+  <msg id="14">Preparing to deploy: com/nastel/test</msg>
+  <msg id="15">Completed deployment: com/nastel/test</msg>
+  <msg id="16">Starting acceptance test: com/nastel/test</msg>
+  <msg id="17">Completed acceptance test: com/nastel/test</msg>
+  <msg id="18">Starting a performance test : com/nastel/test</msg>
+  <msg id="19">Completed a performance test with errors: com/nastel/test</msg>
+  <msg id="20">Low: Denial of Service CVE-2012-2098. Apache Commons Compress internally use sorting algorithms with unacceptable worst-case performance on very repetitive inputs</msg>
+  <msg id="21">High: Remote Code Execution during object de-serialization</msg>
+  <msg id="22">Compiling VoiceTools.java</msg>
+
+  
+  <activity name="Build" sev="INFO" loc="11.0.0.2" user="jenkins" res="${pname}-${pver}-b${build}" source="1">
+    <event name="Gradle" type="CALL" elapsed="233" res="com/nastel/test/${mainApp}.java" msg="1" sev="INFO"/>  
+    <event name="Gradle" type="CALL" elapsed="342" res="com/nastel/test/${utils}.java" msg="2" sev="INFO"/>  
+    <event name="Gradle" type="CALL" elapsed="554" res="com/nastel/test/${tools}.java" msg="3" sev="INFO"/>  
+	<event name="Gradle" type="CALL" elapsed="554" res="com/nastel/test/VoiceTools.java" msg="22" sev="WARNING" exc="Deprecated API usage"/>  
+    <event name="GradleEnd" type="SEND" elapsed="322" res="Project-${pname}" msg="11" sev="INFO" corrs="{pname}-${pver}-b${build}"/>  
+  </activity>
+  
+  <activity name="Package" sev="INFO" loc="11.0.0.10" user="jenkins" res="${pname}-${pver}-b${build}" source="2">
+    <event name="JarStart" type="RECEIVE" elapsed="423" res="Project-${pname}" msg="11" sev="INFO" corrs="{pname}-${pver}-b${build}"/>  
+    <event name="Jar" type="CALL" elapsed="233" res="${mainApp}.jar" msg="4" sev="INFO" />  
+    <event name="Jar" type="CALL" elapsed="4234" res="${utils}.jar" msg="5" sev="INFO" />  
+    <event name="JarEnd" type="SEND" elapsed="423" res="Project-${pname}" msg="13" sev="INFO" corrs="{pname}-${pver}-b${build}"/>  
+  </activity>
+  
+  <activity name="Deploy" sev="WARNING" loc="162.123.74.18" user="depl-usr" res="${pname}-${pver}-b${build}" source="3">
+    <event name="DeployStart" type="RECEIVE" elapsed="423" res="Project-${pname}" msg="13" sev="INFO" corrs="{pname}-${pver}-b${build}" />  
+    <event name="Vulnerability" type="EVENT" elapsed="2342" res="commons-collections-3.2.2.jar" msg="6" sev="WARNING" tags="CWE-502" />  
+    <event name="Vulnerability" type="EVENT" elapsed="3212" res="commons-collections-3.2.2.jar" msg="21" sev="CRITICAL" tags="CVE-2015-4852,CVE-2015-7501" />  
+    <event name="Vulnerability" type="EVENT" elapsed="1283" res="commons-codec-1.9.jar" msg="20" sev="WARNING" tags="CVE-2012-2098" />  
+    <event name="CheckDeps" type="EVENT" elapsed="2342" res="log4j-1.2.jar" msg="7" sev="INFO"/>  
+    <event name="CheckDeps" type="EVENT" elapsed="1232" res="android-tools.jar" msg="7" sev="INFO" />  
+    <event name="DeployEnd" type="SEND" elapsed="543" res="Project-${pname}" msg="15" sev="WARNING" corrs="{pname}-${pver}-b${build}" />  
+  </activity>
+  
+  <activity name="EndUserTest" sev="WARNING" loc="182.175.23.34" user="qausr" res="${pname}-${pver}-b${build}" source="4">
+    <event name="EndUserTestStart" type="RECEIVE" elapsed="423" res="Project-${pname}" msg="15" sev="INFO" corrs="{pname}-${pver}-b${build}"/>  
+    <event name="RunTest1" type="CALL" elapsed="33432" res="${mainApp}-MySQL" msg="8" sev="INFO"/>  
+    <event name="RunTest2" type="CALL" elapsed="23478" res="${mainApp}-Oracle" msg="9" sev="ERROR" tags="ORA-01017" exc="Failed to run test 13: SQLException(ORA-01017)"/>  
+    <event name="EndUserTestEnd" type="SEND" elapsed="645" res="Project-${pname}" msg="17" sev="WARNING" exc="Completed with errors" corrs="{pname}-${pver}-b${build}"/>  
+  </activity>
+
+  <activity name="ToAppStore" sev="WARNING" loc="162.159.122.123" user="perfusr" res="${pname}-${pver}-b${build}" source="5">
+    <event name="ToAppStoreStart" type="RECEIVE" elapsed="543" res="Project-${pname}" msg="17" sev="INFO" corrs="{pname}-${pver}-b${build}"/>  
+    <event name="ToAppStore-${feature1}" type="CALL" elapsed="3737" res="${mainApp}-${feature1}" msg="10" sev="INFO"/>  
+    <event name="ToAppStore-${feature2}" type="CALL" elapsed="23478" res="${mainApp}-${feature2}" msg="9" tags="ERC-495" sev="WARNING" exc="Problem downloading or updating apps from Play Store" />  
+    <event name="ToAppStoreEnd" type="CALL" elapsed="344" res="Project-${pname}" msg="19" sev="WARNING"/>  
+  </activity>
+  
+</tnt4j-simulator>

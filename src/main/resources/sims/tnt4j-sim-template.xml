@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<!-- This defines a TNT4J simulation session.
+     The sequence of items is not critical, with the exception of the <activity> and <event> elements,
+     which must be last and properly nested, since the activities will be simulated as they are parsed,
+     and all required elements must have been defined.
+-->
+<tnt4j-simulator>
+
+  <!-- Define a source, which represents the origin of an activity or event.  Source is uniquely defined by (name).
+       There can be any number of these.  Generally, sources are defined via nested collections, e.g. an
+       application is a source that is contained within another source (the server).  Top level source must specify
+       an address.
+  
+       Attributes of a source are:
+          id:     value to identify source in activity (see below).  This is required.
+          fqn:    Fully-qualified source name - must be unique across all sources.  This is a string
+                  consisting of source type an name pairs (as TYPE=NAME), with the order implying contained in.
+                  Valid types are:
+                        GENERIC, USER, APPL, PROCESS, APPSERVER, SERVER, RUNTIME, VIRTUAL,
+                        NETWORK, DEVICE, NETADDR, GEOADDR, DATACENTER
+                  For SERVER and NETADDR, if names are set to "?", simulator will use local host information
+          user:   User to identify with source (e.g. user that application is running under).
+          url:    URL for source
+       
+       If name and addr attributes are left out, simulator will create a source record based on local host
+  -->
+  <source id="1" fqn="APPL=App1#SERVER=?#NETADDR=?"/>
+  
+  <!-- Defines message that will be used in events.  There can be any number of these. Messages are unique by id.
+       Message payload is value of element (unless file attribute is specified)
+       
+       Attributes of a message are:
+          id:       value to identify message in event (see below).  This is required.
+          mime:     MIME type of message payload
+          enc:      encoding of message payload
+          charset:  character set of message payload
+          file:     name of a file whose contents are used as message payload
+          binfile:  true/false - indicates if file contents are interpreted as binary (default: false)
+                    ignored if file not specified
+  -->
+  <msg id="1" mime="text/plain">This is the message payload</msg>
+
+  <!-- Each item type below can have custom properties. The property values are specified by nested
+       <prop> elements.  The attributes of a property are:
+          name:     name of property.  This is required.
+          value:    value for property.
+          type:     data type of property, which is one of:
+                      STRING    - value is a character string (default)
+                      INTEGER   - value is an integer
+                      DECIMAL   - value is a decimal number (floating point value)
+                      BOOLEAN   - value is either "true" or "false"
+                      TIMESTAMP - value is a timestamp, specified either as a number of microseconds (10e-6) since epoch,
+                                  or a date/time string in the form: yyyy-MM-dd HH:mm:ss.SSSSSS
+          valtype:  type of property value, i.e. how to interpret the value (percentage, counter, etc.)
+                    This can be any string label.  see com.nastel.jkool.tnt4j.core.ValueTypes for a list
+                    of predefined value types.
+  -->
+  
+  <!-- Defines an activity.  An activity is a collection of related events and sub-activities. <activity> elements can
+       contain <event> elements, other <activity> elements, and <snapshot> elements.
+       
+       Attributes of an activity are:
+          name:       name of the activity (operation)
+          source:     id of the source of the activity
+          status:     status of application.  One of:
+                          END, EXCEPTION
+          sev:        severity of event.  One of:
+                          TRACE, DEBUG, INFO, NOTICE, WARNING, ERROR, FAILURE,
+                          CRITICAL, FATAL, HALT
+          pid:        id of process activity occurred in
+          tid:        id of thread activity occurred in
+          cc:         completion code for event.  One of:
+                          SUCCESS, WARNING, ERROR
+          rc:         numeric reason code for activity
+          exc:        exception/error message for activity
+          loc:        location that activity occurred in (e.g. geographical coordinates or position in source file)
+          corrs:      comma-separated list of correlators
+          user:       user name
+          res:        resource referenced by activity
+      
+         Also, a sleep operation can be inserted to cause a delay to simulate blocking or other long-running processing.
+         Supported attributes for sleep are:
+            msec:     millisecond delay
+            usec:     microsecond delay
+  -->
+  <activity name="Process Payment" source="1" pid="5432" tid="4"
+            sev="CRITICAL" cc="WARNING" exc="Host not available">
+  
+  <!-- Defines an event.  An event represents an application action or operation.
+       
+       Attributes of an event are:
+          name:       name of the event (operation).  This is required.
+          type:       type of event (default is EVENT).  One of:
+                          CALL, EVENT, START, STOP, OPEN, CLOSE, SEND, RECEIVE,
+                          INQUIRE, SET, BROWSE, REQUEST, RESPONSE, ADD, REMOVE, CLEAR
+          sev:        severity of event.  One of:
+                          TRACE, DEBUG, INFO, NOTICE, WARNING, ERROR, FAILURE,
+                          CRITICAL, FATAL, HALT
+          cc:         completion code for event.  One of:
+                          SUCCESS, WARNING, ERROR
+          rc:         numeric reason code for activity
+          exc:        exception/error message for activity
+          corrs:      comma-separated list of correlators
+          tags:       comma-separated list of tags
+          elapsed:    elapsed time for event, in microseconds (10e-6)
+          msg:        message number (defined above) for message to associate with event
+          msgage:     age of message (time spent waiting to be processed), in microseconds (10e-6) 
+
+      Event has the following attributes that are also attributes of an activity.  If they are not
+      specified, they will be inherited from the parent activity:
+          pid
+          tid
+          loc
+          user
+          res
+    -->
+    <event name="validate cc" type="REQUEST" sev="INFO" cc="SUCCESS" elapsed="47621"
+           res="https://cc.com/validate" msg="1"/>
+    
+    <sleep msec="100"/>
+    
+    <!-- Defines a snapshot.  A snapshot represents a collection of property values at a particular instance in time.
+         Examples of snapshot values would be system metrics, like memory used, memory available, cpu usage, etc.
+         Snapshots are uniquely identified by their name and time.
+         
+         Attributes of a snapshot are:
+            name:     name of the snapshot.  This is required.
+            cat:      category of snapshot.
+            sev:      severity of event.  One of:
+                          TRACE, DEBUG, INFO, NOTICE, WARNING, ERROR, FAILURE,
+                          CRITICAL, FATAL, HALT
+    -->
+    <snapshot name="SystemMetrics">
+      <prop name="MEM_USED" type="INTEGER" value="12345678" valtype="size"/>
+    </snapshot>
+  
+  </activity>
+</tnt4j-simulator>

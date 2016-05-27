@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<tnt4j-simulator>
+ 
+  <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC11-Berlin#GEOADDR=52.52437,13.41053"
+          user="webuser" url="https://www.sample.com/orders/parts"/>
+<!--   <source id="1" fqn="APPL=WebOrders#SERVER=WebServer101#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" -->
+<!--           user="webuser" url="https://www.sample.com/orders/parts"/> -->
+<!--   <source id="1" fqn="APPL=WebOrders#SERVER=WebServer102#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" -->
+<!--           user="webuser" url="https://www.sample.com/orders/parts"/> -->
+<!--   <source id="1" fqn="APPL=WebOrders#SERVER=WebServer103#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" -->
+<!--           user="webuser" url="https://www.sample.com/orders/parts"/>            -->
+  <source id="2" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368"
+          user="ebay-proc"/>
+  <source id="3" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5-London#GEOADDR=51.50853,-0.12574"
+          user="SYSPRC"/>
+  <source id="4" fqn="APPL=VerifyCredit#SERVER=CreditServerVISA#NETADDR=182.175.23.34#DATACENTER=DC10-Paris#GEOADDR=48.85341,2.3488"
+          user="system"/>
+  <source id="5" fqn="APPL=ShipProduct#SERVER=SupplyChainServer#NETADDR=132.157.134.67#DATACENTER=Warehouse1-Miami#GEOADDR=25.77427,-80.19366"
+          user="system"/>
+  <source id="6" fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Washington#GEOADDR=38.89511,-77.03637"
+          user="mqm"/>
+  <source id="7" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15-Nevada#GEOADDR=36.17497,-115.13722"
+          user="mqm"/>
+  <!-- Berlin -->
+  <source id="8" fqn="APPL=WebClient#NETADDR=192.178.172.12#GEOADDR=53.57532,10.01534"
+          user="mqm"/>
+  <!-- China   -->
+<!--   <source id="8" fqn="APPL=WebClient#NETADDR=199.178.172.12#GEOADDR=22.28552,114.15769" -->
+<!--           user="mqm"/> -->
+  <!-- London   -->
+<!--   <source id="8" fqn="APPL=WebClient#NETADDR=163.178.172.12#GEOADDR=51.50853,-0.12574" -->
+<!--           user="mqm"/> -->
+  <!-- NY   -->
+<!--   <source id="8" fqn="APPL=WebClient#NETADDR=133.178.172.12#GEOADDR=40.84288,-73.29289" -->
+<!--           user="mqm"/> -->
+
+
+     
+  <!-- Berlin -->     
+  <var name="netAddr"  value="11.0.0.2"/> 
+  <var name="corrs" value="SessionId:234,RequestId:567"/>
+  <var name="orderId" value="OrderId:444"/>
+  
+  <!-- China   -->
+<!--   <var name="netAddr"  value="11.0.0.55"/>  -->
+<!--   <var name="corrs" value="SessionId:567,RequestId:890"/> -->
+<!--   <var name="orderId" value="OrderId:222"/> -->
+
+  <!-- London   -->
+<!--   <var name="netAddr"  value="11.0.0.32"/>  -->
+<!--   <var name="corrs" value="SessionId:890,RequestId:952"/> -->
+<!--   <var name="orderId" value="OrderId:555"/>  -->
+  
+  <!-- NY   -->
+<!--   <var name="netAddr"  value="11.0.0.72"/>  -->
+<!--   <var name="corrs" value="SessionId:123,RequestId:376"/> -->
+<!--   <var name="orderId" value="OrderId:333"/> -->
+  
+  <var name="appCache"  value="10000 bet 20000"/>
+  <var name="tcp"  value="65000 bet 75000"/>
+  <!-- Bad in New York -->
+<!--   <var name="tcp"  value="4041001"/> -->
+  <var name="dns"  value="70000 bet 80000"/>
+  <var name="request"  value="100000 bet 120000"/>
+  <var name="receiveOrder"  value="14000 bet 18000"/>
+  <!-- Bad in Berlin -->
+<!--   <var name="receiveOrder"  value="4300100"/> -->
+  <var name="saveOrder"  value="1200 bet 80000"/>
+  <var name="validateOrder"  value="60000 bet 80000"/>
+  <var name="validateAndVerify"  value="75000 bet 110000"/>
+  <var name="credit"  value="22000 bet 80000"/>
+  <var name="validateCredit"  value="30000 bet 150000"/>
+  <var name="validated"  value="1000 bet 10000"/>
+  <var name="readAndRoute"  value="74000 bet 100000"/>
+  <var name="processPayment"  value="60000 bet 120000"/>
+  <var name="updatePayment"  value="80000 bet 120000"/>
+  <!-- Bad in China -->
+<!--   <var name="processPayment"  value="3040020"/> -->
+  <var name="readOrder"  value="14000 bet 70000"/>
+  <var name="possibleFraud"  value="50000 bet 100000"/>
+  <var name="evaluateFraud"  value="100000 bet 150000"/>
+  <var name="sendShipment"  value="10000 bet 50000"/>
+  <var name="readOrderContents"  value="100000 bet 150000"/>
+  <var name="prepareShippingSlip"  value="1000 bet 10000"/>
+  <var name="sendConfirmation"  value="1000 bet 10000"/>             
+  <var name="responseStart"  value="1000 bet 10000"/>          
+  <var name="onLoad"  value="60000 bet 80000"/>          
+  <var name="processing"  value="40000 bet 80000"/>          
+  <var name="response"  value="10000 bet 50000"/>      
+  <var name="zero" value="0000"/>
+  
+  
+  <var name="validateOrderSleep" value="50000 bet 300000"/>
+  <var name="creditSleep" value="50000 bet 300000"/>
+  <var name="validatedSleep" value="50000 bet 300000"/>
+  <var name="processPaymentSleep" value="50000 bet 300000"/>
+  <var name="possibleFraudSleep" value="50000 bet 300000"/>
+  <var name="evaluateFraudSleep" value="50000 bet 300000"/>
+  <var name="sendShipmentSleep" value="50000 bet 300000"/>
+  <var name="prepareShippingSlipSleep" value="50000 bet 300000"/>           
+  <var name="requestSleep" value="50000 bet 300000"/>     
+                
+  <var name="responseAvailableTimeSleep" value="requestSleep + validateOrderSleep + creditSleep + validatedSleep + processPaymentSleep + possibleFraudSleep + evaluateFraudSleep + sendShipmentSleep + prepareShippingSlipSleep"/>      
+  <var name="documentReadyTime" value="processing + response"/> 
+  <var name="pageRenderTime" value="onLoad + zero"/> 
+  <var name="frontEndTime" value="pageRenderTime + documentReadyTime"/>
+  <var name="documentProcessingTime" value="processing + zero"/>
+  <var name="documentDownloadTime" value="response + zero"/>
+  <var name="serverConnectionTime" value="appCache + tcp + dns"/>
+  <var name="responseAvailableTime" value="responseStart + request + receiveOrder + saveOrder + responseAvailableTimeSleep + validateOrder + validateAndVerify + credit + validateCredit + validated + readAndRoute + processPayment + updatePayment + readOrder + possibleFraud + evaluateFraud + sendShipment + readOrderContents + prepareShippingSlip"/>
+  <var name="firstByteTime" value="serverConnectionTime + responseAvailableTime"/>
+  <var name="endUserResponseTime" value="frontEndTime + firstByteTime"/>
+  
+  
+  
+  
+  
+  <var name="receiveOrderMethod1"  value="receiveOrder * .3"/>
+  <var name="receiveOrderMethod2"  value="receiveOrder * .2"/>
+  <var name="receiveOrderMethod3"  value="receiveOrder * .5"/>
+  
+  <var name="saveOrderMethod1"  value="receiveOrder * .3"/>
+  <var name="saveOrderMethod2"  value="receiveOrder * .2"/>
+  <var name="saveOrderMethod3"  value="receiveOrder * .5"/>
+ 
+  <var name="validateOrderMethod1"  value="validateOrder * 1.0"/>
+    
+  <var name="validateAndVerifyMethod1"  value="validateAndVerify * .1"/>
+  <var name="validateAndVerifyMethod2"  value="validateAndVerify * .2"/>
+  <var name="validateAndVerifyMethod3"  value="validateAndVerify * .7"/>
+      
+  <var name="creditMethod1"  value="credit * .8"/>
+  <var name="creditMethod2"  value="credit * .1"/>
+  <var name="creditMethod3"  value="credit * .1"/>
+      
+  <var name="validateCreditMethod1"  value="validateCredit * .3"/>
+  <var name="validateCreditMethod2"  value="validateCredit * .3"/>
+  <var name="validateCreditMethod3"  value="validateCredit * .4"/>
+      
+  <var name="validatedMethod1"  value="validated * .3"/>
+  <var name="validatedMethod2"  value="validated * .7"/>
+      
+  <var name="readAndRouteMethod1"  value="readAndRoute * .5"/>
+  <var name="readAndRouteMethod2"  value="readAndRoute * .4"/>
+  <var name="readAndRouteMethod3"  value="readAndRoute * .1"/>
+      
+  <var name="processPaymentMethod1"  value="processPayment * .3"/>
+  <var name="processPaymentMethod2"  value="processPayment * .4"/>
+  <var name="processPaymentMethod3"  value="processPayment * .3"/>
+  
+  <var name="updatePaymentMethod1"  value="processPayment * .3"/>
+  <var name="updatePaymentMethod2"  value="processPayment * .4"/>
+  <var name="updatePaymentMethod3"  value="processPayment * .3"/>
+      
+  <var name="readOrderMethod1"  value="readOrder * .2"/>
+  <var name="readOrderMethod2"  value="readOrder * .8"/>
+      
+  <var name="possibleFraudMethod1"  value="possibleFraud * .5"/>
+  <var name="possibleFraudMethod2"  value="possibleFraud * .1"/>
+  <var name="possibleFraudMethod3"  value="possibleFraud * .4"/>
+      
+  <var name="evaluateFraudMethod1"  value="evaluateFraud * .6"/>
+  <var name="evaluateFraudMethod2"  value="evaluateFraud * .1"/>
+  <var name="evaluateFraudMethod3"  value="evaluateFraud * .3"/>
+      
+  <var name="sendShipmentMethod1"  value="sendShipment * .2"/>
+  <var name="sendShipmentMethod2"  value="sendShipment * .4"/>
+  <var name="sendShipmentMethod3"  value="sendShipment * .2"/>
+      
+  <var name="readOrderContentsMethod1"  value="readOrderContents * .5"/>
+  <var name="readOrderContentsMethod2"  value="readOrderContents * .3"/>
+  <var name="readOrderContentsMethod3"  value="readOrderContents * .2"/>
+      
+  <var name="prepareShippingSlipMethod1"  value="prepareShippingSlip * .4"/>
+  <var name="prepareShippingSlipMethod2"  value="prepareShippingSlip * .2"/>
+  <var name="prepareShippingSlipMethod3"  value="prepareShippingSlip * .4"/>
+      
+  <var name="sendConfirmationMethod1"  value="sendConfirmation * .8"/>     
+  <var name="sendConfirmationMethod2"  value="sendConfirmation * .1"/>   
+  <var name="sendConfirmationMethod3"  value="sendConfirmation * .1"/>   
+      
+  
+  
+  <msg id="1">AMAZON ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="2">Verify ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="3">Process Payment ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="4">Ship ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="5">Confirm ProductId=8380203, Productname=iPhone, CustomerID=848383</msg>
+  <msg id="6">Malformed expression</msg>
+  
+  
+  <activity name="EUM_SMRY" source="8" sev="INFO" loc="${netAddr}" user="webuser" >
+  	 <prop name="browser" type="STRING" value="Chrome"/>
+	 <prop name="browserVersion" type="INTEGER" value="49"/>
+	 <prop name="platform" type="STRING" value="Win32"/>
+	 <prop name="queryString" type="STRING" value=""/>
+	 <prop name="cs" type="STRING" value="client"/>
+	 <prop name="END_USER_RESPONSE_TIME" type="DECIMAL" value="${endUserResponseTime}"/>
+	 <prop name="FRONT_END_TIME" type="DECIMAL" value="${frontEndTime}"/>
+	 <prop name="PAGE_RENDER_TIME" type="DECIMAL" value="${onLoad}"/>
+	 <prop name="DOCUMENT_PROCESSING_TIME" type="DECIMAL" value="${documentProcessingTime}"/>
+	 <prop name="DOCUMENT_DOWNLOAD_TIME" type="DECIMAL" value="${documentDownloadTime}"/>
+	 <prop name="SERVER_CONNECTION_TIME" type="DECIMAL" value="${serverConnectionTime}"/>
+	 <prop name="RESPONSE_AVAILABLE_TIME" type="DECIMAL" value="${responseAvailableTime}"/>
+	 <prop name="DOCUMENT_READY_TIME" type="DECIMAL" value="${documentReadyTime}"/>
+	 <prop name="FIRST_BYTE_TIME" type="DECIMAL" value="${firstByteTime}"/>
+	 <activity name="END_USER_RESPONSE_TIME" source="8" sev="INFO" loc="${netAddr}" corrs="${corrs}" user="webuser" >
+	  	  <prop name="browser" type="STRING" value="Chrome"/>
+		  <prop name="browserVersion" type="INTEGER" value="49"/>
+		  <prop name="platform" type="STRING" value="Win32"/>
+		  <prop name="queryString" type="STRING" value=""/>
+		  <prop name="cs" type="STRING" value="client"/>
+		  <activity name="FIRST_BYTE_TIME" source="8" sev="INFO" loc="${netAddr}" corrs="${corrs}"  user="webuser" >
+		  	  <prop name="browser" type="STRING" value="Chrome"/>
+			  <prop name="browserVersion" type="INTEGER" value="49"/>
+			  <prop name="platform" type="STRING" value="Win32"/>
+			  <prop name="queryString" type="STRING" value=""/>
+			  <prop name="cs" type="STRING" value="client"/>
+			  <activity name="SERVER_CONNECTION_TIME" source="8" sev="INFO" loc="${netAddr}" corrs="${corrs}"  user="webuser" >
+			  	  <prop name="browser" type="STRING" value="Chrome"/>
+				  <prop name="browserVersion" type="INTEGER" value="49"/>
+				  <prop name="platform" type="STRING" value="Win32"/>
+				  <prop name="queryString" type="STRING" value=""/>
+				  <prop name="cs" type="STRING" value="client"/>
+				  <event name="APPCACHE" source="8" sev="INFO" elapsed="${appCache}" loc="${netAddr}" corrs="${corrs}" user="webuser" >
+				  	<prop name="browser" type="STRING" value="Chrome"/>
+				  	<prop name="browserVersion" type="INTEGER" value="49"/>
+				  	<prop name="platform" type="STRING" value="Win32"/>
+				  	<prop name="queryString" type="STRING" value=""/>
+				  	<prop name="cs" type="STRING" value="client"/>
+				  </event>
+				  <event name="TCP" source="8" sev="INFO" elapsed="${tcp}" loc="${netAddr}" corrs="${corrs}" user="webuser" ></event>
+				  	<prop name="browser" type="STRING" value="Chrome"/>
+				  	<prop name="browserVersion" type="INTEGER" value="49"/>
+				  	<prop name="platform" type="STRING" value="Win32"/>
+				  	<prop name="queryString" type="STRING" value=""/>
+				  	<prop name="cs" type="STRING" value="client"/>
+				  <event name="DNS" source="8" sev="INFO" elapsed="${dns}" loc="${netAddr}" corrs="${corrs}" user="webuser" >
+				  	<prop name="browser" type="STRING" value="Chrome"/>
+				  	<prop name="browserVersion" type="INTEGER" value="49"/>
+				  	<prop name="platform" type="STRING" value="Win32"/>
+				  	<prop name="queryString" type="STRING" value=""/>
+				  	<prop name="cs" type="STRING" value="client"/>
+				  </event>
+			  </activity>
+			  <activity name="RESPONSE_AVAILABLE_TIME" source="8" sev="INFO" loc="${netAddr}" corrs="${corrs}" user="webuser" >
+			  		<prop name="browser" type="STRING" value="Chrome"/>
+				  	<prop name="browserVersion" type="INTEGER" value="49"/>
+				  	<prop name="platform" type="STRING" value="Win32"/>
+				  	<prop name="queryString" type="STRING" value=""/>
+				  	<prop name="cs" type="STRING" value="client"/>
+				   	<event name="REQUEST" source="8" sev="INFO" type="SEND" elapsed="${request}" loc="${netAddr}" res="queue::INCOMING.ORDERS.QUEUE.BERLIN" corrs="${corrs}" user="webuser" msg="2">
+<!-- 					<event name="REQUEST" source="8" sev="INFO" type="SEND" elapsed="${request}" loc="${netAddr}" res="queue::INCOMING.ORDERS.QUEUE.CHINA" corrs="${corrs}" user="webuser" msg="2"> -->
+<!-- 					<event name="REQUEST" source="8" sev="INFO" type="SEND" elapsed="${request}" loc="${netAddr}" res="queue::INCOMING.ORDERS.QUEUE.LONDON" corrs="${corrs}" user="webuser" msg="2"> -->
+<!-- 					<event name="REQUEST" source="8" sev="INFO" type="SEND" elapsed="${request}" loc="${netAddr}" res="queue::INCOMING.ORDERS.QUEUE.NY" corrs="${corrs}" user="webuser" msg="2"> -->
+					   	<prop name="browser" type="STRING" value="Chrome"/>
+					  	<prop name="browserVersion" type="INTEGER" value="49"/>
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="queryString" type="STRING" value=""/>
+					  	<prop name="cs" type="STRING" value="client"/>
+					</event>
+					<sleep usec="${requestSleep}"/>
+					<!-- Bad in Berlin -->
+<!-- 					<event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" cc="ERROR" sev="ERROR" exc="Queue full, re-routing to dead letter queue." res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2" corrs="${corrs}" > -->
+				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.BERLIN" msg="2" corrs="${corrs}" >
+<!-- 				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.CHINA" msg="2" corrs="${corrs}" > -->
+<!-- 				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.LONDON" msg="2" corrs="${corrs}" > -->
+<!-- 				    <event name="ReceiveOrder" source="1" elapsed="${receiveOrder}" type="RECEIVE" res="queue::INCOMING.ORDERS.QUEUE.NY" msg="2" corrs="${corrs}" > -->
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="parseOrderFields:${receiveOrderMethod1},calculateOrderFields:${receiveOrderMethod2},lookupOrderFields:${receiveOrderMethod3}" valtype="age.usec"/>		
+					    <prop name="connectionType" type="STRING" value="jdbc"/>	    
+					</event>
+					<event name="SaveOrder" source="1" elapsed="${saveOrder}" type="EVENT" res="database::order database" corrs="${corrs}" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="saveBilling:${saveOrderMethod1},saveShipping:${saveOrderMethod2},savePayment:${saveOrderMethod3}" valtype="age.usec"/>		
+					    <prop name="connectionType" type="STRING" value="jdbc"/>	    
+					</event>
+				    <event name="ValidateOrder" source="1" type="SEND" elapsed="${validateOrder}" res="queue::VALIDATE.ORDERS.QUEUE" corrs="${corrs}" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="validateItemStockAvailable:${validateOrderMethod1}" valtype="age.usec"/>
+					   	<prop name="connectionType" type="STRING" value="jmx"/>
+					</event>
+					<sleep usec="${validateOrderSleep}"/>
+				    <event name="ValidateAndVerify" source="2" type="RECEIVE" elapsed="${validateAndVerify}" res="queue::VALIDATE.ORDERS.QUEUE" corrs="${corrs}" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="verifyCreditCard:${validateAndVerifyMethod1},verifyExpirationDate:${validateAndVerifyMethod2},verifyPaypal:${validateAndVerifyMethod3}" valtype="age.usec"/>	
+					    <prop name="connectionType" type="STRING" value="jmx"/>			 
+					</event>
+				    <event name="Credit" type="SEND" source="2" elapsed="${credit}" res="queue::CREDIT.ORDERS.QUEUE" corrs="${corrs}" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="saveCreditCard:${creditMethod1},saveBillingAddress:${creditMethod2},saveBillingTo:${creditMethod3}" valtype="age.usec"/>	
+					    <prop name="connectionType" type="STRING" value="jmx"/>	
+					</event>
+					<sleep usec="${creditSleep}"/>
+				    <event name="ValidateCredit" type="RECEIVE" source="4" elapsed="${validateCredit}" res="queue::CREDIT.ORDERS.QUEUE" corrs="${corrs}" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="validateCreditCardNumber:${validateCreditMethod1},validateCreditCardAddress:${validateCreditMethod2},validateCreditCardExpirationDate:${validateCreditMethod3}" valtype="age.usec"/>		
+					    <prop name="connectionType" type="STRING" value="jmx"/>	
+					</event>					    
+				    <event name="Validated" type="SEND" source="4"  elapsed="${validated}" res="queue::ROUTE.ORDERS.QUEUE" corrs="${corrs}" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="flagOrderValid:${validatedMethod1},sendToRoutingQueue:${validatedMethod2}" valtype="age.usec"/>
+					    <prop name="connectionType" type="STRING" value="jmx"/>
+					</event>
+					<sleep usec="${validatedSleep}"/>
+				    <event name="ReadAndRoute" type="RECEIVE" source="7" elapsed="${readAndRoute}" res="queue::ROUTE.ORDERS.QUEUE" corrs="${corrs}"  msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="readOrder:${readAndRouteMethod1},identifyProcessingQueue:${readAndRouteMethod2},sendToProcessingQueue:${readAndRouteMethod3}" valtype="age.usec"/>		
+					    <prop name="connectionType" type="STRING" value="jmx"/>	
+					</event>
+				    <event name="ProcessPayment" type="SEND" source="7" elapsed="${processPayment}" res="queue::PAYMENT.ORDERS.QUEUE" corrs="${corrs}" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="receivePayment:${processPaymentMethod1},processPayment:${processPaymentMethod2},sendToFraudEvaluation:${processPaymentMethod3}" valtype="age.usec"/>		 
+					    <prop name="connectionType" type="STRING" value="jmx"/>  
+				    </event>
+				    <event name="UpdatePayment" source="7" elapsed="${updatePayment}" type="EVENT" res="database::billing database" corrs="${corrs}" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="createCredit:${updatePaymentMethod1},updateOrderPaid:${updatePaymentMethod2},updateShippingReady:${updatePaymentMethod3}" valtype="age.usec"/>		
+					    <prop name="connectionType" type="STRING" value="jdbc"/>	    
+					</event>
+					<sleep usec="${processPaymentSleep}"/>
+				    <event name="ReadOrder" type="RECEIVE" source="3" elapsed="${readOrder}" res="queue::PAYMENT.ORDERS.QUEUE" corrs="${corrs}" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="readOrder:${readOrderMethod1},parseOrder:${readOrderMethod2}" valtype="age.usec"/>	
+					    <prop name="connectionType" type="STRING" value="jmx"/>			
+					</event>
+				    <event name="PossibleFraud" type="SEND" source="3" elapsed="${possibleFraud}" res="queue::FRAUD.ORDERS.QUEUE" corrs="${corrs}" msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="fraudDetectLevel1:${possibleFraudMethod1},fraudDetectLevel2:${possibleFraudMethod2},sendToFraudOrShippingQueue:${possibleFraudMethod3}" valtype="age.usec"/>		 
+					    <prop name="connectionType" type="STRING" value="jmx"/>   
+					</event>
+					<sleep usec="${possibleFraudSleep}"/>
+				    <event name="EvaluateFraud" type="RECEIVE" source="6" elapsed="${evaluateFraud}" res="queue::FRAUD.ORDERS.QUEUE" corrs="${corrs}" msg="2" sev="INFO" exc="Possible fraud">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="processFraudData:${evaluateFraudMethod1},saveFraudData:${evaluateFraudMethod2},alertFraudDept:${evaluateFraudMethod3}" valtype="age.usec"/>
+					    <prop name="connectionType" type="STRING" value="jmx"/>				 
+					</event>		
+					<sleep usec="${evaluateFraudSleep}"/>		    					    
+				    <event name="SendShipment" type="SEND" source="3" elapsed="${sendShipment}" res="queue::SHIP.ORDERS.QUEUE" corrs="${corrs}"  msg="2">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="validateShippingData:${sendShipmentMethod1},determineShippingMethod:${sendShipmentMethod2},sendToWarehouse:${sendShipmentMethod3}" valtype="age.usec"/>
+					    <prop name="connectionType" type="STRING" value="jmx"/>
+					</event>
+					<sleep usec="${sendShipmentSleep}"/>
+				    <event name="ReadOrderContents" type="RECEIVE" source="5" elapsed="${readOrderContents}" res="queue::SHIP.ORDERS.QUEUE" corrs="${corrs}" msg="2" msgage="7272">
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="parseOrderData:${readOrderContentsMethod1},parseShippingData:${readOrderContentsMethod2},updateOrderReadyToShip:${readOrderContentsMethod3}" valtype="age.usec"/>	
+					    <prop name="connectionType" type="STRING" value="jmx"/>
+					</event>					    
+				    <event name="PrepareShippingSlip" type="EVENT" source="5" elapsed="${prepareShippingSlip}" corrs="${corrs}" >
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					    <prop name="methodStack" type="STRING" value="gatherShippingInformation:${prepareShippingSlipMethod1},printShippingSlip:${prepareShippingSlipMethod2},updateOrderShipped:${prepareShippingSlipMethod3}" valtype="age.usec"/>					
+					</event>
+					<sleep usec="${prepareShippingSlipSleep}"/>
+				    <event name="RESPONSE_START" source="8"  msg="2" sev="INFO" type="SEND" elapsed="${responseStart}" corrs="${corrs}" >
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="cs" type="STRING" value="server"/>
+					 </event>
+   				</activity>
+   		  </activity>
+		  <activity name="FRONT_END_TIME" source="8" sev="INFO" loc="${netAddr}" corrs="${corrs}" user="webuser" >
+		  	<prop name="browser" type="STRING" value="Chrome"/>
+			<prop name="browserVersion" type="INTEGER" value="49"/>
+			<prop name="platform" type="STRING" value="Win32"/>
+			<prop name="queryString" type="STRING" value=""/>
+			<prop name="cs" type="STRING" value="client"/>
+		  	<activity name="PAGE_RENDER_TIME" source="8" sev="INFO" loc="${netAddr}" corrs="${corrs}" user="webuser" >
+		  		<prop name="browser" type="STRING" value="Chrome"/>
+				<prop name="browserVersion" type="INTEGER" value="49"/>
+				<prop name="platform" type="STRING" value="Win32"/>
+				<prop name="queryString" type="STRING" value=""/>
+				<prop name="cs" type="STRING" value="client"/>
+		  	  	<event name="ONLOAD" source="8" sev="INFO" elapsed="${onLoad}" loc="${netAddr}" corrs="${corrs}" user="webuser" >
+		  	  		 <prop name="browser" type="STRING" value="Chrome"/>
+					 <prop name="browserVersion" type="INTEGER" value="49"/>
+					 <prop name="platform" type="STRING" value="Win32"/>
+					 <prop name="queryString" type="STRING" value=""/>
+					 <prop name="cs" type="STRING" value="client"/>
+		  	  	</event>
+		  	</activity>
+		  	<activity name="DOCUMENT_READY_TIME" source="8" sev="INFO" loc="${netAddr}" corrs="${corrs}" user="webuser" >
+		  		<prop name="browser" type="STRING" value="Chrome"/>
+				<prop name="browserVersion" type="INTEGER" value="49"/>
+				<prop name="platform" type="STRING" value="Win32"/>
+				<prop name="queryString" type="STRING" value=""/>
+				<prop name="cs" type="STRING" value="server"/>
+		  		<activity name="DOCUMENT_PROCESSING_TIME" source="8" sev="INFO" loc="${netAddr}" corrs="${corrs}" user="webuser" >
+		  			 <prop name="browser" type="STRING" value="Chrome"/>
+					 <prop name="browserVersion" type="INTEGER" value="49"/>
+					 <prop name="platform" type="STRING" value="Win32"/>
+					 <prop name="queryString" type="STRING" value=""/>
+					 <prop name="cs" type="STRING" value="client"/>
+		  		  	<event name="PROCESSING" source="8" sev="INFO" elapsed="${processing}" loc="${netAddr}" corrs="${corrs}"  user="webuser" >
+			  		     <prop name="browser" type="STRING" value="Chrome"/>
+						 <prop name="browserVersion" type="INTEGER" value="49"/>
+						 <prop name="platform" type="STRING" value="Win32"/>
+						 <prop name="queryString" type="STRING" value=""/>
+						 <prop name="cs" type="STRING" value="client"/>
+		  		  	</event>
+<!-- 		  		  	<event name="JAVASCRIPT_ERROR" source="8" sev="ERROR" elapsed="0"  msg="6"  exc="Malformed expression" loc="${netAddr}" corrs="${corrs}" user="webuser" > -->
+<!-- 						  <prop name="browser" type="STRING" value="Chrome"/> -->
+<!-- 						  <prop name="browserVersion" type="INTEGER" value="49"/> -->
+<!-- 						  <prop name="platform" type="STRING" value="Win32"/> -->
+<!-- 						  <prop name="queryString" type="STRING" value=""/> -->
+<!-- 						  <prop name="cs" type="STRING" value="client"/> -->
+<!--   					</event> -->
+		  		</activity>
+		  		<activity name="DOCUMENT_DOWNLOAD_TIME" source="8" sev="INFO" loc="${netAddr}" corrs="${corrs}" user="webuser" >
+		  			<prop name="browser" type="STRING" value="Chrome"/>
+					<prop name="browserVersion" type="INTEGER" value="49"/>
+					<prop name="platform" type="STRING" value="Win32"/>
+					<prop name="queryString" type="STRING" value=""/>
+					<prop name="cs" type="STRING" value="server"/>
+		  		    <event name="RESPONSE" source="8" sev="INFO" elapsed="${response}" loc="${netAddr}" corrs="${corrs}" user="webuser" >
+		  		    	<prop name="browser" type="STRING" value="Chrome"/>
+					  	<prop name="browserVersion" type="INTEGER" value="49"/>
+					  	<prop name="platform" type="STRING" value="Win32"/>
+					  	<prop name="queryString" type="STRING" value=""/>
+					  	<prop name="cs" type="STRING" value="client"/>
+					</event>
+		  		</activity>
+		  	</activity>
+		  </activity>
+		  </activity>
+  </activity>
+
+</tnt4j-simulator>

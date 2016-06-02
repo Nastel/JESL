@@ -25,9 +25,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/Nastel/TNT4J</connection>
+    <connection>scm:git:git://github.com/Nastel/JESL</connection>
     <developerConnection>scm:git:git//github.com/Nastel/JESL</developerConnection>
-    <url>https://github.com/Nastel/TNT4j</url>
+    <url>https://github.com/Nastel/JESL</url>
   </scm>
 
   <properties>

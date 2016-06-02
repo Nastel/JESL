@@ -4,7 +4,7 @@
 
   <groupId>com.jkoolcloud</groupId>
   <artifactId>jesl</artifactId>
-  <version>0.1.6-SNAPSHOT</version>
+  <version>0.1.5</version>
   <packaging>jar</packaging>
 
   <name>jesl</name>
@@ -26,14 +26,20 @@
   </developers>
   <scm>
     <connection>scm:git:git://github.com/Nastel/TNT4J</connection>
-    <developerConnection>scm:git:git//github.com/Nastel/TNT4J</developerConnection>
+    <developerConnection>scm:git:git//github.com/Nastel/JESL</developerConnection>
     <url>https://github.com/Nastel/TNT4j</url>
   </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  
+  <distributionManagement>
+	 <repository>
+      	<id>bintray-amavashev2-jkoolcloud</id>
+      	<name>amavashev2-jkoolcloud</name>
+      	<url>https://api.bintray.com/maven/amavashev2/jkoolcloud/jesl/;publish=1;override=1</url>
+  	 </repository>
+  </distributionManagement>
 
   <dependencies>
 	<dependency>

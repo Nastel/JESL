@@ -146,12 +146,12 @@ That should do it.
 Streaming Log4j to jKool Cloud 
 ===============================
 Log4J can be configured to stream events and metrics to jKool Cloud by using 
-JESL log4j appender (`com.nastel.jkool.tnt4j.logger.log4j.TNT4JAppender`) as follows:
+JESL log4j appender (`com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender`) as follows:
 
 #### Add JESL log4j appender to your log4j configuration
 ```
 ### Default JESL Appender configuration
-log4j.appender.jkoolcloud=com.nastel.jkool.tnt4j.logger.log4j.TNT4JAppender
+log4j.appender.jkoolcloud=com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender
 log4j.appender.jkoolcloud.SourceName=com.jkool.jesl.stream
 log4j.appender.jkoolcloud.SourceType=APPL
 log4j.appender.jkoolcloud.MetricsOnException=true
@@ -161,7 +161,7 @@ log4j.appender.jkoolcloud.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] %m%
 
 ## JESL Configuration
 log4j.logger.com.jkool.jesl.stream=off
-log4j.logger.com.nastel.jkool=info
+log4j.logger.com.jkoolcloud=info
 log4j.logger.com.jkool.jesl=info
 ```
 Define categories that you want mapped to `jkoolcloud` appender. Example:
@@ -214,11 +214,11 @@ Configure your TNT4J source as follows (using `tnt4j.properties` file):
 {
 	....
 	; event sink configuration: destination and data format
-	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
+	event.sink.factory: com.jkoolcloud.tnt4j.sink.BufferedEventSinkFactory
 	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
 	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
-	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
+	event.formatter: com.jkoolcloud.tnt4j.format.JSONFormatter
 	....
 }
 ```
@@ -227,32 +227,32 @@ JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 ```
 {
 	source: com.myco.myappl
-	source.factory: com.nastel.jkool.tnt4j.source.SourceFactoryImpl
+	source.factory: com.jkoolcloud.tnt4j.source.SourceFactoryImpl
 	source.factory.GEOADDR: New York
 	source.factory.DATACENTER: HQDC
 	source.factory.RootFQN: SERVER=?#DATACENTER=?#GEOADDR=?
 	source.factory.RootSSN: tnt4j-myapp
 	
-	tracker.factory: com.nastel.jkool.tnt4j.tracker.DefaultTrackerFactory
-	dump.sink.factory: com.nastel.jkool.tnt4j.dump.DefaultDumpSinkFactory
+	tracker.factory: com.jkoolcloud.tnt4j.tracker.DefaultTrackerFactory
+	dump.sink.factory: com.jkoolcloud.tnt4j.dump.DefaultDumpSinkFactory
 
 	; event sink configuration: destination and data format
-	event.sink.factory: com.nastel.jkool.tnt4j.sink.BufferedEventSinkFactory
+	event.sink.factory: com.jkoolcloud.tnt4j.sink.BufferedEventSinkFactory
 	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
 	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
-	event.formatter: com.nastel.jkool.tnt4j.format.JSONFormatter
+	event.formatter: com.jkoolcloud.tnt4j.format.JSONFormatter
 
 	; Configure default sink filter based on level and time (elapsed/wait)
-	event.sink.factory.Filter: com.nastel.jkool.tnt4j.filters.EventLevelTimeFilter
+	event.sink.factory.Filter: com.jkoolcloud.tnt4j.filters.EventLevelTimeFilter
 	event.sink.factory.Filter.Level: TRACE
 	; Uncomment lines below to filter out events based on elapsed time and wait time
 	; Timed event/activities greater or equal to given values will be logged
 	;event.sink.factory.Filter.ElapsedUsec: 100
 	;event.sink.factory.Filter.WaitUsec: 100
 	
-	tracking.selector: com.nastel.jkool.tnt4j.selector.DefaultTrackingSelector
-	tracking.selector.Repository: com.nastel.jkool.tnt4j.repository.FileTokenRepository
+	tracking.selector: com.jkoolcloud.tnt4j.selector.DefaultTrackingSelector
+	tracking.selector.Repository: com.jkoolcloud.tnt4j.repository.FileTokenRepository
 }
 ```
 <b>NOTE:</b> You will need to provide your actual API access token in (`event.sink.factory.EventSinkFactory.Token`).

@@ -4,7 +4,7 @@
 
     <groupId>com.jkoolcloud</groupId>
     <artifactId>jesl</artifactId>
-    <version>0.1.6-SNAPSHOT</version>
+    <version>0.1.5</version>
     <packaging>jar</packaging>
 
     <name>jesl</name>
@@ -32,7 +32,20 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <product.vendor>jKool, LLC</product.vendor>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>doclint-java8-disable</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <properties>
+                <javadoc.opts>-Xdoclint:none</javadoc.opts>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
@@ -68,6 +81,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
+                    <verbose>true</verbose>
+                    <fork>true</fork>
+                    <executable>${JAVA_HOME}/bin/javac</executable>
+                    <compilerVersion>1.6</compilerVersion>
                     <source>1.7</source>
                     <target>1.7</target>
                 </configuration>
@@ -97,6 +114,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <failOnError>false</failOnError>
+                </configuration>
             </plugin>
             <!--<plugin>-->
             <!--<groupId>org.apache.maven.plugins</groupId>-->

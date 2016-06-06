@@ -2,38 +2,44 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jkoolcloud</groupId>
-    <artifactId>jesl</artifactId>
-    <version>0.1.5</version>
-    <packaging>jar</packaging>
+  <groupId>com.jkoolcloud</groupId>
+  <artifactId>jesl</artifactId>
+  <version>0.1.5</version>
+  <packaging>jar</packaging>
 
-    <name>jesl</name>
-    <url>http://www.jkoolcloud.com/</url>
-    <description>Data Streaming, Data Analytics</description>
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <name>Albert Mavashev</name>
-            <email>amavashev@jkoolcloud.com</email>
-            <organization>jKool</organization>
-            <organizationUrl>http://www.jkoolcloud.com</organizationUrl>
-        </developer>
-    </developers>
-    <scm>
-        <connection>scm:git:git://github.com/Nastel/TNT4J</connection>
-        <developerConnection>scm:git:git//github.com/Nastel/TNT4J</developerConnection>
-        <url>https://github.com/Nastel/TNT4j</url>
-    </scm>
+  <name>jesl</name>
+  <url>http://www.jkoolcloud.com/</url>
+  <description>Data Streaming, Data Analytics</description>
+  <licenses>
+  <license>
+    <name>The Apache License, Version 2.0</name>
+    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+  </license>
+  </licenses>
+   <developers>
+    <developer>
+      <name>Albert Mavashev</name>
+      <email>amavashev@jkoolcloud.com</email>
+      <organization>jKool</organization>
+      <organizationUrl>http://www.jkoolcloud.com</organizationUrl>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:git://github.com/Nastel/JESL</connection>
+    <developerConnection>scm:git:git//github.com/Nastel/JESL</developerConnection>
+    <url>https://github.com/Nastel/JESL</url>
+  </scm>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <product.vendor>jKool, LLC</product.vendor>
-    </properties>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <distributionManagement>
+	 <repository>
+      	<id>bintray-amavashev2-jkoolcloud</id>
+      	<name>amavashev2-jkoolcloud</name>
+      	<url>https://api.bintray.com/maven/amavashev2/jkoolcloud/jesl/;publish=1;override=1</url>
+  	 </repository>
+  </distributionManagement>
 
     <profiles>
         <profile>

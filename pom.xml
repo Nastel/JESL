@@ -32,7 +32,10 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <product.vendor>jKool, LLC</product.vendor> 
+    <release.deploy.dir>../build/${project.name}</release.deploy.dir>
   </properties>
+
   <distributionManagement>
   	<repository>
       	<id>bintray-amavashev2-jkoolcloud</id>
@@ -139,6 +142,19 @@
           </execution>
       </executions>
     </plugin>     
-    </plugins>
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.0.0</version>
+        <inherited>false</inherited>
+        <configuration>
+            <filesets>
+                <fileset>
+                    <directory>${release.deploy.dir}</directory>
+                </fileset>
+            </filesets>
+        </configuration>
+     </plugin>   
+   </plugins>
   </build>  
 </project>

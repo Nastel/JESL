@@ -54,4 +54,12 @@
             <outputDirectory></outputDirectory>
         </fileSet>
     </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <useTransitiveDependencies>true</useTransitiveDependencies>
+            <outputDirectory>libs</outputDirectory>
+            <unpack>false</unpack>
+        </dependencySet>
+    </dependencySets>
 </assembly>

@@ -27,6 +27,7 @@ import com.jkoolcloud.tnt4j.sink.AbstractEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.sink.EventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.FileEventSinkFactory;
+import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
  * <p>Concrete implementation of <code>EventSinkFactory</code> interface, which
@@ -90,9 +91,14 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	@Override
     public void setConfiguration(Map<String, Object> settings) throws ConfigException {
 		super.setConfiguration(settings);
-		url = config.get("Url") != null? config.get("Url").toString(): url;
-		token = config.get("Token") != null? config.get("Token").toString(): token;
-		fileName = config.get("Filename") != null? config.get("Filename").toString(): fileName;
+		
+		url = Utils.getString("Url", settings, url);
+		token = Utils.getString("Token", settings, token);
+		fileName =  Utils.getString("Filename", settings, fileName);
+		_applyConfig(settings);
+    }
+	
+	private void _applyConfig(Map<String, Object> settings) throws ConfigException {
 		if (fileName != null) {
 			eventSinkFactory = new FileEventSinkFactory(fileName);
 			eventSinkFactory.setTTL(getTTL());
@@ -100,11 +106,10 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 		try {
 			URI uri = new URI(url);
 			url = uri.toString();
-		}
-		catch (URISyntaxException e1) {
+		} catch (URISyntaxException e1) {
 			ConfigException ce = new ConfigException(e1.toString(), settings);
 			ce.initCause(e1);
 			throw ce;
-		}
-    }
+		}		
+	}
 }

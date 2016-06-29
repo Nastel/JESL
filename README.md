@@ -14,7 +14,7 @@ To stream data to jKool Cloud your application must:
 	
 	4. Configure your application for streaming to jKool Cloud 
 	   using JESL Event Sink (requires API access token).
-	   See (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
+	   See (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
 	
 JESL package includes the following components:
 
@@ -118,7 +118,7 @@ Streaming Syslog to jKool Cloud
 JESL includes Syslog Daemon implementation. Please follow these steps to stream syslog to `jkoolcloud.com`:
 
 * Obtain jkool cloud account. Edit `config/tnt4j.properties`, 
-	* Locate `com.jkool.jesl.net.syslogd` stanza and provide your API access token.
+	* Locate `com.jkoolcloud.jesl.net.syslogd` stanza and provide your API access token.
 * Run JESL syslogd `<jesl-home>/bin/jksysd > jksysd.json`. 
 	* By default JESL `jksysd` binds to TCP port `5140` and writes JSON formatted syslog messages.
 	* JSON output can be played back using `<jesl-home>/bin/jksys` utility.
@@ -152,7 +152,7 @@ JESL log4j appender (`com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender`) as follo
 ```
 ### Default JESL Appender configuration
 log4j.appender.jkoolcloud=com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender
-log4j.appender.jkoolcloud.SourceName=com.jkool.jesl.stream
+log4j.appender.jkoolcloud.SourceName=com.jkoolcloud.jesl.stream
 log4j.appender.jkoolcloud.SourceType=APPL
 log4j.appender.jkoolcloud.MetricsOnException=true
 log4j.appender.jkoolcloud.MetricsFrequency=60
@@ -160,9 +160,9 @@ log4j.appender.jkoolcloud.layout=org.apache.log4j.PatternLayout
 log4j.appender.jkoolcloud.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] %m%n
 
 ## JESL Configuration
-log4j.logger.com.jkool.jesl.stream=off
+log4j.logger.com.jkoolcloud.jesl.stream=off
 log4j.logger.com.jkoolcloud=info
-log4j.logger.com.jkool.jesl=info
+log4j.logger.com.jkoolcloud.jesl=info
 ```
 Define categories that you want mapped to `jkoolcloud` appender. Example:
 ```
@@ -208,14 +208,14 @@ logger.info("Ending a tnt4j activity #end=Test, #app=" + Log4JTest.class.getName
 Streaming TNT4J to jKool Cloud 
 ==============================
 Applications that use TNT4J can be configured to stream events and metrics to jKool Cloud
-by configuring application source to use JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
+by configuring application source to use JESL Event Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
 Configure your TNT4J source as follows (using `tnt4j.properties` file):
 ```
 {
 	....
 	; event sink configuration: destination and data format
 	event.sink.factory: com.jkoolcloud.tnt4j.sink.BufferedEventSinkFactory
-	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
+	event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
 	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.jkoolcloud.tnt4j.format.JSONFormatter
@@ -223,7 +223,7 @@ Configure your TNT4J source as follows (using `tnt4j.properties` file):
 }
 ```
 Below is an example of a sample TNT4J source (com.myco.myappl) configuration with 
-JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
+JESL Event Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 ```
 {
 	source: com.myco.myappl
@@ -238,7 +238,7 @@ JESL Event Sink (`com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 
 	; event sink configuration: destination and data format
 	event.sink.factory: com.jkoolcloud.tnt4j.sink.BufferedEventSinkFactory
-	event.sink.factory.EventSinkFactory: com.jkool.jesl.tnt4j.sink.JKCloudEventSinkFactory
+	event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
 	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.jkoolcloud.tnt4j.format.JSONFormatter

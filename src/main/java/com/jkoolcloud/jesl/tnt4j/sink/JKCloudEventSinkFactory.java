@@ -30,9 +30,9 @@ import com.jkoolcloud.tnt4j.sink.FileEventSinkFactory;
 import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
- * <p>Concrete implementation of <code>EventSinkFactory</code> interface, which
- * creates instances of <code>EventSink</code>. This factory uses <code>JKCloudEventSink</code>
- * as the underlying sink provider and by default uses <code>JSONFormatter</code> to
+ * <p>Concrete implementation of {@link EventSinkFactory} interface, which
+ * creates instances of {@link EventSink}. This factory uses {@link JKCloudEventSink}
+ * as the underlying sink provider and by default uses {@link JSONFormatter} to
  * format messages.</p>
  *
  *

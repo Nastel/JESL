@@ -4,7 +4,7 @@
 
   <groupId>com.jkoolcloud</groupId>
   <artifactId>jesl</artifactId>
-  <version>0.1.5</version>
+  <version>0.1.6-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>jesl</name>
@@ -48,7 +48,7 @@
 	<dependency>
 	    <groupId>com.jkoolcloud</groupId>
 	    <artifactId>tnt4j</artifactId>
-	    <version>2.2</version>
+	    <version>2.2.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 	    <groupId>com.jkoolcloud.tnt4j.logger</groupId>

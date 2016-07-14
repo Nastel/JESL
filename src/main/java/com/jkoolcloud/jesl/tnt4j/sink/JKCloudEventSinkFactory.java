@@ -26,7 +26,7 @@ import com.jkoolcloud.tnt4j.format.JSONFormatter;
 import com.jkoolcloud.tnt4j.sink.AbstractEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.sink.EventSinkFactory;
-import com.jkoolcloud.tnt4j.sink.FileEventSinkFactory;
+import com.jkoolcloud.tnt4j.sink.impl.FileEventSinkFactory;
 import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**

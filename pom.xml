@@ -57,16 +57,6 @@
 	    <version>0.3.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>
-	    <groupId>com.jkoolcloud.tnt4j.logger</groupId>
-	    <artifactId>tnt4j-logback</artifactId>
-	    <version>0.2-SNAPSHOT</version>
-	</dependency>
-	<dependency>
-	    <groupId>com.jkoolcloud.tnt4j.logger</groupId>
-	    <artifactId>tnt4j-log4j</artifactId>
-	    <version>0.2-SNAPSHOT</version>
-	</dependency>
-	<dependency>
 	    <groupId>org.apache.httpcomponents</groupId>
 	    <artifactId>httpclient</artifactId>
 	    <version>4.2.5</version>

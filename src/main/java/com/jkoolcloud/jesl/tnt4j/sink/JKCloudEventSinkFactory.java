@@ -26,7 +26,7 @@ import com.jkoolcloud.tnt4j.format.JSONFormatter;
 import com.jkoolcloud.tnt4j.sink.AbstractEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.sink.EventSinkFactory;
-import com.jkoolcloud.tnt4j.sink.FileEventSinkFactory;
+import com.jkoolcloud.tnt4j.sink.impl.FileEventSinkFactory;
 import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
@@ -45,7 +45,7 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	private String fileName = null;
 	private String token = System.getProperty("tnt4j.sink.factory.socket.token", "");
 	private String url = System.getProperty("tnt4j.sink.factory.socket.url", "http://localhost:6580");
-
+	
 	private EventSinkFactory eventSinkFactory = null;
 
 	/**
@@ -91,13 +91,13 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	@Override
     public void setConfiguration(Map<String, Object> settings) throws ConfigException {
 		super.setConfiguration(settings);
-
+		
 		url = Utils.getString("Url", settings, url);
 		token = Utils.getString("Token", settings, token);
 		fileName =  Utils.getString("Filename", settings, fileName);
 		_applyConfig(settings);
     }
-
+	
 	private void _applyConfig(Map<String, Object> settings) throws ConfigException {
 		if (fileName != null) {
 			eventSinkFactory = new FileEventSinkFactory(fileName);
@@ -110,6 +110,6 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 			ConfigException ce = new ConfigException(e1.toString(), settings);
 			ce.initCause(e1);
 			throw ce;
-		}
+		}		
 	}
 }

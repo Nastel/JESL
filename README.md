@@ -2,8 +2,8 @@
 JESL allows application developers stream time-series data to jKool Cloud.
 To stream data to jKool Cloud your application must:
 	
-	1. Use TNT4J, or slf4j/log4j/Logback  in your application
-	   to log events, activities, metrics
+	1. Use TNT4J, or MQTT/slf4j/log4j/Logback in your application
+	   to log events, activities, metrics (see https://github.com/Nastel/tnt4j-streams)
 	
 	2. Obtain your jKool account and API access token 
 	   at https://www.jkoolcloud.com. API access token is required to stream
@@ -19,19 +19,14 @@ To stream data to jKool Cloud your application must:
 JESL package includes the following components:
 
 	1. TNT4J streaming library with SLF4j support (https://github.com/Nastel/TNT4J)
-	   
-	2. TNT4J Appender for Log4J 1.2 (https://github.com/Nastel/tnt4j-log4j12)	 
+	   	
+	2. TNT4J Syslog for streaming syslog to jkoolcloud.com. (https://github.com/Nastel/tnt4j-syslogd)
 	
-	3. TNT4J Appender for Logback (https://github.com/Nastel/tnt4j-logback)	 
-	
-	4. TNT4J Syslog for streaming syslog to jkoolcloud.com. ((https://github.com/Nastel/tnt4j-syslogd)
-	
-	5. JESL Simulator -- stream simulated events, activities and metrics
+	3. JESL Simulator -- stream simulated events, activities and metrics
 	   to jKool Cloud. Simulations are defined in XML files.
 	   (see `sims/tnt4j-sim-template.xml` and `sims/order-process.xml`) 
 	
-	6. JESL Event Sink -- TNT4J Event Sink implementation
-	   to stream events to jKool Cloud.
+	4. JESL Event Sink -- TNT4J Event Sink implementation to stream events to jKoolCloud.
 
 ## JESL Simulator
 The JESL Simulator provides the ability to simulate tracking activities
@@ -145,6 +140,8 @@ That should do it.
 
 Streaming Log4j to jKool Cloud 
 ===============================
+Requires TNT4J Appender for Log4J 1.2 (https://github.com/Nastel/tnt4j-log4j12)	 
+	
 Log4J can be configured to stream events and metrics to jKool Cloud by using 
 JESL log4j appender (`com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender`) as follows:
 
@@ -181,8 +178,8 @@ Optionally you can add the following parameters to define default data center na
 ```
 -Dtnt4j.source.DATACENTER=YourDataCenterName -Dtnt4j.source.GEOADDR="Melville, NY" 
 ```
-Make sure `<jesl.home>/jkool-jesl.jar` and all dependent jar files in `<jesl.home>/lib` are in your class path.
-Also include TNT4J-LOG4J12 appender libraries under `<jesl.home>/lib/tnt4j-log4j12`.
+Make sure `<jesl.home>/jesl-<version>.jar` and all dependent jar files in `<jesl.home>/lib` are in your class path.
+Also include tnt4-log4j12 appender library `tnt4j-log4j-<version>.jar`.
 
 #### Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 This allows streaming data to be associated with your private repository.
@@ -214,7 +211,9 @@ Configure your TNT4J source as follows (using `tnt4j.properties` file):
 {
 	....
 	; event sink configuration: destination and data format
-	event.sink.factory: com.jkoolcloud.tnt4j.sink.BufferedEventSinkFactory
+	event.sink.factory: com.jkoolcloud.tnt4j.sink.impl.BufferedEventSinkFactory
+	event.sink.factory.PooledLoggerFactory: com.jkoolcloud.tnt4j.sink.impl.PooledLoggerFactoryImpl
+	
 	event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
 	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
@@ -237,7 +236,9 @@ JESL Event Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 	dump.sink.factory: com.jkoolcloud.tnt4j.dump.DefaultDumpSinkFactory
 
 	; event sink configuration: destination and data format
-	event.sink.factory: com.jkoolcloud.tnt4j.sink.BufferedEventSinkFactory
+	event.sink.factory: com.jkoolcloud.tnt4j.sink.impl.BufferedEventSinkFactory
+	event.sink.factory.PooledLoggerFactory: com.jkoolcloud.tnt4j.sink.impl.PooledLoggerFactoryImpl
+	
 	event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
 	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN

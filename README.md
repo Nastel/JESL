@@ -179,7 +179,7 @@ Optionally you can add the following parameters to define default data center na
 -Dtnt4j.source.DATACENTER=YourDataCenterName -Dtnt4j.source.GEOADDR="Melville, NY" 
 ```
 Make sure `<jesl.home>/jesl-<version>.jar` and all dependent jar files in `<jesl.home>/lib` are in your class path.
-Also include tnt4-log4j12 appender library `tnt4j-log4j-<version>.jar`.
+Also include tnt4-log4j12 appender library `tnt4j-log4j12-<version>.jar`.
 
 #### Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 This allows streaming data to be associated with your private repository.

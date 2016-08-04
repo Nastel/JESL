@@ -258,6 +258,59 @@ JESL Event Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 ```
 <b>NOTE:</b> You will need to provide your actual API access token in (`event.sink.factory.EventSinkFactory.Token`).
 
+# Sample jKQL Queries
+Sample queries you can run against your data using jkool dashboard.
+jKQL queries follow this convention:
+
+`<verb> <expression> show as <widget>`
+
+Example:
+```sql
+Get events where severity > INFO show as linechart
+```
+
+## Sample Get queries
+```sql
+Get relatives show as topology
+Get relatives show as geomap
+Get events where severity > INFO show as linechart
+Get worst 10 events for last day show as linechart
+Get number of events where severity > INFO group by servername, applname, severity show as scorecard
+Get number of events where exception is not null group by applname ORDER BY applname show as piechart
+Get number of events group by servername ORDER BY servername show as piechart
+Get number of events where severity in (Error, Warning) for latest day group by starttime bucketed by hour, eventname show as stackchart
+Get number of events group by starttime bucketed by minute show as anomalychart
+Get number of activities group by starttime bucketed by minute show as anomalychart
+Get number of events for latest 4 hours group by location show as barchart
+Get number of events fields avg elapsedtime, max elapsedtime, min elapsedtime for latest 4 hours where severity in (Critical, Warning, Error) group by starttime bucketed by hour show as linechart
+Get number of events group by eventname, severity, starttime bucketed by minute order by severity show as stackchart
+Get number of activities group by Properties('browser') show as piechart
+```
+
+## Sample Compare queries
+```sql
+Compare only diffs latest 3 events
+Compare only diffs longest 5 events show as table
+```
+
+## Sample Snapshot queries
+```sql
+Get number of snapshots where Category In (Log4J, Java, GarbageCollector) group by severity, category show as piechart
+Get snapshots Memory fields snapshottime, map(FreeBytes) for latest day where map(FreeBytes) < 1500000000 show as colchart
+Get snapshots Memory avg map(FreeBytes), max map(FreeBytes), max map(FreeBytes) show as colchart
+Get snapshots where properties(TotalCpuUserUsec) > 4000 order by activityname
+Get snapshot ShopingCart avg map(ShippingCost), sum map(ShippingCost) group by location show as scorecard
+```
+
+## Sample Real-time queries
+```sql
+Subscribe to events show as linechart
+Subscribe to number of events show as linechart
+Subscribe to number of activities show as linechart
+Subscribe to events where message contains 'failure' show as linechart
+Get worst 10 events for last day show as linechart
+```
+
 # Project Dependencies
 JESL requires the following (which will download automatically if using Maven):
 * JDK 1.6+

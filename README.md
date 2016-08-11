@@ -308,7 +308,6 @@ Subscribe to events show as linechart
 Subscribe to number of events show as linechart
 Subscribe to number of activities show as linechart
 Subscribe to events where message contains 'failure' show as linechart
-Get worst 10 events for last day show as linechart
 ```
 
 # Project Dependencies

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <tnt4j-simulator>
          
-<source id="1" fqn="APPL=Orders#SERVER=iPhone 482#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="???"/>      
-<source id="2" fqn="APPL=Orders#SERVER=WebServer101#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="???"/> 
-<source id="3" fqn="APPL=Orders#SERVER=WebServer102#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="???"/> 
-<source id="4" fqn="APPL=Orders#SERVER=WebServer103#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="???"/>           
+<source id="1" fqn="APPL=Orders#SERVER=iPhone 482#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
+<source id="2" fqn="APPL=Orders#SERVER=WebServer101#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+<source id="3" fqn="APPL=Orders#SERVER=WebServer102#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+<source id="4" fqn="APPL=Orders#SERVER=WebServer103#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           
 <var name="sleep" value="50000 bet 300000"/>
 <var name="source" value="1 bet 4"/>
 <var name="user1" value="10000000 bet 99999999"/>
@@ -15,67 +15,67 @@
 <var name="netaddr1" value="100 bet 999"/>
 <var name="netaddr2" value="100 bet 999"/>
 <var name="netaddr3" value="1 bet 9"/>
-<var name="netaddr4" value="10 bet 9"/>
-<var name="deviceNumber" value="1 and 999999"/>
-<var name="thread" value="1000 and 9999"/>
+<var name="netaddr4" value="10 bet 99"/>
+<var name="deviceNumber" value="1 bet 999999"/>
+<var name="tid" value="1000 bet 9999"/>
    
 <activity name="TRACKING_ACTIVITY" source="${source}" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" >
-  	 <prop name="freeMemory" type="INTEGER" value="4542954464"/>
+  	 <prop name="freeMemory" type="INTEGER" value="444"/>
 	 <prop name="hardware" type="STRING" value="x86_64"/>
 	 <prop name="iOSVersion" type="STRING" value="10.1"/>
 	 <prop name="model" type="STRING" value="iPhone"/>
 	 <prop name="phoneCarrier" type="STRING" value="ATT"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="allProductsViewController" thread="${thread}" tag="iPhone" source-ssn="jKool-iOS-client" device="iphone-${device-number}"/>
+	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tid="${tid}" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonSearchClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="allProductsViewController" thread="${thread}" tag="iPhone" source-ssn="jKool-iOS-client" device="iphone-${device-number}"/>
+	 <event name="buttonSearchClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tid="${tid}" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="allProductsViewController" thread="${thread}" tag="iPhone" source-ssn="jKool-iOS-client" device="iphone-${device-number}"/>
+	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tid="${tid}" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="productViewController" thread="${thread}" tag="iPhone" source-ssn="jKool-iOS-client" device="iphone-${device-number}"/>
+	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tid="${tid}" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonAddToCartClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="productViewController" thread="${thread}" tag="iPhone" source-ssn="jKool-iOS-client" device="iphone-${device-number}"/>
+	 <event name="buttonAddToCartClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tid="${tid}" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonCheckoutClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="productViewController" thread="${thread}" tag="iPhone" source-ssn="jKool-iOS-client" device="iphone-${device-number}"/>
+	 <event name="buttonCheckoutClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tid="${tid}" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="productViewController" thread="${thread}" tag="iPhone" source-ssn="jKool-iOS-client" device="iphone-${device-number}"/>
+	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tid="${tid}" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="cartViewController" thread="${thread}" tag="iPhone" source-ssn="jKool-iOS-client" device="iphone-${device-number}"/>
+	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tid="${tid}" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonPlaceOrderClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="cartViewController" thread="${thread}" tag="iPhone" source-ssn="jKool-iOS-client" device="iphone-${device-number}"/>
+	 <event name="buttonPlaceOrderClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tid="${tid}" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="cartViewController" thread="${thread}" tag="iPhone" source-ssn="jKool-iOS-client" device="iphone-${device-number}"/>
+	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tid="${tid}" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="checkoutViewController" thread="${thread}" tag="iPhone" source-ssn="jKool-iOS-client" device="iphone-${device-number}"/>
+	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="checkoutViewController" tid="${tid}" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>            
 </activity>
 
 <activity name="TRACKING_ACTIVITY" source="${source}" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" >
-  	 <prop name="freeMemory" type="INTEGER" value="4542954464"/>
+  	 <prop name="freeMemory" type="INTEGER" value="444"/>
 	 <prop name="hardware" type="STRING" value="x86_64"/>
 	 <prop name="iOSVersion" type="STRING" value="10.1"/>
 	 <prop name="model" type="STRING" value="iPhone"/>
 	 <prop name="phoneCarrier" type="STRING" value="ATT"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="allProductsViewController" thread="${thread}" tag="iPad" source-ssn="jKool-iOS-client" device="ipad-${device-number}"/>
+	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tid="${tid}" tags="iPad"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonSearchClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="allProductsViewController" thread="${thread}" tag="iPad" source-ssn="jKool-iOS-client" device="ipad-${device-number}"/>
+	 <event name="buttonSearchClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tid="${tid}" tags="iPad"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="allProductsViewController" thread="${thread}" tag="iPad" source-ssn="jKool-iOS-client" device="ipad-${device-number}"/>
+	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tid="${tid}" tags="iPad"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="productViewController" thread="${thread}" tag="iPad" source-ssn="jKool-iOS-client" device="ipad-${device-number}"/>
+	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tid="${tid}" tags="iPad"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonAddToCartClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="productViewController" thread="${thread}" tag="iPad" source-ssn="jKool-iOS-client" device="ipad-${device-number}"/>
+	 <event name="buttonAddToCartClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tid="${tid}" tags="iPad"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonCheckoutClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="productViewController" thread="${thread}" tag="iPad" source-ssn="jKool-iOS-client" device="ipad-${device-number}"/>
+	 <event name="buttonCheckoutClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tid="${tid}" tags="iPad"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="productViewController" thread="${thread}" tag="iPad" source-ssn="jKool-iOS-client" device="ipad-${device-number}"/>
+	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tid="${tid}" tags="iPad"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="cartViewController" thread="${thread}" tag="iPad" source-ssn="jKool-iOS-client" device="ipad-${device-number}"/>
+	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tid="${tid}" tags="iPad"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonPlaceOrderClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="cartViewController" thread="${thread}" tag="iPad" source-ssn="jKool-iOS-client" device="ipad-${device-number}"/>
+	 <event name="buttonPlaceOrderClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tid="${tid}" tags="iPad"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="cartViewController" thread="${thread}" tag="iPad" source-ssn="jKool-iOS-client" device="ipad-${device-number}"/>
+	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tid="${tid}" tags="iPad"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" severity="TRACE" resource="checkoutViewController" thread="${thread}" tag="iPad" source-ssn="jKool-iOS-client" device="ipad-${device-number}"/>
+	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="checkoutViewController" tid="${tid}" tags="iPad"/>
 	 <sleep usec="${sleep}"/>            
 </activity>
 

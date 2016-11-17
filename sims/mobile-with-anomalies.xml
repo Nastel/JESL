@@ -28,6 +28,9 @@
 <var name="freeMemory" value="3000000000 bet 6000000000"/>
 <var name="elapsedTime" value="100000 bet 999999"/>
 <var name="corr" value="100000 bet 999999"/>
+<var name="iOSVersion" value="9.3|10.4|9.1"/>
+<var name="phoneCarrier" value="ATT|Verizon|Sprint|T-Mobile"/>
+<var name="model" value="iPhone7|iPhone6s|iPhone5|iPhone5s|iPad|iPad2|iPadMini"/>
 <var name="amount" value="10 bet 300"/>
 <var name="numberOfItems" value="1 bet 5"/>
 <var name="custid" 	value="750000 bet 850000"/>
@@ -45,9 +48,9 @@
   <activity name="TRACKING_ACTIVITY" source="${source}" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" corrs="${corr}">
   	 <prop name="freeMemory" type="STRING" value="${freeMemory}"/>
 	 <prop name="hardware" type="STRING" value="x86_64"/>
-	 <prop name="iOSVersion" type="STRING" value="10.1"/>
-	 <prop name="model" type="STRING" value="iPhone"/>
-	 <prop name="phoneCarrier" type="STRING" value="ATT"/>
+	 <prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
+	 <prop name="model" type="STRING" value="${model}"/>
+	 <prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
 	 <event name="buttonSearchClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>

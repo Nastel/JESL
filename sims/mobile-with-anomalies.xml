@@ -73,7 +73,7 @@
 	 <event name="buttonPlaceOrderClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
 	 <event name="total_amount_order_placed" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone">
-	   	<prop name="amount" type="STRING" value="${amount}"/>
+	   	<prop name="amount" type="INTEGER" value="${amount}"/>
 	    <prop name="numberOfItems" type="INTEGER" value="${numberOfItems}"/>
 	 </event>
 	 <sleep usec="${sleep}"/>
@@ -81,7 +81,7 @@
 	 <sleep usec="${sleep}"/>
 	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="checkoutViewController" tags="iPhone"/>
+	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="orderConfirmationViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>            
   </activity>
 

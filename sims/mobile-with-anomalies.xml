@@ -11,30 +11,13 @@
 <source id="2" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
 <source id="3" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
 <source id="4" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           
-
-
-
-<source id="5" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
-        user="webuser" url="https://www.sample.com/orders/parts"/>
-<source id="6" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=Los Angeles, CA"
-        user="ebay-proc"/>
-<source id="7" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=London, England"
-        user="SYSPRC"/>
-<source id="8" fqn="APPL=VerifyCredit#SERVER=CreditServerVISA#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=Paris, France"
-        user="system"/>
-<source id="9" fqn="APPL=ShipProduct#SERVER=SupplyChainServer#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=Miami, Florida"
-        user="system"/>
-<source id="10" fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Washington#GEOADDR=Washington, Virginia"
-        user="mqm"/>
-<source id="11" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=Las Vegas, Nevada"
-        user="mqm"/>
-
-
-
-
-
-
-
+<source id="5" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=40.7818,-73.4737" user="webuser" url="https://www.sample.com/orders/parts"/>
+<source id="6" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=34.05223,-118.24368" user="ebay-proc"/>
+<source id="7" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=51.50853,-0.12574" user="SYSPRC"/>
+<source id="8" fqn="APPL=VerifyCredit#SERVER=CreditServerVISA#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=48.85341,2.3488" user="system"/>
+<source id="9" fqn="APPL=ShipProduct#SERVER=SupplyChainServer#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=25.77427,-80.19366" user="system"/>
+<source id="10" fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Texas#GEOADDR=30.192601199591976,-95.71681155627338" user="mqm"/>
+<source id="11" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=36.17497,-115.13722" user="mqm"/>
 
 <var name="sleep" value="50000 bet 300000"/>
 <var name="source" value="1 bet 4"/>
@@ -73,11 +56,11 @@
 	 <sleep usec="${sleep}"/>
 	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="colorSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPad"/>
+	 <event name="colorSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="sizeSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPad"/>
+	 <event name="sizeSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="qtySelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPad"/>
+	 <event name="qtySelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
 	 <event name="buttonAddToCartClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
@@ -131,11 +114,11 @@
   <sleep msec="891"/>
     
   <activity name="ProcessFraudAlerts" source="10" pid="3423" tid="548" corrs="${corr}">
-    <event name="EvaluateFraud" type="RECEIVE" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1" sev="WARNING" exc="Possible fraud" />
+    <event name="EvaluateFraud" type="RECEIVE" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1"  />
   </activity>
 
   <activity name="PaymentProcess" source="7" pid="8154" tid="12" sev="WARNING" corrs="${corr}">
-    <event name="ReadOrder" type="RECEIVE" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" sev="ERROR" exc="SQLException: unknown column custid"/>
+    <event name="ReadOrder" type="RECEIVE" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" />
     <sleep msec="11"/>
     <event name="SendShipment" type="SEND" elapsed="293" res="SHIP.ORDERS.QUEUE" msg="4"/>
   </activity>

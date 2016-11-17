@@ -1,25 +1,65 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <tnt4j-simulator>
-         
-<var name="deviceNumber" value="1 bet 999999"/>         
-<source id="1" fqn="APPL=Orders#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
-<source id="2" fqn="APPL=Orders#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-<source id="3" fqn="APPL=Orders#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-<source id="4" fqn="APPL=Orders#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           
-<var name="sleep" value="50000 bet 300000"/>
-<var name="source" value="1 bet 4"/>
+
 <var name="user1" value="10000000 bet 99999999"/>
 <var name="user2" value="1000 bet 9999"/>
 <var name="user3" value="1000 bet 9999"/>
 <var name="user4" value="1000 bet 9999"/>
-<var name="user5" value="100000000000 bet 999999999999"/>
+<var name="user5" value="100000000000 bet 999999999999"/>         
+<var name="deviceNumber" value="1 bet 999999"/>         
+<source id="1" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
+<source id="2" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+<source id="3" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+<source id="4" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           
+
+
+
+<source id="5" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
+        user="webuser" url="https://www.sample.com/orders/parts"/>
+<source id="6" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=Los Angeles, CA"
+        user="ebay-proc"/>
+<source id="7" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=London, England"
+        user="SYSPRC"/>
+<source id="8" fqn="APPL=VerifyCredit#SERVER=CreditServerVISA#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=Paris, France"
+        user="system"/>
+<source id="9" fqn="APPL=ShipProduct#SERVER=SupplyChainServer#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=Miami, Florida"
+        user="system"/>
+<source id="10" fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Washington#GEOADDR=Washington, Virginia"
+        user="mqm"/>
+<source id="11" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=Las Vegas, Nevada"
+        user="mqm"/>
+
+
+
+
+
+
+
+
+<var name="sleep" value="50000 bet 300000"/>
+<var name="source" value="1 bet 4"/>
 <var name="netAddr1" value="100 bet 999"/>
 <var name="netAddr2" value="100 bet 999"/>
 <var name="netAddr3" value="1 bet 9"/>
 <var name="netAddr4" value="10 bet 99"/>
 <var name="freeMemory" value="3000000000 bet 6000000000"/>
-   
-<activity name="TRACKING_ACTIVITY" source="${source}" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" >
+<var name="elapsedTime" value="100000 bet 999999"/>
+<var name="corr" value="100000 bet 999999"/>
+<var name="amount" value="10 bet 300"/>
+<var name="numberOfItems" value="1 bet 5"/>
+<var name="custid" 	value="750000 bet 850000"/>
+<var name="prodid" 	value="10000 bet 90000"/>
+<var name="orderid" 	value="30000 bet 90000"/>
+<var name="orderdb" 	value="jdbc://oracle/ora1/order_db"/>
+<msg id="1">AMAZON ProductId=${prodid}, CustomerID=${custid}</msg>
+<msg id="2">Verify ProductId=${prodid}, CustomerID=${custid}</msg>
+<msg id="3">Process Payment ProductId=${prodid}, CustomerID=${custid}</msg>
+<msg id="4">Ship ProductId=${prodid}, CustomerID=${custid}</msg>
+<msg id="5">Confirm ProductId=${prodid}, CustomerID=${custid}</msg>
+<msg id="6">SELECT * FROM ORDERS WHERE order_id = ${orderid} and customer_id = ${custid}</msg>
+<msg id="7">SELECT * FROM PRODUCTS WHERE product_id = ${prodid}</msg>
+
+  <activity name="TRACKING_ACTIVITY" source="${source}" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" corrs="${corr}">
   	 <prop name="freeMemory" type="STRING" value="${freeMemory}"/>
 	 <prop name="hardware" type="STRING" value="x86_64"/>
 	 <prop name="iOSVersion" type="STRING" value="10.1"/>
@@ -49,53 +89,55 @@
 	 <sleep usec="${sleep}"/>
 	 <event name="buttonPlaceOrderClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
+	 <event name="total_amount_order_placed" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone">
+	   	<prop name="amount" type="STRING" value="${amount}"/>
+	    <prop name="numberOfItems" type="INTEGER" value="${numberOfItems}"/>
+	 </event>
+	 <sleep usec="${sleep}"/>
+	 <event name="processingOrder" source="${source}" sev="TRACE" elapsed="${elapsedTime}" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
+	 <sleep usec="${sleep}"/>
 	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
 	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="checkoutViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>            
-</activity>
+  </activity>
 
-<activity name="TRACKING_ACTIVITY" source="${source}" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" >
-  	 <prop name="freeMemory" type="STRING" value="${freeMemory}"/>
-	 <prop name="hardware" type="STRING" value="x86_64"/>
-	 <prop name="iOSVersion" type="STRING" value="10.1"/>
-	 <prop name="model" type="STRING" value="iPhone"/>
-	 <prop name="phoneCarrier" type="STRING" value="ATT"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonSearchClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="colorSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="sizeSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="qtySelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonAddToCartClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonCheckoutClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonPlaceOrderClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="checkoutViewController" tags="iPad"/>
-	 <sleep usec="${sleep}"/>    
-	 
-	 
-	 <event name="Uncaught Exception - NSRangeException" source="${source}" sev="FAILURE" exc="*** -[__NSArrayM objectAtIndex:]: index 5 beyond bounds [0 .. 2]" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="checkoutViewController" tags="iPad"/>
-	 
-	 
-	 
-	         
-</activity>
+  <activity name="AcceptOrder" source="5" pid="5432" tid="4" corrs="${corr}">
+    <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" />
+    <event name="SQL.execute" type="CALL" elapsed="7187" sev="ANY" res="${orderdb}" msg="6" />
+	<event name="SQL.execute" type="CALL" elapsed="5472" sev="ANY" res="${orderdb}" msg="7" />
+    <event name="ValidateOrder" type="SEND" elapsed="823" res="VALIDATE.ORDERS.QUEUE" msg="2" />
+    <sleep usec="121"/>
+  </activity>
+  
+  <sleep msec="163"/>
+
+  <activity name="ValidateOrder" source="6" pid="7373" tid="15" corrs="${corr}">
+    <event name="ValidateAndVerify" type="RECEIVE" elapsed="626" res="VALIDATE.ORDERS.QUEUE" msg="2"/>
+    <event name="Credit" type="SEND" elapsed="2323" res="CREDIT.ORDERS.QUEUE" msg="2" />
+  </activity>
+
+  <activity name="CreditValidate" source="8" pid="432" tid="64" corrs="${corr}">
+    <event name="ValidateCredit" type="RECEIVE" elapsed="2782" res="CREDIT.ORDERS.QUEUE" msg="2" />
+    <event name="Validated" type="SEND" elapsed="7189" res="ROUTE.ORDERS.QUEUE" msg="1" />
+  </activity>
+
+  <activity name="RouteOrder" source="11" pid="67126" tid="43" corrs="${corr}">
+    <event name="ReadAndRoute" type="RECEIVE" elapsed="626" res="ROUTE.ORDERS.QUEUE" msg="1" />
+    <event name="ProcessPayment" type="SEND" elapsed="128" res="PAYMENT.ORDERS.QUEUE" msg="3" />
+    <event name="PossibleFraud" type="SEND" elapsed="234" res="FRAUD.ORDERS.QUEUE" msg="1" />
+  </activity>
+    
+  <sleep msec="891"/>
+    
+  <activity name="ProcessFraudAlerts" source="10" pid="3423" tid="548" corrs="${corr}">
+    <event name="EvaluateFraud" type="RECEIVE" elapsed="728" res="FRAUD.ORDERS.QUEUE" msg="1" sev="WARNING" exc="Possible fraud" />
+  </activity>
+
+  <activity name="PaymentProcess" source="7" pid="8154" tid="12" sev="WARNING" corrs="${corr}">
+    <event name="ReadOrder" type="RECEIVE" elapsed="28000" res="PAYMENT.ORDERS.QUEUE" msg="3" sev="ERROR" exc="SQLException: unknown column custid"/>
+    <sleep msec="11"/>
+    <event name="SendShipment" type="SEND" elapsed="293" res="SHIP.ORDERS.QUEUE" msg="4"/>
+  </activity>
 
 </tnt4j-simulator>

@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -295,6 +296,17 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			        + Double.parseDouble(vars.get(value.substring(0, value.length())));
 			value = "" + totalValue;
 		}
+		else if (value.indexOf("|") > 0) {			
+			StringTokenizer tk = new StringTokenizer(value, "|");
+			ArrayList<String> tokens = new ArrayList<String>();
+			while (tk.hasMoreElements())
+			{
+				tokens.add((String)tk.nextElement());
+			}
+		    Random randomGenerator = new Random();
+		    int index = randomGenerator.nextInt(tokens.size());
+		    value = (String)tokens.get(index);
+	    }	
 		return value;
 	}
 	

@@ -3,8 +3,8 @@
 
   <var name="custid" 	value="848383"/>
   <var name="prodid" 	value="8380203"/>
-  <var name="prodname" 	value="iPhone"/>
-  <var name="orderid" 	value="OrderId:123"/>
+  <var name="prodname"  value="iPhone"/>
+  <var name="orderid"   value="=?"/>
   <var name="orderdb" 	value="jdbc://oracle/ora1/order_db"/>
 
   <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"

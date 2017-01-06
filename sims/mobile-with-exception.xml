@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <tnt4j-simulator>
          
-<var name="deviceNumber" value="1 bet 999999"/>         
-<source id="1" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
-<var name="sleep" value="50000 bet 300000"/>
-<var name="source" value="1 bet 4"/>
+<var name="deviceNumber" value="1 bet 999999"/>     
 <var name="user1" value="10000000 bet 99999999"/>
 <var name="user2" value="1000 bet 9999"/>
 <var name="user3" value="1000 bet 9999"/>
 <var name="user4" value="1000 bet 9999"/>
-<var name="user5" value="100000000000 bet 999999999999"/>
+<var name="user5" value="100000000000 bet 999999999999"/>    
+<source id="1" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
+<var name="sleep" value="50000 bet 300000"/>
+<var name="source" value="1 bet 4"/>
 <var name="netAddr1" value="100 bet 999"/>
 <var name="netAddr2" value="100 bet 999"/>
 <var name="netAddr3" value="1 bet 9"/>
@@ -22,7 +22,7 @@
 <var name="model" value="iPhone7|iPhone6s|iPhone5|iPhone5s|iPad|iPad2|iPadMini"/>
 
 
-<activity name="TRACKING_ACTIVITY" source="1" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" corrs="${corr}">
+<activity name="TRACKING_ACTIVITY" source="1" sev="FAILURE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" corrs="${corr}">
   	 <prop name="freeMemory" type="STRING" value="${freeMemory}"/>
 	 <prop name="hardware" type="STRING" value="x86_64"/>
 	 <prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>

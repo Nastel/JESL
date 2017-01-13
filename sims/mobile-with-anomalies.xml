@@ -117,9 +117,13 @@ upsert set name='T-Mobile', scope='SINGULAR', criteria='properties(\'phoneCarrie
   
   <sleep msec="163"/>
 
-  <activity name="ValidateOrder" source="6" pid="7373" tid="15" corrs="${corr}">
-    <event name="ValidateAndVerify" type="RECEIVE" elapsed="626" res="queue::VALIDATE.ORDERS.QUEUE" msg="2"/>
-    <event name="Credit" type="SEND" elapsed="2323" res="queue::CREDIT.ORDERS.QUEUE" msg="2" />
+  <activity name="ValidateOrderTop" source="6" pid="7373" tid="15" corrs="${corr}">
+	  <activity name="ValidateOrderStep1" source="6" pid="7373" tid="15" corrs="${corr}">
+		  <activity name="ValidateOrderStep2" source="6" pid="7373" tid="15" corrs="${corr}">
+		    <event name="ValidateAndVerify" type="RECEIVE" elapsed="626" res="queue::VALIDATE.ORDERS.QUEUE" msg="2"/>
+		    <event name="Credit" type="SEND" elapsed="2323" res="queue::CREDIT.ORDERS.QUEUE" msg="2" />
+		  </activity>
+	  </activity>
   </activity>
 
   <activity name="CreditValidate" source="8" pid="432" tid="64" corrs="${corr}">

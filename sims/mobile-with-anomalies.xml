@@ -117,18 +117,23 @@ upsert set name='T-Mobile', scope='SINGULAR', criteria='properties(\'phoneCarrie
   
   <sleep msec="163"/>
 
-  <activity name="ValidateOrderTop" source="6" pid="7373" tid="15" corrs="${corr}">
-	  <activity name="ValidateOrderStep1" source="6" pid="7373" tid="15" corrs="${corr}">
-		  <activity name="ValidateOrderStep2" source="6" pid="7373" tid="15" corrs="${corr}">
-		    <event name="ValidateAndVerify" type="RECEIVE" elapsed="626" res="queue::VALIDATE.ORDERS.QUEUE" msg="2"/>
-		    <event name="Credit" type="SEND" elapsed="2323" res="queue::CREDIT.ORDERS.QUEUE" msg="2" />
-		  </activity>
+  <activity name="Validate" source="6" pid="7373" tid="15" corrs="${corr}">
+      <event name="InitiateValidate" type="RECEIVE" elapsed="2323" res="queue::VALIDATE.ORDERS.QUEUE" msg="2" />
+	  <activity name="ValidateCredit" source="6" pid="7373" tid="15" corrs="${corr}">
+	      <event name="ValidateBillingAddress" type="CALL" elapsed="2323" res="order/validate"/>
+	 	  <activity name="ValidateWithCreditor" source="6" pid="7373" tid="15" corrs="${corr}">
+		    <event name="ValidateAccount" type="SEND" elapsed="626" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
+		    <activity name="ValidateAmount" source="6" pid="7373" tid="15" corrs="${corr}">		   
+		    	<event name="ObtainCreditLimit" type="RECEIVE" elapsed="999999999" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
+		    	<event name="AmountWithinCreditLimit" type="CALL" elapsed="626" res="orders/validate"/>
+		    </activity> 
+	     </activity>
 	  </activity>
-  </activity>
-
-  <activity name="CreditValidate" source="8" pid="432" tid="64" corrs="${corr}">
-    <event name="ValidateCredit" type="RECEIVE" elapsed="2782" res="queue::CREDIT.ORDERS.QUEUE" msg="2" />
-    <event name="Validated" type="SEND" elapsed="7189" res="queue::ROUTE.ORDERS.QUEUE" msg="1" />
+	  <activity name="ValidateShipping" source="8" pid="432" tid="64" corrs="${corr}">
+    		<event name="ValidateAddress" type="CALL" elapsed="234" res="shipping/validate"/>
+    		<event name="ValidateEmail" type="CALL" elapsed="7189" res="shipping/validate"/>
+    		<event name="InitiateOrderRouting" type="SEND" elapsed="2323" res="queue::ROUTE.ORDERS.QUEUE" msg="1" />
+  	  </activity> 
   </activity>
 
   <activity name="RouteOrder" source="11" pid="67126" tid="43" corrs="${corr}">

@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- 
-upsert set name='iPhone', scope='SINGULAR', criteria='properties(\'model\') contains \'iPhone\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='iPad', scope='SINGULAR', criteria='properties(\'model\') contains \'iPad\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='Android', scope='SINGULAR', criteria='properties(\'model\') contains \'Android\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='MobileOrders', scope='SINGULAR', criteria='properties(\'model\') contains \'iPhone\' or properties(\'model\') contains \'iPad\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='Verification', scope='SINGULAR', criteria='name=\'ValidateOrder\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='Payment', scope='SINGULAR', criteria='name=\'ProcessPayment\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='Shipping', scope='SINGULAR', criteria='name=\'SendShipment\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='Fraud', scope='SINGULAR', criteria='name=\'PossibleFraud\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='Orders', scope='SINGULAR', criteria='name=\'RouteOrders\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='ATT', scope='SINGULAR', criteria='properties(\'phoneCarrier\')=\'ATT\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='Verizon', scope='SINGULAR', criteria='properties(\'phoneCarrier\')=\'Verizon\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='Sprint', scope='SINGULAR', criteria='properties(\'phoneCarrier\')=\'Sprint\'', objective+=('SLA'='ElapsedTime<=2 seconds')
-upsert set name='T-Mobile', scope='SINGULAR', criteria='properties(\'phoneCarrier\')=\'T-Mobile\'', objective+=('SLA'='ElapsedTime<=2 seconds')
+These sets are required to demo this simulation. Run as an import in Query Browser.
+
+CFG,RelDates=false
+HDR,Set,SetName,SetScope,Criteria,Objectives,Classifier,LearnData,SetSequence,Owner,AdminUser,UserName
+ROW,Set,'ATT','SINGULAR','properties(\'phoneCarrier\')=\'ATT\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'AcceptOrder','SINGULAR',"'((ActivityName equals (""AcceptOrder"")))'",(S:'SLA-ElapsedTime'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Android','SINGULAR','properties(\'model\') contains \'Android\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'CreditValidate','SINGULAR',"'((ActivityName equals (""CreditValidate"")))'",(S:'SLA-ElapsedTime'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'MobileOrders','SINGULAR','properties(\'model\') contains \'iPhone\' or properties(\'model\') contains \'iPad\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Orders','SINGULAR','name=\'RouteOrders\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Payment','SINGULAR','name=\'PaymentProcess\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ProcessFraudAlerts','SINGULAR',"'((ActivityName equals (""ProcessFraudAlerts"")))'",(S:'SLA-ElapsedTime'='ElapsedTime <= 2 seconds'),,,
+ROW,Set,'RouteOrder','SINGULAR',"'((ActivityName equals (""RouteOrder"")))'",(S:'SLA-ElapsedTime'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Shipping','SINGULAR','name=\'SendShipment\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Sprint','SINGULAR','properties(\'phoneCarrier\')=\'Sprint\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'T-Mobile','SINGULAR','properties(\'phoneCarrier\')=\'T-Mobile\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'TRACKING_ACTIVITY','SINGULAR',"'((ActivityName equals (""TRACKING_ACTIVITY"")))'",(S:'SLA-ElapsedTime'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'TRACKING_ACTIVITY_TO_PaymentProcess','SINGULAR',"'((ActivityName equals (""TRACKING_ACTIVITY_TO_PaymentProcess"")))'",(S:'SLA-ElapsedTime'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ValidateAmount','SINGULAR',"'((ActivityName equals (""ValidateAmount"")))'",(S:'SLA-ElapsedTime'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ValidateCredit','SINGULAR',"'((ActivityName equals (""ValidateCredit"")))'",(S:'SLA-ElapsedTime'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Validate','SINGULAR',"'((ActivityName equals (""Validate"")))'",(S:'SLA-ElapsedTime'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ValidateOrder','SINGULAR',"'((ActivityName equals (""ValidateOrder"")))'",(S:'SLA-ElapsedTime'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ValidateShipping','SINGULAR','name=\'ValidateShipping\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ValidateWithCreditor','SINGULAR','name=\'ValidateShipping\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Verizon','SINGULAR','properties(\'phoneCarrier\')=\'Verizon\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'iPad','SINGULAR','properties(\'model\') contains \'iPad\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'iPhone','SINGULAR','properties(\'model\') contains \'iPhone\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
 -->
 
 <tnt4j-simulator>
@@ -117,19 +131,21 @@ upsert set name='T-Mobile', scope='SINGULAR', criteria='properties(\'phoneCarrie
   
   <sleep msec="163"/>
 
-  <activity name="Validate" source="6" pid="7373" tid="15" corrs="${corr}">
+  <activity name="Validate" source="8" pid="7373" tid="15" corrs="${corr}">
       <event name="InitiateValidate" type="RECEIVE" elapsed="2323" res="queue::VALIDATE.ORDERS.QUEUE" msg="2" />
-	  <activity name="ValidateCredit" source="6" pid="7373" tid="15" corrs="${corr}">
+	  <activity name="ValidateCredit" source="8" pid="7373" tid="15" corrs="${corr}">
 	      <event name="ValidateBillingAddress" type="CALL" elapsed="2323" res="order/validate"/>
-	 	  <activity name="ValidateWithCreditor" source="6" pid="7373" tid="15" corrs="${corr}">
+	 	  <activity name="ValidateWithCreditor" source="8" pid="7373" tid="15" corrs="${corr}">
 		    <event name="ValidateAccount" type="SEND" elapsed="626" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
-		    <activity name="ValidateAmount" source="6" pid="7373" tid="15" corrs="${corr}">		   
+		    <activity name="ValidateAmount" source="8" pid="7373" tid="15" corrs="${corr}">		   
 		    	<event name="ObtainCreditLimit" type="RECEIVE" elapsed="999999999" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
 		    	<event name="AmountWithinCreditLimit" type="CALL" elapsed="626" res="orders/validate"/>
 		    </activity> 
 	     </activity>
 	  </activity>
-	  <activity name="ValidateShipping" source="8" pid="432" tid="64" corrs="${corr}">
+  </activity>
+  <activity>
+	  <activity name="ValidateShipping" source="6" pid="432" tid="64" corrs="${corr}">
     		<event name="ValidateAddress" type="CALL" elapsed="234" res="shipping/validate"/>
     		<event name="ValidateEmail" type="CALL" elapsed="7189" res="shipping/validate"/>
     		<event name="InitiateOrderRouting" type="SEND" elapsed="2323" res="queue::ROUTE.ORDERS.QUEUE" msg="1" />

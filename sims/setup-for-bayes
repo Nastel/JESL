@@ -4,7 +4,7 @@ These sets are required to setup for the bayes simulation. Run as an upsert in Q
 upsert set name = "SatisfiedCustomer", learnquery = "Get Event Fields tokenize(message,' ') where name='SQL.insert.survey' and tag contains 'positive'", classifier="CustomerSatisfaction"
 upsert set name = "RiskLoosingCustomer", learnquery = "Get Event Fields tokenize(message,' ') where name='SQL.cancel.account'", classifier="CustomerSatisfaction"
 upsert BayesSourceFields active=true, name='msgItems', jkqlexpr='tokenize(msg," ")'
-upsert dictionary properties=('classifier'='msgItems'), name='CustomerSatisfaction'	
+upsert dictionary properties=('source'='msgItems'), name='CustomerSatisfaction'	
 upsert dictionary properties+=('criteria'='name=\'SQL.insert.note\'') where name='CustomerSatisfaction' 
  -->
  

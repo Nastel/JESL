@@ -4,6 +4,8 @@
 These sets are required to demo this simulation. Run as an upsert in Query Browser.
 
 upsert set name = "RiskLoosingCustomer", learnquery = "Get Event Fields tokenize(message,' ') where name='SQL.cancel.account'", classifier="CustomerSatisfaction"
+upsert BayesSourceFields active=true, name='msgItems', jkqlexpr='tokenize(msg," ")'
+upsert dictionary properties=('classifier'='msgItems'), name='RiskLoosingCustomer'	
  -->
 
 
@@ -25,19 +27,11 @@ upsert set name = "RiskLoosingCustomer", learnquery = "Get Event Fields tokenize
 <msg id="2">Shipment was not received. Tracking item, will call back.</msg>
 <msg id="3">Item was damaged. Return receipt sent out.</msg>
 <msg id="4">Credit card was charged twice.</msg>
-<msg id="5">Fraudulent activity on credit card.</msg>
+<msg id="5">Asked to speak with supervisor.</msg>
 <msg id="6">Wrong size sent.</msg>
 <msg id="7">Wrong color sent.</msg>
 <msg id="8">Customer had to correct a wrong address that was specified when shipping information was entered.</msg>
 
-<var name="note1" value="Credit was not issued. Customer is frustrated."/>
-<var name="note2" value="Shipment was not received. Tracking item, will call back."/>
-<var name="note3" value="Item was damaged. Return receipt sent out."/>
-<var name="note4" value="Credit card was charged twice."/>
-<var name="note5" value="Fraudulent activity on credit card."/>
-<var name="note6" value="Wrong size sent."/>
-<var name="note7" value="Wrong color sent."/>
-<var name="note8" value="Customer had to correct a wrong address that was specified when shipping information was entered."/>
 
 <var name="msgNum" value="1 bet 8"/>
 
@@ -51,15 +45,5 @@ upsert set name = "RiskLoosingCustomer", learnquery = "Get Event Fields tokenize
     <sleep usec="121"/>
   </activity>
   
-  <sleep msec="${sleep}"/>
-
-  <activity name="NotateAccount" source="2">
-    <event name="SQL.retrieve.account" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db">
-        	<prop name="accountId" type="STRING" value="${acct1}-${acct2}-${acct3}-${acct4}-${acct5}"/>
-    </event>
-    <event name="SQL.insert.note" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db">
-	 	<prop name="query" type="STRING" value="insert note values ('${acct1}-${acct2}-${acct3}-${acct4}-${acct5}','${note1}',now"/>
-    </event>
-  </activity>
     
 </tnt4j-simulator>

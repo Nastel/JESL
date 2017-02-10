@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 
-<!-- 
-These sets are required to demo this simulation. Run as an upsert in Query Browser.
-
-upsert set name = "RiskLoosingCustomer", learnquery = "Get Event Fields tokenize(message,' ') where name='SQL.cancel.account'", classifier="CustomerSatisfaction"
-upsert BayesSourceFields active=true, name='msgItems', jkqlexpr='tokenize(msg," ")'
-upsert dictionary properties=('classifier'='msgItems'), name='RiskLoosingCustomer'	
- -->
-
-
 <tnt4j-simulator> 
  
 <source id="1" fqn="APPL=CancelAccount#SERVER=ProcessAccountServer#NETADDR=162.123.74.18#DATACENTER=DC2#GEOADDR=34.05223,-118.24368" user="system"/>

@@ -58,7 +58,7 @@ public class TNT4JSimulator {
 	private static String			simFileName    = "";
 	private static boolean			uniqueTags     = false;
 	private static boolean			uniqueCorrs    = false;
-	private static boolean			uniqueIds    = false;
+	private static boolean			uniqueIds      = false;
 	private static OpLevel			traceLevel     = OpLevel.INFO;
 	private static String			jkFileName     = "";
 	private static int				valuePctChg    = 0;
@@ -74,7 +74,7 @@ public class TNT4JSimulator {
 	public static String readFromConsole(String prompt) throws IOException {
 		return System.console().readLine(prompt);
 	}
-	
+
 	public static void error(String msg, Throwable e) {
 		logger.tnt(OpLevel.ERROR, null, null, msg, e);
 	}
@@ -128,9 +128,9 @@ public class TNT4JSimulator {
 	}
 
 	public static String getConnectUrl() {
-		return jkProtocol.equalsIgnoreCase("file")?
+		return (runType == SimulatorRunType.RUN_SIM && jkProtocol.equalsIgnoreCase("file")?
 				(jkProtocol.toLowerCase() + "://" + jkFileName):
-				(jkProtocol.toLowerCase() + "://" + jkHost + ":" + jkPort);
+				(jkProtocol.toLowerCase() + "://" + jkHost + ":" + jkPort));
 	}
 
 	public static String getAccessToken() {
@@ -144,11 +144,11 @@ public class TNT4JSimulator {
 	public static boolean useUniqueCorrs() {
 	    return uniqueCorrs;
     }
-	
+
 	public static boolean useUniqueIds() {
 	    return uniqueIds;
     }
-	
+
 	public static boolean isGenerateValues() {
 		return generateValues;
 	}
@@ -176,7 +176,7 @@ public class TNT4JSimulator {
 
 		return newValue;
 	}
-	
+
 	public static long varyValue(int value) {
 		if (value == 0 || valuePctChg == 0)
 			return value;
@@ -196,7 +196,7 @@ public class TNT4JSimulator {
 
 		return newValue;
 	}
-	
+
 	public static double varyValue(double value) {
 		if (value == 0 || valuePctChg == 0)
 			return value;
@@ -271,10 +271,10 @@ public class TNT4JSimulator {
 	}
 
 	private static void printUsedArgs() {
-		System.out.format("Arguments: runype=%s, url=%s, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s, jkFile=%s\n", 
+		System.out.format("Arguments: runype=%s, url=%s, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s, jkFile=%s\n",
 				runType, getConnectUrl(), generateValues, uniqueTags, uniqueCorrs, uniqueIds, valuePctChg, simFileName, jkFileName);
 	}
-	
+
 	protected static void processArgs(TNT4JSimulatorParserHandler xmlHandler, String[] args) {
 		if (args.length == 0)
 			printUsage("Missing simulation type");
@@ -329,7 +329,8 @@ public class TNT4JSimulator {
 					jkFileName = arg.substring(3);
 					if (StringUtils.isEmpty(jkFileName))
 						printUsage("Missing <jk_file_name> for '-G' argument");
-					jkProtocol = "file";
+					if (runType == SimulatorRunType.RUN_SIM)
+						jkProtocol = "file";
 				} else if (runType == SimulatorRunType.RUN_SIM) {
 					if (arg.startsWith("-f:")) {
 						simFileName = arg.substring(3);
@@ -417,11 +418,13 @@ public class TNT4JSimulator {
 			if (StringUtils.isEmpty(jkFileName))
 				printUsage("Missing XML file name");
 		}
-		printUsedArgs();		
+		printUsedArgs();
 	}
 
 	public static void main(String[] args) {
 		boolean isTTY = (System.console() != null);
+		boolean showProgress = false;
+		int itTrcWidth = 0;
 		long startTime = System.currentTimeMillis();
 
 		try {
@@ -439,6 +442,8 @@ public class TNT4JSimulator {
 				traceLevel = OpLevel.DEBUG;
 
 			if (runType == SimulatorRunType.RUN_SIM) {
+				showProgress = (isTTY && numIterations > 1);
+
 				if (StringUtils.isEmpty(simFileName)) {
 					simFileName = "tnt4j-sim.xml";
 					String fileName = readFromConsole("Simulation file [" + simFileName + "]: ");
@@ -457,11 +462,11 @@ public class TNT4JSimulator {
 				info("jKool Activity Simulator Run starting: file=" + simFileName + ", iterations=" + numIterations + ", ttl.sec=" + ttl);
 				startTime = System.currentTimeMillis();
 
-				if (isTTY && numIterations > 1)
+				if (showProgress)
 					System.out.print("Iteration: ");
-				int itTrcWidth = 0;
 				for (iteration = 1; iteration <= numIterations; iteration++) {
-					itTrcWidth = printProgress("Executing Iteration", iteration, itTrcWidth);
+					if (showProgress)
+						itTrcWidth = printProgress("Executing Iteration", iteration, itTrcWidth);
 
 					theParser.parse(new InputSource(new StringReader(simDef.toString())), xmlHandler);
 
@@ -471,42 +476,43 @@ public class TNT4JSimulator {
 						gwFile.close();
 					}
 				}
-				if (numIterations > 1)
+				if (showProgress)
 					System.out.println("");
 
-				info("jKool Activity Simulator Run finished, elapsed time = " +
+				info("jKool Activity Simulator Run finished, elapsed time=" +
 					 DurationFormatUtils.formatDurationHMS(System.currentTimeMillis()-startTime));
 				printMetrics(xmlHandler.getSinkStats(), "Total Sink Statistics");
 			}
 			else if (runType == SimulatorRunType.REPLAY_SIM) {
-				info("jKool Activity Simulator Replay starting: file=" + jkFileName + ", iterations=" + numIterations);
+				showProgress = isTTY;
+				info("jKool Activity Simulator Replay starting: file=" + jkFileName);
 				connect();
 				startTime = System.currentTimeMillis();
 
 				// Determine number of lines in file
+				info("Analyzing file ...");
 				BufferedReader gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
 				for (numIterations = 0; gwFile.readLine() != null; numIterations++);
 				gwFile.close();
 
 				// Reopen the file and
 				gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
-				if (isTTY && numIterations > 1)
+				if (showProgress)
 					System.out.print("Processing Line: ");
-				int itTrcWidth = 0;
 				String gwMsg;
 				iteration = 0;
 				while ((gwMsg=gwFile.readLine()) != null) {
-					iteration++;
-					if (isTTY)
+					if (showProgress)
 						itTrcWidth = printProgress("Processing Line", iteration, itTrcWidth);
 					gwConn.write(gwMsg);
+					iteration++;
 				}
-				if (isTTY && numIterations > 1)
+				if (showProgress)
 					System.out.println("");
 				long endTime = System.currentTimeMillis();
 
-				info("jKool Activity Simulator Replay finished, elasped.time = " +
-					 DurationFormatUtils.formatDurationHMS(endTime-startTime));
+				info("jKool Activity Simulator Replay finished, tracking.msg.count=" + iteration
+					 + ", elasped.time=" + DurationFormatUtils.formatDurationHMS(endTime-startTime));
 			}
 		}
 		catch (Exception e) {
@@ -516,10 +522,14 @@ public class TNT4JSimulator {
 			}
 			else {
 				error("Error running simulator", e);
+				if (runType == SimulatorRunType.RUN_SIM)
+					info("jKool Activity Simulator Run failed, completed " + iteration + " out of " + numIterations + " iterations");
+				else if (runType == SimulatorRunType.REPLAY_SIM)
+					info("jKool Activity Simulator Replay failed, processed " + iteration + " out of " + numIterations + " records");
 			}
 		}
 		finally {
-			try {Thread.sleep(1000L);} catch (Exception e) {}
+			try {Thread.sleep(2000L);} catch (Exception e) {}
 			TNT4JSimulator.disconnect();
 		}
 
@@ -549,9 +559,6 @@ public class TNT4JSimulator {
 	}
 
 	private static int printProgress(String text, long iteration, int trcWidth) {
-		if ( numIterations == 1)
-			return 0;
-
 		int itPct = (int)((double)iteration/numIterations*100.0);
 		int maxItWidth = (int)(Math.log10(numIterations)+1);
 		String bkSpStr = StringUtils.leftPad("", trcWidth, '\b');

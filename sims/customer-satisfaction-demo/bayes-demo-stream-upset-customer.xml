@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<tnt4j-simulator> 
+ 
+<source id="1" fqn="APPL=CancelAccount#SERVER=ProcessAccountServer#NETADDR=162.123.74.18#DATACENTER=DC2#GEOADDR=34.05223,-118.24368" user="system"/>
+<source id="2" fqn="APPL=NotateAccount#SERVER=ProcessAccountServer#NETADDR=162.123.74.18#DATACENTER=DC2#GEOADDR=34.05223,-118.24368" user="system"/>
+
+<var name="sleep" value="50000 bet 300000"/>
+<var name="elapsedTime" value="50000 bet 300000"/>
+
+<var name="acct1" value="10000000 bet 99999999"/>
+<var name="acct2" value="1000 bet 9999"/>
+<var name="acct3" value="1000 bet 9999"/>
+<var name="acct4" value="1000 bet 9999"/>
+<var name="acct5" value="100000000000 bet 999999999999"/>   
+
+
+
+<msg id = "1">Credit was not issued. Customer is frustrated.</msg>
+<msg id = "2">Shipment was not received. Tracking item, will call back.</msg>
+<msg id = "3">Item was damaged. Return receipt sent out.</msg>
+<msg id = "4">Credit card was charged twice.</msg>
+<msg id = "5">Fraudulent activity on credit card.</msg>
+<msg id = "6">Wrong size sent.</msg>
+<msg id = "7">Wrong color sent.</msg>
+<msg id = "8">Customer kept asking to speak with a supervisor.</msg>
+
+<var name="msgNum" value="1 bet 8"/>
+
+  <activity name="NotateAccount" source="2">
+    <event name="SQL.retrieve.account" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db">
+        	<prop name="accountId" type="STRING" value="${acct1}-${acct2}-${acct3}-${acct4}-${acct5}"/>
+    </event>
+    <event name="SQL.insert.note" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db" msg="1">
+	 	<prop name="query" type="STRING" value="insert note values ('${acct1}-${acct2}-${acct3}-${acct4}-${acct5}',now"/>
+    </event>
+  </activity>
+  
+   <activity name="NotateAccount" source="2">
+    <event name="SQL.retrieve.account" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db">
+        	<prop name="accountId" type="STRING" value="${acct1}-${acct2}-${acct3}-${acct4}-${acct5}"/>
+    </event>
+    <event name="SQL.insert.note" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db" msg="2">
+	 	<prop name="query" type="STRING" value="insert note values ('${acct1}-${acct2}-${acct3}-${acct4}-${acct5}',now"/>
+    </event>
+  </activity>
+  
+   <activity name="NotateAccount" source="2">
+    <event name="SQL.retrieve.account" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db">
+        	<prop name="accountId" type="STRING" value="${acct1}-${acct2}-${acct3}-${acct4}-${acct5}"/>
+    </event>
+    <event name="SQL.insert.note" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db" msg="3">
+	 	<prop name="query" type="STRING" value="insert note values ('${acct1}-${acct2}-${acct3}-${acct4}-${acct5}',now"/>
+    </event>
+  </activity>
+  
+   <activity name="NotateAccount" source="2">
+    <event name="SQL.retrieve.account" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db">
+        	<prop name="accountId" type="STRING" value="${acct1}-${acct2}-${acct3}-${acct4}-${acct5}"/>
+    </event>
+    <event name="SQL.insert.note" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db" msg="4">
+	 	<prop name="query" type="STRING" value="insert note values ('${acct1}-${acct2}-${acct3}-${acct4}-${acct5}',now"/>
+    </event>
+  </activity>
+  
+   <activity name="NotateAccount" source="2">
+    <event name="SQL.retrieve.account" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db">
+        	<prop name="accountId" type="STRING" value="${acct1}-${acct2}-${acct3}-${acct4}-${acct5}"/>
+    </event>
+    <event name="SQL.insert.note" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db" msg="5">
+	 	<prop name="query" type="STRING" value="insert note values ('${acct1}-${acct2}-${acct3}-${acct4}-${acct5}',now"/>
+    </event>
+  </activity>
+  
+   <activity name="NotateAccount" source="2">
+    <event name="SQL.retrieve.account" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db">
+        	<prop name="accountId" type="STRING" value="${acct1}-${acct2}-${acct3}-${acct4}-${acct5}"/>
+    </event>
+    <event name="SQL.insert.note" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db" msg="6">
+	 	<prop name="query" type="STRING" value="insert note values ('${acct1}-${acct2}-${acct3}-${acct4}-${acct5}',now"/>
+    </event>
+  </activity>
+  
+   <activity name="NotateAccount" source="2">
+    <event name="SQL.retrieve.account" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db">
+        	<prop name="accountId" type="STRING" value="${acct1}-${acct2}-${acct3}-${acct4}-${acct5}"/>
+    </event>
+    <event name="SQL.insert.note" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db" msg="7">
+	 	<prop name="query" type="STRING" value="insert note values ('${acct1}-${acct2}-${acct3}-${acct4}-${acct5}',now"/>
+    </event>
+  </activity>
+  
+   <activity name="NotateAccount" source="2">
+    <event name="SQL.retrieve.account" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db">
+        	<prop name="accountId" type="STRING" value="${acct1}-${acct2}-${acct3}-${acct4}-${acct5}"/>
+    </event>
+    <event name="SQL.insert.note" type="CALL" elapsed="${elapsedTime}" res="jdbc://oracle/ora1/order_db" msg="8">
+	 	<prop name="query" type="STRING" value="insert note values ('${acct1}-${acct2}-${acct3}-${acct4}-${acct5}',now"/>
+    </event>
+  </activity>
+    
+</tnt4j-simulator>

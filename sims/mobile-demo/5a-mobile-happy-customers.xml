@@ -1,33 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- 
-These sets are required to demo this simulation. Run as an import in Query Browser.
-
-CFG,RelDates=false
-HDR,Set,SetName,SetScope,Criteria,Objectives,Classifier,LearnData,SetSequence,Owner,AdminUser,UserName
-ROW,Set,'ATT','SINGULAR','properties(\'phoneCarrier\')=\'ATT\'',,,,
-ROW,Set,'AcceptOrder','SINGULAR',"'((ActivityName equals (""AcceptOrder"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
-ROW,Set,'Android','SINGULAR','properties(\'model\') contains \'Android\'',,,,
-ROW,Set,'MobileOrders','SINGULAR','properties(\'model\') contains \'iPhone\' or properties(\'model\') contains \'iPad\'',,,,
-ROW,Set,'PaymentProcess','SINGULAR',"'((ActivityName equals (""PaymentProcess"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
-ROW,Set,'ProcessFraudAlerts','SINGULAR',"'((ActivityName equals (""ProcessFraudAlerts"")))'",(S:'SLA'='ElapsedTime <= 2 seconds'),,,
-ROW,Set,'RouteOrder','SINGULAR',"'((ActivityName equals (""RouteOrder"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
-ROW,Set,'Shipping','SINGULAR','ActivityName=\'SendShipment\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
-ROW,Set,'Sprint','SINGULAR','properties(\'phoneCarrier\')=\'Sprint\'',,,,
-ROW,Set,'T-Mobile','SINGULAR','properties(\'phoneCarrier\')=\'T-Mobile\'',,,,
-ROW,Set,'TRACKING_ACTIVITY','SINGULAR',"'((ActivityName equals (""TRACKING_ACTIVITY"")))'",,,,
-ROW,Set,'TRACKING_ACTIVITY_TO_PaymentProcess','SINGULAR',"'((ActivityName equals (""TRACKING_ACTIVITY_TO_PaymentProcess"")))'",,,,
-ROW,Set,'ValidateAmount','SINGULAR',"'((ActivityName equals (""ValidateAmount"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
-ROW,Set,'ValidateCredit','SINGULAR',"'((ActivityName equals (""ValidateCredit"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
-ROW,Set,'ValidateCreditor','SINGULAR',"'((ActivityName equals (""ValidateCreditor"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
-ROW,Set,'Validate','SINGULAR',"'((ActivityName equals (""Validate"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
-ROW,Set,'ValidateOrder','SINGULAR',"'((ActivityName equals (""ValidateOrder"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
-ROW,Set,'ValidateShipping','SINGULAR',"'((ActivityName equals (""ValidateShipping"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
-ROW,Set,'ValidateWithCreditor','SINGULAR',"'((ActivityName equals (""ValidateWithCreditor"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
-ROW,Set,'Verizon','SINGULAR','properties(\'phoneCarrier\')=\'Verizon\'',,,,
-ROW,Set,'iPad','SINGULAR','properties(\'model\') contains \'iPad\'',,,,
-ROW,Set,'iPhone','SINGULAR','properties(\'model\') contains \'iPhone\'',,,,
-ROW,Set,'Orders','RELATED',"'((ApplicationName contains (""MobileOrdersV2.4"")) OR (ApplicationName contains (""OrderRouter"")) OR (ApplicationName contains (""MobileOrdersV2.3"")) OR (ApplicationName contains (""MobileOrdersV3.0"")) OR (ApplicationName contains (""VerifyOrders"")) OR (ApplicationName contains (""WebOrders"")) OR (ApplicationName contains (""ProcessPayment"")) OR (ApplicationName contains (""FraudAlert""))OR (ApplicationName contains (""ShipProduct"")) OR (ApplicationName contains (""VerifyCreditAndShipping"")))'",,,,
--->
+<!-- Run 15x -->
 
 <tnt4j-simulator>
 <var name="user1" value="10000000 bet 99999999"/>
@@ -42,7 +14,7 @@ ROW,Set,'Orders','RELATED',"'((ApplicationName contains (""MobileOrdersV2.4"")) 
 <source id="1" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
 <source id="2" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
 <source id="3" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-<source id="4" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           
+<source id="4" fqn="APPL=MobileOrdersV4.0#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           
 <source id="5" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=40.7818,-73.4737" user="webuser" url="https://www.sample.com/orders/parts"/>
 <source id="6" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=34.05223,-118.24368" user="ebay-proc"/>
 <source id="7" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=51.50853,-0.12574" user="SYSPRC"/>
@@ -62,8 +34,8 @@ ROW,Set,'Orders','RELATED',"'((ApplicationName contains (""MobileOrdersV2.4"")) 
 <var name="elapsedTime" value="100000 bet 99999999999"/>
 <var name="corr" value="100000 bet 999999"/>
 <var name="iOSVersion" value="9.3|10.4|9.1"/>
-<var name="phoneCarrier" value="ATT|Verizon|Sprint|T-Mobile"/>
-<var name="model" value="iPhone7|iPhone6s|iPhone5|iPhone5s|iPad|iPad2|iPadMini"/>
+<var name="phoneCarrier" value="ATT|Verizon|Sprint"/>
+<var name="model" value="iPhone7|iPhone6s|iPhone5s|iPad|iPad2|iPadMini"/>
 <var name="amount" value="10 bet 300"/>
 <var name="numberOfItems" value="1 bet 5"/>
 <var name="custid" 	value="750000 bet 850000"/>

@@ -1,0 +1,29 @@
+<!-- 
+These sets are required to demo this simulation. Run as an import in Query Browser.
+-->
+
+CFG,RelDates=false
+HDR,Set,SetName,SetScope,Criteria,Objectives,Classifier,LearnData,SetSequence,Owner,AdminUser,UserName
+ROW,Set,'ATT','SINGULAR','properties(\'phoneCarrier\')=\'ATT\'',,,,
+ROW,Set,'AcceptOrder','SINGULAR',"'((ActivityName equals (""AcceptOrder"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Android','SINGULAR','properties(\'model\') contains \'Android\'',,,,
+ROW,Set,'MobileOrders','SINGULAR','properties(\'model\') contains \'iPhone\' or properties(\'model\') contains \'iPad\'',,,,
+ROW,Set,'PaymentProcess','SINGULAR',"'((ActivityName equals (""PaymentProcess"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ProcessFraudAlerts','SINGULAR',"'((ActivityName equals (""ProcessFraudAlerts"")))'",(S:'SLA'='ElapsedTime <= 2 seconds'),,,
+ROW,Set,'RouteOrder','SINGULAR',"'((ActivityName equals (""RouteOrder"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Shipping','SINGULAR','ActivityName=\'SendShipment\'',(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Sprint','SINGULAR','properties(\'phoneCarrier\')=\'Sprint\'',,,,
+ROW,Set,'T-Mobile','SINGULAR','properties(\'phoneCarrier\')=\'T-Mobile\'',,,,
+ROW,Set,'TRACKING_ACTIVITY','SINGULAR',"'((ActivityName equals (""TRACKING_ACTIVITY"")))'",,,,
+ROW,Set,'TRACKING_ACTIVITY_TO_PaymentProcess','SINGULAR',"'((ActivityName equals (""TRACKING_ACTIVITY_TO_PaymentProcess"")))'",,,,
+ROW,Set,'ValidateAmount','SINGULAR',"'((ActivityName equals (""ValidateAmount"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ValidateCredit','SINGULAR',"'((ActivityName equals (""ValidateCredit"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ValidateCreditor','SINGULAR',"'((ActivityName equals (""ValidateCreditor"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Validate','SINGULAR',"'((ActivityName equals (""Validate"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ValidateOrder','SINGULAR',"'((ActivityName equals (""ValidateOrder"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ValidateShipping','SINGULAR',"'((ActivityName equals (""ValidateShipping"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'ValidateWithCreditor','SINGULAR',"'((ActivityName equals (""ValidateWithCreditor"")))'",(S:'SLA'='ElapsedTime<=2 seconds'),,,
+ROW,Set,'Verizon','SINGULAR','properties(\'phoneCarrier\')=\'Verizon\'',,,,
+ROW,Set,'iPad','SINGULAR','properties(\'model\') contains \'iPad\'',,,,
+ROW,Set,'iPhone','SINGULAR','properties(\'model\') contains \'iPhone\'',,,,
+ROW,Set,'Orders','RELATED',"'((ApplicationName contains (""MobileOrdersV2.4"")) OR (ApplicationName contains (""OrderRouter"")) OR (ApplicationName contains (""MobileOrdersV2.3"")) OR (ApplicationName contains (""MobileOrdersV3.0"")) OR (ApplicationName contains (""VerifyOrders"")) OR (ApplicationName contains (""WebOrders"")) OR (ApplicationName contains (""ProcessPayment"")) OR (ApplicationName contains (""FraudAlert""))OR (ApplicationName contains (""ShipProduct"")) OR (ApplicationName contains (""VerifyCreditAndShipping"")))'",,,,

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Run once -->
+<tnt4j-simulator>
+
+	<var name="sleep" value="50000 bet 300000" />
+	<var name="elapsedTime" value="50000 bet 300000" />
+	<var name="iOSVersion" value="9.3"/>
+	<var name="phoneCarrier" value="ATT|Verizon|Sprint"/>
+	<var name="model" value="iPhone7|iPhone6s|iPhone5s|iPad|iPad2|iPadMini"/>
+	<var name="amount" value="10 bet 300"/>
+	<var name="freeMemory" value="5000000000 bet 1000000000"/>
+	<sleep usec="${sleep}" />
+	<var name="user1" value="10000000 bet 99999999"/>
+	<var name="user2" value="1000 bet 9999"/>
+	<var name="user3" value="1000 bet 9999"/>
+	<var name="user4" value="1000 bet 9999"/>
+	<var name="user5" value="100000000000 bet 999999999999"/>  
+	<source id="1" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
+	<source id="2" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+	<source id="3" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+	<source id="4" fqn="APPL=MobileOrdersV4.0#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           
+	
+
+	<activity name="PlaceOrder" source="1">
+		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+	 	<prop name="hardware" type="STRING" value="x86_64"/>
+	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
+	 	<prop name="model" type="STRING" value="${model}"/>
+	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
+	 	<prop name="amount" type="INTEGER" value="${amount}"/>
+		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+			sev="TRACE" res="jdbc://oracle/ora1/order_db">	
+		</event>
+	</activity>
+
+	<sleep usec="${sleep}" />
+	<var name="user1" value="10000000 bet 99999999"/>
+	<var name="user2" value="1000 bet 9999"/>
+	<var name="user3" value="1000 bet 9999"/>
+	<var name="user4" value="1000 bet 9999"/>
+	<var name="user5" value="100000000000 bet 999999999999"/>  
+
+
+
+	<activity name="PlaceOrder" source="2">
+		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+	 	<prop name="hardware" type="STRING" value="x86_64"/>
+	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
+	 	<prop name="model" type="STRING" value="${model}"/>
+	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
+	 	<prop name="amount" type="INTEGER" value="${amount}"/>
+		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+		</event>
+	</activity>
+	
+	<sleep usec="${sleep}" />
+	<var name="user1" value="10000000 bet 99999999"/>
+	<var name="user2" value="1000 bet 9999"/>
+	<var name="user3" value="1000 bet 9999"/>
+	<var name="user4" value="1000 bet 9999"/>
+	<var name="user5" value="100000000000 bet 999999999999"/>  
+
+
+
+	<activity name="PlaceOrder" source="3">
+		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+	 	<prop name="hardware" type="STRING" value="x86_64"/>
+	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
+	 	<prop name="model" type="STRING" value="${model}"/>
+	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
+	 	<prop name="amount" type="INTEGER" value="${amount}"/>
+		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+		</event>
+	</activity>
+
+	<sleep usec="${sleep}" />
+	<var name="user1" value="10000000 bet 99999999"/>
+	<var name="user2" value="1000 bet 9999"/>
+	<var name="user3" value="1000 bet 9999"/>
+	<var name="user4" value="1000 bet 9999"/>
+	<var name="user5" value="100000000000 bet 999999999999"/>  
+
+
+
+	<activity name="PlaceOrder" source="4">
+		<prop name="query" type="STRING"
+				value="update account set status='X' where account='${acct1}-${acct2}-${acct3}-${acct4}-${acct5}'" />
+		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+	 	<prop name="hardware" type="STRING" value="x86_64"/>
+	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
+	 	<prop name="model" type="STRING" value="${model}"/>
+	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
+	 	<prop name="amount" type="INTEGER" value="${amount}"/>
+		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+		</event>
+	</activity>
+
+	<sleep usec="${sleep}" />
+	<var name="user1" value="10000000 bet 99999999"/>
+	<var name="user2" value="1000 bet 9999"/>
+	<var name="user3" value="1000 bet 9999"/>
+	<var name="user4" value="1000 bet 9999"/>
+	<var name="user5" value="100000000000 bet 999999999999"/>  
+
+	<activity name="PlaceOrder" source="1">
+		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+	 	<prop name="hardware" type="STRING" value="x86_64"/>
+	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
+	 	<prop name="model" type="STRING" value="${model}"/>
+	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
+	 	<prop name="amount" type="INTEGER" value="${amount}"/>
+		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+		</event>
+
+	</activity>
+
+	<sleep usec="${sleep}" />
+	<var name="user1" value="10000000 bet 99999999"/>
+	<var name="user2" value="1000 bet 9999"/>
+	<var name="user3" value="1000 bet 9999"/>
+	<var name="user4" value="1000 bet 9999"/>
+	<var name="user5" value="100000000000 bet 999999999999"/>  
+
+
+	<activity name="PlaceOrder" source="2">
+		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+	 	<prop name="hardware" type="STRING" value="x86_64"/>
+	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
+	 	<prop name="model" type="STRING" value="${model}"/>
+	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
+	 	<prop name="amount" type="INTEGER" value="${amount}"/>
+		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+		</event>
+	</activity>
+
+	<sleep usec="${sleep}" />
+	<var name="user1" value="10000000 bet 99999999"/>
+	<var name="user2" value="1000 bet 9999"/>
+	<var name="user3" value="1000 bet 9999"/>
+	<var name="user4" value="1000 bet 9999"/>
+	<var name="user5" value="100000000000 bet 999999999999"/>  
+
+
+	<activity name="PlaceOrder" source="3">
+		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+	 	<prop name="hardware" type="STRING" value="x86_64"/>
+	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
+	 	<prop name="model" type="STRING" value="${model}"/>
+	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
+	 	<prop name="amount" type="INTEGER" value="${amount}"/>
+		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+		</event>
+	</activity>
+
+	<sleep usec="${sleep}" />
+	<var name="user1" value="10000000 bet 99999999"/>
+	<var name="user2" value="1000 bet 9999"/>
+	<var name="user3" value="1000 bet 9999"/>
+	<var name="user4" value="1000 bet 9999"/>
+	<var name="user5" value="100000000000 bet 999999999999"/>  
+
+	<activity name="PlaceOrder" source="4">
+		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+	 	<prop name="hardware" type="STRING" value="x86_64"/>
+	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
+	 	<prop name="model" type="STRING" value="${model}"/>
+	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
+	 	<prop name="amount" type="INTEGER" value="${amount}"/>
+		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+		</event>
+	</activity>
+
+
+</tnt4j-simulator>

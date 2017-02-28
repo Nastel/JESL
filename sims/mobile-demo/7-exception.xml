@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Run once -->
+<!-- Run 2x -->
 
 <tnt4j-simulator>
          
@@ -17,7 +17,7 @@
 <var name="netAddr3" value="1 bet 9"/>
 <var name="netAddr4" value="10 bet 99"/>
 <var name="freeMemory" value="3000000000 bet 6000000000"/>
-<var name="elapsedTime" value="100000 bet 999999"/>
+<var name="elapsedTime" value="50000 bet 300000"/>
 <var name="corr" value="100000 bet 999999"/>
 <var name="iOSVersion" value="9.3|10.4|9.1"/>
 <var name="phoneCarrier" value="ATT|Verizon|Sprint|T-Mobile"/>

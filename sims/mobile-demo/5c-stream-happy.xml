@@ -47,7 +47,7 @@
 <!--  >var name="elapsedTime" value="100000 bet 999999"/-->
 <var name="elapsedTime" value="50000 bet 300000"/>
 <var name="corr" value="100000 bet 999999"/>
-<var name="iOSVersion" value="9.3|10.4|9.1"/>
+<var name="iOSVersion" value="9.0|9.1|9.2|9.3|10.0|10.1|10.3"/>
 <var name="phoneCarrier" value="ATT|Verizon|Sprint"/>
 <var name="model" value="iPhone7|iPhone6s|iPhone5s|iPad|iPad2|iPadMini|iPhone5"/>
 <var name="amount" value="10 bet 300"/>

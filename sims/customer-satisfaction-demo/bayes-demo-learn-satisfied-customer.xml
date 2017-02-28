@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<tnt4j-simulator> 
+ 
+<source id="1" fqn="APPL=CancelAccount#SERVER=ProcessAccountServer#NETADDR=162.123.74.18#DATACENTER=DC2#GEOADDR=34.05223,-118.24368" user="system"/>
+<source id="2" fqn="APPL=NotateAccount#SERVER=ProcessAccountServer#NETADDR=162.123.74.18#DATACENTER=DC2#GEOADDR=34.05223,-118.24368" user="system"/>
+
+<var name="sleep" value="50000 bet 300000"/>
+<var name="elapsedTime" value="50000 bet 300000"/>
+
+<var name="acct1" value="10000000 bet 99999999"/>
+<var name="acct2" value="1000 bet 9999"/>
+<var name="acct3" value="1000 bet 9999"/>
+<var name="acct4" value="1000 bet 9999"/>
+<var name="acct5" value="100000000000 bet 999999999999"/>   
+
+<msg id="1">Duplicate item sent.</msg>
+<msg id="2">Return label emailed.</msg>
+<msg id="3">Coupon was applied.</msg>
+<msg id="4">Instructions emailed.</msg>
+<msg id="5">Refund issued.</msg>
+<msg id="6">Explained that there was no issue.</msg>
+<msg id="7">Different size will be mailed when we receive the original back.</msg>
+<msg id="8">Customer had to correct a wrong address that was specified when shipping information was entered.</msg>
+
+
+<var name="msgNum" value="1 bet 8"/>
+
+  <activity name="PositiveSurvey" source="1" >
+    <event name="SQL.retrieve.account" type="CALL" elapsed="${elapsedTime}" sev="TRACE" res="jdbc://oracle/ora1/order_db">
+    	<prop name="accountId" type="STRING" value="${acct1}-${acct2}-${acct3}-${acct4}-${acct5}"/>
+    </event>
+	<event name="SQL.insert.survey" type="CALL" tags="positive" elapsed="${elapsedTime}" sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="${msgNum}">
+	 	<prop name="query" type="STRING" value="insert survey values (10,10,10,10,10,'happy') where account='${acct1}-${acct2}-${acct3}-${acct4}-${acct5}'"/>
+	</event>
+    <sleep usec="121"/>
+  </activity>
+  
+    
+</tnt4j-simulator>

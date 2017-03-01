@@ -11,8 +11,6 @@
 <var name="deviceNumber2" value="1 bet 999999"/> 
 <var name="deviceNumber3" value="1 bet 999999"/> 
 <var name="deviceNumber4" value="1 bet 999999"/>       
-<!--  >source id="1" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
-<source id="2" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/-->      
 <source id="1" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
 <source id="5" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=40.7818,-73.4737" user="webuser" url="https://www.sample.com/orders/parts"/>
 <source id="6" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=34.05223,-118.24368" user="ebay-proc"/>
@@ -58,8 +56,8 @@
 	 <prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
 	 <prop name="model" type="STRING" value="${model}"/>
 	 <prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 <prop name="amount" type="INTEGER" value="${amount}"/>
-	 <prop name="numberOfItems" type="INTEGER" value="${numberOfItems}"/>
+	 <prop name="amount" type="INTEGER" value="0"/>
+	 <prop name="numberOfItems" type="INTEGER" value="1"/>
 	 <prop name="clicks" type="INTEGER" value="${numberOfClicksV2}"/>
 	 <prop name="itemsLeftInCart" type="INTEGER" value="2"/>
 	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>

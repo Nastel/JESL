@@ -50,7 +50,7 @@
 <msg id="7">SELECT * FROM PRODUCTS WHERE product_id = ${prodid}</msg>
 
   <var name="source" value="1"/>
-  <activity name="TRACKING_ACTIVITY" source="${source}" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" corrs="${corr}">
+  <activity name="TRACKING_ACTIVITY" source="1" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" corrs="${corr}">
   	 <prop name="freeMemory" type="STRING" value="${freeMemory}"/>
 	 <prop name="hardware" type="STRING" value="x86_64"/>
 	 <prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
@@ -60,40 +60,39 @@
 	 <prop name="numberOfItems" type="INTEGER" value="0"/>
 	 <prop name="clicks" type="INTEGER" value="5"/>
 	 <prop name="itemsLeftInCart" type="INTEGER" value="3"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
+	 <event name="ViewAppearing" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonSearchClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>
+	 <event name="buttonSearchClick:" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>
+	 <event name="ViewDisAppearing" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="ViewAppearing" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="colorSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="colorSelectedClick:" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="sizeSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="sizeSelectedClick:" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="qtySelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="qtySelectedClick:" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonAddToCartClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="buttonAddToCartClick:" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonCheckoutClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="buttonCheckoutClick:" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="ViewDisAppearing" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
+	 <event name="ViewAppearing" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonPlaceOrderClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="RECEIVE" res="cartViewController" tags="iPhone"/>
+	 <event name="buttonPlaceOrderClick:" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="RECEIVE" res="cartViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="processingOrder" msg="1" source="${source}" sev="TRACE" elapsed="${elapsedTime}" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
+	 <event name="processingOrder" msg="1" source="1" sev="TRACE" elapsed="${elapsedTime}" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
+	 <event name="ViewDisAppearing" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="orderConfirmationViewController" tags="iPhone"/>
+	 <event name="ViewAppearing" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="orderConfirmationViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>            
   </activity>
   
-  <var name="source" value="3"/>
-  <activity name="TRACKING_ACTIVITY" source="${source}" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" corrs="${corr}">
+  <activity name="TRACKING_ACTIVITY" source="3" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" corrs="${corr}">
   	 <prop name="freeMemory" type="STRING" value="${freeMemory}"/>
 	 <prop name="hardware" type="STRING" value="x86_64"/>
 	 <prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
@@ -103,80 +102,39 @@
 	 <prop name="numberOfItems" type="INTEGER" value="0"/>
 	 <prop name="clicks" type="INTEGER" value="5"/>
 	 <prop name="itemsLeftInCart" type="INTEGER" value="3"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
+	 <event name="ViewAppearing" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonSearchClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>
+	 <event name="buttonSearchClick:" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>
+	 <event name="ViewDisAppearing" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="ViewAppearing" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="colorSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="colorSelectedClick:" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="sizeSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="sizeSelectedClick:" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="qtySelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="qtySelectedClick:" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonAddToCartClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="buttonAddToCartClick:" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonCheckoutClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="buttonCheckoutClick:" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
+	 <event name="ViewDisAppearing" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
+	 <event name="ViewAppearing" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="buttonPlaceOrderClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="RECEIVE" res="cartViewController" tags="iPhone"/>
+	 <event name="buttonPlaceOrderClick:" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="RECEIVE" res="cartViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="processingOrder" msg="1" source="${source}" sev="TRACE" elapsed="${elapsedTime}" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
+	 <event name="processingOrder" msg="1" source="3" sev="TRACE" elapsed="${elapsedTime}" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
+	 <event name="ViewDisAppearing" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="orderConfirmationViewController" tags="iPhone"/>
+	 <event name="ViewAppearing" source="3" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="orderConfirmationViewController" tags="iPhone"/>
 	 <sleep usec="${sleep}"/>            
   </activity>
   
-    <var name="source" value="3"/>
-  <activity name="TRACKING_ACTIVITY" source="${source}" sev="TRACE" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" corrs="${corr}">
-  	 <prop name="freeMemory" type="STRING" value="${freeMemory}"/>
-	 <prop name="hardware" type="STRING" value="x86_64"/>
-	 <prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 <prop name="model" type="STRING" value="${model}"/>
-	 <prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 <prop name="amount" type="INTEGER" value="${amount}"/>
-	 <prop name="numberOfItems" type="INTEGER" value="0"/>
-	 <prop name="clicks" type="INTEGER" value="5"/>
-	 <prop name="itemsLeftInCart" type="INTEGER" value="3"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonSearchClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="colorSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="sizeSelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="qtySelectedClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonAddToCartClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonCheckoutClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonPlaceOrderClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="RECEIVE" res="cartViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="processingOrder" msg="1" source="${source}" sev="TRACE" elapsed="${elapsedTime}" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="orderConfirmationViewController" tags="iPhone"/>
-	 <sleep usec="${sleep}"/>            
-  </activity>
+
 
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Run 10 times -->
+<!-- Run 5 times -->
 <tnt4j-simulator>
 
 	<var name="sleep" value="50000 bet 300000" />

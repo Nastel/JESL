@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Run once -->
+<!-- Run 10 times -->
 <tnt4j-simulator>
 
 	<var name="sleep" value="50000 bet 300000" />
@@ -19,16 +19,15 @@
 
 	<source id="15" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
 	<source id="16" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-	<source id="17" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-	
-	
+	<source id="17" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+		
 	<source id="18" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
 	<source id="19" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-	<source id="20" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+	<source id="20" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
 	
 	<source id="21" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
 	<source id="22" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
-	<source id="23" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
+	<source id="23" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
 
 
 	<activity name="PlaceOrder" source="15">

@@ -50,7 +50,7 @@ import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
- * This class provides HTTP[S] connection to the specified JESK server based on given URL.
+ * This class provides HTTP[S] connection to the specified JESL server based on given URL.
  *
  * @version $Revision: 3 $
  */
@@ -99,11 +99,11 @@ public class HttpClient implements HttpStream {
 		String scheme = uri.getScheme();
 		secure = "https".equalsIgnoreCase(scheme);
 		host = uri.getHost();
-	    if (host == null)
-	    	host = "localhost";
-	    port = uri.getPort();
-	    if (port <= 0)
-	    	port = (secure ? 443 : 80);
+		if (host == null)
+			host = "localhost";
+		port = uri.getPort();
+		if (port <= 0)
+			port = (secure ? 443 : 80);
 		init(host, port, uri.getPath(), secure, proxyHost, proxyPort, logger);
 	}
 
@@ -120,7 +120,7 @@ public class HttpClient implements HttpStream {
 
 		String scheme = (secure ? "https" : "http");
 
-	    httpHost = new HttpHost(host, port, scheme);
+		httpHost = new HttpHost(host, port, scheme);
 		if (!StringUtils.isEmpty(proxyHost))
 			httpProxy = new HttpHost(proxyHost, proxyPort);
 	}
@@ -142,19 +142,19 @@ public class HttpClient implements HttpStream {
 	@Override
 	public synchronized void connect() throws IOException {
 		try {
-		    if (secure) {
-		    	SSLSocketFactory ssf = null;
-		    	if (!StringUtils.isEmpty(sslKeystore)) {
-			    	SSLContextFactory scf = new SSLContextFactory(sslKeystore, sslKeystorePwd, sslKeystorePwd);
-			    	ssf = new SSLSocketFactory(scf.getSslContext(true));
+			if (secure) {
+				SSLSocketFactory ssf = null;
+				if (!StringUtils.isEmpty(sslKeystore)) {
+					SSLContextFactory scf = new SSLContextFactory(sslKeystore, sslKeystorePwd, sslKeystorePwd);
+					ssf = new SSLSocketFactory(scf.getSslContext(true));
 		    	}
 		    	else {
-		    		ssf = new SSLSocketFactory(SSLContext.getDefault());
-		    	}
-		    	Scheme secureScheme = new Scheme("https", port, ssf);
-		    	schemeReg = new SchemeRegistry();
-		    	schemeReg.register(secureScheme);
-		    }
+					ssf = new SSLSocketFactory(SSLContext.getDefault());
+				}
+				Scheme secureScheme = new Scheme("https", port, ssf);
+				schemeReg = new SchemeRegistry();
+				schemeReg.register(secureScheme);
+			}
 			route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN, RouteInfo.LayerType.PLAIN);
 			if (schemeReg != null) {
 				connMgr = new BasicClientConnectionManager(schemeReg);
@@ -199,7 +199,7 @@ public class HttpClient implements HttpStream {
 			org.apache.http.HttpRequest httpRequest = (org.apache.http.HttpRequest) request;
 			connection.sendRequestHeader(httpRequest);
 			if (httpRequest instanceof HttpEntityEnclosingRequest && request.hasContent())
-				connection.sendRequestEntity((HttpEntityEnclosingRequest)httpRequest);
+				connection.sendRequestEntity((HttpEntityEnclosingRequest) httpRequest);
 			connection.flush();
 		} catch (HttpException he) {
 			throw new IOException(he.getMessage(), he);
@@ -377,7 +377,7 @@ public class HttpClient implements HttpStream {
 	 * {@inheritDoc}
 	 */
 	@Override
-    public URI getURI() {
-	    return uri;
-    }
+	public URI getURI() {
+		return uri;
+	}
 }

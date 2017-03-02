@@ -37,8 +37,7 @@ import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 
 /**
- * This class provides TCP/SSL connection to the specified JESK server based on given URL.
- * tcp[s]://host:port
+ * This class provides TCP/SSL connection to the specified JESL server based on given URL. tcp[s]://host:port
  *
  * @version $Revision: 3 $
  */
@@ -46,7 +45,7 @@ public class SocketClient implements JKStream {
 	protected EventSink logger;
 
 	protected InetSocketAddress proxyAddr;
-	protected Proxy proxy = Proxy.NO_PROXY;	// default to direct connection
+	protected Proxy proxy = Proxy.NO_PROXY; // default to direct connection
 
 	protected String			host;
 	protected int				port;
@@ -54,7 +53,6 @@ public class SocketClient implements JKStream {
 	protected Socket			socket;
 	protected DataOutputStream	out;
 	protected BufferedReader	in;
-
 
 	/**
 	 * Create JESL HTTP[S} client stream with given attributes
@@ -127,9 +125,9 @@ public class SocketClient implements JKStream {
 	public synchronized void send(String msg, boolean wantResponse) throws IOException {
 		if (wantResponse)
 			throw new UnsupportedOperationException("Responses are not supported for TCP connections");
-		
-		String lineMsg = msg.endsWith("\n")? msg: msg + "\n";
-		byte [] bytes = lineMsg.getBytes();
+
+		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
+		byte[] bytes = lineMsg.getBytes();
 		out.write(bytes, 0, bytes.length);
 		out.flush();
 	}
@@ -218,11 +216,11 @@ public class SocketClient implements JKStream {
 	 * {@inheritDoc}
 	 */
 	@Override
-    public URI getURI() { 
+	public URI getURI() {
 		try {
 			return new URI("tcp" + (isSecure() ? "s" : "") + "://" + host + ":" + port);
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
-    }
+	}
 }

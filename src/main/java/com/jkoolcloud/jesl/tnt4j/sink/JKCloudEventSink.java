@@ -50,7 +50,7 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  * @see EventFormatter
  */
 public class JKCloudEventSink extends AbstractEventSink {
-	private static final EventSink logger = DefaultEventSinkFactory.defaultEventSink(JKCloudEventSink.class);	
+	private static final EventSink logger = DefaultEventSinkFactory.defaultEventSink(JKCloudEventSink.class);
 
 	public static final String KEY_SENT_BYTES = "sink-sent-bytes";
 	public static final String KEY_LAST_BYTES = "sink-last-bytes";
@@ -151,7 +151,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 		stats.put(Utils.qualify(this, KEY_SERVICE_URL), url);
 		return this;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -227,34 +227,38 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	@Override
 	protected void _log(TrackingEvent event) throws IOException {
+		writeLine(getEventFormatter().format(event));
+
 		if (logSink != null && logSink.isSet(event.getSeverity())) {
 			logSink.log(event);
 		}
-		writeLine(getEventFormatter().format(event));
 	}
 
 	@Override
 	protected void _log(TrackingActivity activity) throws IOException {
+		writeLine(getEventFormatter().format(activity));
+
 		if (logSink != null && logSink.isSet(activity.getSeverity())) {
 			logSink.log(activity);
 		}
-		writeLine(getEventFormatter().format(activity));
 	}
 
 	@Override
 	protected void _log(long ttl, Source src, OpLevel sev, String msg, Object... args) throws IOException {
+		writeLine(getEventFormatter().format(ttl, src, sev, msg, args));
+
 		if (logSink != null && logSink.isSet(sev)) {
 			logSink.log(ttl, src, sev, msg, args);
 		}
-		writeLine(getEventFormatter().format(ttl, src, sev, msg, args));
 	}
 
 	@Override
 	protected void _log(Snapshot snapshot) throws Exception {
+		writeLine(getEventFormatter().format(snapshot));
+
 		if (logSink != null && logSink.isSet(snapshot.getSeverity())) {
 			logSink.log(snapshot);
 		}
-		writeLine(getEventFormatter().format(snapshot));
 	}
 
 	@Override

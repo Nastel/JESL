@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import com.jkoolcloud.tnt4j.config.ConfigException;
 import com.jkoolcloud.tnt4j.format.EventFormatter;
@@ -30,22 +31,25 @@ import com.jkoolcloud.tnt4j.sink.impl.FileEventSinkFactory;
 import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
- * <p>Concrete implementation of {@link EventSinkFactory} interface, which
- * creates instances of {@link EventSink}. This factory uses {@link JKCloudEventSink}
- * as the underlying sink provider and by default uses {@link JSONFormatter} to
- * format messages.</p>
+ * <p>
+ * Concrete implementation of {@link EventSinkFactory} interface, which creates instances of {@link EventSink}. This
+ * factory uses {@link JKCloudEventSink} as the underlying sink provider and by default uses {@link JSONFormatter} to
+ * format messages.
+ * </p>
  *
  *
  * @see JKCloudEventSink
  *
- * @version $Revision: 6 $
+ * @version $Revision: 7 $
  *
  */
 public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	private String fileName = null;
 	private String token = System.getProperty("tnt4j.sink.factory.socket.token", "");
 	private String url = System.getProperty("tnt4j.sink.factory.socket.url", "http://localhost:6580");
-	
+	// NOTE: server side uses 5min. to close inactive connection
+	private long idleTimeout = Long.getLong("tnt4j.sink.factory.socket.idle.timeout", TimeUnit.MINUTES.toMillis(4));
+
 	private EventSinkFactory eventSinkFactory = null;
 
 	/**
@@ -66,38 +70,48 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	}
 
 	@Override
-    public EventSink getEventSink(String name) {
-		EventSink outSink = eventSinkFactory != null? eventSinkFactory.getEventSink(name, System.getProperties(), new JSONFormatter(false)): null;
-	    return configureSink(new JKCloudEventSink(name, url, new JSONFormatter(false), outSink));
-    }
+	public EventSink getEventSink(String name) {
+		EventSink outSink = eventSinkFactory != null
+				? eventSinkFactory.getEventSink(name, System.getProperties(), new JSONFormatter(false)) : null;
+		return configureSink(new JKCloudEventSink(name, url, new JSONFormatter(false), outSink));
+	}
 
 	@Override
-    public EventSink getEventSink(String name, Properties props) {
-		EventSink outSink = eventSinkFactory != null? eventSinkFactory.getEventSink(name, System.getProperties(), new JSONFormatter(false)): null;
-	    return configureSink(new JKCloudEventSink(name, url, new JSONFormatter(false), outSink));
-    }
+	public EventSink getEventSink(String name, Properties props) {
+		EventSink outSink = eventSinkFactory != null
+				? eventSinkFactory.getEventSink(name, System.getProperties(), new JSONFormatter(false)) : null;
+		return configureSink(new JKCloudEventSink(name, url, new JSONFormatter(false), outSink));
+	}
 
 	@Override
-    public EventSink getEventSink(String name, Properties props, EventFormatter frmt) {
-		EventSink outSink = eventSinkFactory != null? eventSinkFactory.getEventSink(name, props, frmt): null;
-	    return configureSink(new JKCloudEventSink(name, url,  token, frmt, outSink));
-    }
+	public EventSink getEventSink(String name, Properties props, EventFormatter frmt) {
+		EventSink outSink = eventSinkFactory != null ? eventSinkFactory.getEventSink(name, props, frmt) : null;
+		return configureSink(new JKCloudEventSink(name, url, token, frmt, outSink));
+	}
 
 	@Override
-    public Map<String, Object> getConfiguration() {
-	    return config;
-    }
+	protected EventSink configureSink(EventSink sink) {
+		EventSink jsink = super.configureSink(sink);
+		((JKCloudEventSink) jsink).setIdleTimeout(idleTimeout, TimeUnit.MILLISECONDS);
+		return jsink;
+	}
 
 	@Override
-    public void setConfiguration(Map<String, Object> settings) throws ConfigException {
+	public Map<String, Object> getConfiguration() {
+		return config;
+	}
+
+	@Override
+	public void setConfiguration(Map<String, Object> settings) throws ConfigException {
 		super.setConfiguration(settings);
-		
+
 		url = Utils.getString("Url", settings, url);
 		token = Utils.getString("Token", settings, token);
-		fileName =  Utils.getString("Filename", settings, fileName);
+		fileName = Utils.getString("Filename", settings, fileName);
+		idleTimeout = Utils.getLong("IdleTimeout", settings, idleTimeout);
 		_applyConfig(settings);
-    }
-	
+	}
+
 	private void _applyConfig(Map<String, Object> settings) throws ConfigException {
 		if (fileName != null) {
 			eventSinkFactory = new FileEventSinkFactory(fileName);
@@ -110,6 +124,6 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 			ConfigException ce = new ConfigException(e1.toString(), settings);
 			ce.initCause(e1);
 			throw ce;
-		}		
+		}
 	}
 }

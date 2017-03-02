@@ -1,14 +1,14 @@
 <!-- 
 These sets are required to setup for the bayes simulation. Run as an upsert in Query Browser.
 
-upsert set name = "RiskLoosingCustomer", learnquery = "Get Activity Fields appl, properties('iOSVersion'), properties('phoneCarrier'), loc where name='CancelAccount'", classifier="CustomerSatisfaction"
-upsert set name = "SatisfiedCustomer", learnquery = "Get Activity Fields appl, properties('iOSVersion'), properties('phoneCarrier'), loc where name='PlaceOrder'", classifier="CustomerSatisfaction"
+upsert set name = "RiskLoosingCustomer", learnquery = "Get Activity Fields appl, properties('iOSVersion'), properties('phoneCarrier'), geolocation where name='CancelAccount'", classifier="CustomerSatisfaction", scope=0
+upsert set name = "SatisfiedCustomer", learnquery = "Get Activity Fields appl, properties('iOSVersion'), properties('phoneCarrier'), geolocation where name='PlaceOrder'", classifier="CustomerSatisfaction", scope=0
 upsert BayesSourceFields active=true, name='appl', jkqlexpr='appl'
-upsert BayesSourceFields active=true, name='loc', jkqlexpr='loc'
+upsert BayesSourceFields active=true, name='geolocation', jkqlexpr='geolocation'
 upsert BayesSourceFields active=true, name='iOSVersion', jkqlexpr='properties(\'iOSVersion\')'
 upsert BayesSourceFields active=true, name='msgItems', jkqlexpr='properties(\'freeMemory\')'
 upsert BayesSourceFields active=true, name='phoneCarrier', jkqlexpr='properties(\'phoneCarrier\')'
-upsert dictionary properties=('source'='appl,iOSVersion,loc,phoneCarrier'), name='CustomerSatisfaction'	
+upsert dictionary properties=('source'='appl,iOSVersion,geolocation,phoneCarrier'), name='CustomerSatisfaction'	
 upsert dictionary properties+=('criteria'='activityname=\'TRACKING_ACTIVITY\'') where name='CustomerSatisfaction' 
 -->
  

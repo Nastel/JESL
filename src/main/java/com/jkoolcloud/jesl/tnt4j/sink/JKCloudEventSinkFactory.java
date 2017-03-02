@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import com.jkoolcloud.tnt4j.config.ConfigException;
 import com.jkoolcloud.tnt4j.format.EventFormatter;
@@ -45,6 +46,7 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	private String fileName = null;
 	private String token = System.getProperty("tnt4j.sink.factory.socket.token", "");
 	private String url = System.getProperty("tnt4j.sink.factory.socket.url", "http://localhost:6580");
+	private int idleTimeout = Integer.getInteger("tnt4j.sink.factory.socket.idle.timeout", 200000);
 	
 	private EventSinkFactory eventSinkFactory = null;
 
@@ -84,6 +86,13 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
     }
 
 	@Override
+	protected EventSink configureSink(EventSink sink) {
+		EventSink jsink = super.configureSink(sink);
+		((JKCloudEventSink)jsink).setIdleTimeout(idleTimeout, TimeUnit.MILLISECONDS);
+		return jsink;
+	}
+	
+	@Override
     public Map<String, Object> getConfiguration() {
 	    return config;
     }
@@ -95,6 +104,7 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 		url = Utils.getString("Url", settings, url);
 		token = Utils.getString("Token", settings, token);
 		fileName =  Utils.getString("Filename", settings, fileName);
+		idleTimeout = Utils.getInt("IdleTimeout", settings, idleTimeout);
 		_applyConfig(settings);
     }
 	

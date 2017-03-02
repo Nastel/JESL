@@ -18,6 +18,7 @@ package com.jkoolcloud.jesl.tnt4j.sink;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.lang3.StringUtils;
@@ -64,6 +65,9 @@ public class JKCloudEventSink extends AbstractEventSink {
 	private String proxyHost;
 	private String accessToken;
 	private int proxyPort = 0;
+	private long idleTimeout = 0;
+	
+	private AtomicLong lastWrite = new AtomicLong(0);
 	private AtomicLong sentBytes = new AtomicLong(0);
 	private AtomicLong lastBytes = new AtomicLong(0);
 	private AtomicLong sentMsgs = new AtomicLong(0);
@@ -126,6 +130,46 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 */
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
+	}
+
+	/**
+	 * Sets idle timeout for the sink. Connection is dropped on next write 
+	 * after timeout.
+	 *
+	 * @param timeOut
+	 *            idle timeout
+	 * @param tunit
+	 *            time out time units
+	 */
+	public void setIdleTimeout(long timeOut, TimeUnit tunit) {
+		this.idleTimeout = TimeUnit.MILLISECONDS.convert(timeOut, tunit);
+	}
+
+	/**
+	 * Gets idle timeout in milliseconds
+	 *
+	 * @return idle timeout in ms.
+	 */
+	public long getIdleTimeout() {
+		return idleTimeout;
+	}
+
+	/**
+	 * Gets last write time stamp
+	 *
+	 * @return last write time stamp
+	 */
+	public long getLastWrite() {
+		return lastWrite.get();
+	}
+
+	/**
+	 * Gets last write age in ms
+	 *
+	 * @return last write age in ms
+	 */
+	public long getLastWriteAge() {
+		return lastWrite.get() > 0? System.currentTimeMillis() - lastWrite.get(): 0;
 	}
 
 	/**
@@ -212,6 +256,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 		_checkState();
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
 		jkHandle.send(lineMsg, false);
+		
+		lastWrite.set(System.currentTimeMillis());
 		sentMsgs.incrementAndGet();
 		lastBytes.set(lineMsg.length());
 		sentBytes.addAndGet(lineMsg.length());
@@ -267,8 +313,12 @@ public class JKCloudEventSink extends AbstractEventSink {
 	}
 
 	@Override
-	protected void _checkState() throws IllegalStateException {
+	protected void _checkState() throws IllegalStateException{
 		if (!isOpen())
 			throw new IllegalStateException("Sink closed name=" + getName() + ", url=" + url + ", handle=" + jkHandle);
+		if (idleTimeout > 0 && (getLastWriteAge() > idleTimeout)) {
+			Utils.close(this);
+			throw new IllegalStateException("Sink aged name=" + getName() + ", url=" + url + ", handle=" + jkHandle);
+		}
 	}
 }

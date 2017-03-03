@@ -58,6 +58,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	public static final String KEY_LAST_BYTES	= "sink-last-bytes";
 	public static final String KEY_SENT_MSGS	= "sink-sent-messages";
 	public static final String KEY_SERVICE_URL	= "sink-service-url";
+	public static final String KEY_LAST_WAGE	= "sink-last-write-age-ms";
 
 	private EventSink logSink;
 	private JKClient jkHandle;
@@ -69,7 +70,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	private long idleTimeout = 0;
 
 	private AtomicLong idleCount = new AtomicLong(0);
-	private AtomicLong lastWrite = new AtomicLong(-1);
+	private AtomicLong lastWrite = new AtomicLong(0);
 	private AtomicLong sentBytes = new AtomicLong(0);
 	private AtomicLong lastBytes = new AtomicLong(0);
 	private AtomicLong sentMsgs = new AtomicLong(0);
@@ -170,7 +171,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 * @return last write age in ms
 	 */
 	public long getLastWriteAge() {
-		return lastWrite.get() > 0 ? System.currentTimeMillis() - lastWrite.get() : idleTimeout + 1;
+		return lastWrite.get() > 0? System.currentTimeMillis() - lastWrite.get(): 0;
 	}
 
 	/**
@@ -179,17 +180,14 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 * @throws IOException
 	 *             if IO error occurs while closing/opening sink handle
 	 */
-	protected void handleIdleTimeout() throws IOException {
-		if (idleTimeout > 0 && (getLastWriteAge() > idleTimeout)) {
+	protected void handleIdleReconnect() throws IOException {
+		if ((idleTimeout > 0) && (getLastWriteAge() > idleTimeout)) {
 			idleCount.incrementAndGet();
 			Utils.close(this);
 			this.open();
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void resetStats() {
 		idleCount.set(0);
@@ -199,33 +197,23 @@ public class JKCloudEventSink extends AbstractEventSink {
 		super.resetStats();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public KeyValueStats getStats(Map<String, Object> stats) {
 		super.getStats(stats);
 		stats.put(Utils.qualify(this, KEY_SENT_BYTES), sentBytes.get());
 		stats.put(Utils.qualify(this, KEY_LAST_BYTES), lastBytes.get());
 		stats.put(Utils.qualify(this, KEY_SENT_MSGS), sentMsgs.get());
+		stats.put(Utils.qualify(this, KEY_LAST_WAGE), getLastWriteAge());
 		stats.put(Utils.qualify(this, KEY_IDLE_COUNT), idleCount.get());
 		stats.put(Utils.qualify(this, KEY_SERVICE_URL), url);
 		return this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Object getSinkHandle() {
 		return jkHandle;
 	}
 
-	/**
-	 * Indicates whether connection to remote destination is open and available.
-	 *
-	 * @return {@code true} if connection open, {@code false} otherwise.
-	 */
 	@Override
 	public synchronized boolean isOpen() {
 		return (jkHandle != null && jkHandle.isConnected());
@@ -263,7 +251,6 @@ public class JKCloudEventSink extends AbstractEventSink {
 		if (logSink != null && logSink.isOpen()) {
 			logSink.close();
 		}
-		lastWrite.set(-1);
 	}
 
 	@Override
@@ -271,26 +258,6 @@ public class JKCloudEventSink extends AbstractEventSink {
 		return super.toString() + "(url: " + url + ", jk.handle: " + jkHandle + ", piped.sink: " + logSink + ")";
 	}
 
-	private void writeLine(String msg) throws IOException {
-		if (StringUtils.isEmpty(msg)) {
-			return;
-		}
-
-		_checkState();
-		handleIdleTimeout();
-
-		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
-		jkHandle.send(lineMsg, false);
-
-		lastWrite.set(System.currentTimeMillis());
-		sentMsgs.incrementAndGet();
-		lastBytes.set(lineMsg.length());
-		sentBytes.addAndGet(lineMsg.length());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void _write(Object msg, Object... args) throws IOException {
 		writeLine(getEventFormatter().format(msg, args));
@@ -299,7 +266,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	@Override
 	protected void _log(TrackingEvent event) throws IOException {
 		writeLine(getEventFormatter().format(event));
-		if (logSink != null && logSink.isSet(event.getSeverity())) {
+		if (canForward(event.getSeverity())) {
 			logSink.log(event);
 		}
 	}
@@ -307,7 +274,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	@Override
 	protected void _log(TrackingActivity activity) throws IOException {
 		writeLine(getEventFormatter().format(activity));
-		if (logSink != null && logSink.isSet(activity.getSeverity())) {
+		if (canForward(activity.getSeverity())) {
 			logSink.log(activity);
 		}
 	}
@@ -315,7 +282,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	@Override
 	protected void _log(long ttl, Source src, OpLevel sev, String msg, Object... args) throws IOException {
 		writeLine(getEventFormatter().format(ttl, src, sev, msg, args));
-		if (logSink != null && logSink.isSet(sev)) {
+		if (canForward(sev)) {
 			logSink.log(ttl, src, sev, msg, args);
 		}
 	}
@@ -323,7 +290,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	@Override
 	protected void _log(Snapshot snapshot) throws Exception {
 		writeLine(getEventFormatter().format(snapshot));
-		if (logSink != null && logSink.isSet(snapshot.getSeverity())) {
+		if (canForward(snapshot.getSeverity())) {
 			logSink.log(snapshot);
 		}
 	}
@@ -339,5 +306,26 @@ public class JKCloudEventSink extends AbstractEventSink {
 			throw new IllegalStateException(
 					"EventSink closed: name=" + getName() + ", url=" + url + ", handle=" + jkHandle);
 		}
+	}
+	
+	private void writeLine(String msg) throws IOException {
+		if (StringUtils.isEmpty(msg)) {
+			return;
+		}
+
+		_checkState();
+		handleIdleReconnect();
+
+		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
+		jkHandle.send(lineMsg, false);
+
+		lastWrite.set(System.currentTimeMillis());
+		sentMsgs.incrementAndGet();
+		lastBytes.set(lineMsg.length());
+		sentBytes.addAndGet(lineMsg.length());
+	}
+
+	private boolean canForward(OpLevel sev) {
+		return logSink != null && logSink.isSet(sev);
 	}
 }

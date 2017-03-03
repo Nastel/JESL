@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Run 10x -->
+<!-- Run once for each source -->
 
 <tnt4j-simulator>
 <var name="user1" value="10000000 bet 99999999"/>
@@ -38,7 +38,7 @@
 <source id="11" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=36.17497,-115.13722" user="mqm"/>
 
 <var name="sleep" value="50000 bet 300000"/>
-<var name="source" value="12 bet 23"/>
+<var name="source" value="16"/>
 <var name="netAddr1" value="100 bet 999"/>
 <var name="netAddr2" value="100 bet 999"/>
 <var name="netAddr3" value="1 bet 9"/>
@@ -47,8 +47,8 @@
 <!--  >var name="elapsedTime" value="100000 bet 999999"/-->
 <var name="elapsedTime" value="50000 bet 300000"/>
 <var name="corr" value="100000 bet 999999"/>
-<var name="iOSVersion" value="9.0|9.1|9.2|9.3|10.0|10.1|10.3"/>
-<var name="phoneCarrier" value="ATT|Verizon|Sprint|T-Mobile"/>
+<var name="iOSVersion" value="9.2"/>
+<var name="phoneCarrier" value="T-Mobile"/>
 <var name="model" value="iPhone7|iPhone6s|iPhone5s|iPad|iPad2|iPadMini|iPhone5"/>
 <var name="amount" value="10 bet 300"/>
 <var name="numberOfItems" value="1 bet 5"/>

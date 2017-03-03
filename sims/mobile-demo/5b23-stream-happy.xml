@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Run 3x -->
+<!-- Run once for each source -->
 
 <tnt4j-simulator>
 <var name="user1" value="10000000 bet 99999999"/>
@@ -11,10 +11,24 @@
 <var name="deviceNumber2" value="1 bet 999999"/> 
 <var name="deviceNumber3" value="1 bet 999999"/> 
 <var name="deviceNumber4" value="1 bet 999999"/>       
-<source id="1" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
-<source id="2" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-<source id="3" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-<source id="4" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
+
+<source id="12" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
+<source id="13" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
+<source id="14" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
+
+<source id="15" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+<source id="16" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+<source id="17" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+
+<source id="18" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+<source id="19" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+<source id="20" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+
+<source id="21" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
+<source id="22" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
+<source id="23" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
+
+
 <source id="5" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=40.7818,-73.4737" user="webuser" url="https://www.sample.com/orders/parts"/>
 <source id="6" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=34.05223,-118.24368" user="ebay-proc"/>
 <source id="7" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=51.50853,-0.12574" user="SYSPRC"/>
@@ -24,17 +38,17 @@
 <source id="11" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=36.17497,-115.13722" user="mqm"/>
 
 <var name="sleep" value="50000 bet 300000"/>
-<var name="source" value="1 bet 4"/>
+<var name="source" value="23"/>
 <var name="netAddr1" value="100 bet 999"/>
 <var name="netAddr2" value="100 bet 999"/>
 <var name="netAddr3" value="1 bet 9"/>
 <var name="netAddr4" value="10 bet 99"/>
-<var name="freeMemory" value="500000000 bet 1000000000"/>
+<var name="freeMemory" value="3000000000 bet 6000000000"/>
+<!--  >var name="elapsedTime" value="100000 bet 999999"/-->
 <var name="elapsedTime" value="50000 bet 300000"/>
-<!-->var name="elapsedTime" value="100000 bet 99999999999"/-->
 <var name="corr" value="100000 bet 999999"/>
-<var name="iOSVersion" value="10.2"/>
-<var name="phoneCarrier" value="ATT|Verizon|Sprint|T-Mobile"/>
+<var name="iOSVersion" value="9.1"/>
+<var name="phoneCarrier" value="Verizon"/>
 <var name="model" value="iPhone7|iPhone6s|iPhone5s|iPad|iPad2|iPadMini|iPhone5"/>
 <var name="amount" value="10 bet 300"/>
 <var name="numberOfItems" value="1 bet 5"/>
@@ -59,10 +73,10 @@
 	 <prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
 	 <prop name="model" type="STRING" value="${model}"/>
 	 <prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 <prop name="amount" type="INTEGER" value="0"/>
-	 <prop name="numberOfItems" type="INTEGER" value="1"/>
+	 <prop name="amount" type="INTEGER" value="${amount}"/>
+	 <prop name="numberOfItems" type="INTEGER" value="${numberOfItems}"/>
 	 <prop name="clicks" type="INTEGER" value="${numberOfClicksV2}"/>
-	 <prop name="itemsLeftInCart" type="INTEGER" value="2"/>
+	 <prop name="itemsLeftInCart" type="INTEGER" value="0"/>
 	 <event name="ViewAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
 	 <sleep usec="${sleep}"/>
 	 <event name="buttonSearchClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>

@@ -19,7 +19,14 @@
 	<source id="2" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
 	<source id="3" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
 	<source id="4" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
-	
+	<msg id = "1">Credit was not issued. Customer is frustrated.</msg>
+	<msg id = "2">Shipment was not received. Tracking item, will call back.</msg>
+	<msg id = "3">Item was damaged. Return receipt sent out.</msg>
+	<msg id = "4">Credit card was charged twice.</msg>
+	<msg id = "5">Fraudulent activity on credit card.</msg>
+	<msg id = "6">Wrong size sent.</msg>
+	<msg id = "7">Wrong color sent.</msg>
+	<msg id = "8">Customer kept asking to speak with a supervisor.</msg>
 
 	<activity name="CancelAccount" source="1">
 		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
@@ -29,7 +36,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.cancel.account" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">	
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="1">	
 		</event>
 	</activity>
 
@@ -50,7 +57,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.cancel.account" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="2">
 		</event>
 	</activity>
 	
@@ -71,7 +78,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.cancel.account" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="3">
 		</event>
 	</activity>
 
@@ -94,7 +101,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.cancel.account" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="4">
 		</event>
 	</activity>
 
@@ -113,7 +120,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.cancel.account" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="5">
 		</event>
 
 	</activity>
@@ -134,7 +141,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.cancel.account" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="6">
 		</event>
 	</activity>
 
@@ -154,7 +161,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.cancel.account" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="7">
 		</event>
 	</activity>
 
@@ -173,7 +180,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.cancel.account" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="8">
 		</event>
 	</activity>
 

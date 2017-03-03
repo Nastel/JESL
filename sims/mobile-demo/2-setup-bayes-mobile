@@ -10,7 +10,12 @@ upsert BayesSourceFields active=true, name='msgItems', jkqlexpr='properties(\'fr
 upsert BayesSourceFields active=true, name='phoneCarrier', jkqlexpr='properties(\'phoneCarrier\')'
 upsert dictionary properties=('source'='appl,iOSVersion,geolocation,phoneCarrier'), name='CustomerSatisfaction'	
 upsert dictionary properties+=('criteria'='activityname=\'TRACKING_ACTIVITY\'') where name='CustomerSatisfaction' 
+
+ 
+upsert set name = "PositiveSentiment", learnquery = "Get Event Fields tokenize(message,' ') where name='SQL.place.order'", classifier="CustomerSentiment", scope=0
+upsert set name = "NegativeSentiment", learnquery = "Get Event Fields tokenize(message,' ') where name='SQL.cancel.account'", classifier="CustomerSentiment", scope=0
+upsert BayesSourceFields active=true, name='msgItems', jkqlexpr='tokenize(msg," ")'
+upsert dictionary properties=('source'='msgItems'), name='CustomerSentiment'	
+upsert dictionary properties+=('criteria'='name=\'SQL.insert.note\'') where name='CustomerSentiment' 
 -->
- 
- 
  

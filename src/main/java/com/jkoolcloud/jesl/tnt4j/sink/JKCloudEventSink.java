@@ -67,9 +67,9 @@ public class JKCloudEventSink extends AbstractEventSink {
 	private String accessToken;
 	private int proxyPort = 0;
 	private long idleTimeout = 0;
-	
+
 	private AtomicLong idleCount = new AtomicLong(0);
-	private AtomicLong lastWrite = new AtomicLong(0);
+	private AtomicLong lastWrite = new AtomicLong(-1);
 	private AtomicLong sentBytes = new AtomicLong(0);
 	private AtomicLong lastBytes = new AtomicLong(0);
 	private AtomicLong sentMsgs = new AtomicLong(0);
@@ -135,8 +135,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	}
 
 	/**
-	 * Sets idle timeout for the sink. Connection is dropped on next write 
-	 * after timeout.
+	 * Sets idle timeout for the sink. Connection is dropped on next write after timeout.
 	 *
 	 * @param timeOut
 	 *            idle timeout
@@ -144,7 +143,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 *            time out time units
 	 */
 	public void setIdleTimeout(long timeOut, TimeUnit tunit) {
-		this.idleTimeout = TimeUnit.MILLISECONDS.convert(timeOut, tunit);
+		this.idleTimeout = tunit.toMillis(timeOut);
 	}
 
 	/**
@@ -171,22 +170,23 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 * @return last write age in ms
 	 */
 	public long getLastWriteAge() {
-		return lastWrite.get() > 0? System.currentTimeMillis() - lastWrite.get(): 0;
+		return lastWrite.get() > 0 ? System.currentTimeMillis() - lastWrite.get() : idleTimeout + 1;
 	}
 
 	/**
-	 * handle connection idle timeout, attempt to close and reopen
-	 * to avoid data loss.
+	 * Handle connection idle timeout, attempt to close and reopen to avoid data loss.
 	 *
+	 * @throws IOException
+	 *             if IO error occurs while closing/opening sink handle
 	 */
 	protected void handleIdleTimeout() throws IOException {
 		if (idleTimeout > 0 && (getLastWriteAge() > idleTimeout)) {
 			idleCount.incrementAndGet();
 			Utils.close(this);
 			this.open();
-		}		
+		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -242,6 +242,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 			} else {
 				jkHandle.connect();
 			}
+			lastWrite.set(System.currentTimeMillis());
+
 			if (logSink != null && !logSink.isOpen()) {
 				logSink.open();
 			}
@@ -261,6 +263,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 		if (logSink != null && logSink.isOpen()) {
 			logSink.close();
 		}
+		lastWrite.set(-1);
 	}
 
 	@Override
@@ -269,13 +272,16 @@ public class JKCloudEventSink extends AbstractEventSink {
 	}
 
 	private void writeLine(String msg) throws IOException {
-		if (StringUtils.isEmpty(msg)) return;
-		
+		if (StringUtils.isEmpty(msg)) {
+			return;
+		}
+
 		_checkState();
 		handleIdleTimeout();
-		
+
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
-		jkHandle.send(lineMsg, false);	
+		jkHandle.send(lineMsg, false);
+
 		lastWrite.set(System.currentTimeMillis());
 		sentMsgs.incrementAndGet();
 		lastBytes.set(lineMsg.length());
@@ -328,8 +334,10 @@ public class JKCloudEventSink extends AbstractEventSink {
 	}
 
 	@Override
-	protected void _checkState() throws IllegalStateException{
-		if (!isOpen())
-			throw new IllegalStateException("EventSink closed: name=" + getName() + ", url=" + url + ", handle=" + jkHandle);
+	protected void _checkState() throws IllegalStateException {
+		if (!isOpen()) {
+			throw new IllegalStateException(
+					"EventSink closed: name=" + getName() + ", url=" + url + ", handle=" + jkHandle);
+		}
 	}
 }

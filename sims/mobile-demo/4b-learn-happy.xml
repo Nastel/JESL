@@ -15,7 +15,16 @@
 	<var name="user3" value="1000 bet 9999"/>
 	<var name="user4" value="1000 bet 9999"/>
 	<var name="user5" value="100000000000 bet 999999999999"/>  
-	
+	<msg id="1">Duplicate item sent.</msg>
+	<msg id="2">Return label emailed.</msg>
+	<msg id="3">Coupon was applied.</msg>
+	<msg id="4">Instructions emailed.</msg>
+	<msg id="5">Refund issued.</msg>
+	<msg id="6">Explained that there was no issue.</msg>
+	<msg id="7">Different size will be mailed when we receive the original back.</msg>
+	<msg id="8">Customer had to correct a wrong address that was specified when shipping information was entered.</msg>
+
+
 
 	<source id="12" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
 	<source id="13" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
@@ -43,7 +52,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="2">
 		</event>
 	</activity>
 
@@ -62,7 +71,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="3">
 		</event>
 
 	</activity>
@@ -83,7 +92,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="4">
 		</event>
 	</activity>
 
@@ -106,7 +115,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="1">
 		</event>
 	</activity>
 
@@ -125,7 +134,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="2">
 		</event>
 
 	</activity>
@@ -146,7 +155,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="3">
 		</event>
 	</activity>
 
@@ -166,7 +175,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="4">
 		</event>
 	</activity>
 
@@ -185,7 +194,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="5">
 		</event>
 	</activity>
 	
@@ -204,7 +213,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="6">
 		</event>
 	</activity>
 	
@@ -223,7 +232,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="7">
 		</event>
 	</activity>
 	
@@ -244,7 +253,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="8">
 		</event>
 	</activity>
 	
@@ -263,7 +272,7 @@
 	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
 	 	<prop name="amount" type="INTEGER" value="${amount}"/>
 		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db">
+			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="1">
 		</event>
 	</activity>
 

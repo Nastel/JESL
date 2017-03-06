@@ -266,13 +266,16 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	@Override
 	public synchronized void close() throws IOException {
-		if (isOpen()) {
-			logger.log(OpLevel.DEBUG, "Closing name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url, 
+		try {
+			if (isOpen()) {
+				logger.log(OpLevel.DEBUG, "Closing name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url, 
 					proxyHost, proxyPort, proxyScheme, this.getName());
-			jkHandle.close();
-		}
-		if (logSink != null && logSink.isOpen()) {
-			logSink.close();
+				jkHandle.close();
+			}
+		} finally {
+			if (logSink != null && logSink.isOpen()) {
+				Utils.close(logSink);
+			}
 		}
 	}
 

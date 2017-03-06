@@ -47,8 +47,12 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	private String fileName = null;
 	private String token = System.getProperty("tnt4j.sink.factory.socket.token", "");
 	private String url = System.getProperty("tnt4j.sink.factory.socket.url", "http://localhost:6580");
-	// NOTE: server side uses 5min. to close inactive connection
+	// NOTE: server side uses 5min. to close inactive connection by default
 	private long idleTimeout = Long.getLong("tnt4j.sink.factory.socket.idle.timeout", TimeUnit.MINUTES.toMillis(4));
+
+	private String proxyScheme;
+	private String proxyHost;
+	private int proxyPort = 0;
 
 	private EventSinkFactory eventSinkFactory = null;
 
@@ -93,6 +97,7 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	protected EventSink configureSink(EventSink sink) {
 		EventSink jsink = super.configureSink(sink);
 		((JKCloudEventSink) jsink).setIdleTimeout(idleTimeout, TimeUnit.MILLISECONDS);
+		((JKCloudEventSink) jsink).setProxyParms(proxyScheme, proxyHost, proxyPort);
 		return jsink;
 	}
 
@@ -109,6 +114,9 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 		token = Utils.getString("Token", settings, token);
 		fileName = Utils.getString("Filename", settings, fileName);
 		idleTimeout = Utils.getLong("IdleTimeout", settings, idleTimeout);
+		proxyScheme = Utils.getString("ProxyScheme", settings, proxyScheme);
+		proxyHost = Utils.getString("ProxyHost", settings, proxyHost);
+		proxyPort = Utils.getInt("ProxyPort", settings, proxyPort);
 		_applyConfig(settings);
 	}
 

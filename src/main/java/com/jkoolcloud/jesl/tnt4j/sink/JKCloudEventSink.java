@@ -64,9 +64,12 @@ public class JKCloudEventSink extends AbstractEventSink {
 	private JKClient jkHandle;
 
 	private String url = "localhost";
-	private String proxyHost;
 	private String accessToken;
+	
+	private String proxyScheme;
+	private String proxyHost;
 	private int proxyPort = 0;
+	
 	private long idleTimeout = 0;
 
 	private AtomicLong idleCount = new AtomicLong(0);
@@ -114,6 +117,19 @@ public class JKCloudEventSink extends AbstractEventSink {
 		this.url = url;
 		this.logSink = sink;
 		this.accessToken = token;
+	}
+
+	/**
+	 * Sets proxy communication parameters
+	 *
+	 * @param scheme proxy communication scheme
+	 * @param host proxy host name if any, null if none
+	 * @param port proxy port number if any, 0 of none
+	 */
+	public void setProxyParms(String scheme, String host, int port) {
+		this.proxyScheme = scheme;
+		this.proxyHost = host;
+		this.proxyPort = port;
 	}
 
 	/**
@@ -223,8 +239,9 @@ public class JKCloudEventSink extends AbstractEventSink {
 	public synchronized void open() throws IOException {
 		try {
 			close();
-			logger.log(OpLevel.DEBUG, "Open name={3}, url={0}, proxy.host={1}, proxy.port={2}", url, proxyHost, proxyPort, this.getName());
-			jkHandle = new JKClient(url, proxyHost, proxyPort, logger);
+			logger.log(OpLevel.DEBUG, "Open name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url, 
+					proxyHost, proxyPort, proxyScheme, this.getName());
+			jkHandle = new JKClient(url, proxyHost, proxyPort, proxyScheme, logger);
 			if (!StringUtils.isEmpty(accessToken)) {
 				jkHandle.connect(accessToken);
 			} else {
@@ -236,7 +253,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 				logSink.open();
 			}
 		} catch (URISyntaxException e) {
-			logger.log(OpLevel.ERROR, "Failed to open name={3}, url={0}, proxy.host={1}, proxy.port={2}", url, proxyHost, proxyPort, this.getName(), e);
+			logger.log(OpLevel.ERROR, "Failed to open name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url, 
+					proxyHost, proxyPort, proxyScheme, this.getName(), e);
 			close();
 			throw new IOException(e.getMessage(), e);
 		}

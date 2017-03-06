@@ -58,6 +58,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	public static final String KEY_LAST_BYTES	= "sink-last-bytes";
 	public static final String KEY_SENT_MSGS	= "sink-sent-messages";
 	public static final String KEY_SERVICE_URL	= "sink-service-url";
+	public static final String KEY_PROXY_URL	= "sink-proxy-url";
 	public static final String KEY_LAST_WAGE	= "sink-last-write-age-ms";
 
 	private EventSink logSink;
@@ -66,7 +67,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	private String url = "localhost";
 	private String accessToken;
 	
-	private String proxyScheme;
+	private String proxyScheme = "http";
 	private String proxyHost;
 	private int proxyPort = 0;
 	
@@ -222,6 +223,9 @@ public class JKCloudEventSink extends AbstractEventSink {
 		stats.put(Utils.qualify(this, KEY_LAST_WAGE), getLastWriteAge());
 		stats.put(Utils.qualify(this, KEY_IDLE_COUNT), idleCount.get());
 		stats.put(Utils.qualify(this, KEY_SERVICE_URL), url);
+		if (!Utils.isEmpty(proxyHost)) {
+			stats.put(Utils.qualify(this, KEY_PROXY_URL), (proxyScheme + "//" + proxyHost + ":" + proxyPort));
+		}
 		return this;
 	}
 
@@ -263,7 +267,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 	@Override
 	public synchronized void close() throws IOException {
 		if (isOpen()) {
-			logger.log(OpLevel.DEBUG, "Closing name={3}, url={0}, proxy.host={1}, proxy.port={2}", url, proxyHost, proxyPort, this.getName());
+			logger.log(OpLevel.DEBUG, "Closing name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url, 
+					proxyHost, proxyPort, proxyScheme, this.getName());
 			jkHandle.close();
 		}
 		if (logSink != null && logSink.isOpen()) {

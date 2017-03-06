@@ -50,7 +50,7 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	// NOTE: server side uses 5min. to close inactive connection by default
 	private long idleTimeout = Long.getLong("tnt4j.sink.factory.socket.idle.timeout", TimeUnit.MINUTES.toMillis(4));
 
-	private String proxyScheme;
+	private String proxyScheme = "http";
 	private String proxyHost;
 	private int proxyPort = 0;
 

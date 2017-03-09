@@ -2,19 +2,6 @@
 <!-- Run 5 times -->
 <tnt4j-simulator>
 
-	<var name="sleep" value="50000 bet 300000" />
-	<var name="elapsedTime" value="50000 bet 300000" />
-	<var name="iOSVersion" value="9.0|9.1|9.2|9.3|10.0|10.1|10.3"/>
-	<var name="phoneCarrier" value="ATT|Verizon|Sprint|T-Mobile"/>
-	<var name="model" value="iPhone7|iPhone6s|iPhone5s|iPad|iPad2|iPadMini|iPhone5"/>
-	<var name="amount" value="10 bet 300"/>
-	<var name="freeMemory" value="5000000000 bet 1000000000"/>
-	<sleep usec="${sleep}" />
-	<var name="user1" value="10000000 bet 99999999"/>
-	<var name="user2" value="1000 bet 9999"/>
-	<var name="user3" value="1000 bet 9999"/>
-	<var name="user4" value="1000 bet 9999"/>
-	<var name="user5" value="100000000000 bet 999999999999"/>  
 	<msg id="1">Duplicate item sent.</msg>
 	<msg id="2">Return label emailed.</msg>
 	<msg id="3">Coupon was applied.</msg>
@@ -26,57 +13,53 @@
 
 
 
-	<source id="12" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-	<source id="13" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-	<source id="14" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+	<source id="12" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="93284747-4848-2939-3948-193847576768"/> 
+	<source id="13" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="03288523-5448-0931-3942-778847596799"/> 
+	<source id="14" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="99784349-6641-2539-7741-593230947682"/> 
 
-	<source id="15" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-	<source id="16" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-	<source id="17" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+	<source id="15" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="65284345-2049-0384-3948-942859234498"/> 
+	<source id="16" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="93285773-5049-4723-3948-994756139054"/> 
+	<source id="17" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="93284841-1028-0099-3948-223497341857"/> 
 		
-	<source id="18" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
-	<source id="19" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
-	<source id="20" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
+	<source id="18" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="93284747-2067-4861-3948-833957122830"/>      
+	<source id="19" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="93284747-0937-2939-3948-385930153840"/>      
+	<source id="20" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="93284747-0113-4848-2939-394807576768"/>      
 	
-	<source id="21" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
-	<source id="22" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
-	<source id="23" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
+	<source id="21" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="93284747-4848-6812-1093-930163579805"/>           	
+	<source id="22" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="93284747-4848-1254-3497-947264518708"/>           	
+	<source id="23" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="93284747-4848-0947-1298-121234890573"/>           	
 
 	<activity name="PlaceOrder" source="12">
 		<prop name="query" type="STRING"
 				value="update account set status='X' where account='${acct1}-${acct2}-${acct3}-${acct4}-${acct5}'" />
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="5000394000"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="9.0"/>
+	 	<prop name="model" type="STRING" value="iPhone7"/>
+	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
+	 	<prop name="amount" type="DECIMAL" value="66.98"/>
+		<event name="SQL.place.order" type="CALL" elapsed="392929"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="2">
 		</event>
 	</activity>
 
-	<sleep usec="${sleep}" />
-	<var name="user1" value="10000000 bet 99999999"/>
-	<var name="user2" value="1000 bet 9999"/>
-	<var name="user3" value="1000 bet 9999"/>
-	<var name="user4" value="1000 bet 9999"/>
-	<var name="user5" value="100000000000 bet 999999999999"/>  
+	<sleep usec="84874" />
+
 
 	<activity name="PlaceOrder" source="13">
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="9320000002"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="9.1"/>
+	 	<prop name="model" type="STRING" value="iPhone6s"/>
+	 	<prop name="phoneCarrier" type="STRING" value="Verizon"/>
+	 	<prop name="amount" type="DECIMAL" value="294.33"/>
+		<event name="SQL.place.order" type="CALL" elapsed="39844"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="3">
 		</event>
 
 	</activity>
 
-	<sleep usec="${sleep}" />
+	<sleep usec="49382" />
 	<var name="user1" value="10000000 bet 99999999"/>
 	<var name="user2" value="1000 bet 9999"/>
 	<var name="user3" value="1000 bet 9999"/>
@@ -85,179 +68,147 @@
 
 
 	<activity name="PlaceOrder" source="14">
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="8450000234"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="9.2"/>
+	 	<prop name="model" type="STRING" value="iPhone5"/>
+	 	<prop name="phoneCarrier" type="STRING" value="Sprint"/>
+	 	<prop name="amount" type="DECIMAL" value="54.67"/>
+		<event name="SQL.place.order" type="CALL" elapsed="49382"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="4">
 		</event>
 	</activity>
 
-	<sleep usec="${sleep}" />
-	<var name="user1" value="10000000 bet 99999999"/>
-	<var name="user2" value="1000 bet 9999"/>
-	<var name="user3" value="1000 bet 9999"/>
-	<var name="user4" value="1000 bet 9999"/>
-	<var name="user5" value="100000000000 bet 999999999999"/>  
+	<sleep usec="294848" />
+ 
 
 
 
 	<activity name="PlaceOrder" source="15">
 		<prop name="query" type="STRING"
 				value="update account set status='X' where account='${acct1}-${acct2}-${acct3}-${acct4}-${acct5}'" />
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="5375768493"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="9.3"/>
+	 	<prop name="model" type="STRING" value="iPad"/>
+	 	<prop name="phoneCarrier" type="STRING" value="T-Mobile"/>
+	 	<prop name="amount" type="DECIMAL" value="45.76"/>
+		<event name="SQL.place.order" type="CALL" elapsed="394737"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="1">
 		</event>
 	</activity>
 
-	<sleep usec="${sleep}" />
-	<var name="user1" value="10000000 bet 99999999"/>
-	<var name="user2" value="1000 bet 9999"/>
-	<var name="user3" value="1000 bet 9999"/>
-	<var name="user4" value="1000 bet 9999"/>
-	<var name="user5" value="100000000000 bet 999999999999"/>  
+	<sleep usec="493827" />
+
 
 	<activity name="PlaceOrder" source="16">
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="1029384732"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="10.0"/>
+	 	<prop name="model" type="STRING" value="iPhone7"/>
+	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
+	 	<prop name="amount" type="DECIMAL" value="295.43"/>
+		<event name="SQL.place.order" type="CALL" elapsed="492737"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="2">
 		</event>
 
 	</activity>
 
-	<sleep usec="${sleep}" />
-	<var name="user1" value="10000000 bet 99999999"/>
-	<var name="user2" value="1000 bet 9999"/>
-	<var name="user3" value="1000 bet 9999"/>
-	<var name="user4" value="1000 bet 9999"/>
-	<var name="user5" value="100000000000 bet 999999999999"/>  
+	<sleep usec="232343" />
+
 
 
 	<activity name="PlaceOrder" source="17">
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="3248568694"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="10.1"/>
+	 	<prop name="model" type="STRING" value="iPhone7"/>
+	 	<prop name="phoneCarrier" type="STRING" value="Verizon"/>
+	 	<prop name="amount" type="DECIMAL" value="87.99"/>
+		<event name="SQL.place.order" type="CALL" elapsed="947372"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="3">
 		</event>
 	</activity>
 
-	<sleep usec="${sleep}" />
-	<var name="user1" value="10000000 bet 99999999"/>
-	<var name="user2" value="1000 bet 9999"/>
-	<var name="user3" value="1000 bet 9999"/>
-	<var name="user4" value="1000 bet 9999"/>
-	<var name="user5" value="100000000000 bet 999999999999"/>  
+	<sleep usec="403020" />
+
 
 
 	<activity name="PlaceOrder" source="18">
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="2849205712"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="10.3"/>
+	 	<prop name="model" type="STRING" value="iPhone7"/>
+	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
+	 	<prop name="amount" type="DECIMAL" value="174.55"/>
+		<event name="SQL.place.order" type="CALL" elapsed="284737"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="4">
 		</event>
 	</activity>
 
-	<sleep usec="${sleep}" />
-	<var name="user1" value="10000000 bet 99999999"/>
-	<var name="user2" value="1000 bet 9999"/>
-	<var name="user3" value="1000 bet 9999"/>
-	<var name="user4" value="1000 bet 9999"/>
-	<var name="user5" value="100000000000 bet 999999999999"/>  
+	<sleep usec="393929" />
+
 
 	<activity name="PlaceOrder" source="19">
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="8496729471"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="10.3"/>
+	 	<prop name="model" type="STRING" value="iPhone7"/>
+	 	<prop name="phoneCarrier" type="STRING" value="Verizon"/>
+	 	<prop name="amount" type="DECIMAL" value="64.78"/>
+		<event name="SQL.place.order" type="CALL" elapsed="287373"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="5">
 		</event>
 	</activity>
 	
-	<sleep usec="${sleep}" />
-	<var name="user1" value="10000000 bet 99999999"/>
-	<var name="user2" value="1000 bet 9999"/>
-	<var name="user3" value="1000 bet 9999"/>
-	<var name="user4" value="1000 bet 9999"/>
-	<var name="user5" value="100000000000 bet 999999999999"/>  
+	<sleep usec="101919" />
+
 
 	<activity name="PlaceOrder" source="20">
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="1937412435"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="10.1"/>
+	 	<prop name="model" type="STRING" value="iPhone6s"/>
+	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
+	 	<prop name="amount" type="DECIMAL" value="99.66"/>
+		<event name="SQL.place.order" type="CALL" elapsed="127374"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="6">
 		</event>
 	</activity>
 	
-	<sleep usec="${sleep}" />
-	<var name="user1" value="10000000 bet 99999999"/>
-	<var name="user2" value="1000 bet 9999"/>
-	<var name="user3" value="1000 bet 9999"/>
-	<var name="user4" value="1000 bet 9999"/>
-	<var name="user5" value="100000000000 bet 999999999999"/>  
+	<sleep usec="29485" />
+
 
 	<activity name="PlaceOrder" source="21">
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="9273162789"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="10.1"/>
+	 	<prop name="model" type="STRING" value="iPhone7"/>
+	 	<prop name="phoneCarrier" type="STRING" value="Verizon"/>
+	 	<prop name="amount" type="DECIMAL" value="28.66"/>
+		<event name="SQL.place.order" type="CALL" elapsed="94784"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="7">
 		</event>
 	</activity>
 	
 	
 	
-	<sleep usec="${sleep}" />
-	<var name="user1" value="10000000 bet 99999999"/>
-	<var name="user2" value="1000 bet 9999"/>
-	<var name="user3" value="1000 bet 9999"/>
-	<var name="user4" value="1000 bet 9999"/>
-	<var name="user5" value="100000000000 bet 999999999999"/>  
+	<sleep usec="93948" />
+
 
 	<activity name="PlaceOrder" source="22">
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="9375152840"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="9.3"/>
+	 	<prop name="model" type="STRING" value="iPhone5s"/>
+	 	<prop name="phoneCarrier" type="STRING" value="T-Mobile"/>
+	 	<prop name="amount" type="DECIMAL" value="233.98"/>
+		<event name="SQL.place.order" type="CALL" elapsed="98742"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="8">
 		</event>
 	</activity>
 	
-	<sleep usec="${sleep}" />
+	<sleep usec="2847575" />
 	<var name="user1" value="10000000 bet 99999999"/>
 	<var name="user2" value="1000 bet 9999"/>
 	<var name="user3" value="1000 bet 9999"/>
@@ -265,13 +216,13 @@
 	<var name="user5" value="100000000000 bet 999999999999"/>  
 
 	<activity name="PlaceOrder" source="23">
-		<prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+		<prop name="freeMemory" type="STRING" value="9812758975"/>
 	 	<prop name="hardware" type="STRING" value="x86_64"/>
-	 	<prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 	<prop name="model" type="STRING" value="${model}"/>
-	 	<prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 	<prop name="amount" type="INTEGER" value="${amount}"/>
-		<event name="SQL.place.order" type="CALL" elapsed="${elapsedTime}"
+	 	<prop name="iOSVersion" type="STRING" value="10.3"/>
+	 	<prop name="model" type="STRING" value="iPhone7"/>
+	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
+	 	<prop name="amount" type="DECIMAL" value="188.12"/>
+		<event name="SQL.place.order" type="CALL" elapsed="123651"
 			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="1">
 		</event>
 	</activity>

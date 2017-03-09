@@ -23,15 +23,13 @@
 <source id="10" fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Texas#GEOADDR=30.192601199591976,-95.71681155627338" user="mqm"/>
 <source id="11" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=36.17497,-115.13722" user="mqm"/>
 
-<var name="sleep" value="50000 bet 300000"/>
+<var name="sleep" value="2000000 bet 90000000"/>
 <var name="source" value="4"/>
 <var name="netAddr1" value="100 bet 999"/>
 <var name="netAddr2" value="100 bet 999"/>
 <var name="netAddr3" value="1 bet 9"/>
 <var name="netAddr4" value="10 bet 99"/>
 <var name="freeMemory" value="500000000 bet 1000000000"/>
-<var name="elapsedTime" value="50000 bet 300000"/>
-<!-->var name="elapsedTime" value="100000 bet 99999999999"/-->
 <var name="corr" value="100000 bet 999999"/>
 <var name="iOSVersion" value="10.2"/>
 <var name="phoneCarrier" value="T-Mobile"/>
@@ -87,7 +85,7 @@
 	 <sleep usec="${sleep}"/>
 	 <event name="buttonPlaceOrderClick:" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="${model}"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="processingOrder" msg="1" source="${source}" sev="TRACE" elapsed="${elapsedTime}" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
+	 <event name="processingOrder" msg="1" source="${source}" sev="TRACE" elapsed="939392" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
 	 <sleep usec="${sleep}"/>
 	 <event name="ViewDisAppearing" source="${source}" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="${model}"/>
 	 <sleep usec="${sleep}"/>
@@ -96,57 +94,57 @@
   
   <sleep usec="${sleep}"/>     
 
-  <activity name="AcceptOrder" source="5" pid="5432" tid="4" corrs="${corr}">
-    <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" />
-    <event name="SQL.execute" type="CALL" elapsed="7187" sev="TRACE" res="${orderdb}" msg="6" />
-	<event name="SQL.execute" type="CALL" elapsed="5472" sev="TRACE" res="${orderdb}" msg="7" />
-    <event name="ValidateOrder" type="SEND" elapsed="823" res="queue::VALIDATE.ORDERS.QUEUE" msg="2" />
+  <activity name="AcceptOrder" source="5" corrs="${corr}">
+    <event name="ReceiveOrder" type="RECEIVE" elapsed="364" res="order/parts" msg="1" />
+    <event name="SQL.execute" type="CALL" elapsed="7289" sev="TRACE" res="${orderdb}" msg="6" />
+	<event name="SQL.execute" type="CALL" elapsed="5576" sev="TRACE" res="${orderdb}" msg="7" />
+    <event name="ValidateOrder" type="SEND" elapsed="927" res="queue::VALIDATE.ORDERS.QUEUE" msg="2" />
     <sleep usec="121"/>
   </activity>
   
   <sleep msec="163"/>
 
-  <activity name="Validate" source="8" pid="7373" tid="15" corrs="${corr}">
-      <event name="InitiateValidate" type="RECEIVE" elapsed="2323" res="queue::VALIDATE.ORDERS.QUEUE" msg="2" />
-	  <activity name="ValidateCredit" source="8" pid="7373" tid="15" corrs="${corr}">
-	      <event name="ValidateBillingAddress" type="CALL" elapsed="2323" res="order/validate"/>
-	 	  <activity name="ValidateWithCreditor" source="8" pid="7373" tid="15" corrs="${corr}">
-		    <event name="ValidateAccount" type="SEND" elapsed="626" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
-		    <activity name="ValidateAmount" source="8" pid="7373" tid="15" corrs="${corr}">		   
-		    	<event name="ObtainCreditLimit" type="RECEIVE" elapsed="${elapsedTime}" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
-		    	<event name="AmountWithinCreditLimit" type="CALL" elapsed="626" res="orders/validate"/>
-		    	<event name="InitiateShippingValidate" type="SEND" elapsed="2323" res="queue::VALIDATE.ORDERS.QUEUE" msg="8" />
+  <activity name="Validate" source="8" corrs="${corr}">
+      <event name="InitiateValidate" type="RECEIVE" elapsed="1937" res="queue::VALIDATE.ORDERS.QUEUE" msg="2" />
+	  <activity name="ValidateCredit" source="8" corrs="${corr}">
+	      <event name="ValidateBillingAddress" type="CALL" elapsed="2738" res="order/validate"/>
+	 	  <activity name="ValidateWithCreditor" source="8" corrs="${corr}">
+		    <event name="ValidateAccount" type="SEND" elapsed="723" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
+		    <activity name="ValidateAmount" source="8" corrs="${corr}">		   
+		    	<event name="ObtainCreditLimit" type="RECEIVE" elapsed="847612" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
+		    	<event name="AmountWithinCreditLimit" type="CALL" elapsed="655" res="orders/validate"/>
+		    	<event name="InitiateShippingValidate" type="SEND" elapsed="2287" res="queue::VALIDATE.ORDERS.QUEUE" msg="8" />
 		    </activity> 
 	     </activity>
 	  </activity>
-	  <activity name="ValidateShipping" source="8" pid="432" tid="64" corrs="${corr}">
-	    <event name="ReceiveShippingValidateRequest" type="RECEIVE" elapsed="234" res="shipping/validate" msg="8"/>
-    	<event name="ValidateAddress" type="CALL" elapsed="234" res="shipping/validate"/>
-    	<event name="ValidateEmail" type="CALL" elapsed="7189" res="shipping/validate"/>
-    	<event name="InitiateOrderRouting" type="SEND" elapsed="2323" res="queue::ROUTE.ORDERS.QUEUE" msg="1" />
+	  <activity name="ValidateShipping" source="8" corrs="${corr}">
+	    <event name="ReceiveShippingValidateRequest" type="RECEIVE" elapsed="213" res="shipping/validate" msg="8"/>
+    	<event name="ValidateAddress" type="CALL" elapsed="245" res="shipping/validate"/>
+    	<event name="ValidateEmail" type="CALL" elapsed="7894" res="shipping/validate"/>
+    	<event name="InitiateOrderRouting" type="SEND" elapsed="2145" res="queue::ROUTE.ORDERS.QUEUE" msg="1" />
   	  </activity> 
   </activity>
   
   <sleep msec="563"/>
 
-  <activity name="RouteOrder" source="11" pid="67126" tid="43" corrs="${corr}">
-    <event name="ReadAndRoute" type="RECEIVE" elapsed="626" res="queue::ROUTE.ORDERS.QUEUE" msg="1" />
-    <event name="ProcessPayment" type="SEND" elapsed="128" res="queue::PAYMENT.ORDERS.QUEUE" msg="3" />
-    <event name="PossibleFraud" type="SEND" elapsed="234" res="queue::FRAUD.ORDERS.QUEUE" msg="1" />
+  <activity name="RouteOrder" source="11" corrs="${corr}">
+    <event name="ReadAndRoute" type="RECEIVE" elapsed="611" res="queue::ROUTE.ORDERS.QUEUE" msg="1" />
+    <event name="ProcessPayment" type="SEND" elapsed="199" res="queue::PAYMENT.ORDERS.QUEUE" msg="3" />
+    <event name="PossibleFraud" type="SEND" elapsed="263" res="queue::FRAUD.ORDERS.QUEUE" msg="1" />
   </activity>
     
   <sleep msec="891"/>
     
-  <activity name="ProcessFraudAlerts" source="10" pid="3423" tid="548" corrs="${corr}">
-    <event name="EvaluateFraud" type="RECEIVE" elapsed="728" res="queue::FRAUD.ORDERS.QUEUE" msg="1"  />
+  <activity name="ProcessFraudAlerts" source="10" corrs="${corr}">
+    <event name="EvaluateFraud" type="RECEIVE" elapsed="712" res="queue::FRAUD.ORDERS.QUEUE" msg="1"  />
   </activity>
   
   <sleep msec="998"/>
 
-  <activity name="PaymentProcess" source="7" pid="8154" tid="12" sev="WARNING" corrs="${corr}">
-    <event name="ReadOrder" type="RECEIVE" elapsed="28000" res="queue::PAYMENT.ORDERS.QUEUE" msg="3" />
+  <activity name="PaymentProcess" source="7" sev="WARNING" corrs="${corr}">
+    <event name="ReadOrder" type="RECEIVE" elapsed="19375" res="queue::PAYMENT.ORDERS.QUEUE" msg="3" />
     <sleep msec="11"/>
-    <event name="SendShipment" type="SEND" elapsed="293" res="queue::SHIP.ORDERS.QUEUE" msg="4"/>
+    <event name="SendShipment" type="SEND" elapsed="331" res="queue::SHIP.ORDERS.QUEUE" msg="4"/>
   </activity>
  
 

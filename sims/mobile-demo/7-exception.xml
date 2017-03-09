@@ -55,7 +55,7 @@
 	 <sleep usec="${sleep}"/>
 	 <event name="buttonPlaceOrderClick:" source="1" sev="TRACE" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="${model}"/>
 	 <sleep usec="${sleep}"/>
-	 <event name="processingOrder" source="1" sev="TRACE" elapsed="${elapsedTime}" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
+	 <event name="processingOrder" source="1" sev="TRACE" elapsed="938237" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
 	 <sleep usec="${sleep}"/>
   
 	 <event name="Uncaught Exception - NSRangeException" source="1" sev="FAILURE" exc="*** -[__NSArrayM objectAtIndex:]: index 5 beyond bounds [0 .. 2]" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="checkoutViewController" tags="iPad"/>

@@ -82,7 +82,7 @@ public class HttpClient implements HttpStream {
 	 * @throws URISyntaxException if invalid connection string
 	 */
 	public HttpClient(String urlStr, EventSink logger) throws URISyntaxException {
-		this(urlStr, null, 0, logger);
+		this(urlStr, null, 0, null, logger);
 	}
 
 	/**
@@ -91,10 +91,11 @@ public class HttpClient implements HttpStream {
 	 * @param urlStr connection string to specified JESL server
 	 * @param proxyHost proxy host name if any, null if none
 	 * @param proxyPort proxy port number if any, 0 of none
+	 * @param proxyScheme proxy communication scheme
 	 * @param logger event sink used for logging, null if none
 	 * @throws URISyntaxException if invalid connection string
 	 */
-	public HttpClient(String urlStr, String proxyHost, int proxyPort, EventSink logger) throws URISyntaxException {
+	public HttpClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
 		secure = "https".equalsIgnoreCase(scheme);
@@ -104,14 +105,14 @@ public class HttpClient implements HttpStream {
 		port = uri.getPort();
 		if (port <= 0)
 			port = (secure ? 443 : 80);
-		init(host, port, uri.getPath(), secure, proxyHost, proxyPort, logger);
+		init(host, port, uri.getPath(), secure, proxyHost, proxyPort, proxyScheme, logger);
 	}
 
 	/**
 	 *
 	 */
 	private void init(String host, int port, String uriPath, boolean secure,
-					  String proxyHost, int proxyPort, EventSink logger) {
+					  String proxyHost, int proxyPort, String proxyScheme, EventSink logger) {
 		this.host    = host;
 		this.port    = port;
 		this.uriPath = uriPath;
@@ -122,7 +123,7 @@ public class HttpClient implements HttpStream {
 
 		httpHost = new HttpHost(host, port, scheme);
 		if (!StringUtils.isEmpty(proxyHost))
-			httpProxy = new HttpHost(proxyHost, proxyPort);
+			httpProxy = new HttpHost(proxyHost, proxyPort, proxyScheme);
 	}
 
 	/**

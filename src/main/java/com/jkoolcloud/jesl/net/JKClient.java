@@ -44,7 +44,7 @@ public class JKClient implements JKStream {
 	 * @throws URISyntaxException if invalid connection string
 	 */
 	public JKClient(String urlStr, EventSink logger) throws URISyntaxException {
-		this(urlStr, null, 0, logger);
+		this(urlStr, null, 0, null, logger);
 	}
 
 	/**
@@ -53,10 +53,11 @@ public class JKClient implements JKStream {
 	 * @param urlStr connection string to specified JESL server
 	 * @param proxyHost proxy host name if any, null if none
 	 * @param proxyPort proxy port number if any, 0 of none
+	 * @param proxyScheme proxy communication scheme
 	 * @param logger event sink used for logging, null if none
 	 * @throws URISyntaxException if invalid connection string
 	 */
-	public JKClient(String urlStr, String proxyHost, int proxyPort, EventSink logger) throws URISyntaxException {
+	public JKClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
 	    if (scheme.equalsIgnoreCase("tcp") || scheme.equalsIgnoreCase("tcps")) {
@@ -67,7 +68,7 @@ public class JKClient implements JKStream {
 		    if (port <= 0) port = (secure ? 443 : 80);
 	    	handle = new SocketClient(host, port, secure, proxyHost, proxyPort, logger);
 	    } else {
-	    	handle = new HttpClient(urlStr, proxyHost, proxyPort, logger);
+	    	handle = new HttpClient(urlStr, proxyHost, proxyPort, proxyScheme, logger);
 	    }
 	}
 

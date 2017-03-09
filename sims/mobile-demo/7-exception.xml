@@ -58,7 +58,27 @@
 	 <event name="processingOrder" source="1" sev="TRACE" elapsed="938237" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
 	 <sleep usec="${sleep}"/>
   
-	 <event name="Uncaught Exception - NSRangeException" source="1" sev="FAILURE" exc="*** -[__NSArrayM objectAtIndex:]: index 5 beyond bounds [0 .. 2]" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="checkoutViewController" tags="iPad"/>
+	 <event name="Uncaught Exception - NSRangeException" source="1" sev="FAILURE" exc="SEVERE: input future failed.
+com.datastax.driver.core.TransportException: [/10.57.43.73:9042] Cannot connect
+	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:156)
+	at com.datastax.driver.core.Connection$1.operationComplete(Connection.java:139)
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:680)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners0(DefaultPromise.java:603)
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:563)
+	at io.netty.util.concurrent.DefaultPromise.tryFailure(DefaultPromise.java:424)
+	at io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.fulfillConnectPromise(AbstractEpollStreamChannel.java:714)
+	at io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.finishConnect(AbstractEpollStreamChannel.java:733)
+	at io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.epollOutReady(AbstractEpollStreamChannel.java:750)
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:331)
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:254)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$2.run(SingleThreadEventExecutor.java:110)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: finishConnect() failed: Connection refused: /10.57.43.73:9042
+	at io.netty.channel.epoll.Native.newConnectException(Native.java:499)
+	at io.netty.channel.epoll.Native.finishConnect(Native.java:491)
+	at io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.doFinishConnect(AbstractEpollStreamChannel.java:760)
+	at io.netty.channel.epoll.AbstractEpollStreamChannel$EpollStreamUnsafe.finishConnect(AbstractEpollStreamChannel.java:727)
+	... 5 more" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="checkoutViewController" tags="iPad"/>
  </activity>
 
 </tnt4j-simulator>

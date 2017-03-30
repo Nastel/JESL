@@ -273,9 +273,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 				jkHandle.close();
 			}
 		} finally {
-			if (logSink != null && logSink.isOpen()) {
-				Utils.close(logSink);
-			}
+			Utils.close(logSink);
 		}
 	}
 

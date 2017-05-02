@@ -49,13 +49,16 @@
         <java.compiler.verbose>false</java.compiler.verbose>
         <java.compiler.fork>false</java.compiler.fork>
 
-        <tnt4j.version>2.5-SNAPSHOT</tnt4j.version>
-
         <release.deploy.dir>../build/${project.name}</release.deploy.dir>
 
         <skipTests>true</skipTests>
         <gpg.skip.sign>true</gpg.skip.sign>
         <build.assemblies.phase>package</build.assemblies.phase>
+
+        <tnt4j.version>2.5-SNAPSHOT</tnt4j.version>
+        <tnt4j.syslogd.version>0.3</tnt4j.syslogd.version>
+        <httpcomponents.version>4.2.6</httpcomponents.version>
+        <httpcomponents.core.version>4.2.5</httpcomponents.core.version>
     </properties>
 
     <dependencies>
@@ -67,18 +70,18 @@
         <dependency>
             <groupId>com.jkoolcloud.jesl.net</groupId>
             <artifactId>tnt4j-syslogd</artifactId>
-            <version>0.3</version>
+            <version>${tnt4j.syslogd.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.2.6</version>
+            <version>${httpcomponents.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.2.5</version>
+            <version>${httpcomponents.core.version}</version>
         </dependency>
     </dependencies>
 

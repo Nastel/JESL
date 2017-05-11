@@ -122,7 +122,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private HashMap<String,Long> genValues = new HashMap<String,Long>();
 	private ConcurrentMap<String, String> vars = new ConcurrentHashMap<String, String>();
 	StrSubstitutor sub = new StrSubstitutor(vars);
-	
+
 	private Message				curMsg;
 	private TrackingActivity	curActivity;
 	private TrackingEvent		curEvent;
@@ -210,13 +210,13 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		if (TNT4JSimulator.useUniqueTags()) {
 			tagSuffix = "@" + String.valueOf(Utils.currentTimeUsec()) + "@" + TNT4JSimulator.getIteration();
 		}
-		
+
 		if (TNT4JSimulator.useUniqueIds()) {
 			for (Message m : messageIds.values()) {
 				m.setTrackingId(TNT4JSimulator.newUUID());
 			}
 		}
-		
+
 		if (TNT4JSimulator.useUniqueCorrs()) {
 			corSuffix = "@" + String.valueOf(Utils.currentTimeUsec()) + "@" + TNT4JSimulator.getIteration();
 		}
@@ -296,7 +296,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			        + Double.parseDouble(vars.get(value.substring(0, value.length())));
 			value = "" + totalValue;
 		}
-		else if (value.indexOf("|") > 0) {			
+		else if (value.indexOf("|") > 0) {
 			StringTokenizer tk = new StringTokenizer(value, "|");
 			ArrayList<String> tokens = new ArrayList<String>();
 			while (tk.hasMoreElements())
@@ -305,11 +305,11 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 		    Random randomGenerator = new Random();
 		    int index = randomGenerator.nextInt(tokens.size());
-		    value = (String)tokens.get(index);
-	    }	
+		    value = tokens.get(index);
+	    }
 		return value;
 	}
-	
+
 	private void defineOption(Attributes attributes) throws SAXException {
 		String name = null;
 		String value = null;
@@ -364,7 +364,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			if (StringUtils.isEmpty(name))
 				throw new SAXParseException("<" + SIM_XML_VAR + ">: must specify '" + SIM_XML_ATTR_NAME + "'",
 				        saxLocator);
-			
+
 			if (value.equalsIgnoreCase("=?")) {
 				// requires input if not defined
 				String oVal = vars.get(name);
@@ -374,7 +374,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					TNT4JSimulator.trace(simCurrTime, "Skipping duplicate variable: '" + name + "=" + value + "', existing.value='" + oVal +"'");
 				}
 			}
-			
+
 			String eVal = vars.putIfAbsent(name, value);
 			if (eVal != null) {
 				TNT4JSimulator.trace(simCurrTime, "Skipping duplicate variable: '" + name + "=" + value + "', existing.value='" + eVal +"'");
@@ -570,7 +570,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		} else if ("TIMESTAMP".equalsIgnoreCase(type)) {
 			try {
 				try {
-					propValue = new UsecTimestamp((long)TNT4JSimulator.varyValue(Long.parseLong(value)));
+					propValue = new UsecTimestamp(TNT4JSimulator.varyValue(Long.parseLong(value)));
 				}
 				catch (NumberFormatException e) {
 					propValue = new UsecTimestamp(value, "yyyy-MM-dd HH:mm:ss.SSSSSS", (String)null);
@@ -855,7 +855,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	}
 
 	private void stopActivity() throws SAXException {
-		long elapsed = simCurrTime.difference(curActivity.getStartTime());  
+		long elapsed = simCurrTime.difference(curActivity.getStartTime());
 		curActivity.stop(simCurrTime, elapsed);
 		TNT4JSimulator.debug(simCurrTime, "Stopped activity " + curActivity.getName() + ", elapsed.usec: " + elapsed);
 
@@ -979,19 +979,16 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					throw new SAXParseException("Unknown <" + SIM_XML_EVENT + "> attribute '" + attName + "'", saxLocator);
 				}
 			}
-			
+
 			if (srcId <= 0 && curActivity == null) {
 				throw new SAXParseException("<" + SIM_XML_EVENT + "> attribute '" + SIM_XML_ATTR_SOURCE + "' is missing for event without parent activity", saxLocator);
 			}
 
 			if ((msgId != null) && (msgtext != null)) {
-				throw new SAXParseException("<" + SIM_XML_EVENT + "> has both attributes '" + SIM_XML_ATTR_MSG + "' and '" + SIM_XML_ATTR_MSG_TEXT + "'", saxLocator);				
+				throw new SAXParseException("<" + SIM_XML_EVENT + "> has both attributes '" + SIM_XML_ATTR_MSG + "' and '" + SIM_XML_ATTR_MSG_TEXT + "'", saxLocator);
 			}
-			
-			curEvent = curTracker.newEvent(severity, type, name, (String)null, (String)null, (String)null, (Object[])null);
-			Source source = (curEvent != null ? curEvent.getSource() : null);
-			if (source == null)
-				source = (curActivity != null ? curActivity.getSource() : null);
+
+			Source source = null;
 			if (srcId > 0) {
 				source = sourceIds.get(srcId);
 				if (source == null)
@@ -1001,6 +998,11 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				if (curTracker == null)
 					throw new SAXParseException("<" + SIM_XML_ACTIVITY + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined", saxLocator);
 			}
+
+			curEvent = curTracker.newEvent(severity, type, name, (String)null, (String)null, (String)null, (Object[])null);
+			source = (curEvent != null ? curEvent.getSource() : null);
+			if (source == null)
+				source = (curActivity != null ? curActivity.getSource() : null);
 
 			if (source == null || curTracker == null) {
 				throw new SAXParseException("<" + SIM_XML_EVENT + "> attribute '" + SIM_XML_ATTR_SOURCE + "' is missing for event without parent activity", saxLocator);
@@ -1042,7 +1044,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			if (!ArrayUtils.isEmpty(labels))
 				curEvent.setTag(labels);
 			if (msgAge > 0L)
-				curEvent.setMessageAge((long)TNT4JSimulator.varyValue(msgAge));
+				curEvent.setMessageAge(TNT4JSimulator.varyValue(msgAge));
 
 			elapsed = TNT4JSimulator.varyValue(elapsed);
 
@@ -1086,7 +1088,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		}
 
 		if (usec > 0) {
-			simCurrTime.add(0L, (long)TNT4JSimulator.varyValue(usec));
+			simCurrTime.add(0L, TNT4JSimulator.varyValue(usec));
 			TNT4JSimulator.trace(simCurrTime, "Executed sleep, usec=" + usec);
 		}
 	}
@@ -1103,9 +1105,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		} else if (valStr.equalsIgnoreCase("SUCCESS")) {
 			return OpLevel.INFO;
 		}
-		return OpLevel.valueOf(valStr);		
+		return OpLevel.valueOf(valStr);
 	}
-	
+
 	/**
 	 * Define a global variable usable for variable substitution
 	 *
@@ -1115,7 +1117,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	public void setVar(String name, String value) {
 		vars.put(name, value);
 	}
-	
+
 	/**
 	 * Resolve variable given name to a global variable.
 	 * Global variables are referenced using: ${var} convention.
@@ -1123,10 +1125,10 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	 * @param text object to use
 	 * @return resolved variable or itself if not a variable
 	 */
-	public String expandEnvVars(String text) {        
+	public String expandEnvVars(String text) {
 		return StrSubstitutor.replaceSystemProperties(sub.replace(text));
 	}
-		
+
 	/**
 	 * {@inheritDoc}
 	 */

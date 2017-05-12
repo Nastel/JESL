@@ -18,12 +18,9 @@ package com.jkoolcloud.jesl.simulator.tnt4j;
 import java.util.Properties;
 
 import com.jkoolcloud.jesl.simulator.TNT4JSimulator;
-import com.jkoolcloud.tnt4j.core.TTL;
 import com.jkoolcloud.tnt4j.format.EventFormatter;
-import com.jkoolcloud.tnt4j.format.JSONFormatter;
 import com.jkoolcloud.tnt4j.sink.AbstractEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
-import com.jkoolcloud.tnt4j.sink.EventSinkFactory;
 
 /**
  * JESL event sink factory implements event sink factory simulation used by JESL Simulator.

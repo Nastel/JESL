@@ -26,6 +26,7 @@ import com.jkoolcloud.tnt4j.format.DefaultFormatter;
 import com.jkoolcloud.tnt4j.format.EventFormatter;
 import com.jkoolcloud.tnt4j.format.JSONFormatter;
 import com.jkoolcloud.tnt4j.sink.AbstractEventSink;
+import com.jkoolcloud.tnt4j.sink.EventLimiter;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.sink.Sink;
 import com.jkoolcloud.tnt4j.sink.impl.FileSink;
@@ -44,14 +45,18 @@ public class SimulatedEventSink extends AbstractEventSink {
 	private EventFormatter		formatter = new JSONFormatter();
 	private Sink				outSink;
 
-	public SimulatedEventSink(String name, String url, String gwAccessToken, EventFormatter formatter) {
+	public SimulatedEventSink(String name, String url, String gwAccessToken, 
+			EventFormatter formatter, EventLimiter limiter) {
 		super(name, formatter);
 
-		if (!url.startsWith("file://")) {
+		if (url.startsWith("http://") || url.startsWith("https://")) {
 			outSink = new JKCloudEventSink(name, url, gwAccessToken, new DefaultFormatter(), null);
-		} else {
+			((EventSink)outSink).setLimiter(limiter);
+		} else if (url.startsWith("file://")) {
 			String fileName = url.substring(FILE_PREFIX.length());
 			outSink = new FileSink(fileName, true, new DefaultFormatter());
+		} else {
+			throw new IllegalArgumentException("Invalid ur=" + url);
 		}
 	}
 

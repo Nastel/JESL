@@ -446,7 +446,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			String token = TNT4JSimulator.getAccessToken();
 			if (!StringUtils.isEmpty(token))
 				srcCfg.setProperty("Token", token);
-
 			Tracker tracker = trackerFactory.getInstance(srcCfg.build());
 			trackers.put(fqn, tracker);
 		}

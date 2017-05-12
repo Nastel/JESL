@@ -66,6 +66,7 @@ public class TNT4JSimulator {
 	private static long				numIterations  = 1;
 	private static boolean			generateValues = false;
 	private static long				ttl            = 0L;
+	
 
 	private static JKCloudConnection	gwConn          = null;
 	private static TrackingLogger		logger          = null;
@@ -459,9 +460,10 @@ public class TNT4JSimulator {
 					simDef.append(line).append("\n");
 				simLoader.close();
 
-				info("jKool Activity Simulator Run starting: file=" + simFileName + ", iterations=" + numIterations + ", ttl.sec=" + ttl);
+				info("jKool Activity Simulator Run starting: file=" + simFileName
+						+ ", iterations=" + numIterations + ", ttl.sec=" + ttl);
+				
 				startTime = System.currentTimeMillis();
-
 				if (showProgress)
 					System.out.print("Iteration: ");
 				for (iteration = 1; iteration <= numIterations; iteration++) {

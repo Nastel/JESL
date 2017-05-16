@@ -66,6 +66,7 @@ public class TNT4JSimulator {
 	private static long				numIterations  = 1;
 	private static boolean			generateValues = false;
 	private static long				ttl            = 0L;
+	private static long				rateMPS = 0, rateBPS = 0;
 	
 
 	private static JKCloudConnection	gwConn          = null;
@@ -229,6 +230,14 @@ public class TNT4JSimulator {
 		return iteration;
 	}
 
+	public static long getBPS() {
+		return rateBPS;
+	}
+
+	public static long getMPS() {
+		return rateMPS;
+	}
+
 	public static long getTTL() {
 		return ttl;
 	}
@@ -244,18 +253,21 @@ public class TNT4JSimulator {
 		System.out.println("\nValid arguments:\n");
 		System.out.println("  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-f:<sim_def_file_name>]");
 		System.out.println("                              [-p:<percentage>] [-V:name=value] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>]\n");
+		System.out.println("  to limit streaming:         [-LM:max-msgs-sec] [-LB:max-bytes-sec]\n");
 		System.out.println("  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n");
 		System.out.println("  for usage information:  help\n");
 		System.out.println("where:");
-		System.out.println("    -A    -  jKool streaming access token (required with '-T')");
-		System.out.println("    -T    -  Host name or IP address of jKool streaming data service");
-		System.out.println("             (if not specified, data is not sent to jKool service)");
+		System.out.println("    -A    -  Streaming access token (required with '-T')");
+		System.out.println("    -T    -  Host name or IP address of the streaming data service");
+		System.out.println("             (if not specified, data is not sent to data streaming service)");
 		System.out.println("    -V    -  Define a global variable (property) name=value pair");
-		System.out.println("    -P    -  Port jKool data streaming service is listening on (default: SSL 443)");
+		System.out.println("    -P    -  Data streaming port where service is listening on (default: SSL 443)");
 		System.out.println("    -C    -  Connection type to use for jKool data streaming service (default: https)");
+		System.out.println("    -LB   -  Limit streaming to a maximum of a given bytes/sec rate per defined source");
+		System.out.println("    -LM   -  Limit streaming to a maximum of a given msgs/sec rate per defined source");
 		System.out.println("    -f    -  Use <sim_def_file_name> as simulation configuration");
 		System.out.println("    -p    -  Vary all numeric values by +/- <percentage>");
-		System.out.println("    -G    -  Read/Write jKool service messages from/to <jk_file_name>");
+		System.out.println("    -G    -  Read/Write messages from/to <jk_file_name>");
 		System.out.println("             (if writing, data is appended to an existing file)");
 		System.out.println("    -i    -  Number of iterations to make on <sim_file_name>");
 		System.out.println("    -u    -  Make tags, correlators, ids unique between iterations");
@@ -274,6 +286,9 @@ public class TNT4JSimulator {
 	private static void printUsedArgs() {
 		System.out.format("Arguments: runype=%s, url=%s, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s, jkFile=%s\n",
 				runType, getConnectUrl(), generateValues, uniqueTags, uniqueCorrs, uniqueIds, valuePctChg, simFileName, jkFileName);
+		if (rateMPS > 0 || rateBPS > 0) {
+			System.out.format("Limits: msgs/sec=%s, bytes/sec=%s\n", rateMPS, rateBPS);
+		}
 	}
 
 	protected static void processArgs(TNT4JSimulatorParserHandler xmlHandler, String[] args) {
@@ -370,6 +385,28 @@ public class TNT4JSimulator {
 								printUsage("Missing <ttl_hours> for '-t' argument");
 							else
 								printUsage("Invalid <ttl_hours> for '-t' argument (" + arg.substring(3) + ")");
+						}
+					} else if (arg.startsWith("-LM:")) {
+						String rate = arg.substring(4);
+						try {
+							rateMPS = Long.parseLong(rate);
+						}
+						catch (NumberFormatException e) {
+							if (StringUtils.isEmpty(rate))
+								printUsage("Missing <msgs/sec> for '-LM' argument");
+							else
+								printUsage("Invalid <msgs/sec> for '-LM' argument (" + rate + ")");
+						}
+					} else if (arg.startsWith("-LB:")) {
+						String rate = arg.substring(4);
+						try {
+							rateBPS = Long.parseLong(rate);
+						}
+						catch (NumberFormatException e) {
+							if (StringUtils.isEmpty(rate))
+								printUsage("Missing <bytes/sec> for '-LB' argument");
+							else
+								printUsage("Invalid <bytes/sec> for '-LB' argument (" + rate + ")");
 						}
 					} else if (arg.equals("-ut")) {
 						uniqueTags = true;

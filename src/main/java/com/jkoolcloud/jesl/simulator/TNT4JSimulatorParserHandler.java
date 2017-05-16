@@ -446,6 +446,14 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			String token = TNT4JSimulator.getAccessToken();
 			if (!StringUtils.isEmpty(token))
 				srcCfg.setProperty("Token", token);
+			if (TNT4JSimulator.getMPS() > 0) {
+				srcCfg.setProperty("RateMaxMPS", String.valueOf(TNT4JSimulator.getMPS()));				
+				srcCfg.setProperty("RateLimit", String.valueOf(Boolean.TRUE));					
+			}
+			if (TNT4JSimulator.getBPS() > 0) {
+				srcCfg.setProperty("RateMaxBPS", String.valueOf(TNT4JSimulator.getBPS()));	
+				srcCfg.setProperty("RateLimit", String.valueOf(Boolean.TRUE));					
+			}
 			Tracker tracker = trackerFactory.getInstance(srcCfg.build());
 			trackers.put(fqn, tracker);
 		}

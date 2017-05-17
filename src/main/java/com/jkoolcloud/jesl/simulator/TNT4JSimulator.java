@@ -262,7 +262,7 @@ public class TNT4JSimulator {
 		System.out.println("             (if not specified, data is not sent to data streaming service)");
 		System.out.println("    -V    -  Define a global variable (property) name=value pair");
 		System.out.println("    -P    -  Data streaming port where service is listening on (default: SSL 443)");
-		System.out.println("    -C    -  Connection type to use for jKool data streaming service (default: https)");
+		System.out.println("    -C    -  Connection type to use with data streaming service (default: https)");
 		System.out.println("    -LB   -  Limit streaming to a maximum of a given bytes/sec rate per defined source");
 		System.out.println("    -LM   -  Limit streaming to a maximum of a given msgs/sec rate per defined source");
 		System.out.println("    -f    -  Use <sim_def_file_name> as simulation configuration");

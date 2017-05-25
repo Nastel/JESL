@@ -53,7 +53,7 @@
 
         <skipTests>true</skipTests>
         <gpg.skip.sign>true</gpg.skip.sign>
-        <build.assemblies.phase>package</build.assemblies.phase>
+        <build.assemblies.attach>false</build.assemblies.attach>
 
         <tnt4j.version>2.5-SNAPSHOT</tnt4j.version>
         <tnt4j.syslogd.version>0.3</tnt4j.syslogd.version>
@@ -152,12 +152,13 @@
                     <descriptors>
                         <descriptor>src/assembly/deployAssembly.xml</descriptor>
                     </descriptors>
+                    <attach>${build.assemblies.attach}</attach>
                     <outputDirectory>${release.deploy.dir}</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
                         <id>deploy-assembly</id>
-                        <phase>${build.assemblies.phase}</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>

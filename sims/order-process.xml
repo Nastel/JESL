@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <tnt4j-simulator>
 
-  <var name="custid" 	value="848383"/>
-  <var name="prodid" 	value="8380203"/>
-  <var name="prodname"  value="iPhone"/>
   <var name="orderid"   value="=?"/>
+  <var name="custid" 	value="=?"/>
+  <var name="prodid" 	value="=?"/>
+  <var name="prodname"  value="=?"/>
   <var name="orderdb" 	value="jdbc://oracle/ora1/order_db"/>
 
   <source id="1" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
@@ -36,7 +36,7 @@
 	<event name="SQL.execute" type="CALL" elapsed="5472" sev="ANY" res="${orderdb}" msg="7" corrs="${orderid}"/>
     <event name="ValidateOrder" type="SEND" elapsed="823" res="VALIDATE.ORDERS.QUEUE" msg="2" corrs="${orderid}"/>
     <sleep usec="121"/>
-    <snapshot name="ShopingCart" cat="Orders">
+    <snapshot name="ShoppingCart" cat="Orders">
       <prop name="ProductCount" type="INTEGER" value="2" valtype="size"/>
       <prop name="OrderAmount" type="DECIMAL" value="210.38" valtype="currency.usd"/>
       <prop name="Taxes" type="DECIMAL" value="10.73" valtype="currency.usd"/>
@@ -124,7 +124,7 @@
     <event name="PrepareShippingSlip" type="EVENT" elapsed="4821"/>
     <sleep msec="835"/>
     <event name="SendConfirmation" type="SEND" elapsed="142" msg="5"/>
-    <snapshot name="ShopingCart" cat="Orders">
+    <snapshot name="ShoppingCart" cat="Orders">
       <prop name="ProductCount" type="INTEGER" value="2" valtype="size"/>
       <prop name="OrderAmount" type="DECIMAL" value="210.38" valtype="currency.usd"/>
       <prop name="Taxes" type="DECIMAL" value="10.73" valtype="currency.usd"/>

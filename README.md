@@ -35,10 +35,10 @@ a XML format.  There are three major parts to a simulation definition:
 
 	1. Sources
 	   Defines the sources involved in simulated activities and events
-	   
+
 	2. Messages
 	   Defines the messages that will be exchanged during activities
-	   
+
 	3. Activities and Events
 	   Defines the actual activities and the sub-activities and events in them
 

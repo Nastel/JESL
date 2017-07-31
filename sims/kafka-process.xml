@@ -10,12 +10,14 @@
 	<var name="amount"		value="=?:10000.00"/>
 	<var name="checksum" 	value="=?:10100010101"/>
 	<var name="timestamp-type" 	value="=?:LogAppendTime"/>
+	<var name="exception" 	value="=?:IOException connection refused"/>
+	
 
 	<source id="1" fqn="APPL=KafkaSender01#SERVER=KFKBroker01#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
-          user="kafka-prod1" />
+          user="kafka-prod1"/>
 	<source id="2" fqn="APPL=KafkaReader01#SERVER=KFKBroker02#NETADDR=11.0.0.4#DATACENTER=DC2#GEOADDR=Melville, NY"
-          user="kafka-read1" />
-	<source id="3" fqn="APPL=KafkaReader02#SERVER=KFKBroker03NETADDR=11.0.0.5#DATACENTER=DC3#GEOADDR=Boston, MA"
+          user="kafka-read1"/>
+	<source id="3" fqn="APPL=KafkaReader02#SERVER=KFKBroker03#NETADDR=11.0.0.5#DATACENTER=DC3#GEOADDR=Boston, MA"
           user="kafka-read2"/>
 	<source id="4" fqn="APPL=KafkaReader03#SERVER=KFKBroker04#NETADDR=11.0.0.6#DATACENTER=DC4#GEOADDR=Chicago, IL"
           user="kafka-read3"/>
@@ -52,7 +54,7 @@
 	</activity>
 
 	<activity name="KafkaReceive" source="3" pid="63672" tid="32">
-		<event name="KafkaConsumer.poll" type="RECEIVE" elapsed="15" msgage="34" sev="ANY" res="${topic}:${partition}" msg="1" exc="SocketException: Connection Refused" corrs="${partition}:${offset}">
+		<event name="KafkaConsumer.poll" type="RECEIVE" elapsed="15" msgage="34" sev="ANY" res="${topic}:${partition}" msg="1" exc="${exception}" corrs="${partition}:${offset}">
 			<prop name="ktopic" type="STRING" value="${topic}"/>	
 			<prop name="offset" type="INTEGER" value="${offset}" valtype="counter"/>	
 			<prop name="broker-name" type="STRING" value="broker:${brokerid}"/>	

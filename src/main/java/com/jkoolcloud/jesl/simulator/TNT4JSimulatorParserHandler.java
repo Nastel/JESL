@@ -83,6 +83,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	public static final String SIM_XML_ATTR_TYPE      = "type";
 	public static final String SIM_XML_ATTR_VALTYPE   = "valtype";
 	public static final String SIM_XML_ATTR_VALUE     = "value";
+	public static final String SIM_XML_ATTR_VARY      = "vary";
 	public static final String SIM_XML_ATTR_FQN       = "fqn";
 	public static final String SIM_XML_ATTR_USER      = "user";
 	public static final String SIM_XML_ATTR_URL       = "url";
@@ -365,14 +366,20 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				throw new SAXParseException("<" + SIM_XML_VAR + ">: must specify '" + SIM_XML_ATTR_NAME + "'",
 				        saxLocator);
 
-			if (value.equalsIgnoreCase("=?")) {
+			if (value.startsWith("=?")) {
 				// requires input if not defined
+				String [] vals = value.split(":");
 				String oVal = vars.get(name);
+				
+				//extract default value if one defined
+				String defVal = vals.length > 1? vals[1]: null;
+				
 				if (oVal == null) {
-					value = processVarValue(TNT4JSimulator.readFromConsole("\nDefine variable [" + name + "]:"));
+					value = processVarValue(TNT4JSimulator.readFromConsole("\nDefine variable [" + name + "][" + defVal + "]:"));
 				} else {
 					TNT4JSimulator.trace(simCurrTime, "Skipping duplicate variable: '" + name + "=" + value + "', existing.value='" + oVal +"'");
 				}
+				value = (value == null || value.length() == 0)? defVal: value;
 			}
 
 			String eVal = vars.putIfAbsent(name, value);
@@ -437,12 +444,10 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 			sourceNames.put(fqn, src);
 			sourceIds.put(id, src);
-
 			TrackerConfig srcCfg = DefaultConfigFactory.getInstance().getConfig(fqn);
 			srcCfg.setSource(src);
 
 			srcCfg.setProperty("Url", TNT4JSimulator.getConnectUrl());
-
 			String token = TNT4JSimulator.getAccessToken();
 			if (!StringUtils.isEmpty(token))
 				srcCfg.setProperty("Token", token);
@@ -456,13 +461,12 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 			Tracker tracker = trackerFactory.getInstance(srcCfg.build());
 			trackers.put(fqn, tracker);
-		}
-		catch (Exception e) {
+			TNT4JSimulator.info("Source: id=" + id + ", tracker=" + tracker + ", fqn=" + fqn);
+		} catch (Exception e) {
 			if (e instanceof SAXException)
 				throw (SAXException)e;
 			throw new SAXParseException("Failed processing definition for source: ", saxLocator, e);
 		}
-
 		TNT4JSimulator.trace(simCurrTime, "Recording Server: " + fqn + " ...");
 	}
 
@@ -520,6 +524,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		String type    = null;
 		String value   = null;
 		String valType = null;
+		Boolean vary = Boolean.TRUE;
 
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
@@ -534,6 +539,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					value = attValue;
 				else if (attName.equals(SIM_XML_ATTR_VALTYPE))
 					valType = attValue;
+				else if (attName.equals(SIM_XML_ATTR_VARY))
+					vary = Boolean.valueOf(attValue);
 				else
 					throw new SAXParseException("Unknown <" + SIM_XML_PROP + "> attribute '" + attName + "'", saxLocator);
 			}
@@ -543,7 +550,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 			TNT4JSimulator.trace(simCurrTime, "Recording " + curElement + " property: " + name  + " ...");
 
-			Property prop = processPropertyValue(name, type, value, valType);
+			Property prop = processPropertyValue(name, type, value, valType, vary);
 
 			if (SIM_XML_SNAPSHOT.equals(curElement))
 				curSnapshot.add(prop);
@@ -558,18 +565,18 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		}
 	}
 
-	private Property processPropertyValue(String name, String type, String value, String valType) throws SAXParseException {
+	private Property processPropertyValue(String name, String type, String value, String valType, boolean vary) throws SAXParseException {
 		Object propValue = value;
 
-		if ("INTEGER".equalsIgnoreCase(type)) {
+		if ("INTEGER".equalsIgnoreCase(type) || "INT".equalsIgnoreCase(type)) {
 			Integer num = Integer.parseInt(generateFromRange(type, value));
-			propValue = (int)TNT4JSimulator.varyValue(num.intValue());
+			propValue = vary? (int)TNT4JSimulator.varyValue(num.intValue()): num;
 		} else if ("LONG".equalsIgnoreCase(type)) {
 			Long num = Long.parseLong(generateFromRange(type, value));
-			propValue = (long)TNT4JSimulator.varyValue(num.longValue());
+			propValue = vary? (long)TNT4JSimulator.varyValue(num.longValue()): num;
 		} else if ("DECIMAL".equalsIgnoreCase(type)) {
 			Double num = Double.parseDouble(generateFromRange(type, value));
-			propValue = TNT4JSimulator.varyValue(num.doubleValue());
+			propValue = vary? TNT4JSimulator.varyValue(num.doubleValue()): num;
 		} else if ("BOOLEAN".equalsIgnoreCase(type)) {
 			if (StringUtils.isEmpty(valType))
 				valType = "boolean";
@@ -577,7 +584,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		} else if ("TIMESTAMP".equalsIgnoreCase(type)) {
 			try {
 				try {
-					propValue = new UsecTimestamp(TNT4JSimulator.varyValue(Long.parseLong(value)));
+					long tstamp = Long.parseLong(value);
+					propValue = new UsecTimestamp((vary? TNT4JSimulator.varyValue(tstamp): tstamp));
 				}
 				catch (NumberFormatException e) {
 					propValue = new UsecTimestamp(value, "yyyy-MM-dd HH:mm:ss.SSSSSS", (String)null);

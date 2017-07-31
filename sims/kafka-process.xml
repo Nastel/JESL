@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<tnt4j-simulator>
+
+	<var name="topic" 		value="=?"/>
+	<var name="partition"	value="=?"/>
+	<var name="offset"		value="=?"/>
+	<var name="key" 		value="=?"/>
+	<var name="payid"		value="=?"/>
+	<var name="amount"		value="=?"/>
+	<var name="checksum" 	value="=?"/>
+
+	<source id="1" fqn="APPL=Producer01#SERVER=KFKClient01#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
+          user="kafka-prod1" />
+	<source id="2" fqn="APPL=Consumer02#SERVER=KFKClient03#NETADDR=11.0.0.4#DATACENTER=DC2#GEOADDR=Melville, NY"
+          user="kafka-cons1" />
+	<source id="3" fqn="APPL=Consumer02#SERVER=KFKClient04#NETADDR=11.0.0.5#DATACENTER=DC3#GEOADDR=Boston, MA"
+          user="kafka-cons2" />
+	<source id="4" fqn="APPL=Consumer03#SERVER=KFKClient05#NETADDR=11.0.0.6#DATACENTER=DC4#GEOADDR=Chicago, IL"
+          user="kafka-cons3" />
+
+	<msg id="1">pay.id=${payid}, amount=${amount}</msg>
+
+	<activity name="KafkaSend" source="1" pid="5432" tid="4">
+		<event name="KafkaProducer.Send" type="SEND" elapsed="5" res="${topic}:${partition}" msg="1" corrs="${partition}:${offset}">
+			<prop name="ktopic" type="STRING" value="${topic}"/>	
+			<prop name="offset" type="DECIMAL" value="${offset}" valtype="counter"/>	
+			<prop name="partition" type="DECIMAL" value="${partition}" valtype="id"/>	
+			<prop name="checksum" type="STRING" value="${checksum}"/>	
+			<prop name="key" type="STRING" value="${key}"/>	
+			<prop name="payid" type="STRING" value="${payid}"/>	
+			<prop name="amount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>	
+		</event>
+	</activity>
+
+	<activity name="KafkaReceive" source="2" pid="48748" tid="12">
+		<event name="KafkaConsumer.poll" type="RECEIVE" elapsed="27" res="${topic}:${partition}" msg="1" corrs="${partition}:${offset}">
+			<prop name="ktopic" type="STRING" value="${topic}"/>	
+			<prop name="offset" type="DECIMAL" value="${offset}" valtype="counter"/>	
+			<prop name="partition" type="DECIMAL" value="${partition}" valtype="id"/>	
+			<prop name="checksum" type="STRING" value="${checksum}"/>	
+			<prop name="timestamp-type" type="STRING" value="LogAppendTime" />	
+			<prop name="key" type="STRING" value="${key}"/>	
+			<prop name="payid" type="STRING" value="${payid}"/>	
+			<prop name="amount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>	
+		</event>
+	</activity>
+
+	<activity name="KafkaReceive" source="3" pid="63672" tid="32">
+		<event name="KafkaConsumer.poll" type="RECEIVE" elapsed="15" res="${topic}:${partition}" msg="1" corrs="${partition}:${offset}">
+			<prop name="ktopic" type="STRING" value="${topic}"/>	
+			<prop name="offset" type="DECIMAL" value="${offset}" valtype="counter"/>	
+			<prop name="partition" type="DECIMAL" value="${partition}" valtype="id"/>	
+			<prop name="checksum" type="STRING" value="${checksum}"/>	
+			<prop name="timestamp-type" type="STRING" value="LogAppendTime" />	
+			<prop name="key" type="STRING" value="${key}"/>	
+			<prop name="payid" type="STRING" value="${payid}"/>	
+			<prop name="amount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>	
+		</event>
+	</activity>
+
+	<activity name="KafkaReceive" source="4" pid="7272" tid="23">
+		<event name="KafkaConsumer.poll" type="RECEIVE" elapsed="15" res="${topic}:${partition}" msg="1" corrs="${partition}:${offset}">
+			<prop name="ktopic" type="STRING" value="${topic}"/>	
+			<prop name="offset" type="DECIMAL" value="${offset}" valtype="counter"/>	
+			<prop name="partition" type="DECIMAL" value="${partition}" valtype="id"/>	
+			<prop name="checksum" type="STRING" value="${checksum}"/>	
+			<prop name="timestamp-type" type="STRING" value="LogAppendTime" />	
+			<prop name="key" type="STRING" value="${key}"/>	
+			<prop name="payid" type="STRING" value="${payid}"/>	
+			<prop name="amount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>	
+		</event>
+	</activity>
+
+</tnt4j-simulator>

@@ -24,9 +24,9 @@
 	 	<prop name="model" type="STRING" value="iPhone7"/>
 	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
 	 	<prop name="amount" type="DECIMAL" value="50.55"/>
-		<event name="SQL.cancel.account" type="CALL" elapsed="683960"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="1">	
-		</event>
+		<event name="cancel.account" type="CALL" elapsed="683960"
+			 res="jdbc://oracle/ora1/order_db" msg="1"/>	
+
 	</activity>
 
 	<sleep usec="30000" />
@@ -37,9 +37,11 @@
 	 	<prop name="model" type="STRING" value="iPhone6s"/>
 	 	<prop name="phoneCarrier" type="STRING" value="Verizon"/>
 	 	<prop name="amount" type="DECIMAL" value="28.23"/>
-		<event name="SQL.cancel.account" type="CALL" elapsed="939576"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="2">
-		</event>
+		<event name="cancel.account" type="CALL" elapsed="939576"
+			 res="jdbc://oracle/ora1/order_db" msg="2"/>
+
+		
+		
 	</activity>
 	
 	<sleep usec="60005" />
@@ -50,9 +52,8 @@
 	 	<prop name="model" type="STRING" value="iPhone5s"/>
 	 	<prop name="phoneCarrier" type="STRING" value="Sprint"/>
 	 	<prop name="amount" type="DECIMAL" value="78.09"/>
-		<event name="SQL.cancel.account" type="CALL" elapsed="284769"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="3">
-		</event>
+		<event name="cancel.account" type="CALL" elapsed="284769"
+			 res="jdbc://oracle/ora1/order_db" msg="3"/>
 	</activity>
 
 	<sleep usec="20000" />
@@ -65,9 +66,8 @@
 	 	<prop name="model" type="STRING" value="iPad2"/>
 	 	<prop name="phoneCarrier" type="STRING" value="T-Mobile"/>
 	 	<prop name="amount" type="DECIMAL" value="44.07"/>
-		<event name="SQL.cancel.account" type="CALL" elapsed="038476"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="4">
-		</event>
+		<event name="cancel.account" type="CALL" elapsed="038476"
+			 res="jdbc://oracle/ora1/order_db" msg="4"/>
 	</activity>
 
 	<sleep usec="50000" />
@@ -78,10 +78,8 @@
 	 	<prop name="model" type="STRING" value="iPhone7"/>
 	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
 	 	<prop name="amount" type="DECIMAL" value="33.50"/>
-		<event name="SQL.cancel.account" type="CALL" elapsed="993847"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="5">
-		</event>
-
+		<event name="cancel.account" type="CALL" elapsed="993847"
+			 res="jdbc://oracle/ora1/order_db" msg="5"/>
 	</activity>
 
 	<sleep usec="70000" />
@@ -92,9 +90,8 @@
 	 	<prop name="model" type="STRING" value="iPhone6s"/>
 	 	<prop name="phoneCarrier" type="STRING" value="Verizon"/>
 	 	<prop name="amount" type="DECIMAL" value="187.98"/>
-		<event name="SQL.cancel.account" type="CALL" elapsed="918747"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="6">
-		</event>
+		<event name="cancel.account" type="CALL" elapsed="918747"
+			 res="jdbc://oracle/ora1/order_db" msg="6"/>
 	</activity>
 
 	<sleep usec="80000" />
@@ -105,9 +102,8 @@
 	 	<prop name="model" type="STRING" value="iPhone7"/>
 	 	<prop name="phoneCarrier" type="STRING" value="Sprint"/>
 	 	<prop name="amount" type="DECIMAL" value="26.43"/>
-		<event name="SQL.cancel.account" type="CALL" elapsed="384760"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="7">
-		</event>
+		<event name="cancel.account" type="CALL" elapsed="384760"
+			 res="jdbc://oracle/ora1/order_db" msg="7"/>
 	</activity>
 
 	<sleep usec="55000" />
@@ -118,9 +114,8 @@
 	 	<prop name="model" type="STRING" value="iPhone7"/>
 	 	<prop name="phoneCarrier" type="STRING" value="T-Mobile"/>
 	 	<prop name="amount" type="DECIMAL" value="106.23"/>
-		<event name="SQL.cancel.account" type="CALL" elapsed="349877"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="8">
-		</event>
+		<event name="cancel.account" type="CALL" elapsed="349877"
+			 res="jdbc://oracle/ora1/order_db" msg="8"/>
 	</activity>
 
 

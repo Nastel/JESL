@@ -16,10 +16,10 @@
 <msg id = "8">Customer had to correct a wrong address that was specified when they entered their shipping information.</msg>
 
   <activity name="NotateAccount" source="2">
-    <event name="SQL.retrieve.account" type="CALL" elapsed="392910" res="jdbc://oracle/ora1/order_db">
+    <event name="retrieve.account" type="CALL" elapsed="392910" res="jdbc://oracle/ora1/order_db">
         	<prop name="accountId" type="STRING" value="38575749"/>
     </event>
-    <event name="SQL.insert.note" type="CALL" elapsed="294838" res="jdbc://oracle/ora1/order_db" msg="1">
+    <event name="insert.note" type="CALL" elapsed="294838" res="jdbc://oracle/ora1/order_db" msg="1">
 	 	<prop name="query" type="STRING" value="insert note values ('38575749','${note1}',now"/>
     </event>
   </activity>
@@ -28,10 +28,10 @@
   
   
     <activity name="NotateAccount" source="2">
-    <event name="SQL.retrieve.account" type="CALL" elapsed="389292" res="jdbc://oracle/ora1/order_db">
+    <event name="retrieve.account" type="CALL" elapsed="389292" res="jdbc://oracle/ora1/order_db">
         	<prop name="accountId" type="STRING" value="38578575"/>
     </event>
-    <event name="SQL.insert.note" type="CALL" elapsed="202037" res="jdbc://oracle/ora1/order_db" msg="2">
+    <event name="insert.note" type="CALL" elapsed="202037" res="jdbc://oracle/ora1/order_db" msg="2">
 	 	<prop name="query" type="STRING" value="insert note values ('38578575','${note1}',now"/>
     </event>
   </activity>
@@ -39,10 +39,10 @@
     <sleep msec="${sleep}"/>
   
     <activity name="NotateAccount" source="2">
-    <event name="SQL.retrieve.account" type="CALL" elapsed="103847" res="jdbc://oracle/ora1/order_db">
+    <event name="retrieve.account" type="CALL" elapsed="103847" res="jdbc://oracle/ora1/order_db">
         	<prop name="accountId" type="STRING" value="30293844"/>
     </event>
-    <event name="SQL.insert.note" type="CALL" elapsed="202817" res="jdbc://oracle/ora1/order_db" msg="3">
+    <event name="insert.note" type="CALL" elapsed="202817" res="jdbc://oracle/ora1/order_db" msg="3">
 	 	<prop name="query" type="STRING" value="insert note values ('30293844','${note1}',now"/>
     </event>
   </activity>
@@ -50,10 +50,10 @@
     <sleep msec="${sleep}"/>
   
     <activity name="NotateAccount" source="2">
-    <event name="SQL.retrieve.account" type="CALL" elapsed="204827" res="jdbc://oracle/ora1/order_db">
+    <event name="retrieve.account" type="CALL" elapsed="204827" res="jdbc://oracle/ora1/order_db">
         	<prop name="accountId" type="STRING" value="49302945"/>
     </event>
-    <event name="SQL.insert.note" type="CALL" elapsed="204837" res="jdbc://oracle/ora1/order_db" msg="4">
+    <event name="insert.note" type="CALL" elapsed="204837" res="jdbc://oracle/ora1/order_db" msg="4">
 	 	<prop name="query" type="STRING" value="insert note values ('49302945','${note1}',now"/>
     </event>
   </activity>
@@ -61,10 +61,10 @@
     <sleep msec="${sleep}"/>
   
     <activity name="NotateAccount" source="2">
-    <event name="SQL.retrieve.account" type="CALL" elapsed="202847" res="jdbc://oracle/ora1/order_db">
+    <event name="retrieve.account" type="CALL" elapsed="202847" res="jdbc://oracle/ora1/order_db">
         	<prop name="accountId" type="STRING" value="28295028"/>
     </event>
-    <event name="SQL.insert.note" type="CALL" elapsed="302847" res="jdbc://oracle/ora1/order_db" msg="5">
+    <event name="insert.note" type="CALL" elapsed="302847" res="jdbc://oracle/ora1/order_db" msg="5">
 	 	<prop name="query" type="STRING" value="insert note values ('28295028',now"/>
     </event>
   </activity>
@@ -72,10 +72,10 @@
     <sleep msec="${sleep}"/>
   
     <activity name="NotateAccount" source="2">
-    <event name="SQL.retrieve.account" type="CALL" elapsed="302837" res="jdbc://oracle/ora1/order_db">
+    <event name="retrieve.account" type="CALL" elapsed="302837" res="jdbc://oracle/ora1/order_db">
         	<prop name="accountId" type="STRING" value="32747457"/>
     </event>
-    <event name="SQL.insert.note" type="CALL" elapsed="845743" res="jdbc://oracle/ora1/order_db" msg="6">
+    <event name="insert.note" type="CALL" elapsed="845743" res="jdbc://oracle/ora1/order_db" msg="6">
 	 	<prop name="query" type="STRING" value="insert note values ('32747457','${note1}',now"/>
     </event>
   </activity>
@@ -83,10 +83,10 @@
     <sleep msec="${sleep}"/>
   
     <activity name="NotateAccount" source="2">
-    <event name="SQL.retrieve.account" type="CALL" elapsed="148281" res="jdbc://oracle/ora1/order_db">
+    <event name="retrieve.account" type="CALL" elapsed="148281" res="jdbc://oracle/ora1/order_db">
         	<prop name="accountId" type="STRING" value="29473923"/>
     </event>
-    <event name="SQL.insert.note" type="CALL" elapsed="104827" res="jdbc://oracle/ora1/order_db" msg="7">
+    <event name="insert.note" type="CALL" elapsed="104827" res="jdbc://oracle/ora1/order_db" msg="7">
 	 	<prop name="query" type="STRING" value="insert note values ('29473923','${note1}',now"/>
     </event>
   </activity>
@@ -94,10 +94,10 @@
     <sleep msec="${sleep}"/>
   
     <activity name="NotateAccount" source="2">
-    <event name="SQL.retrieve.account" type="CALL" elapsed="120381" res="jdbc://oracle/ora1/order_db">
+    <event name="retrieve.account" type="CALL" elapsed="120381" res="jdbc://oracle/ora1/order_db">
         	<prop name="accountId" type="STRING" value="39285000"/>
     </event>
-    <event name="SQL.insert.note" type="CALL" elapsed="927684" res="jdbc://oracle/ora1/order_db" msg="8">
+    <event name="insert.note" type="CALL" elapsed="927684" res="jdbc://oracle/ora1/order_db" msg="8">
 	 	<prop name="query" type="STRING" value="insert note values ('39285000','${note1}',now"/>
     </event>
   </activity>

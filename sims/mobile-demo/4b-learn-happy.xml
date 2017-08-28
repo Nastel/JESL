@@ -38,8 +38,8 @@
 	 	<prop name="model" type="STRING" value="iPhone7"/>
 	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
 	 	<prop name="amount" type="DECIMAL" value="66.98"/>
-		<event name="SQL.place.order" type="CALL" elapsed="392929"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="2">
+		<event name="place.order" type="CALL" elapsed="392929"
+			 res="jdbc://oracle/ora1/order_db" msg="2">
 		</event>
 	</activity>
 
@@ -53,8 +53,8 @@
 	 	<prop name="model" type="STRING" value="iPhone6s"/>
 	 	<prop name="phoneCarrier" type="STRING" value="Verizon"/>
 	 	<prop name="amount" type="DECIMAL" value="294.33"/>
-		<event name="SQL.place.order" type="CALL" elapsed="39844"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="3">
+		<event name="place.order" type="CALL" elapsed="39844"
+			 res="jdbc://oracle/ora1/order_db" msg="3">
 		</event>
 
 	</activity>
@@ -74,8 +74,8 @@
 	 	<prop name="model" type="STRING" value="iPhone5"/>
 	 	<prop name="phoneCarrier" type="STRING" value="Sprint"/>
 	 	<prop name="amount" type="DECIMAL" value="54.67"/>
-		<event name="SQL.place.order" type="CALL" elapsed="49382"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="4">
+		<event name="place.order" type="CALL" elapsed="49382"
+			 res="jdbc://oracle/ora1/order_db" msg="4">
 		</event>
 	</activity>
 
@@ -93,8 +93,8 @@
 	 	<prop name="model" type="STRING" value="iPad"/>
 	 	<prop name="phoneCarrier" type="STRING" value="T-Mobile"/>
 	 	<prop name="amount" type="DECIMAL" value="45.76"/>
-		<event name="SQL.place.order" type="CALL" elapsed="394737"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="1">
+		<event name="place.order" type="CALL" elapsed="394737"
+			 res="jdbc://oracle/ora1/order_db" msg="1">
 		</event>
 	</activity>
 
@@ -108,8 +108,8 @@
 	 	<prop name="model" type="STRING" value="iPhone7"/>
 	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
 	 	<prop name="amount" type="DECIMAL" value="295.43"/>
-		<event name="SQL.place.order" type="CALL" elapsed="492737"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="2">
+		<event name="place.order" type="CALL" elapsed="492737"
+			 res="jdbc://oracle/ora1/order_db" msg="2">
 		</event>
 
 	</activity>
@@ -125,8 +125,8 @@
 	 	<prop name="model" type="STRING" value="iPhone7"/>
 	 	<prop name="phoneCarrier" type="STRING" value="Verizon"/>
 	 	<prop name="amount" type="DECIMAL" value="87.99"/>
-		<event name="SQL.place.order" type="CALL" elapsed="947372"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="3">
+		<event name="place.order" type="CALL" elapsed="947372"
+			 res="jdbc://oracle/ora1/order_db" msg="3">
 		</event>
 	</activity>
 
@@ -141,8 +141,8 @@
 	 	<prop name="model" type="STRING" value="iPhone7"/>
 	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
 	 	<prop name="amount" type="DECIMAL" value="174.55"/>
-		<event name="SQL.place.order" type="CALL" elapsed="284737"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="4">
+		<event name="place.order" type="CALL" elapsed="284737"
+			 res="jdbc://oracle/ora1/order_db" msg="4">
 		</event>
 	</activity>
 
@@ -156,8 +156,8 @@
 	 	<prop name="model" type="STRING" value="iPhone7"/>
 	 	<prop name="phoneCarrier" type="STRING" value="Verizon"/>
 	 	<prop name="amount" type="DECIMAL" value="64.78"/>
-		<event name="SQL.place.order" type="CALL" elapsed="287373"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="5">
+		<event name="place.order" type="CALL" elapsed="287373"
+			 res="jdbc://oracle/ora1/order_db" msg="5">
 		</event>
 	</activity>
 	
@@ -171,8 +171,8 @@
 	 	<prop name="model" type="STRING" value="iPhone6s"/>
 	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
 	 	<prop name="amount" type="DECIMAL" value="99.66"/>
-		<event name="SQL.place.order" type="CALL" elapsed="127374"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="6">
+		<event name="place.order" type="CALL" elapsed="127374"
+			 res="jdbc://oracle/ora1/order_db" msg="6">
 		</event>
 	</activity>
 	
@@ -186,8 +186,8 @@
 	 	<prop name="model" type="STRING" value="iPhone7"/>
 	 	<prop name="phoneCarrier" type="STRING" value="Verizon"/>
 	 	<prop name="amount" type="DECIMAL" value="28.66"/>
-		<event name="SQL.place.order" type="CALL" elapsed="94784"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="7">
+		<event name="place.order" type="CALL" elapsed="94784"
+			 res="jdbc://oracle/ora1/order_db" msg="7">
 		</event>
 	</activity>
 	
@@ -203,8 +203,8 @@
 	 	<prop name="model" type="STRING" value="iPhone5s"/>
 	 	<prop name="phoneCarrier" type="STRING" value="T-Mobile"/>
 	 	<prop name="amount" type="DECIMAL" value="233.98"/>
-		<event name="SQL.place.order" type="CALL" elapsed="98742"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="8">
+		<event name="place.order" type="CALL" elapsed="98742"
+			 res="jdbc://oracle/ora1/order_db" msg="8">
 		</event>
 	</activity>
 	
@@ -222,8 +222,8 @@
 	 	<prop name="model" type="STRING" value="iPhone7"/>
 	 	<prop name="phoneCarrier" type="STRING" value="ATT"/>
 	 	<prop name="amount" type="DECIMAL" value="188.12"/>
-		<event name="SQL.place.order" type="CALL" elapsed="123651"
-			sev="TRACE" res="jdbc://oracle/ora1/order_db" msg="1">
+		<event name="place.order" type="CALL" elapsed="123651"
+			 res="jdbc://oracle/ora1/order_db" msg="1">
 		</event>
 	</activity>
 

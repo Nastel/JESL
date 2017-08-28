@@ -1,21 +1,8 @@
-<!-- 
-These sets are required to setup for the bayes simulation. Run as an upsert in Query Browser.
-
-upsert set name = "RiskLoosingCustomer", learnquery = "Get Activity Fields appl, properties('iOSVersion'), properties('phoneCarrier'), geolocation where name='CancelAccount'", classifier="CustomerSatisfaction", scope=0
-upsert set name = "SatisfiedCustomer", learnquery = "Get Activity Fields appl, properties('iOSVersion'), properties('phoneCarrier'), geolocation where name='PlaceOrder'", classifier="CustomerSatisfaction", scope=0
-upsert BayesSourceFields active=true, name='appl', jkqlexpr='appl'
-upsert BayesSourceFields active=true, name='geolocation', jkqlexpr='geolocation'
-upsert BayesSourceFields active=true, name='iOSVersion', jkqlexpr='properties(\'iOSVersion\')'
-upsert BayesSourceFields active=true, name='msgItems', jkqlexpr='properties(\'freeMemory\')'
-upsert BayesSourceFields active=true, name='phoneCarrier', jkqlexpr='properties(\'phoneCarrier\')'
-upsert dictionary properties=('source'='appl,iOSVersion,geolocation,phoneCarrier'), name='CustomerSatisfaction'	
-upsert dictionary properties+=('criteria'='activityname=\'TRACKING_ACTIVITY\'') where name='CustomerSatisfaction' 
-
- 
-upsert set name = "PositiveSentiment", learnquery = "Get Event Fields tokenize(message,' ') where name='SQL.place.order'", classifier="CustomerSentiment", scope=0
-upsert set name = "NegativeSentiment", learnquery = "Get Event Fields tokenize(message,' ') where name='SQL.cancel.account'", classifier="CustomerSentiment", scope=0
-upsert BayesSourceFields active=true, name='msgItems', jkqlexpr='tokenize(msg," ")'
-upsert dictionary properties=('source'='msgItems'), name='CustomerSentiment'	
-upsert dictionary properties+=('criteria'='name=\'SQL.insert.note\'') where name='CustomerSentiment' 
--->
- 
+CFG,RelDates=false
+HDR,BayesSourceFields,Criteria,Name,Active,JkqlExpr
+ROW,BayesSourceFields,,'appl',true,'appl'
+ROW,BayesSourceFields,,'geolocation',true,'geolocation'
+ROW,BayesSourceFields,,'iOSVersion',true,'properties(\'iOSVersion\')'
+ROW,BayesSourceFields,,'model',true,'properties(\'model\')'
+ROW,BayesSourceFields,,'msgItems',true,"'tokenize(msg,"" "")'"
+ROW,BayesSourceFields,,'phoneCarrier',true,'properties(\'phoneCarrier\')'

@@ -1,0 +1,8 @@
+CFG,RelDates=false
+HDR,BayesSourceFields,Criteria,Name,Active,JkqlExpr
+ROW,BayesSourceFields,,'appl',true,'appl'
+ROW,BayesSourceFields,,'geolocation',true,'geolocation'
+ROW,BayesSourceFields,,'iOSVersion',true,'properties(\'iOSVersion\')'
+ROW,BayesSourceFields,,'model',true,'properties(\'model\')'
+ROW,BayesSourceFields,,'msgItems',true,"'tokenize(msg,"" "")'"
+ROW,BayesSourceFields,,'phoneCarrier',true,'properties(\'phoneCarrier\')'

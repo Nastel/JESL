@@ -18,7 +18,6 @@ package com.jkoolcloud.jesl.net.http;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 
@@ -55,8 +54,9 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  * @version $Revision: 3 $
  */
 public class HttpClient implements HttpStream {
-	public static final String NO_RESPONSE_REQUIRED_HEADER = "Pragma";
-	public static final String NO_RESPONSE_REQUIRED_VALUE  = "no-response";
+	public static final String HEADER_KEY_PRAGMA         = "Pragma";
+	public static final String PRAGMA_VALUE_NO_RESPONSE  = "no-response";
+	public static final String PRAGMA_VALUE_PING         = "ping";
 
 	protected URI							uri;
 	protected EventSink		 			    logger;
@@ -148,8 +148,7 @@ public class HttpClient implements HttpStream {
 				if (!StringUtils.isEmpty(sslKeystore)) {
 					SSLContextFactory scf = new SSLContextFactory(sslKeystore, sslKeystorePwd, sslKeystorePwd);
 					ssf = new SSLSocketFactory(scf.getSslContext(true));
-		    	}
-		    	else {
+		    	} else {
 					ssf = new SSLSocketFactory(SSLContext.getDefault());
 				}
 				Scheme secureScheme = new Scheme("https", port, ssf);
@@ -193,14 +192,16 @@ public class HttpClient implements HttpStream {
 			throw new IllegalArgumentException("request must be an instance of org.apache.http.HttpRequest");
 
 		try {
-			if (!wantResponse)
-				request.setHeader(NO_RESPONSE_REQUIRED_HEADER, NO_RESPONSE_REQUIRED_VALUE);
+			if (!wantResponse) {
+				request.setHeader(HEADER_KEY_PRAGMA, PRAGMA_VALUE_NO_RESPONSE);
+			}
 
 			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", uri, request);
 			org.apache.http.HttpRequest httpRequest = (org.apache.http.HttpRequest) request;
 			connection.sendRequestHeader(httpRequest);
-			if (httpRequest instanceof HttpEntityEnclosingRequest && request.hasContent())
+			if (httpRequest instanceof HttpEntityEnclosingRequest && request.hasContent()) {
 				connection.sendRequestEntity((HttpEntityEnclosingRequest) httpRequest);
+			}
 			connection.flush();
 		} catch (HttpException he) {
 			throw new IOException(he.getMessage(), he);
@@ -217,15 +218,14 @@ public class HttpClient implements HttpStream {
 
 		try {
 			HttpRequest req = newRequest(method, reqUri);
-			if (!StringUtils.isEmpty(content))
+			if (!StringUtils.isEmpty(content)) {
 				req.setContent(contentType, content, "UTF-8");
+			}
 			sendRequest(req, wantResponse);
-		}
-		catch (IllegalStateException ise) {
+		} catch (IllegalStateException ise) {
 			close();
 			throw ise;
-		}
-		catch (IOException ioe) {
+		} catch (IOException ioe) {
 			close();
 			throw ioe;
 		}
@@ -250,8 +250,9 @@ public class HttpClient implements HttpStream {
 			String contentLenStr = resp.getHeader(HttpHeaders.CONTENT_LENGTH);
 			String contentType   = resp.getHeader(HttpHeaders.CONTENT_TYPE);
 			int contentLen = (StringUtils.isEmpty(contentLenStr) ? 0 : Integer.parseInt(contentLenStr));
-			if (contentLen > 0 || !StringUtils.isEmpty(contentType))
+			if (contentLen > 0 || !StringUtils.isEmpty(contentType)) {
 				connection.receiveResponseEntity(resp);
+			}
 
 			return resp;
 		} catch (Throwable ex) {
@@ -274,11 +275,11 @@ public class HttpClient implements HttpStream {
 				close();
 				AccessResponse accessResp = AccessResponse.parseMsg(content);
 				String reason = accessResp.getReason();
-				if (StringUtils.isEmpty(reason))
+				if (StringUtils.isEmpty(reason)) {
 					reason = "Access Denied";
+				}
 				throw new SecurityException(reason);
-			}
-			else {
+			} else {
 				throw new HttpRequestException(status, content);
 			}
 		}
@@ -311,7 +312,9 @@ public class HttpClient implements HttpStream {
 		try {
 			logger.log(OpLevel.DEBUG, "Issuing PING to checking if all requests has been sent to {0}", uri);
 
-			send("PING", true);
+			HttpRequest pingReq = newDefaultRequest();
+			pingReq.setHeader(HEADER_KEY_PRAGMA, PRAGMA_VALUE_PING);
+			sendRequest(pingReq, true);
 			HttpResponse pingResp = getResponse();
 
 			logger.log(OpLevel.DEBUG, "Got PING response and ready to close connection to {0}", uri);
@@ -381,6 +384,10 @@ public class HttpClient implements HttpStream {
 	@Override
 	public HttpRequest newRequest(String method, String uri) {
 		return new HttpRequestImpl(method, uri);
+	}
+
+	private HttpRequest newDefaultRequest() {
+		return newRequest("POST", uriPath);
 	}
 
 	/**

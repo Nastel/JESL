@@ -292,13 +292,30 @@ public class HttpClient implements HttpStream {
 	public synchronized void close() {
 		if (connection != null) {
 			try {
-				connMgr.releaseConnection(connection, 0, TimeUnit.MILLISECONDS);
-				connMgr.closeIdleConnections(0, TimeUnit.MILLISECONDS);
-				connMgr.shutdown();
+				ensureAllRequestsSent();
+
 				connection.close();
+				connMgr.shutdown();
+
 				logger.log(OpLevel.DEBUG, "Closed connection to {0}", uri);
 			} catch (Throwable err) {
 			}
+		}
+	}
+
+	/**
+	 * Ensures that all connection (socket output stream buffer) contained data has been sent by issuing PING message
+	 * and waiting for response.
+	 */
+	protected void ensureAllRequestsSent() {
+		try {
+			logger.log(OpLevel.DEBUG, "Issuing PING to checking if all requests has been sent to {0}", uri);
+
+			send("PING", true);
+			HttpResponse pingResp = getResponse();
+
+			logger.log(OpLevel.DEBUG, "Got PING response and ready to close connection to {0}", uri);
+		} catch (Throwable exc) {
 		}
 	}
 

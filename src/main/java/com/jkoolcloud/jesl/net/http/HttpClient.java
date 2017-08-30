@@ -310,14 +310,12 @@ public class HttpClient implements HttpStream {
 	 */
 	protected void ensureAllRequestsSent() {
 		try {
-			logger.log(OpLevel.DEBUG, "Issuing PING to checking if all requests has been sent to {0}", uri);
-
+			logger.log(OpLevel.DEBUG, "Ping{0}: ensure all requests have been sent to {1}", this, uri);
 			HttpRequest pingReq = newDefaultRequest();
 			pingReq.setHeader(HEADER_KEY_PRAGMA, PRAGMA_VALUE_PING);
 			sendRequest(pingReq, true);
 			HttpResponse pingResp = getResponse();
-
-			logger.log(OpLevel.DEBUG, "Got PING response and ready to close connection to {0}", uri);
+			logger.log(OpLevel.DEBUG, "Ping{0}: response received from {1}, response={2}", this, uri, pingResp);
 		} catch (Throwable exc) {
 		}
 	}

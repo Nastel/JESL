@@ -100,11 +100,13 @@ public class HttpClient implements HttpStream {
 		String scheme = uri.getScheme();
 		secure = "https".equalsIgnoreCase(scheme);
 		host = uri.getHost();
-		if (host == null)
+		if (host == null) {
 			host = "localhost";
+		}
 		port = uri.getPort();
-		if (port <= 0)
+		if (port <= 0) {
 			port = (secure ? 443 : 80);
+		}
 		init(host, port, uri.getPath(), secure, proxyHost, proxyPort, proxyScheme, logger);
 	}
 
@@ -122,8 +124,9 @@ public class HttpClient implements HttpStream {
 		String scheme = (secure ? "https" : "http");
 
 		httpHost = new HttpHost(host, port, scheme);
-		if (!StringUtils.isEmpty(proxyHost))
+		if (!StringUtils.isEmpty(proxyHost)) {
 			httpProxy = new HttpHost(proxyHost, proxyPort, proxyScheme);
+		}
 	}
 
 	/**
@@ -148,7 +151,7 @@ public class HttpClient implements HttpStream {
 				if (!StringUtils.isEmpty(sslKeystore)) {
 					SSLContextFactory scf = new SSLContextFactory(sslKeystore, sslKeystorePwd, sslKeystorePwd);
 					ssf = new SSLSocketFactory(scf.getSslContext(true));
-		    	} else {
+				} else {
 					ssf = new SSLSocketFactory(SSLContext.getDefault());
 				}
 				Scheme secureScheme = new Scheme("https", port, ssf);
@@ -188,8 +191,9 @@ public class HttpClient implements HttpStream {
 	 */
 	@Override
 	public synchronized void sendRequest(HttpRequest request, boolean wantResponse) throws IOException {
-		if (!(request instanceof org.apache.http.HttpRequest))
+		if (!(request instanceof org.apache.http.HttpRequest)) {
 			throw new IllegalArgumentException("request must be an instance of org.apache.http.HttpRequest");
+		}
 
 		try {
 			if (!wantResponse) {
@@ -213,8 +217,9 @@ public class HttpClient implements HttpStream {
 	 */
 	@Override
 	public void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws IOException {
-		if (StringUtils.isEmpty(reqUri))
+		if (StringUtils.isEmpty(reqUri)) {
 			reqUri = "/";
+		}
 
 		try {
 			HttpRequest req = newRequest(method, reqUri);
@@ -310,12 +315,12 @@ public class HttpClient implements HttpStream {
 	 */
 	protected void ensureAllRequestsSent() {
 		try {
-			logger.log(OpLevel.DEBUG, "Ping{0}: ensure all requests have been sent to {1}", this, uri);
+			logger.log(OpLevel.DEBUG, "Ping {0}: ensure all requests have been sent to {1}", this, uri);
 			HttpRequest pingReq = newDefaultRequest();
 			pingReq.setHeader(HEADER_KEY_PRAGMA, PRAGMA_VALUE_PING);
 			sendRequest(pingReq, true);
 			HttpResponse pingResp = getResponse();
-			logger.log(OpLevel.DEBUG, "Ping{0}: response received from {1}, response={2}", this, uri, pingResp);
+			logger.log(OpLevel.DEBUG, "Ping {0}: response received from {1}, response={2}", this, uri, pingResp);
 		} catch (Throwable exc) {
 		}
 	}

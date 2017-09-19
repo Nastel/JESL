@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set RUNDIR=%~p0
+set RUNDIR=%~dp0
 set SIMCMD=run
 
 set CLPATH="%RUNDIR%..;%RUNDIR%../*.jar;%RUNDIR%../lib/*"

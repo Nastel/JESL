@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set RUNDIR=%~p0
+set RUNDIR=%~dp0
 
 set CLPATH="%RUNDIR%../*.jar;%RUNDIR%../lib/*"
 set MAINCL=com.jkoolcloud.jesl.net.syslogd.Syslogd

@@ -217,10 +217,6 @@ public class HttpClient implements HttpStream {
 	 */
 	@Override
 	public void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws IOException {
-		if (StringUtils.isEmpty(reqUri)) {
-			reqUri = "/";
-		}
-
 		try {
 			HttpRequest req = newRequest(method, reqUri);
 			if (!StringUtils.isEmpty(content)) {
@@ -386,6 +382,10 @@ public class HttpClient implements HttpStream {
 	 */
 	@Override
 	public HttpRequest newRequest(String method, String uri) {
+		if (StringUtils.isEmpty(uri)) {
+			uri = "/";
+		}
+
 		return new HttpRequestImpl(method, uri);
 	}
 

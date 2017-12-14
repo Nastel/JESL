@@ -78,11 +78,6 @@
             <artifactId>httpclient</artifactId>
             <version>${httpcomponents.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
-            <version>${httpcomponents.core.version}</version>
-        </dependency>
     </dependencies>
 
     <profiles>

@@ -315,9 +315,7 @@ JESL requires the following (which will download automatically if using Maven):
 * JDK 1.6+
 * TNT4J (https://github.com/Nastel/TNT4J)
 * Apache HTTP Client 4.2.5 (http://hc.apache.org/httpcomponents-client-ga/)
-* Apache HTTP Core 4.3.4 (http://hc.apache.org/httpcomponents-client-ga/)
-* Joda Time (http://www.joda.org/joda-time/)
-* GSON (https://github.com/google/gson)
+* TNT4J-Syslogd (https://github.com/Nastel/tnt4j-syslogd/) (runtime)
 
 # Related Projects
 * TNT4J (https://github.com/Nastel/TNT4J)
@@ -326,7 +324,6 @@ JESL requires the following (which will download automatically if using Maven):
 * TNT4J-Servlet-Filter (http://nastel.github.io/tnt4j-servlet-filter/)
 * TNT4J-Stream-JMX (http://nastel.github.io/tnt4j-stream-jmx/)
 * TNT4J-Stream-GC (http://nastel.github.io/tnt4j-stream-gc/)
-* TNT4J-Syslogd (https://github.com/Nastel/tnt4j-syslogd)
 
 # Available Integrations
 * jkoolcloud.com (https://www.jkoolcloud.com)

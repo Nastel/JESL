@@ -76,7 +76,7 @@ The simplest way to run the simulator is to execute the file `jksim.bat`
 Sample simulation files are located under `<jesl>/sims/` folder (e.g. `<jesl>/sims/order-process.xml`). 
 `iterations` is the number of iterations for a given simulation (1 default).
 
-<b>NOTE:</b> You will may to alter `jksim` shell script to specify custom simulator 
+**NOTE:** You will may to alter `jksim` shell script to specify custom simulator 
 parameters such as simulation type as well as other advanced options.
 
 The simulator also contains options for allowing the data values used for some of
@@ -136,7 +136,7 @@ where `jksysd.json` is JSON output of JESL syslog daemon.
 	
 That should do it.
 
-<b>NOTE:</b> JESL currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
+**NOTE:** JESL currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
 
 Streaming Log4j to jKool Cloud 
 ===============================
@@ -184,14 +184,14 @@ Also include tnt4-log4j12 appender library `tnt4j-log4j12-<version>.jar`.
 #### Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 This allows streaming data to be associated with your private repository.
 
-<b>NOTE</b>: Make sure your firewall allows outgoing `https` connections to https://data.jkoolcloud.com
+**NOTE**: Make sure your firewall allows outgoing `https` connections to https://data.jkoolcloud.com
 
 #### Restart your application
 log4j messages which map to JESL `jkoolcloud` appender will stream to jKool Cloud @ https://data.jkoolcloud.com
 
 #### Login to "My Dashboard" @ https://www.jkoolcloud.com/
 
-<b>NOTE</b>: Visit https://github.com/Nastel/TNT4J#log4j-integration for more information on `TNT4JAppender`.
+**NOTE**: Visit https://github.com/Nastel/TNT4J#log4j-integration for more information on `TNT4JAppender`.
 Optionally you may annotate your log4j messages to provide better context, timing as well as report
 user defined metrics. Example: 
 
@@ -256,7 +256,21 @@ JESL Event Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 	tracking.selector.Repository: com.jkoolcloud.tnt4j.repository.FileTokenRepository
 }
 ```
-<b>NOTE:</b> You will need to provide your actual API access token in (`event.sink.factory.EventSinkFactory.Token`).
+**NOTE:** You will need to provide your actual API access token in (`event.sink.factory.EventSinkFactory.Token`).
+
+**NOTE:** When streaming to JKool Cloud it may happen data containing special numeric (`double`/`float`) values: `Infinity`, `-Infinity`, 
+`NaN`. While it is legal to have them in JSON, default JSON parser configuration on JKool Cloud may not allow them and skip complete 
+activity entities to store in your repository. This `JSONFormatter` has configuration property `SpecNumbersHandling` to handle those 
+special values on`TNT4J/JESL` side:
+```properties
+    event.formatter: com.jkoolcloud.tnt4j.format.JSONFormatter
+    ; Configures special numeric values handling. Can be one of: SUPPRESS, ENQUOTE, MAINTAIN. Default value: SUPPRESS
+    event.formatter.SpecNumbersHandling: MAINTAIN
+```
+`SpecNumbersHandling` property values:
+* `SUPPRESS` - suppress properties having special numeric value. Produced JSON will not contain these activity entity properties.      
+* `ENQUOTE` - enquote special numeric value. Produced JSON will have enquoted values e.g.`"Infinity"`, `"NaN"`. 
+* `MAINTAIN` - maintain value as is. Produced JSON will have literal number values e.g. `Infnity`, `NaN`.   
 
 # Sample jKQL Queries
 Sample queries you can run against your data using jkool dashboard.

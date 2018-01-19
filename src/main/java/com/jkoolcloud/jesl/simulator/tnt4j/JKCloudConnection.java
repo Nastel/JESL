@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,7 @@ import com.jkoolcloud.tnt4j.TrackingLogger;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 
 /**
- * JESL Cloud connection class that encapsulates streaming to jKool Cloud servers
- * using HTTP[S] or TCP[S] protocols.
+ * JESL Cloud connection class that encapsulates streaming to jKool Cloud servers using HTTP[S] or TCP[S] protocols.
  *
  * @version $Revision: $
  */
@@ -34,8 +33,8 @@ public class JKCloudConnection {
 	private String gwUrl;
 	private String accessToken;
 
-	private JKClient		jkHandle;
-	private TrackingLogger	logger;
+	private JKClient jkHandle;
+	private TrackingLogger logger;
 
 	public JKCloudConnection(String url, String accessToken, TrackingLogger logger) {
 		this.gwUrl = url.toLowerCase();
@@ -46,39 +45,41 @@ public class JKCloudConnection {
 	protected EventSink getEventSink() {
 		return (logger == null ? null : logger.getEventSink());
 	}
-	
+
 	public boolean isOpen() {
 		return (jkHandle != null);
 	}
-	
+
 	public synchronized void open() throws IOException {
-		if (isOpen())
+		if (isOpen()) {
 			return;
+		}
 
 		try {
 			jkHandle = new JKClient(gwUrl, getEventSink());
 			jkHandle.connect(accessToken);
-		}
-		catch (URISyntaxException e) {
+		} catch (URISyntaxException e) {
 			close();
 			throw new IOException(e.getMessage(), e);
 		}
 	}
 
 	public synchronized void write(String msg) throws IOException {
-		if (StringUtils.isEmpty(msg))
+		if (StringUtils.isEmpty(msg)) {
 			return;
+		}
 
-		if (!isOpen())
+		if (!isOpen()) {
 			open();
+		}
 
 		try {
-			if (jkHandle != null)
+			if (jkHandle != null) {
 				jkHandle.send(msg, false);
-			else
+			} else {
 				throw new IOException("Connection not opened");
-		}
-		catch (IOException e) {
+			}
+		} catch (IOException e) {
 			close();
 			throw e;
 		}

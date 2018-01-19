@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
-import org.apache.http.HeaderIterator;
-import org.apache.http.HttpEntity;
-import org.apache.http.ProtocolVersion;
-import org.apache.http.StatusLine;
+import org.apache.http.*;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.params.HttpParams;
 
@@ -40,7 +36,8 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	/**
 	 * Create HTTP response object
 	 * 
-	 * @param response apache HTTP response
+	 * @param response
+	 *            apache HTTP response
 	 */
 	public HttpResponseImpl(org.apache.http.HttpResponse response) {
 		super(response.getStatusLine());
@@ -50,8 +47,10 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	/**
 	 * Create HTTP response object
 	 * 
-	 * @param version protocol version
-	 * @param statusCode HTTP status code
+	 * @param version
+	 *            protocol version
+	 * @param statusCode
+	 *            HTTP status code
 	 */
 	public HttpResponseImpl(ProtocolVersion version, int statusCode) {
 		super(version, statusCode, null);
@@ -98,10 +97,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void addHeader(String name, String value) {
-		if (response != null)
+		if (response != null) {
 			response.addHeader(name, value);
-		else
+		} else {
 			super.addHeader(name, value);
+		}
 	}
 
 	/**
@@ -109,10 +109,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void setHeader(String name, String value) {
-		if (response != null)
+		if (response != null) {
 			response.setHeader(name, value);
-		else
+		} else {
 			super.setHeader(name, value);
+		}
 	}
 
 	/**
@@ -202,10 +203,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void setStatusLine(StatusLine statusline) {
-		if (response != null)
+		if (response != null) {
 			response.setStatusLine(statusline);
-		else
+		} else {
 			super.setStatusLine(statusline);
+		}
 	}
 
 	/**
@@ -213,10 +215,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void setStatusLine(ProtocolVersion ver, int code) {
-		if (response != null)
+		if (response != null) {
 			response.setStatusLine(ver, code);
-		else
+		} else {
 			super.setStatusLine(ver, code);
+		}
 	}
 
 	/**
@@ -224,10 +227,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
-		if (response != null)
+		if (response != null) {
 			response.setStatusLine(ver, code, reason);
-		else
+		} else {
 			super.setStatusLine(ver, code, reason);
+		}
 	}
 
 	/**
@@ -235,10 +239,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void setStatusCode(int code) {
-		if (response != null)
+		if (response != null) {
 			response.setStatusCode(code);
-		else
+		} else {
 			super.setStatusCode(code);
+		}
 	}
 
 	/**
@@ -246,10 +251,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void setReasonPhrase(String reason) {
-		if (response != null)
+		if (response != null) {
 			response.setReasonPhrase(reason);
-		else
+		} else {
 			super.setReasonPhrase(reason);
+		}
 	}
 
 	/**
@@ -297,10 +303,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void addHeader(Header header) {
-		if (response != null)
+		if (response != null) {
 			response.addHeader(header);
-		else
+		} else {
 			super.addHeader(header);
+		}
 	}
 
 	/**
@@ -308,10 +315,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void setHeader(Header header) {
-		if (response != null)
+		if (response != null) {
 			response.setHeader(header);
-		else
+		} else {
 			super.setHeader(header);
+		}
 	}
 
 	/**
@@ -319,10 +327,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void setHeaders(Header[] headers) {
-		if (response != null)
+		if (response != null) {
 			response.setHeaders(headers);
-		else
+		} else {
 			super.setHeaders(headers);
+		}
 	}
 
 	/**
@@ -330,10 +339,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void removeHeaders(String name) {
-		if (response != null)
+		if (response != null) {
 			response.removeHeaders(name);
-		else
+		} else {
 			super.removeHeaders(name);
+		}
 	}
 
 	/**
@@ -341,10 +351,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void removeHeader(Header header) {
-		if (response != null)
+		if (response != null) {
 			response.removeHeader(header);
-		else
+		} else {
 			super.removeHeader(header);
+		}
 	}
 
 	/**
@@ -376,10 +387,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void setParams(HttpParams params) {
-		if (response != null)
+		if (response != null) {
 			response.setParams(params);
-		else
+		} else {
 			super.setParams(params);
+		}
 	}
 
 	/**
@@ -395,10 +407,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void setEntity(HttpEntity entity) {
-		if (response != null)
+		if (response != null) {
 			response.setEntity(entity);
-		else
+		} else {
 			super.setEntity(entity);
+		}
 	}
 
 	/**
@@ -414,10 +427,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 */
 	@Override
 	public void setLocale(Locale loc) {
-		if (response != null)
+		if (response != null) {
 			response.setLocale(loc);
-		else
+		} else {
 			super.setLocale(loc);
+		}
 	}
 
 	/**
@@ -429,10 +443,11 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 		str.append(response != null ? response.toString() : super.toString());
 		try {
 			String content = getContentString();
-			if (!StringUtils.isEmpty(content))
+			if (!StringUtils.isEmpty(content)) {
 				str.append("\n").append(content);
+			}
+		} catch (Exception e) {
 		}
-		catch (Exception e) {}
 		return str.toString();
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,7 @@ import java.net.URISyntaxException;
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpException;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpHost;
-import org.apache.http.ProtocolVersion;
+import org.apache.http.*;
 import org.apache.http.conn.ClientConnectionRequest;
 import org.apache.http.conn.ManagedClientConnection;
 import org.apache.http.conn.routing.HttpRoute;
@@ -54,32 +50,35 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  * @version $Revision: 3 $
  */
 public class HttpClient implements HttpStream {
-	public static final String HEADER_KEY_PRAGMA         = "Pragma";
-	public static final String PRAGMA_VALUE_NO_RESPONSE  = "no-response";
-	public static final String PRAGMA_VALUE_PING         = "ping";
+	public static final String HEADER_KEY_PRAGMA = "Pragma";
+	public static final String PRAGMA_VALUE_NO_RESPONSE = "no-response";
+	public static final String PRAGMA_VALUE_PING = "ping";
 
-	protected URI							uri;
-	protected EventSink		 			    logger;
-	protected String						host;
-	protected int							port;
-	protected String						uriPath;
-	protected String						sslKeystore;
-	protected String						sslKeystorePwd;
-	protected HttpHost						httpHost;
-	protected HttpHost						httpProxy;
-	protected BasicClientConnectionManager	connMgr;
-	protected ClientConnectionRequest		connReq;
-	protected ManagedClientConnection		connection;
-	protected HttpRoute						route;
-	protected SchemeRegistry				schemeReg;
-	protected boolean						secure = false;
+	protected URI uri;
+	protected EventSink logger;
+	protected String host;
+	protected int port;
+	protected String uriPath;
+	protected String sslKeystore;
+	protected String sslKeystorePwd;
+	protected HttpHost httpHost;
+	protected HttpHost httpProxy;
+	protected BasicClientConnectionManager connMgr;
+	protected ClientConnectionRequest connReq;
+	protected ManagedClientConnection connection;
+	protected HttpRoute route;
+	protected SchemeRegistry schemeReg;
+	protected boolean secure = false;
 
 	/**
 	 * Create JESL HTTP[S} client stream with given attributes
 	 *
-	 * @param urlStr connection string to specified JESL server
-	 * @param logger event sink used for logging, null if none
-	 * @throws URISyntaxException if invalid connection string
+	 * @param urlStr
+	 *            connection string to specified JESL server
+	 * @param logger
+	 *            event sink used for logging, null if none
+	 * @throws URISyntaxException
+	 *             if invalid connection string
 	 */
 	public HttpClient(String urlStr, EventSink logger) throws URISyntaxException {
 		this(urlStr, null, 0, null, logger);
@@ -88,14 +87,21 @@ public class HttpClient implements HttpStream {
 	/**
 	 * Create JESL HTTP[S} client stream with given attributes
 	 *
-	 * @param urlStr connection string to specified JESL server
-	 * @param proxyHost proxy host name if any, null if none
-	 * @param proxyPort proxy port number if any, 0 of none
-	 * @param proxyScheme proxy communication scheme
-	 * @param logger event sink used for logging, null if none
-	 * @throws URISyntaxException if invalid connection string
+	 * @param urlStr
+	 *            connection string to specified JESL server
+	 * @param proxyHost
+	 *            proxy host name if any, null if none
+	 * @param proxyPort
+	 *            proxy port number if any, 0 of none
+	 * @param proxyScheme
+	 *            proxy communication scheme
+	 * @param logger
+	 *            event sink used for logging, null if none
+	 * @throws URISyntaxException
+	 *             if invalid connection string
 	 */
-	public HttpClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger) throws URISyntaxException {
+	public HttpClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger)
+			throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
 		secure = "https".equalsIgnoreCase(scheme);
@@ -113,13 +119,13 @@ public class HttpClient implements HttpStream {
 	/**
 	 *
 	 */
-	private void init(String host, int port, String uriPath, boolean secure,
-					  String proxyHost, int proxyPort, String proxyScheme, EventSink logger) {
-		this.host    = host;
-		this.port    = port;
+	private void init(String host, int port, String uriPath, boolean secure, String proxyHost, int proxyPort,
+			String proxyScheme, EventSink logger) {
+		this.host = host;
+		this.port = port;
 		this.uriPath = uriPath;
-		this.secure  = secure;
-		this.logger  = (logger != null ? logger : DefaultEventSinkFactory.defaultEventSink(HttpClient.class));
+		this.secure = secure;
+		this.logger = (logger != null ? logger : DefaultEventSinkFactory.defaultEventSink(HttpClient.class));
 
 		String scheme = (secure ? "https" : "http");
 
@@ -132,11 +138,13 @@ public class HttpClient implements HttpStream {
 	/**
 	 * Sets keystore and password for obtaining SSL certificate for server.
 	 *
-	 * @param sslKeystore path to keystore
-	 * @param sslKeystorePwd password for keystore
+	 * @param sslKeystore
+	 *            path to keystore
+	 * @param sslKeystorePwd
+	 *            password for keystore
 	 */
 	public void setSslKeystore(String sslKeystore, String sslKeystorePwd) {
-		this.sslKeystore    = sslKeystore;
+		this.sslKeystore = sslKeystore;
 		this.sslKeystorePwd = sslKeystorePwd;
 	}
 
@@ -158,7 +166,8 @@ public class HttpClient implements HttpStream {
 				schemeReg = new SchemeRegistry();
 				schemeReg.register(secureScheme);
 			}
-			route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN, RouteInfo.LayerType.PLAIN);
+			route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN,
+					RouteInfo.LayerType.PLAIN);
 			if (schemeReg != null) {
 				connMgr = new BasicClientConnectionManager(schemeReg);
 			} else {
@@ -216,7 +225,8 @@ public class HttpClient implements HttpStream {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse) throws IOException {
+	public void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse)
+			throws IOException {
 		try {
 			HttpRequest req = newRequest(method, reqUri);
 			if (!StringUtils.isEmpty(content)) {
@@ -249,7 +259,7 @@ public class HttpClient implements HttpStream {
 		try {
 			HttpResponseImpl resp = new HttpResponseImpl(connection.receiveResponseHeader());
 			String contentLenStr = resp.getHeader(HttpHeaders.CONTENT_LENGTH);
-			String contentType   = resp.getHeader(HttpHeaders.CONTENT_TYPE);
+			String contentType = resp.getHeader(HttpHeaders.CONTENT_TYPE);
 			int contentLen = (StringUtils.isEmpty(contentLenStr) ? 0 : Integer.parseInt(contentLenStr));
 			if (contentLen > 0 || !StringUtils.isEmpty(contentType)) {
 				connection.receiveResponseEntity(resp);

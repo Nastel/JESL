@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,16 +42,16 @@ import com.jkoolcloud.tnt4j.tracker.TrackingEvent;
 public class SimulatedEventSink extends AbstractEventSink {
 	private static final String FILE_PREFIX = "file://";
 
-	private EventFormatter		formatter = new JSONFormatter();
-	private Sink				outSink;
+	private EventFormatter formatter = new JSONFormatter();
+	private Sink outSink;
 
-	public SimulatedEventSink(String name, String url, String gwAccessToken, 
-			EventFormatter formatter, EventLimiter limiter) {
+	public SimulatedEventSink(String name, String url, String gwAccessToken, EventFormatter formatter,
+			EventLimiter limiter) {
 		super(name, formatter);
 
 		if (url.startsWith("http://") || url.startsWith("https://")) {
 			outSink = new JKCloudEventSink(name, url, gwAccessToken, new DefaultFormatter(), null);
-			((EventSink)outSink).setLimiter(limiter);
+			((EventSink) outSink).setLimiter(limiter);
 		} else if (url.startsWith("file://")) {
 			String fileName = url.substring(FILE_PREFIX.length());
 			outSink = new FileSink(fileName, true, new DefaultFormatter());
@@ -77,7 +77,9 @@ public class SimulatedEventSink extends AbstractEventSink {
 	}
 
 	private void writeFormattedMsg(String msg) throws IOException, InterruptedException {
-		if (isOpen()) outSink.write(msg);
+		if (isOpen()) {
+			outSink.write(msg);
+		}
 	}
 
 	/**
@@ -125,7 +127,9 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 */
 	@Override
 	public synchronized void open() throws IOException {
-		if (outSink != null) outSink.open();
+		if (outSink != null) {
+			outSink.open();
+		}
 	}
 
 	/**
@@ -142,8 +146,9 @@ public class SimulatedEventSink extends AbstractEventSink {
 	@Override
 	public synchronized void close() throws IOException {
 		try {
-			if (outSink != null)
+			if (outSink != null) {
 				outSink.close();
+			}
 		} finally {
 			outSink = null;
 		}
@@ -155,7 +160,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 	@Override
 	public KeyValueStats getStats(Map<String, Object> stats) {
 		if (outSink instanceof EventSink) {
-			((EventSink)outSink).getStats(stats);
+			((EventSink) outSink).getStats(stats);
 		}
 		return super.getStats(stats);
 	}
@@ -167,7 +172,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 	public void resetStats() {
 		super.resetStats();
 		if (outSink instanceof EventSink) {
-			((EventSink)outSink).resetStats();
+			((EventSink) outSink).resetStats();
 		}
 	}
 }

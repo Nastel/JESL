@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,7 @@
  */
 package com.jkoolcloud.jesl.simulator;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
+import java.io.*;
 import java.util.Map;
 import java.util.Random;
 
@@ -41,37 +36,38 @@ import com.jkoolcloud.tnt4j.core.UsecTimestamp;
 import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
- * JESL Activity Simulator which uses TNT4J to simulate application activities and transactions.
- * This will simulate activities by loading activity definitions from an XML file.
+ * JESL Activity Simulator which uses TNT4J to simulate application activities and transactions. This will simulate
+ * activities by loading activity definitions from an XML file.
  *
  * @version $Revision: $
  */
 public class TNT4JSimulator {
 
-	public enum SimulatorRunType {RUN_SIM, REPLAY_SIM}
+	public enum SimulatorRunType {
+		RUN_SIM, REPLAY_SIM
+	}
 
-	private static SimulatorRunType	runType        = SimulatorRunType.RUN_SIM;
-	private static String			jkProtocol     = "https";
-	private static String			jkHost         = null;
-	private static int				jkPort         = 443;
-	private static String			jkAccessToken  = null;
-	private static String			simFileName    = "";
-	private static boolean			uniqueTags     = false;
-	private static boolean			uniqueCorrs    = false;
-	private static boolean			uniqueIds      = false;
-	private static OpLevel			traceLevel     = OpLevel.INFO;
-	private static String			jkFileName     = "";
-	private static int				valuePctChg    = 0;
-	private static Random			ranGen         = new Random();
-	private static long				numIterations  = 1;
-	private static boolean			generateValues = false;
-	private static long				ttl            = 0L;
-	private static long				rateMPS = 0, rateBPS = 0;
-	
+	private static SimulatorRunType runType = SimulatorRunType.RUN_SIM;
+	private static String jkProtocol = "https";
+	private static String jkHost = null;
+	private static int jkPort = 443;
+	private static String jkAccessToken = null;
+	private static String simFileName = "";
+	private static boolean uniqueTags = false;
+	private static boolean uniqueCorrs = false;
+	private static boolean uniqueIds = false;
+	private static OpLevel traceLevel = OpLevel.INFO;
+	private static String jkFileName = "";
+	private static int valuePctChg = 0;
+	private static Random ranGen = new Random();
+	private static long numIterations = 1;
+	private static boolean generateValues = false;
+	private static long ttl = 0L;
+	private static long rateMPS = 0, rateBPS = 0;
 
-	private static JKCloudConnection	gwConn          = null;
-	private static TrackingLogger		logger          = null;
-	private static long					iteration       = 0L;
+	private static JKCloudConnection gwConn = null;
+	private static TrackingLogger logger = null;
+	private static long iteration = 0L;
 
 	public static String readFromConsole(String prompt) throws IOException {
 		return System.console().readLine(prompt);
@@ -82,11 +78,11 @@ public class TNT4JSimulator {
 	}
 
 	public static void warn(String msg) {
-		logger.tnt(OpLevel.WARNING, null, null, msg, (Object[])null);
+		logger.tnt(OpLevel.WARNING, null, null, msg, (Object[]) null);
 	}
 
 	public static void info(String msg) {
-		logger.tnt(OpLevel.INFO, null, null, msg, (Object[])null);
+		logger.tnt(OpLevel.INFO, null, null, msg, (Object[]) null);
 	}
 
 	public static boolean isDebugEnabled() {
@@ -95,8 +91,9 @@ public class TNT4JSimulator {
 
 	public static void debug(UsecTimestamp simTime, String msg) {
 		if (isDebugEnabled()) {
-			if (simTime == null)
+			if (simTime == null) {
 				simTime = new UsecTimestamp();
+			}
 			logger.tnt(OpLevel.DEBUG, null, null, "SimTime=" + simTime + ": " + msg);
 		}
 	}
@@ -107,8 +104,9 @@ public class TNT4JSimulator {
 
 	public static void trace(UsecTimestamp simTime, String msg) {
 		if (isTraceEnabled()) {
-			if (simTime == null)
+			if (simTime == null) {
 				simTime = new UsecTimestamp();
+			}
 			logger.tnt(OpLevel.TRACE, null, null, "SimTime=" + simTime + ": " + msg);
 		}
 	}
@@ -130,9 +128,9 @@ public class TNT4JSimulator {
 	}
 
 	public static String getConnectUrl() {
-		return (runType == SimulatorRunType.RUN_SIM && jkProtocol.equalsIgnoreCase("file")?
-				(jkProtocol.toLowerCase() + "://" + jkFileName):
-				(jkProtocol.toLowerCase() + "://" + jkHost + ":" + jkPort));
+		return (runType == SimulatorRunType.RUN_SIM && jkProtocol.equalsIgnoreCase("file")
+				? (jkProtocol.toLowerCase() + "://" + jkFileName)
+				: (jkProtocol.toLowerCase() + "://" + jkHost + ":" + jkPort));
 	}
 
 	public static String getAccessToken() {
@@ -144,12 +142,12 @@ public class TNT4JSimulator {
 	}
 
 	public static boolean useUniqueCorrs() {
-	    return uniqueCorrs;
-    }
+		return uniqueCorrs;
+	}
 
 	public static boolean useUniqueIds() {
-	    return uniqueIds;
-    }
+		return uniqueIds;
+	}
 
 	public static boolean isGenerateValues() {
 		return generateValues;
@@ -160,66 +158,78 @@ public class TNT4JSimulator {
 	}
 
 	public static long varyValue(long value) {
-		if (value == 0 || valuePctChg == 0)
+		if (value == 0 || valuePctChg == 0) {
 			return value;
+		}
 
-		// nextInt returns value in range [0,n).  We want values in range [-n,n).
-		double percentChg = (ranGen.nextInt(valuePctChg*2) - valuePctChg) / 100.0;
+		// nextInt returns value in range [0,n). We want values in range [-n,n).
+		double percentChg = (ranGen.nextInt(valuePctChg * 2) - valuePctChg) / 100.0;
 
 		// let's keep a lid on variations
-		if (percentChg > 0.99)
+		if (percentChg > 0.99) {
 			percentChg = 0.99;
-		if (percentChg < -0.99)
+		}
+		if (percentChg < -0.99) {
 			percentChg = -0.99;
+		}
 
-		long newValue = (long) (value * (1.0+percentChg));
-		if (newValue < 0.0 && value > 0.0)
+		long newValue = (long) (value * (1.0 + percentChg));
+		if (newValue < 0.0 && value > 0.0) {
 			newValue = 0;
+		}
 
 		return newValue;
 	}
 
 	public static long varyValue(int value) {
-		if (value == 0 || valuePctChg == 0)
+		if (value == 0 || valuePctChg == 0) {
 			return value;
+		}
 
-		// nextInt returns value in range [0,n).  We want values in range [-n,n).
-		double percentChg = (ranGen.nextInt(valuePctChg*2) - valuePctChg) / 100.0;
+		// nextInt returns value in range [0,n). We want values in range [-n,n).
+		double percentChg = (ranGen.nextInt(valuePctChg * 2) - valuePctChg) / 100.0;
 
 		// let's keep a lid on variations
-		if (percentChg > 0.99)
+		if (percentChg > 0.99) {
 			percentChg = 0.99;
-		if (percentChg < -0.99)
+		}
+		if (percentChg < -0.99) {
 			percentChg = -0.99;
+		}
 
-		int newValue = (int) (value * (1.0+percentChg));
-		if (newValue < 0 && value > 0)
+		int newValue = (int) (value * (1.0 + percentChg));
+		if (newValue < 0 && value > 0) {
 			newValue = 0;
+		}
 
 		return newValue;
 	}
 
 	public static double varyValue(double value) {
-		if (value == 0 || valuePctChg == 0)
+		if (value == 0 || valuePctChg == 0) {
 			return value;
+		}
 
-		// nextInt returns value in range [0,n).  We want values in range [-n,n).
-		double percentChg = (ranGen.nextInt(valuePctChg*2) - valuePctChg) / 100.0;
+		// nextInt returns value in range [0,n). We want values in range [-n,n).
+		double percentChg = (ranGen.nextInt(valuePctChg * 2) - valuePctChg) / 100.0;
 
 		// let's keep a lid on variations
-		if (percentChg > 0.99)
+		if (percentChg > 0.99) {
 			percentChg = 0.99;
-		if (percentChg < -0.99)
+		}
+		if (percentChg < -0.99) {
 			percentChg = -0.99;
+		}
 
-		double newValue = value * (1.0+percentChg);
-		if (newValue < 0.0 && value > 0.0)
+		double newValue = value * (1.0 + percentChg);
+		if (newValue < 0.0 && value > 0.0) {
 			newValue = 0;
+		}
 
 		return newValue;
 	}
 
-	public static void incrementValue(Map<String,Long> map, String item, long amount) {
+	public static void incrementValue(Map<String, Long> map, String item, long amount) {
 		Long prev = map.put(item, amount);
 		if (prev != null) {
 			map.put(item, prev.longValue() + amount);
@@ -247,14 +257,18 @@ public class TNT4JSimulator {
 	}
 
 	private static void printUsage(String error) {
-		if (!StringUtils.isEmpty(error))
+		if (!StringUtils.isEmpty(error)) {
 			System.out.println(error);
+		}
 
 		System.out.println("\nValid arguments:\n");
-		System.out.println("  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-f:<sim_def_file_name>]");
-		System.out.println("                              [-p:<percentage>] [-V:name=value] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>]\n");
+		System.out.println(
+				"  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-f:<sim_def_file_name>]");
+		System.out.println(
+				"                              [-p:<percentage>] [-V:name=value] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>]\n");
 		System.out.println("  to limit streaming:         [-LM:max-msgs-sec] [-LB:max-bytes-sec]\n");
-		System.out.println("  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n");
+		System.out.println(
+				"  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n");
 		System.out.println("  for usage information:  help\n");
 		System.out.println("where:");
 		System.out.println("    -A    -  Streaming access token (required with '-T')");
@@ -276,49 +290,57 @@ public class TNT4JSimulator {
 		System.out.println("    -ui   -  Make tracking ids unique between iterations");
 		System.out.println("    -t    -  Time-to-live (TTL) for all tracking items, in hours");
 		System.out.println("                > 0 : tracking events are deleted after the specified number of hours");
-		System.out.println("                = 0 : tracking events are deleted based on Retention quota for repository (default)");
-		System.out.println("                < 0 : tracking events are not persisted to data store (only processed by Real-time Grid)");
+		System.out.println(
+				"                = 0 : tracking events are deleted based on Retention quota for repository (default)");
+		System.out.println(
+				"                < 0 : tracking events are not persisted to data store (only processed by Real-time Grid)");
 		System.out.println("\nFor 'run' mode, must specify at least of one: '-T', '-G'");
 
 		System.exit(StringUtils.isEmpty(error) ? 0 : 1);
 	}
 
 	private static void printUsedArgs() {
-		System.out.format("Arguments: runype=%s, url=%s, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s, jkFile=%s\n",
-				runType, getConnectUrl(), generateValues, uniqueTags, uniqueCorrs, uniqueIds, valuePctChg, simFileName, jkFileName);
+		System.out.format(
+				"Arguments: runype=%s, url=%s, generateValues=%s, uniqueTags=%s,  uniqueCorrs=%s, uniqueIds=%s, percent=%d, simFile=%s, jkFile=%s\n",
+				runType, getConnectUrl(), generateValues, uniqueTags, uniqueCorrs, uniqueIds, valuePctChg, simFileName,
+				jkFileName);
 		if (rateMPS > 0 || rateBPS > 0) {
 			System.out.format("Limits: msgs/sec=%s, bytes/sec=%s\n", rateMPS, rateBPS);
 		}
 	}
 
 	protected static void processArgs(TNT4JSimulatorParserHandler xmlHandler, String[] args) {
-		if (args.length == 0)
+		if (args.length == 0) {
 			printUsage("Missing simulation type");
+		}
 
 		String runTypeArg = args[0];
-		if (runTypeArg.equals("run"))
+		if (runTypeArg.equals("run")) {
 			runType = SimulatorRunType.RUN_SIM;
-		else if (runTypeArg.equals("replay"))
+		} else if (runTypeArg.equals("replay")) {
 			runType = SimulatorRunType.REPLAY_SIM;
-		else if (runTypeArg.equals("help"))
+		} else if (runTypeArg.equals("help")) {
 			printUsage(null);
-		else
+		} else {
 			printUsage("Invalid simulation type");
+		}
 
 		boolean invalidArg = false;
 		for (int i = 1; i < args.length; i++) {
 			String arg = args[i];
 
-			if (arg == null)
+			if (arg == null) {
 				continue;
+			}
 
 			// Process arguments common to all simulation types first
 			if (arg.startsWith("-A:")) {
 				jkAccessToken = arg.substring(3);
-				if (StringUtils.isEmpty(jkAccessToken))
+				if (StringUtils.isEmpty(jkAccessToken)) {
 					printUsage("Missing <access_token> for '-A' argument");
+				}
 			} else if (arg.startsWith("-V:")) {
-				String [] var = arg.substring(3).split("=");
+				String[] var = arg.substring(3).split("=");
 				if (var.length == 2) {
 					System.out.println("Defining variable: '" + var[0] + "=" + var[1] + "'");
 					xmlHandler.setVar(var[0], var[1]);
@@ -327,86 +349,94 @@ public class TNT4JSimulator {
 				}
 			} else if (arg.startsWith("-T:")) {
 				jkHost = arg.substring(3);
-				if (StringUtils.isEmpty(jkHost))
+				if (StringUtils.isEmpty(jkHost)) {
 					printUsage("Missing <jk_host> for '-T' argument");
+				}
 			} else if (arg.startsWith("-P:")) {
 				try {
 					jkPort = Integer.parseInt(arg.substring(3));
-				}
-				catch (NumberFormatException e) {
+				} catch (NumberFormatException e) {
 					printUsage("Missing or invalid <jk_port> for '-P' argument");
 				}
 			} else if (arg.startsWith("-C:")) {
 				jkProtocol = arg.substring(3).toLowerCase();
-				if (!"tcp".equals(jkProtocol) && !"http".equals(jkProtocol) && !"https".equals(jkProtocol))
-					printUsage("Invalid connection protocol for '-C' argument (must be one of: 'tcp', 'http', 'https')");
+				if (!"tcp".equals(jkProtocol) && !"http".equals(jkProtocol) && !"https".equals(jkProtocol)) {
+					printUsage(
+							"Invalid connection protocol for '-C' argument (must be one of: 'tcp', 'http', 'https')");
+				}
 			} else if (runType == SimulatorRunType.RUN_SIM || runType == SimulatorRunType.REPLAY_SIM) {
 				if (arg.startsWith("-G:")) {
 					jkFileName = arg.substring(3);
-					if (StringUtils.isEmpty(jkFileName))
+					if (StringUtils.isEmpty(jkFileName)) {
 						printUsage("Missing <jk_file_name> for '-G' argument");
-					if (runType == SimulatorRunType.RUN_SIM)
+					}
+					if (runType == SimulatorRunType.RUN_SIM) {
 						jkProtocol = "file";
+					}
 				} else if (runType == SimulatorRunType.RUN_SIM) {
 					if (arg.startsWith("-f:")) {
 						simFileName = arg.substring(3);
-						if (StringUtils.isEmpty(simFileName))
+						if (StringUtils.isEmpty(simFileName)) {
 							printUsage("Missing <sim_def_file_name> for '-f' argument");
-					}
-					else if (arg.startsWith("-i:")) {
+						}
+					} else if (arg.startsWith("-i:")) {
 						String iterations = arg.substring(3);
 						try {
 							numIterations = Long.parseLong(iterations);
-						}
-						catch (NumberFormatException e) {
-							if (StringUtils.isEmpty(iterations))
+						} catch (NumberFormatException e) {
+							if (StringUtils.isEmpty(iterations)) {
 								printUsage("Missing <iterations> for '-i' argument");
-							else
+							} else {
 								printUsage("Invalid <iterations> for '-i' argument (" + arg.substring(3) + ")");
+							}
 						}
-						if (numIterations <= 0)
+						if (numIterations <= 0) {
 							printUsage("<iterations> for '-i' argument must be > 0");
+						}
 					} else if (arg.startsWith("-p:")) {
 						String percentStr = arg.substring(3);
-						if (StringUtils.isEmpty(percentStr))
+						if (StringUtils.isEmpty(percentStr)) {
 							printUsage("Missing <percentage> for '-p' argument");
+						}
 						valuePctChg = Integer.parseInt(percentStr);
-						if (valuePctChg < 0 || valuePctChg > 100)
+						if (valuePctChg < 0 || valuePctChg > 100) {
 							printUsage("Percentage for varying values ('-p' argument) must be in the range [0,100)");
+						}
 					} else if (arg.startsWith("-t:")) {
 						String ttlStr = arg.substring(3);
 						try {
 							ttl = Long.parseLong(ttlStr);
-							if (ttl > 0L)
+							if (ttl > 0L) {
 								ttl *= 3600;
-						}
-						catch (NumberFormatException e) {
-							if (StringUtils.isEmpty(ttlStr))
+							}
+						} catch (NumberFormatException e) {
+							if (StringUtils.isEmpty(ttlStr)) {
 								printUsage("Missing <ttl_hours> for '-t' argument");
-							else
+							} else {
 								printUsage("Invalid <ttl_hours> for '-t' argument (" + arg.substring(3) + ")");
+							}
 						}
 					} else if (arg.startsWith("-LM:")) {
 						String rate = arg.substring(4);
 						try {
 							rateMPS = Long.parseLong(rate);
-						}
-						catch (NumberFormatException e) {
-							if (StringUtils.isEmpty(rate))
+						} catch (NumberFormatException e) {
+							if (StringUtils.isEmpty(rate)) {
 								printUsage("Missing <msgs/sec> for '-LM' argument");
-							else
+							} else {
 								printUsage("Invalid <msgs/sec> for '-LM' argument (" + rate + ")");
+							}
 						}
 					} else if (arg.startsWith("-LB:")) {
 						String rate = arg.substring(4);
 						try {
 							rateBPS = Long.parseLong(rate);
-						}
-						catch (NumberFormatException e) {
-							if (StringUtils.isEmpty(rate))
+						} catch (NumberFormatException e) {
+							if (StringUtils.isEmpty(rate)) {
 								printUsage("Missing <bytes/sec> for '-LB' argument");
-							else
+							} else {
 								printUsage("Invalid <bytes/sec> for '-LB' argument (" + rate + ")");
+							}
 						}
 					} else if (arg.equals("-ut")) {
 						uniqueTags = true;
@@ -431,30 +461,36 @@ public class TNT4JSimulator {
 			}
 
 			if (invalidArg) {
-				if (arg.startsWith("-"))
+				if (arg.startsWith("-")) {
 					printUsage("Invalid argument: " + arg);
-				else
+				} else {
 					printUsage("Invalid argument list");
+				}
 			}
 		}
 
 		if (runType == SimulatorRunType.RUN_SIM) {
-			if (StringUtils.isEmpty(jkHost) && StringUtils.isEmpty(jkFileName))
+			if (StringUtils.isEmpty(jkHost) && StringUtils.isEmpty(jkFileName)) {
 				printUsage("Must specify one of '-T' or '-G'");
+			}
 
-			if (StringUtils.isEmpty(jkAccessToken) && !StringUtils.isEmpty(jkHost))
+			if (StringUtils.isEmpty(jkAccessToken) && !StringUtils.isEmpty(jkHost)) {
 				printUsage("Must specify '-A'");
+			}
 		}
 
 		if (runType == SimulatorRunType.REPLAY_SIM) {
-			if (StringUtils.isEmpty(jkAccessToken))
+			if (StringUtils.isEmpty(jkAccessToken)) {
 				printUsage("Must specify '-A'");
+			}
 
-			if (StringUtils.isEmpty(jkHost))
+			if (StringUtils.isEmpty(jkHost)) {
 				printUsage("Missing host or URL");
+			}
 
-			if (StringUtils.isEmpty(jkFileName))
+			if (StringUtils.isEmpty(jkFileName)) {
 				printUsage("Missing XML file name");
+			}
 		}
 		printUsedArgs();
 	}
@@ -466,18 +502,19 @@ public class TNT4JSimulator {
 		long startTime = System.currentTimeMillis();
 
 		try {
-			SAXParserFactory            parserFactory = SAXParserFactory.newInstance();
-			SAXParser                   theParser     = parserFactory.newSAXParser();
-			TNT4JSimulatorParserHandler xmlHandler    = new TNT4JSimulatorParserHandler();
+			SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+			SAXParser theParser = parserFactory.newSAXParser();
+			TNT4JSimulatorParserHandler xmlHandler = new TNT4JSimulatorParserHandler();
 
 			processArgs(xmlHandler, args);
 
 			TrackerConfig simConfig = DefaultConfigFactory.getInstance().getConfig(TNT4JSimulator.class.getName());
 			logger = TrackingLogger.getInstance(simConfig.build());
-			if (logger.isSet(OpLevel.TRACE))
+			if (logger.isSet(OpLevel.TRACE)) {
 				traceLevel = OpLevel.TRACE;
-			else if (logger.isSet(OpLevel.DEBUG))
+			} else if (logger.isSet(OpLevel.DEBUG)) {
 				traceLevel = OpLevel.DEBUG;
+			}
 
 			if (runType == SimulatorRunType.RUN_SIM) {
 				showProgress = (isTTY && numIterations > 1);
@@ -486,26 +523,30 @@ public class TNT4JSimulator {
 					simFileName = "tnt4j-sim.xml";
 					String fileName = readFromConsole("Simulation file [" + simFileName + "]: ");
 
-					if (!StringUtils.isEmpty(fileName))
+					if (!StringUtils.isEmpty(fileName)) {
 						simFileName = fileName;
+					}
 				}
 
 				StringBuffer simDef = new StringBuffer();
 				BufferedReader simLoader = new BufferedReader(new FileReader(simFileName));
 				String line;
-				while ((line = simLoader.readLine()) != null)
+				while ((line = simLoader.readLine()) != null) {
 					simDef.append(line).append("\n");
+				}
 				simLoader.close();
 
-				info("jKool Activity Simulator Run starting: file=" + simFileName
-						+ ", iterations=" + numIterations + ", ttl.sec=" + ttl);
-				
+				info("jKool Activity Simulator Run starting: file=" + simFileName + ", iterations=" + numIterations
+						+ ", ttl.sec=" + ttl);
+
 				startTime = System.currentTimeMillis();
-				if (showProgress)
+				if (showProgress) {
 					System.out.print("Iteration: ");
+				}
 				for (iteration = 1; iteration <= numIterations; iteration++) {
-					if (showProgress)
+					if (showProgress) {
 						itTrcWidth = printProgress("Executing Iteration", iteration, itTrcWidth);
+					}
 
 					theParser.parse(new InputSource(new StringReader(simDef.toString())), xmlHandler);
 
@@ -515,14 +556,14 @@ public class TNT4JSimulator {
 						gwFile.close();
 					}
 				}
-				if (showProgress)
+				if (showProgress) {
 					System.out.println("");
+				}
 
-				info("jKool Activity Simulator Run finished, elapsed time=" +
-					 DurationFormatUtils.formatDurationHMS(System.currentTimeMillis()-startTime));
+				info("jKool Activity Simulator Run finished, elapsed time="
+						+ DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - startTime));
 				printMetrics(xmlHandler.getSinkStats(), "Total Sink Statistics");
-			}
-			else if (runType == SimulatorRunType.REPLAY_SIM) {
+			} else if (runType == SimulatorRunType.REPLAY_SIM) {
 				showProgress = isTTY;
 				info("jKool Activity Simulator Replay starting: file=" + jkFileName);
 				connect();
@@ -531,44 +572,51 @@ public class TNT4JSimulator {
 				// Determine number of lines in file
 				info("Analyzing file ...");
 				BufferedReader gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
-				for (numIterations = 0; gwFile.readLine() != null; numIterations++);
+				for (numIterations = 0; gwFile.readLine() != null; numIterations++) {
+				}
 				gwFile.close();
 
 				// Reopen the file and
 				gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
-				if (showProgress)
+				if (showProgress) {
 					System.out.print("Processing Line: ");
+				}
 				String gwMsg;
 				iteration = 0;
-				while ((gwMsg=gwFile.readLine()) != null) {
-					if (showProgress)
+				while ((gwMsg = gwFile.readLine()) != null) {
+					if (showProgress) {
 						itTrcWidth = printProgress("Processing Line", iteration, itTrcWidth);
+					}
 					gwConn.write(gwMsg);
 					iteration++;
 				}
-				if (showProgress)
+				if (showProgress) {
 					System.out.println("");
+				}
 				long endTime = System.currentTimeMillis();
 
-				info("jKool Activity Simulator Replay finished, tracking.msg.count=" + iteration
-					 + ", elasped.time=" + DurationFormatUtils.formatDurationHMS(endTime-startTime));
+				info("jKool Activity Simulator Replay finished, tracking.msg.count=" + iteration + ", elasped.time="
+						+ DurationFormatUtils.formatDurationHMS(endTime - startTime));
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			if (e instanceof SAXParseException) {
-				SAXParseException spe = (SAXParseException)e;
+				SAXParseException spe = (SAXParseException) e;
 				error("Error at line: " + spe.getLineNumber() + ", column: " + spe.getColumnNumber(), e);
-			}
-			else {
+			} else {
 				error("Error running simulator", e);
-				if (runType == SimulatorRunType.RUN_SIM)
-					info("jKool Activity Simulator Run failed, completed " + iteration + " out of " + numIterations + " iterations");
-				else if (runType == SimulatorRunType.REPLAY_SIM)
-					info("jKool Activity Simulator Replay failed, processed " + iteration + " out of " + numIterations + " records");
+				if (runType == SimulatorRunType.RUN_SIM) {
+					info("jKool Activity Simulator Run failed, completed " + iteration + " out of " + numIterations
+							+ " iterations");
+				} else if (runType == SimulatorRunType.REPLAY_SIM) {
+					info("jKool Activity Simulator Replay failed, processed " + iteration + " out of " + numIterations
+							+ " records");
+				}
 			}
-		}
-		finally {
-			try {Thread.sleep(2000L);} catch (Exception e) {}
+		} finally {
+			try {
+				Thread.sleep(2000L);
+			} catch (Exception e) {
+			}
 			TNT4JSimulator.disconnect();
 		}
 
@@ -576,14 +624,17 @@ public class TNT4JSimulator {
 	}
 
 	public static JKCloudConnection connect() throws IOException {
-		if (StringUtils.isEmpty(jkHost))
+		if (StringUtils.isEmpty(jkHost)) {
 			return null;
+		}
 
-		if (gwConn != null)
+		if (gwConn != null) {
 			return gwConn;
+		}
 
 		String gwUrl = TNT4JSimulator.getConnectUrl();
-		TNT4JSimulator.debug(new UsecTimestamp(), "Connecting to service=" + gwUrl + " with access token=" + jkAccessToken + " ...");
+		TNT4JSimulator.debug(new UsecTimestamp(),
+				"Connecting to service=" + gwUrl + " with access token=" + jkAccessToken + " ...");
 		gwConn = new JKCloudConnection(gwUrl, jkAccessToken, logger);
 		gwConn.open();
 
@@ -592,14 +643,17 @@ public class TNT4JSimulator {
 
 	public static void disconnect() {
 		if (gwConn != null) {
-			try {gwConn.close();} catch (Exception e) {}
+			try {
+				gwConn.close();
+			} catch (Exception e) {
+			}
 			gwConn = null;
 		}
 	}
 
 	private static int printProgress(String text, long iteration, int trcWidth) {
-		int itPct = (int)((double)iteration/numIterations*100.0);
-		int maxItWidth = (int)(Math.log10(numIterations)+1);
+		int itPct = (int) ((double) iteration / numIterations * 100.0);
+		int maxItWidth = (int) (Math.log10(numIterations) + 1);
 		String bkSpStr = StringUtils.leftPad("", trcWidth, '\b');
 		String trcMsg = String.format(bkSpStr + "%" + maxItWidth + "d (%02d%%)", iteration, itPct);
 		trcWidth = trcMsg.length() - bkSpStr.length();
@@ -608,13 +662,15 @@ public class TNT4JSimulator {
 	}
 
 	private static <V extends Object> void printMetrics(Map<String, V> map, String label) {
-		if (map == null)
+		if (map == null) {
 			return;
+		}
 		info(label + ":");
 		for (String key : map.keySet()) {
 			V value = map.get(key);
-			String valueStr = (value instanceof Number ? String.format("%,15d", value) : String.format("%s", value.toString()));
-			info(String.format("    %-50s %s", key+":", valueStr));
+			String valueStr = (value instanceof Number ? String.format("%,15d", value)
+					: String.format("%s", value.toString()));
+			info(String.format("    %-50s %s", key + ":", valueStr));
 		}
 	}
 }

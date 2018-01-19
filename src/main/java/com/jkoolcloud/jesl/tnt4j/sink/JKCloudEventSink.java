@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,24 +53,24 @@ import com.jkoolcloud.tnt4j.utils.Utils;
 public class JKCloudEventSink extends AbstractEventSink {
 	private static final EventSink logger = DefaultEventSinkFactory.defaultEventSink(JKCloudEventSink.class);
 
-	public static final String KEY_IDLE_COUNT	= "sink-idle-count";
-	public static final String KEY_SENT_BYTES	= "sink-sent-bytes";
-	public static final String KEY_LAST_BYTES	= "sink-last-bytes";
-	public static final String KEY_SENT_MSGS	= "sink-sent-messages";
-	public static final String KEY_SERVICE_URL	= "sink-service-url";
-	public static final String KEY_PROXY_URL	= "sink-proxy-url";
-	public static final String KEY_LAST_WAGE	= "sink-last-write-age-ms";
+	public static final String KEY_IDLE_COUNT = "sink-idle-count";
+	public static final String KEY_SENT_BYTES = "sink-sent-bytes";
+	public static final String KEY_LAST_BYTES = "sink-last-bytes";
+	public static final String KEY_SENT_MSGS = "sink-sent-messages";
+	public static final String KEY_SERVICE_URL = "sink-service-url";
+	public static final String KEY_PROXY_URL = "sink-proxy-url";
+	public static final String KEY_LAST_WAGE = "sink-last-write-age-ms";
 
 	private EventSink logSink;
 	private JKClient jkHandle;
 
 	private String url = "localhost";
 	private String accessToken;
-	
+
 	private String proxyScheme = "http";
 	private String proxyHost;
 	private int proxyPort = 0;
-	
+
 	private long idleTimeout = 0;
 
 	private AtomicLong idleCount = new AtomicLong(0);
@@ -123,9 +123,12 @@ public class JKCloudEventSink extends AbstractEventSink {
 	/**
 	 * Sets proxy communication parameters
 	 *
-	 * @param scheme proxy communication scheme
-	 * @param host proxy host name if any, null if none
-	 * @param port proxy port number if any, 0 of none
+	 * @param scheme
+	 *            proxy communication scheme
+	 * @param host
+	 *            proxy host name if any, null if none
+	 * @param port
+	 *            proxy port number if any, 0 of none
 	 */
 	public void setProxyParms(String scheme, String host, int port) {
 		this.proxyScheme = scheme;
@@ -188,7 +191,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 * @return last write age in ms
 	 */
 	public long getLastWriteAge() {
-		return lastWrite.get() > 0? System.currentTimeMillis() - lastWrite.get(): 0;
+		return lastWrite.get() > 0 ? System.currentTimeMillis() - lastWrite.get() : 0;
 	}
 
 	/**
@@ -243,7 +246,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	public synchronized void open() throws IOException {
 		try {
 			close();
-			logger.log(OpLevel.DEBUG, "Open name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url, 
+			logger.log(OpLevel.DEBUG, "Open name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url,
 					proxyHost, proxyPort, proxyScheme, this.getName());
 			jkHandle = new JKClient(url, proxyHost, proxyPort, proxyScheme, logger);
 			if (!StringUtils.isEmpty(accessToken)) {
@@ -257,7 +260,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 				logSink.open();
 			}
 		} catch (URISyntaxException e) {
-			logger.log(OpLevel.ERROR, "Failed to open name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url, 
+			logger.log(OpLevel.ERROR,
+					"Failed to open name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url,
 					proxyHost, proxyPort, proxyScheme, this.getName(), e);
 			close();
 			throw new IOException(e.getMessage(), e);
@@ -268,8 +272,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 	public synchronized void close() throws IOException {
 		try {
 			if (isOpen()) {
-				logger.log(OpLevel.DEBUG, "Closing name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url, 
-					proxyHost, proxyPort, proxyScheme, this.getName());
+				logger.log(OpLevel.DEBUG, "Closing name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}",
+						url, proxyHost, proxyPort, proxyScheme, this.getName());
 				jkHandle.close();
 			}
 		} finally {
@@ -331,7 +335,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 					"EventSink closed: name=" + getName() + ", url=" + url + ", handle=" + jkHandle);
 		}
 	}
-	
+
 	private void writeLine(String msg) throws IOException {
 		if (StringUtils.isEmpty(msg)) {
 			return;

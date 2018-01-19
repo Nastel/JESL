@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,7 @@ package com.jkoolcloud.jesl.net.http.apache;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
-import org.apache.http.HeaderIterator;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpVersion;
-import org.apache.http.ProtocolVersion;
-import org.apache.http.RequestLine;
+import org.apache.http.*;
 import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 import org.apache.http.params.HttpParams;
 
@@ -41,7 +35,8 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	/**
 	 * Create HTTP request object
 	 * 
-	 * @param request apache HTTP request
+	 * @param request
+	 *            apache HTTP request
 	 */
 	public HttpRequestImpl(HttpEntityEnclosingRequest request) {
 		super(request.getRequestLine());
@@ -51,8 +46,10 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	/**
 	 * Create HTTP request object
 	 * 
-	 * @param method HTTP method
-	 * @param uri URI
+	 * @param method
+	 *            HTTP method
+	 * @param uri
+	 *            URI
 	 */
 	public HttpRequestImpl(String method, String uri) {
 		super(method, uri, HttpVersion.HTTP_1_1);
@@ -99,10 +96,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 */
 	@Override
 	public void addHeader(String name, String value) {
-		if (request != null)
+		if (request != null) {
 			request.addHeader(name, value);
-		else
+		} else {
 			super.addHeader(name, value);
+		}
 	}
 
 	/**
@@ -110,10 +108,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 */
 	@Override
 	public void setHeader(String name, String value) {
-		if (request != null)
+		if (request != null) {
 			request.setHeader(name, value);
-		else
+		} else {
 			super.setHeader(name, value);
+		}
 	}
 
 	/**
@@ -227,10 +226,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 */
 	@Override
 	public void addHeader(Header header) {
-		if (request != null)
+		if (request != null) {
 			request.addHeader(header);
-		else
+		} else {
 			super.addHeader(header);
+		}
 	}
 
 	/**
@@ -238,10 +238,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 */
 	@Override
 	public void setHeader(Header header) {
-		if (request != null)
+		if (request != null) {
 			request.setHeader(header);
-		else
+		} else {
 			super.setHeader(header);
+		}
 	}
 
 	/**
@@ -249,10 +250,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 */
 	@Override
 	public void setHeaders(Header[] headers) {
-		if (request != null)
+		if (request != null) {
 			request.setHeaders(headers);
-		else
+		} else {
 			super.setHeaders(headers);
+		}
 	}
 
 	/**
@@ -260,10 +262,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 */
 	@Override
 	public void removeHeader(Header header) {
-		if (request != null)
+		if (request != null) {
 			request.removeHeader(header);
-		else
+		} else {
 			super.removeHeader(header);
+		}
 	}
 
 	/**
@@ -303,10 +306,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 */
 	@Override
 	public void removeHeaders(String name) {
-		if (request != null)
+		if (request != null) {
 			request.removeHeaders(name);
-		else
+		} else {
 			super.removeHeaders(name);
+		}
 	}
 
 	/**
@@ -322,10 +326,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 */
 	@Override
 	public void setParams(HttpParams params) {
-		if (request != null)
+		if (request != null) {
 			request.setParams(params);
-		else
+		} else {
 			super.setParams(params);
+		}
 	}
 
 	/**
@@ -341,10 +346,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 */
 	@Override
 	public void setEntity(HttpEntity entity) {
-		if (request != null)
+		if (request != null) {
 			request.setEntity(entity);
-		else
+		} else {
 			super.setEntity(entity);
+		}
 	}
 
 	/**
@@ -365,10 +371,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 
 		try {
 			String content = getContentString();
-			if (!StringUtils.isEmpty(content))
+			if (!StringUtils.isEmpty(content)) {
 				str.append("\n").append(content);
+			}
+		} catch (Exception e) {
 		}
-		catch (Exception e) {}
 		return str.toString();
 	}
 }

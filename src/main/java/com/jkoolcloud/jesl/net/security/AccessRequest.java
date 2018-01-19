@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,23 +26,23 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * JESL access request implementation, which encapsulates JESL
- * authentication request message.
+ * JESL access request implementation, which encapsulates JESL authentication request message.
  *
  * @version $Revision: 1 $
  */
 public class AccessRequest {
-	private static final String ROOT_TAG  = "access-request";
+	private static final String ROOT_TAG = "access-request";
 	private static final String TOKEN_TAG = "token";
 
 	private static final String ROOT_ELMT = "<" + ROOT_TAG + ">";
 
-	private String	token;
+	private String token;
 
 	/**
 	 * Create access request with a given access token
 	 *
-	 * @param token access token
+	 * @param token
+	 *            access token
 	 */
 	public AccessRequest(String token) {
 		this.token = token;
@@ -75,7 +75,8 @@ public class AccessRequest {
 	/**
 	 * Parse and create access request from a given string
 	 *
-	 * @param msg access request message
+	 * @param msg
+	 *            access request message
 	 * @return access request object instance
 	 */
 	public static AccessRequest parseMsg(String msg) {
@@ -84,8 +85,7 @@ public class AccessRequest {
 			AccessRequestParserHandler handler = new AccessRequestParserHandler();
 			parser.parse(new InputSource(new StringReader(msg)), handler);
 			return handler.req;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new SecurityException("Failed to create AccessRequest from message", e);
 		}
 	}
@@ -93,21 +93,20 @@ public class AccessRequest {
 	/**
 	 * Is a given string message an access request message
 	 *
-	 * @param msg access request message
+	 * @param msg
+	 *            access request message
 	 * @return true if given string is an access request message, false otherwise
 	 */
 	public static boolean isAccessRequest(String msg) {
-		return (msg != null &&
-				msg.length() > ROOT_ELMT.length() &&
-				msg.startsWith(ROOT_ELMT, 0));
+		return (msg != null && msg.length() > ROOT_ELMT.length() && msg.startsWith(ROOT_ELMT, 0));
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	protected static class AccessRequestParserHandler extends DefaultHandler {
-		public    AccessRequest	req;
-		protected String		token;
-		protected StringBuilder	elmtValue = new StringBuilder();
+		public AccessRequest req;
+		protected String token;
+		protected StringBuilder elmtValue = new StringBuilder();
 
 		@Override
 		public void endDocument() throws SAXException {
@@ -115,14 +114,16 @@ public class AccessRequest {
 		}
 
 		@Override
-		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+		public void startElement(String uri, String localName, String qName, Attributes attributes)
+				throws SAXException {
 			elmtValue.setLength(0);
 		}
 
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
-			if (TOKEN_TAG.equals(qName))
+			if (TOKEN_TAG.equals(qName)) {
 				token = elmtValue.toString();
+			}
 		}
 
 		@Override

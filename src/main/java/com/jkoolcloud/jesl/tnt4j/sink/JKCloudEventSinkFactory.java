@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,8 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	/**
 	 * Create a jKool Cloud Event Sink factory
 	 *
-	 * @param url host location of the jKool cloud service
+	 * @param url
+	 *            host location of the jKool cloud service
 	 *
 	 */
 	public JKCloudEventSinkFactory(String url) {

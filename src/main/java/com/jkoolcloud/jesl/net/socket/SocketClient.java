@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.Socket;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.*;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
@@ -47,25 +43,29 @@ public class SocketClient implements JKStream {
 	protected InetSocketAddress proxyAddr;
 	protected Proxy proxy = Proxy.NO_PROXY; // default to direct connection
 
-	protected String			host;
-	protected int				port;
-	protected boolean			secure;
-	protected Socket			socket;
-	protected DataOutputStream	out;
-	protected BufferedReader	in;
+	protected String host;
+	protected int port;
+	protected boolean secure;
+	protected Socket socket;
+	protected DataOutputStream out;
+	protected BufferedReader in;
 
 	/**
 	 * Create JESL HTTP[S} client stream with given attributes
 	 * 
-	 * @param host JESL host server
-	 * @param port JESL host port number
-	 * @param secure use SSL if secure, standard sockets if false
-	 * @param logger event sink used for logging, null if none
+	 * @param host
+	 *            JESL host server
+	 * @param port
+	 *            JESL host port number
+	 * @param secure
+	 *            use SSL if secure, standard sockets if false
+	 * @param logger
+	 *            event sink used for logging, null if none
 	 * 
 	 */
 	public SocketClient(String host, int port, boolean secure, EventSink logger) {
-		this.host   = host;
-		this.port   = port;
+		this.host = host;
+		this.port = port;
 		this.secure = secure;
 		this.logger = (logger != null ? logger : DefaultEventSinkFactory.defaultEventSink(SocketClient.class));
 	}
@@ -73,12 +73,18 @@ public class SocketClient implements JKStream {
 	/**
 	 * Create JESL HTTP[S} client stream with given attributes
 	 * 
-	 * @param host JESL host server
-	 * @param port JESL host port number
-	 * @param secure use SSL if secure, standard sockets if false
-	 * @param proxyHost proxy host name if any, null if none
-	 * @param proxyPort proxy port number if any, 0 of none
-	 * @param logger event sink used for logging, null if none
+	 * @param host
+	 *            JESL host server
+	 * @param port
+	 *            JESL host port number
+	 * @param secure
+	 *            use SSL if secure, standard sockets if false
+	 * @param proxyHost
+	 *            proxy host name if any, null if none
+	 * @param proxyPort
+	 *            proxy port number if any, 0 of none
+	 * @param logger
+	 *            event sink used for logging, null if none
 	 * 
 	 */
 	public SocketClient(String host, int port, boolean secure, String proxyHost, int proxyPort, EventSink logger) {
@@ -94,12 +100,13 @@ public class SocketClient implements JKStream {
 	 */
 	@Override
 	public synchronized void connect() throws IOException {
-		if (isConnected()) return;
+		if (isConnected()) {
+			return;
+		}
 		if (secure) {
 			SocketFactory socketFactory = SSLSocketFactory.getDefault();
 			socket = socketFactory.createSocket(host, port);
-		}
-		else {
+		} else {
 			socket = new Socket(host, port);
 		}
 		out = new DataOutputStream(socket.getOutputStream());
@@ -123,8 +130,9 @@ public class SocketClient implements JKStream {
 	 */
 	@Override
 	public synchronized void send(String msg, boolean wantResponse) throws IOException {
-		if (wantResponse)
+		if (wantResponse) {
 			throw new UnsupportedOperationException("Responses are not supported for TCP connections");
+		}
 
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
 		byte[] bytes = lineMsg.getBytes();
@@ -139,12 +147,16 @@ public class SocketClient implements JKStream {
 	public synchronized void close() {
 		try {
 			if (socket != null) {
-				if (out != null) out.close();
-				if (in  != null) in.close();
+				if (out != null) {
+					out.close();
+				}
+				if (in != null) {
+					in.close();
+				}
 				socket.close();
 			}
+		} catch (IOException e) {
 		}
-		catch (IOException e) {}
 	}
 
 	/**
@@ -200,7 +212,9 @@ public class SocketClient implements JKStream {
 	 */
 	@Override
 	public synchronized String read() throws IOException {
-		if (socket == null) connect();
+		if (socket == null) {
+			connect();
+		}
 		return in.readLine();
 	}
 

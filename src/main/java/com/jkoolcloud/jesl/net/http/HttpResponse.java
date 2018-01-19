@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package com.jkoolcloud.jesl.net.http;
 
 /**
- * This interface defines JESL HTTP Response. 
+ * This interface defines JESL HTTP Response.
  *
  * @version $Revision: 1 $
  */
@@ -24,14 +24,15 @@ public interface HttpResponse extends HttpMessage {
 	/**
 	 * Set HTTP status code
 	 * 
-	 * @param status HTTP status code
+	 * @param status
+	 *            HTTP status code
 	 */
 	void setStatus(int status);
-	
+
 	/**
 	 * Get HTTP status code
 	 * 
 	 * @return HTTP status code
 	 */
-	int	getStatus();
+	int getStatus();
 }

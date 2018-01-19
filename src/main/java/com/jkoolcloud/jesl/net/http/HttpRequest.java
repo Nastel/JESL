@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,8 @@
  */
 package com.jkoolcloud.jesl.net.http;
 
-
 /**
- * This interface defines JESL HTTP Request. 
+ * This interface defines JESL HTTP Request.
  *
  * @version $Revision: 1 $
  */
@@ -27,12 +26,12 @@ public interface HttpRequest extends HttpMessage {
 	 * 
 	 * @return HTTP method
 	 */
-	String	getMethod();
-	
+	String getMethod();
+
 	/**
 	 * Get URI
 	 * 
 	 * @return HTTP URI
 	 */
-	String	getUri();
+	String getUri();
 }

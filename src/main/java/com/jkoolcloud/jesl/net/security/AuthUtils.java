@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,16 +40,17 @@ public class AuthUtils {
 			client.send(new AccessRequest(token).generateMsg(), true);
 			respStr = client.read();
 		} catch (Throwable e) {
-			throw new SecurityException("Failed to authenticate with service='" + client.getURI()
-					+ "' token='" + Utils.hide(token, "x", 4) + "'", e);
+			throw new SecurityException("Failed to authenticate with service='" + client.getURI() + "' token='"
+					+ Utils.hide(token, "x", 4) + "'", e);
 		}
 
 		AccessResponse resp = AccessResponse.parseMsg(respStr);
 		if (!resp.isSuccess()) {
-			String msg = "Failed to validate access with service='" + client.getURI()
-					+ "' token='" + Utils.hide(token, "x", 4) + "'";
-			if (resp.getReason() != null)
+			String msg = "Failed to validate access with service='" + client.getURI() + "' token='"
+					+ Utils.hide(token, "x", 4) + "'";
+			if (resp.getReason() != null) {
 				msg += ": reason='" + resp.getReason() + "'";
+			}
 			throw new SecurityException(msg);
 		}
 	}

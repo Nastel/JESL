@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 JKOOL, LLC.
+ * Copyright 2015-2018 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,10 +35,8 @@ public class SimulatedEventSinkFactory extends AbstractEventSinkFactory {
 
 	@Override
 	public EventSink getEventSink(String name) {
-		return configureSink(new SimulatedEventSink(name,
-				TNT4JSimulator.getConnectUrl(),
-				TNT4JSimulator.getAccessToken(),
-				null, getDefaultEventLimiter()));
+		return configureSink(new SimulatedEventSink(name, TNT4JSimulator.getConnectUrl(),
+				TNT4JSimulator.getAccessToken(), null, getDefaultEventLimiter()));
 	}
 
 	@Override

@@ -118,11 +118,13 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 		proxyScheme = Utils.getString("ProxyScheme", settings, proxyScheme);
 		proxyHost = Utils.getString("ProxyHost", settings, proxyHost);
 		proxyPort = Utils.getInt("ProxyPort", settings, proxyPort);
+		eventSinkFactory = (EventSinkFactory) Utils.createConfigurableObject("eventSinkFactory", "eventSinkFactory.",
+				settings);
 		_applyConfig(settings);
 	}
 
 	private void _applyConfig(Map<String, Object> settings) throws ConfigException {
-		if (fileName != null) {
+		if (eventSinkFactory == null && fileName != null) {
 			eventSinkFactory = new FileEventSinkFactory(fileName);
 			eventSinkFactory.setTTL(getTTL());
 		}

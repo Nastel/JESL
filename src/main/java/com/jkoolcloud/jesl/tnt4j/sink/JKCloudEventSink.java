@@ -283,7 +283,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	@Override
 	public String toString() {
-		return super.toString() + "(url: " + url + ", jk.handle: " + jkHandle + ", piped.sink: " + logSink + ")";
+		return super.toString() + "(url: " + url + ", token: " + Utils.hide(accessToken, "x", 4) + ", jk.handle: "
+				+ jkHandle + ", piped.sink: " + logSink + ")";
 	}
 
 	@Override

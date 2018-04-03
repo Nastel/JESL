@@ -15,7 +15,13 @@
  */
 package com.jkoolcloud.jesl.simulator;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Random;
 
@@ -158,54 +164,14 @@ public class TNT4JSimulator {
 	}
 
 	public static long varyValue(long value) {
-		if (value == 0 || valuePctChg == 0) {
-			return value;
-		}
-
-		// nextInt returns value in range [0,n). We want values in range [-n,n).
-		double percentChg = (ranGen.nextInt(valuePctChg * 2) - valuePctChg) / 100.0;
-
-		// let's keep a lid on variations
-		if (percentChg > 0.99) {
-			percentChg = 0.99;
-		}
-		if (percentChg < -0.99) {
-			percentChg = -0.99;
-		}
-
-		long newValue = (long) (value * (1.0 + percentChg));
-		if (newValue < 0.0 && value > 0.0) {
-			newValue = 0;
-		}
-
-		return newValue;
+		return (long)varyValue(value, 0);
 	}
 
 	public static long varyValue(int value) {
-		if (value == 0 || valuePctChg == 0) {
-			return value;
-		}
-
-		// nextInt returns value in range [0,n). We want values in range [-n,n).
-		double percentChg = (ranGen.nextInt(valuePctChg * 2) - valuePctChg) / 100.0;
-
-		// let's keep a lid on variations
-		if (percentChg > 0.99) {
-			percentChg = 0.99;
-		}
-		if (percentChg < -0.99) {
-			percentChg = -0.99;
-		}
-
-		int newValue = (int) (value * (1.0 + percentChg));
-		if (newValue < 0 && value > 0) {
-			newValue = 0;
-		}
-
-		return newValue;
+		return (long)varyValue(value, 0);
 	}
 
-	public static double varyValue(double value) {
+	public static double varyValue(double value, int precision) {
 		if (value == 0 || valuePctChg == 0) {
 			return value;
 		}
@@ -222,6 +188,11 @@ public class TNT4JSimulator {
 		}
 
 		double newValue = value * (1.0 + percentChg);
+
+		if (precision > 0) {
+			newValue = BigDecimal.valueOf(newValue).setScale(precision, BigDecimal.ROUND_HALF_UP).doubleValue();
+		}
+
 		if (newValue < 0.0 && value > 0.0) {
 			newValue = 0;
 		}

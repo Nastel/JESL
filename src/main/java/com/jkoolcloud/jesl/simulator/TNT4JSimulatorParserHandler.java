@@ -20,7 +20,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.math.BigInteger;
-import java.util.*;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.Stack;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -35,7 +42,15 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.jkoolcloud.tnt4j.config.DefaultConfigFactory;
 import com.jkoolcloud.tnt4j.config.TrackerConfig;
-import com.jkoolcloud.tnt4j.core.*;
+import com.jkoolcloud.tnt4j.core.ActivityStatus;
+import com.jkoolcloud.tnt4j.core.Message;
+import com.jkoolcloud.tnt4j.core.OpCompCode;
+import com.jkoolcloud.tnt4j.core.OpLevel;
+import com.jkoolcloud.tnt4j.core.OpType;
+import com.jkoolcloud.tnt4j.core.Property;
+import com.jkoolcloud.tnt4j.core.PropertySnapshot;
+import com.jkoolcloud.tnt4j.core.UsecTimestamp;
+import com.jkoolcloud.tnt4j.core.ValueTypes;
 import com.jkoolcloud.tnt4j.source.DefaultSourceFactory;
 import com.jkoolcloud.tnt4j.source.Source;
 import com.jkoolcloud.tnt4j.tracker.DefaultTrackerFactory;
@@ -595,7 +610,17 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			propValue = vary ? (long) TNT4JSimulator.varyValue(num.longValue()) : num;
 		} else if ("DECIMAL".equalsIgnoreCase(type)) {
 			Double num = Double.parseDouble(generateFromRange(type, value));
-			propValue = vary ? TNT4JSimulator.varyValue(num.doubleValue()) : num;
+			if (!vary) {
+				propValue = num;
+			}
+			else {
+				int precision = 2;
+				String numStr = Double.toString(num);
+				int dec = numStr.indexOf(DecimalFormatSymbols.getInstance().getDecimalSeparator());
+				if (dec >= 0)
+					precision = numStr.length() - dec - 1;
+				propValue = TNT4JSimulator.varyValue(num.doubleValue(), precision);
+			}
 		} else if ("BOOLEAN".equalsIgnoreCase(type)) {
 			if (StringUtils.isEmpty(valType)) {
 				valType = "boolean";

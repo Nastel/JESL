@@ -103,12 +103,7 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	}
 
 	@Override
-	public Map<String, Object> getConfiguration() {
-		return config;
-	}
-
-	@Override
-	public void setConfiguration(Map<String, Object> settings) throws ConfigException {
+	public void setConfiguration(Map<String, ?> settings) throws ConfigException {
 		super.setConfiguration(settings);
 
 		url = Utils.getString("Url", settings, url);
@@ -123,7 +118,7 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 		_applyConfig(settings);
 	}
 
-	private void _applyConfig(Map<String, Object> settings) throws ConfigException {
+	private void _applyConfig(Map<String, ?> settings) throws ConfigException {
 		if (eventSinkFactory == null && fileName != null) {
 			eventSinkFactory = new FileEventSinkFactory(fileName);
 			eventSinkFactory.setTTL(getTTL());

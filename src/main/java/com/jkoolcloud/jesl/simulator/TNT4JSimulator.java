@@ -539,27 +539,31 @@ public class TNT4JSimulator {
 				info("jKool Activity Simulator Replay starting: file=" + jkFileName);
 				connect();
 				startTime = System.currentTimeMillis();
+				String gwMsg;
 
 				// Determine number of lines in file
 				info("Analyzing file ...");
 				BufferedReader gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
-				for (numIterations = 0; gwFile.readLine() != null; numIterations++) {
+				for (numIterations = 0; (gwMsg = gwFile.readLine()) != null; ) {
+					if (!StringUtils.isEmpty(gwMsg))
+						numIterations++;
 				}
 				gwFile.close();
 
-				// Reopen the file and
+				// Reopen the file and send each line (tracking msg) to gateway
 				gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
 				if (showProgress) {
 					System.out.print("Processing Line: ");
 				}
-				String gwMsg;
 				iteration = 0;
 				while ((gwMsg = gwFile.readLine()) != null) {
 					if (showProgress) {
 						itTrcWidth = printProgress("Processing Line", iteration, itTrcWidth);
 					}
-					gwConn.write(gwMsg);
-					iteration++;
+					if (!StringUtils.isEmpty(gwMsg)) {
+						gwConn.write(gwMsg);
+						iteration++;
+					}
 				}
 				if (showProgress) {
 					System.out.println("");

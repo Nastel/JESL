@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.jkoolcloud.tnt4j.config.ConfigException;
 import com.jkoolcloud.tnt4j.format.EventFormatter;
 import com.jkoolcloud.tnt4j.format.JSONFormatter;
@@ -28,6 +30,7 @@ import com.jkoolcloud.tnt4j.sink.AbstractEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 import com.jkoolcloud.tnt4j.sink.EventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.impl.FileEventSinkFactory;
+import com.jkoolcloud.tnt4j.sink.impl.slf4j.SLF4JEventSinkFactory;
 import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
@@ -44,7 +47,10 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  *
  */
 public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
-	private String fileName = null;
+	private static final String SINK_PREF_FILE = "file:";
+	private static final String SINK_PREF_SLF4J = "slf4j:";
+
+	private String sinkDescriptor = null;
 	private String token = System.getProperty("tnt4j.sink.factory.socket.token", "");
 	private String url = System.getProperty("tnt4j.sink.factory.socket.url", "http://localhost:6580");
 	// NOTE: server side uses 5min. to close inactive connection by default
@@ -57,17 +63,17 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 	private EventSinkFactory eventSinkFactory = null;
 
 	/**
-	 * Create a jKool Cloud Event Sink factory.
+	 * Create a jKoolCloud Event Sink factory.
 	 *
 	 */
 	public JKCloudEventSinkFactory() {
 	}
 
 	/**
-	 * Create a jKool Cloud Event Sink factory
+	 * Create a jKoolCloud Event Sink factory
 	 *
 	 * @param url
-	 *            host location of the jKool cloud service
+	 *            host location of the jKoolCloud service
 	 *
 	 */
 	public JKCloudEventSinkFactory(String url) {
@@ -76,16 +82,12 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 
 	@Override
 	public EventSink getEventSink(String name) {
-		EventSink outSink = eventSinkFactory != null
-				? eventSinkFactory.getEventSink(name, System.getProperties(), new JSONFormatter(false)) : null;
-		return configureSink(new JKCloudEventSink(name, url, new JSONFormatter(false), outSink));
+		return getEventSink(name, System.getProperties());
 	}
 
 	@Override
 	public EventSink getEventSink(String name, Properties props) {
-		EventSink outSink = eventSinkFactory != null
-				? eventSinkFactory.getEventSink(name, System.getProperties(), new JSONFormatter(false)) : null;
-		return configureSink(new JKCloudEventSink(name, url, new JSONFormatter(false), outSink));
+		return getEventSink(name, props, new JSONFormatter(false));
 	}
 
 	@Override
@@ -108,20 +110,36 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 
 		url = Utils.getString("Url", settings, url);
 		token = Utils.getString("Token", settings, token);
-		fileName = Utils.getString("Filename", settings, fileName);
+		String fileName = Utils.getString("Filename", settings, null);
+		sinkDescriptor = Utils.getString("BranchSink", settings, sinkDescriptor);
 		idleTimeout = Utils.getLong("IdleTimeout", settings, idleTimeout);
 		proxyScheme = Utils.getString("ProxyScheme", settings, proxyScheme);
 		proxyHost = Utils.getString("ProxyHost", settings, proxyHost);
 		proxyPort = Utils.getInt("ProxyPort", settings, proxyPort);
 		eventSinkFactory = (EventSinkFactory) Utils.createConfigurableObject("eventSinkFactory", "eventSinkFactory.",
 				settings);
+
+		if (StringUtils.isEmpty(sinkDescriptor)) {
+			if (StringUtils.isNotEmpty(fileName)) {
+				sinkDescriptor = SINK_PREF_FILE + fileName;
+			}
+		}
 		_applyConfig(settings);
 	}
 
 	private void _applyConfig(Map<String, ?> settings) throws ConfigException {
-		if (eventSinkFactory == null && fileName != null) {
-			eventSinkFactory = new FileEventSinkFactory(fileName);
-			eventSinkFactory.setTTL(getTTL());
+		if (eventSinkFactory == null && StringUtils.isNotEmpty(sinkDescriptor)) {
+			if (sinkDescriptor.startsWith(SINK_PREF_SLF4J)) {
+				eventSinkFactory = new SLF4JEventSinkFactory(sinkDescriptor.substring(SINK_PREF_SLF4J.length()));
+			} else if (sinkDescriptor.startsWith(SINK_PREF_FILE)) {
+				eventSinkFactory = new FileEventSinkFactory(sinkDescriptor.substring(SINK_PREF_FILE.length()));
+			} else {
+				throw new ConfigException("Unknown branch sink descriptor: " + sinkDescriptor, settings);
+			}
+
+			if (eventSinkFactory != null) {
+				eventSinkFactory.setTTL(getTTL());
+			}
 		}
 		try {
 			URI uri = new URI(url);

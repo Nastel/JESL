@@ -1,18 +1,18 @@
 #JESL - jKool Event Streaming Library
-JESL allows application developers stream time-series data to jKool Cloud.
-To stream data to jKool Cloud your application must:
+JESL allows application developers stream time-series data to [jKoolCloud](https://www.jkoolcloud.com).
+To stream data to jKoolCloud your application must:
 	
 	1. Use TNT4J, or MQTT/slf4j/log4j/Logback in your application
 	   to log events, activities, metrics (see https://github.com/Nastel/tnt4j-streams)
 	
 	2. Obtain your jKool account and API access token 
 	   at https://www.jkoolcloud.com. API access token is required to stream
-	   data to your jKool Cloud repository.
+	   data to your jKoolCloud repository.
 	
 	3. Use JESL Event Sink implementation (contained in this project) 
 	   within your tnt4j configuration. (Requires API access token)
 	
-	4. Configure your application for streaming to jKool Cloud 
+	4. Configure your application for streaming to jKoolCloud 
 	   using JESL Event Sink (requires API access token).
 	   See (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
 	
@@ -23,7 +23,7 @@ JESL package includes the following components:
 	2. TNT4J Syslog for streaming syslog to jkoolcloud.com. (https://github.com/Nastel/tnt4j-syslogd)
 	
 	3. JESL Simulator -- stream simulated events, activities and metrics
-	   to jKool Cloud. Simulations are defined in XML files.
+	   to jKoolCloud. Simulations are defined in XML files.
 	   (see `sims/tnt4j-sim-template.xml` and `sims/order-process.xml`) 
 	
 	4. JESL Event Sink -- TNT4J Event Sink implementation to stream events to jKoolCloud.
@@ -108,11 +108,11 @@ To see the full set of supported options, run:
 
 	`jksim.bat help`
 
-Streaming Syslog to jKool Cloud 
+Streaming Syslog to jKoolCloud 
 ===============================
 JESL includes Syslog Daemon implementation. Please follow these steps to stream syslog to `jkoolcloud.com`:
 
-* Obtain jkool cloud account. Edit `config/tnt4j.properties`, 
+* Obtain jKoolCloud account. Edit `config/tnt4j.properties`, 
 	* Locate `com.jkoolcloud.jesl.net.syslogd` stanza and provide your API access token.
 * Run JESL syslogd `<jesl-home>/bin/jksysd > jksysd.json`. 
 	* By default JESL `jksysd` binds to TCP port `5140` and writes JSON formatted syslog messages.
@@ -138,11 +138,11 @@ That should do it.
 
 **NOTE:** JESL currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
 
-Streaming Log4j to jKool Cloud 
+Streaming Log4j to jKoolCloud 
 ===============================
 Requires TNT4J Appender for Log4J 1.2 (https://github.com/Nastel/tnt4j-log4j12)	 
 	
-Log4J can be configured to stream events and metrics to jKool Cloud by using 
+Log4J can be configured to stream events and metrics to jKoolCloud by using 
 JESL log4j appender (`com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender`) as follows:
 
 #### Add JESL log4j appender to your log4j configuration
@@ -187,7 +187,7 @@ This allows streaming data to be associated with your private repository.
 **NOTE**: Make sure your firewall allows outgoing `https` connections to https://data.jkoolcloud.com
 
 #### Restart your application
-log4j messages which map to JESL `jkoolcloud` appender will stream to jKool Cloud @ https://data.jkoolcloud.com
+log4j messages which map to JESL `jkoolcloud` appender will stream to jKoolCloud @ https://data.jkoolcloud.com
 
 #### Login to "My Dashboard" @ https://www.jkoolcloud.com/
 
@@ -202,9 +202,9 @@ logger.error("Second log message #app=" + Log4JTest.class.getName() + ", #msg='2
 logger.info("Ending a tnt4j activity #end=Test, #app=" + Log4JTest.class.getName() + " #%i/order-no=" + orderNo);
 ```
 
-Streaming TNT4J to jKool Cloud 
+Streaming TNT4J to jKoolCloud 
 ==============================
-Applications that use TNT4J can be configured to stream events and metrics to jKool Cloud
+Applications that use TNT4J can be configured to stream events and metrics to jKoolCloud
 by configuring application source to use JESL Event Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
 Configure your TNT4J source as follows (using `tnt4j.properties` file):
 ```
@@ -258,8 +258,8 @@ JESL Event Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 ```
 **NOTE:** You will need to provide your actual API access token in (`event.sink.factory.EventSinkFactory.Token`).
 
-**NOTE:** When streaming to JKool Cloud it may happen data containing special numeric (`double`/`float`) values: `Infinity`, `-Infinity`, 
-`NaN`. While it is legal to have them in JSON, default JSON parser configuration on JKool Cloud may not allow them and skip complete 
+**NOTE:** When streaming to jKoolCloud it may happen data containing special numeric (`double`/`float`) values: `Infinity`, `-Infinity`, 
+`NaN`. While it is legal to have them in JSON, default JSON parser configuration on jKoolCloud may not allow them and skip complete 
 activity entities to store in your repository. This `JSONFormatter` has configuration property `SpecNumbersHandling` to handle those 
 special values on`TNT4J/JESL` side:
 ```properties
@@ -273,7 +273,7 @@ special values on`TNT4J/JESL` side:
 * `MAINTAIN` - maintain value as is. Produced JSON will have literal number values e.g. `Infnity`, `NaN`.   
 
 # Sample jKQL Queries
-Sample queries you can run against your data using jkool dashboard.
+Sample queries you can run against your data using jKool dashboard.
 jKQL queries follow this convention:
 
 `<verb> <expression> show as <widget>`

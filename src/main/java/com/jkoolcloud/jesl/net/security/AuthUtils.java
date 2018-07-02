@@ -28,7 +28,7 @@ public class AuthUtils {
 	 * Authenticate with jKool servers using client handle and a given access token.
 	 *
 	 * @param client
-	 *            jkool client handle encapsulating connection to jkool servers
+	 *            jKool client handle encapsulating connection to jKool servers
 	 * @param token
 	 *            access token to be used for authentication
 	 * @throws SecurityException

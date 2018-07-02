@@ -78,6 +78,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 
 	private void writeFormattedMsg(String msg) throws IOException, InterruptedException {
 		if (isOpen()) {
+			incrementBytesSent(msg.length());
 			outSink.write(msg);
 		}
 	}

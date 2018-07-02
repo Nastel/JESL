@@ -38,7 +38,7 @@ import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
  * <p>
- * This class implements <code>EventSink</code> with HTTP/S as the underlying sink implementation.
+ * This class implements {@link EventSink} with HTTP/S as the underlying sink implementation.
  * </p>
  *
  *
@@ -54,7 +54,6 @@ public class JKCloudEventSink extends AbstractEventSink {
 	private static final EventSink logger = DefaultEventSinkFactory.defaultEventSink(JKCloudEventSink.class);
 
 	public static final String KEY_IDLE_COUNT = "sink-idle-count";
-	public static final String KEY_SENT_BYTES = "sink-sent-bytes";
 	public static final String KEY_LAST_BYTES = "sink-last-bytes";
 	public static final String KEY_SENT_MSGS = "sink-sent-messages";
 	public static final String KEY_SERVICE_URL = "sink-service-url";
@@ -75,7 +74,6 @@ public class JKCloudEventSink extends AbstractEventSink {
 
 	private AtomicLong idleCount = new AtomicLong(0);
 	private AtomicLong lastWrite = new AtomicLong(0);
-	private AtomicLong sentBytes = new AtomicLong(0);
 	private AtomicLong lastBytes = new AtomicLong(0);
 	private AtomicLong sentMsgs = new AtomicLong(0);
 
@@ -86,7 +84,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 * @param name
 	 *            sink name
 	 * @param url
-	 *            http/https URL to jkool cloud service
+	 *            http/https URL to jKoolCloud service
 	 * @param frm
 	 *            event formatter associated with this sink
 	 * @param sink
@@ -104,7 +102,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 * @param name
 	 *            sink name
 	 * @param url
-	 *            http/https URL to jkool cloud service
+	 *            http/https URL to jKoolCloud service
 	 * @param token
 	 *            api access token
 	 * @param frm
@@ -211,7 +209,6 @@ public class JKCloudEventSink extends AbstractEventSink {
 	@Override
 	public void resetStats() {
 		idleCount.set(0);
-		sentBytes.set(0);
 		lastBytes.set(0);
 		sentMsgs.set(0);
 		super.resetStats();
@@ -220,7 +217,6 @@ public class JKCloudEventSink extends AbstractEventSink {
 	@Override
 	public KeyValueStats getStats(Map<String, Object> stats) {
 		super.getStats(stats);
-		stats.put(Utils.qualify(this, KEY_SENT_BYTES), sentBytes.get());
 		stats.put(Utils.qualify(this, KEY_LAST_BYTES), lastBytes.get());
 		stats.put(Utils.qualify(this, KEY_SENT_MSGS), sentMsgs.get());
 		stats.put(Utils.qualify(this, KEY_LAST_WAGE), getLastWriteAge());
@@ -346,12 +342,12 @@ public class JKCloudEventSink extends AbstractEventSink {
 		handleIdleReconnect();
 
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
+		incrementBytesSent(lineMsg.length());
 		jkHandle.send(lineMsg, false);
 
 		lastWrite.set(System.currentTimeMillis());
 		sentMsgs.incrementAndGet();
 		lastBytes.set(lineMsg.length());
-		sentBytes.addAndGet(lineMsg.length());
 	}
 
 	private boolean canForward(OpLevel sev) {

@@ -25,7 +25,7 @@ import com.jkoolcloud.tnt4j.TrackingLogger;
 import com.jkoolcloud.tnt4j.sink.EventSink;
 
 /**
- * JESL Cloud connection class that encapsulates streaming to jKool Cloud servers using HTTP[S] or TCP[S] protocols.
+ * JESL Cloud connection class that encapsulates streaming to jKoolCloud servers using HTTP[S] or TCP[S] protocols.
  *
  * @version $Revision: $
  */

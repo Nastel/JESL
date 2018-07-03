@@ -26,12 +26,10 @@ import org.apache.commons.lang3.StringUtils;
 import com.jkoolcloud.jesl.net.JKClient;
 import com.jkoolcloud.tnt4j.core.KeyValueStats;
 import com.jkoolcloud.tnt4j.core.OpLevel;
-import com.jkoolcloud.tnt4j.core.Snapshot;
 import com.jkoolcloud.tnt4j.format.EventFormatter;
-import com.jkoolcloud.tnt4j.sink.AbstractEventSink;
 import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
-import com.jkoolcloud.tnt4j.source.Source;
+import com.jkoolcloud.tnt4j.sink.LoggedEventSink;
 import com.jkoolcloud.tnt4j.tracker.TrackingActivity;
 import com.jkoolcloud.tnt4j.tracker.TrackingEvent;
 import com.jkoolcloud.tnt4j.utils.Utils;
@@ -42,7 +40,7 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  * </p>
  *
  *
- * @version $Revision: 7 $
+ * @version $Revision: 8 $
  *
  * @see TrackingActivity
  * @see TrackingEvent
@@ -50,7 +48,7 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  * @see EventSink
  * @see EventFormatter
  */
-public class JKCloudEventSink extends AbstractEventSink {
+public class JKCloudEventSink extends LoggedEventSink {
 	private static final EventSink logger = DefaultEventSinkFactory.defaultEventSink(JKCloudEventSink.class);
 
 	public static final String KEY_IDLE_COUNT = "sink-idle-count";
@@ -60,7 +58,6 @@ public class JKCloudEventSink extends AbstractEventSink {
 	public static final String KEY_PROXY_URL = "sink-proxy-url";
 	public static final String KEY_LAST_WAGE = "sink-last-write-age-ms";
 
-	private EventSink logSink;
 	private JKClient jkHandle;
 
 	private String url = "localhost";
@@ -112,9 +109,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 	 *
 	 */
 	public JKCloudEventSink(String name, String url, String token, EventFormatter frm, EventSink sink) {
-		super(name, frm);
+		super(name, frm, sink);
 		this.url = url;
-		this.logSink = sink;
 		this.accessToken = token;
 	}
 
@@ -252,9 +248,7 @@ public class JKCloudEventSink extends AbstractEventSink {
 			}
 			lastWrite.set(System.currentTimeMillis());
 
-			if (logSink != null && !logSink.isOpen()) {
-				logSink.open();
-			}
+			super.open();
 		} catch (URISyntaxException e) {
 			logger.log(OpLevel.ERROR,
 					"Failed to open name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url,
@@ -273,56 +267,14 @@ public class JKCloudEventSink extends AbstractEventSink {
 				jkHandle.close();
 			}
 		} finally {
-			Utils.close(logSink);
+			super.close();
 		}
 	}
 
 	@Override
 	public String toString() {
-		return super.toString() + "(url: " + url + ", token: " + Utils.hide(accessToken, "x", 4) + ", jk.handle: "
-				+ jkHandle + ", piped.sink: " + logSink + ")";
-	}
-
-	@Override
-	protected void _write(Object msg, Object... args) throws IOException {
-		writeLine(getEventFormatter().format(msg, args));
-	}
-
-	@Override
-	protected void _log(TrackingEvent event) throws IOException {
-		writeLine(getEventFormatter().format(event));
-		if (canForward(event.getSeverity())) {
-			logSink.log(event);
-		}
-	}
-
-	@Override
-	protected void _log(TrackingActivity activity) throws IOException {
-		writeLine(getEventFormatter().format(activity));
-		if (canForward(activity.getSeverity())) {
-			logSink.log(activity);
-		}
-	}
-
-	@Override
-	protected void _log(long ttl, Source src, OpLevel sev, String msg, Object... args) throws IOException {
-		writeLine(getEventFormatter().format(ttl, src, sev, msg, args));
-		if (canForward(sev)) {
-			logSink.log(ttl, src, sev, msg, args);
-		}
-	}
-
-	@Override
-	protected void _log(Snapshot snapshot) throws Exception {
-		writeLine(getEventFormatter().format(snapshot));
-		if (canForward(snapshot.getSeverity())) {
-			logSink.log(snapshot);
-		}
-	}
-
-	@Override
-	public boolean isSet(OpLevel sev) {
-		return true;
+		return super.toString() + "{url: " + url + ", token: " + Utils.hide(accessToken, "x", 4) + ", jk.handle: "
+				+ jkHandle + "}";
 	}
 
 	@Override
@@ -333,7 +285,8 @@ public class JKCloudEventSink extends AbstractEventSink {
 		}
 	}
 
-	private void writeLine(String msg) throws IOException {
+	@Override
+	protected void writeLine(String msg) throws IOException {
 		if (StringUtils.isEmpty(msg)) {
 			return;
 		}
@@ -348,9 +301,5 @@ public class JKCloudEventSink extends AbstractEventSink {
 		lastWrite.set(System.currentTimeMillis());
 		sentMsgs.incrementAndGet();
 		lastBytes.set(lineMsg.length());
-	}
-
-	private boolean canForward(OpLevel sev) {
-		return logSink != null && logSink.isSet(sev);
 	}
 }

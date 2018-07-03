@@ -64,14 +64,6 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isSet(OpLevel sev) {
-		return true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public Object getSinkHandle() {
 		return outSink;
 	}

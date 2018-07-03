@@ -111,7 +111,7 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 		url = Utils.getString("Url", settings, url);
 		token = Utils.getString("Token", settings, token);
 		String fileName = Utils.getString("Filename", settings, null);
-		sinkDescriptor = Utils.getString("BranchSink", settings, sinkDescriptor);
+		sinkDescriptor = Utils.getString("LogSink", settings, sinkDescriptor);
 		idleTimeout = Utils.getLong("IdleTimeout", settings, idleTimeout);
 		proxyScheme = Utils.getString("ProxyScheme", settings, proxyScheme);
 		proxyHost = Utils.getString("ProxyHost", settings, proxyHost);
@@ -119,10 +119,8 @@ public class JKCloudEventSinkFactory extends AbstractEventSinkFactory {
 		eventSinkFactory = (EventSinkFactory) Utils.createConfigurableObject("eventSinkFactory", "eventSinkFactory.",
 				settings);
 
-		if (StringUtils.isEmpty(sinkDescriptor)) {
-			if (StringUtils.isNotEmpty(fileName)) {
-				sinkDescriptor = SINK_PREF_FILE + fileName;
-			}
+		if (StringUtils.isEmpty(sinkDescriptor) && StringUtils.isNotEmpty(fileName)) {
+			sinkDescriptor = SINK_PREF_FILE + fileName;
 		}
 		_applyConfig(settings);
 	}

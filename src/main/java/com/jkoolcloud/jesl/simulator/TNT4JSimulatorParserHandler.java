@@ -19,6 +19,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -954,6 +955,12 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		Tracker tracker = trackers.get(curActivity.getSource().getFQName());
 		if (tracker != null) {
 			tracker.tnt(curActivity);
+			try {
+				tracker.getEventSink().flush();
+			}
+			catch (IOException e) {
+				TNT4JSimulator.warn("Failed flushing event sink on stop of activity " + curActivity.getName(), e);
+			}
 		}
 
 		curActivity = activeActivities.pop();

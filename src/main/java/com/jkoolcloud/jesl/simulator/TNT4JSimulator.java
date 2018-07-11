@@ -83,8 +83,8 @@ public class TNT4JSimulator {
 		logger.tnt(OpLevel.ERROR, null, null, msg, e);
 	}
 
-	public static void warn(String msg) {
-		logger.tnt(OpLevel.WARNING, null, null, msg, (Object[]) null);
+	public static void warn(String msg, Throwable e) {
+		logger.tnt(OpLevel.WARNING, null, null, msg, e);
 	}
 
 	public static void info(String msg) {

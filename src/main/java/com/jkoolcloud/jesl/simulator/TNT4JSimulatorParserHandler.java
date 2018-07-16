@@ -457,6 +457,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 
 			Source src = DefaultSourceFactory.getInstance().newFromFQN(fqn);
+			src.setSSN("tnt4j-simulator");
 			if (!StringUtils.isEmpty(user)) {
 				src.setUser(user);
 			}

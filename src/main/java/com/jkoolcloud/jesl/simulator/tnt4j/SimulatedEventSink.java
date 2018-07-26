@@ -68,10 +68,14 @@ public class SimulatedEventSink extends AbstractEventSink {
 		return outSink;
 	}
 
-	private void writeFormattedMsg(String msg) throws IOException, InterruptedException {
+	private void writeFormattedMsg(String msg) throws IOException {
 		if (isOpen()) {
 			incrementBytesSent(msg.length());
-			outSink.write(msg);
+			try {
+	            outSink.write(msg);
+            } catch (InterruptedException e) {
+            	throw new IOException(e);
+            }
 		}
 	}
 
@@ -87,7 +91,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void _log(TrackingEvent event) throws Exception {
+	protected void _log(TrackingEvent event) throws IOException {
 		writeFormattedMsg(formatter.format(event));
 	}
 
@@ -95,7 +99,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void _log(TrackingActivity activity) throws Exception {
+	protected void _log(TrackingActivity activity) throws IOException {
 		writeFormattedMsg(formatter.format(activity));
 	}
 
@@ -103,7 +107,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void _log(Snapshot snapshot) throws Exception {
+	protected void _log(Snapshot snapshot) throws IOException {
 		writeFormattedMsg(formatter.format(snapshot));
 	}
 
@@ -111,7 +115,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void _log(long ttl, Source src, OpLevel sev, String msg, Object... args) throws Exception {
+	protected void _log(long ttl, Source src, OpLevel sev, String msg, Object... args) throws IOException {
 		writeFormattedMsg(formatter.format(ttl, src, msg, args));
 	}
 

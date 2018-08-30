@@ -15,12 +15,7 @@
  */
 package com.jkoolcloud.jesl.simulator;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Random;
@@ -164,11 +159,11 @@ public class TNT4JSimulator {
 	}
 
 	public static long varyValue(long value) {
-		return (long)varyValue(value, 0);
+		return (long) varyValue(value, 0);
 	}
 
 	public static long varyValue(int value) {
-		return (long)varyValue(value, 0);
+		return (long) varyValue(value, 0);
 	}
 
 	public static double varyValue(double value, int precision) {
@@ -232,40 +227,37 @@ public class TNT4JSimulator {
 			System.out.println(error);
 		}
 
-		System.out.println("\nValid arguments:\n");
-		System.out.println(
-				"  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-f:<sim_def_file_name>]");
-		System.out.println(
-				"                              [-p:<percentage>] [-V:name=value] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>]\n");
-		System.out.println("  to limit streaming:         [-LM:max-msgs-sec] [-LB:max-bytes-sec]\n");
-		System.out.println(
-				"  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n");
-		System.out.println("  for usage information:  help\n");
-		System.out.println("where:");
-		System.out.println("    -A    -  Streaming access token (required with '-T')");
-		System.out.println("    -T    -  Host name or IP address of the streaming data service");
-		System.out.println("             (if not specified, data is not sent to data streaming service)");
-		System.out.println("    -V    -  Define a global variable (property) name=value pair");
-		System.out.println("    -P    -  Data streaming port where service is listening on (default: SSL 443)");
-		System.out.println("    -C    -  Connection type to use with data streaming service (default: https)");
-		System.out.println("    -LB   -  Limit streaming to a maximum of a given bytes/sec rate per defined source");
-		System.out.println("    -LM   -  Limit streaming to a maximum of a given msgs/sec rate per defined source");
-		System.out.println("    -f    -  Use <sim_def_file_name> as simulation configuration");
-		System.out.println("    -p    -  Vary all numeric values by +/- <percentage>");
-		System.out.println("    -G    -  Read/Write messages from/to <jk_file_name>");
-		System.out.println("             (if writing, data is appended to an existing file)");
-		System.out.println("    -i    -  Number of iterations to make on <sim_file_name>");
-		System.out.println("    -u    -  Make tags, correlators, ids unique between iterations");
-		System.out.println("    -ut   -  Make tags unique between iterations");
-		System.out.println("    -uc   -  Make correlators unique between iterations");
-		System.out.println("    -ui   -  Make tracking ids unique between iterations");
-		System.out.println("    -t    -  Time-to-live (TTL) for all tracking items, in hours");
-		System.out.println("                > 0 : tracking events are deleted after the specified number of hours");
-		System.out.println(
-				"                = 0 : tracking events are deleted based on Retention quota for repository (default)");
-		System.out.println(
-				"                < 0 : tracking events are not persisted to data store (only processed by Real-time Grid)");
-		System.out.println("\nFor 'run' mode, must specify at least of one: '-T', '-G'");
+		String usageStr = "\nValid arguments:\n"
+				+ "  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-f:<sim_def_file_name>]\n"
+				+ "                              [-p:<percentage>] [-V:name=value] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>]\n\n"
+				+ "  to limit streaming:         [-LM:max-msgs-sec] [-LB:max-bytes-sec]\n\n"
+				+ "  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n\n"
+				+ "  for usage information:  help\n\n"
+				+ "where:                                                      \n"
+				+ "    -A    -  Streaming access token (required with '-T')\n"
+				+ "    -T    -  Host name or IP address of the streaming data service\n"
+				+ "             (if not specified, data is not sent to data streaming service)\n"
+				+ "    -V    -  Define a global variable (property) name=value pair\n"
+				+ "    -P    -  Data streaming port where service is listening on (default: SSL 443)\n"
+				+ "    -C    -  Connection type to use with data streaming service (default: https)\n"
+				+ "    -LB   -  Limit streaming to a maximum of a given bytes/sec rate per defined source\n"
+				+ "    -LM   -  Limit streaming to a maximum of a given msgs/sec rate per defined source\n"
+				+ "    -f    -  Use <sim_def_file_name> as simulation configuration\n"
+				+ "    -p    -  Vary all numeric values by +/- <percentage>\n"
+				+ "    -G    -  Read/Write messages from/to <jk_file_name>\n"
+				+ "             (if writing, data is appended to an existing file)\n"
+				+ "    -i    -  Number of iterations to make on <sim_file_name>\n"
+				+ "    -u    -  Make tags, correlators, ids unique between iterations\n"
+				+ "    -ut   -  Make tags unique between iterations\n"
+				+ "    -uc   -  Make correlators unique between iterations\n"
+				+ "    -ui   -  Make tracking ids unique between iterations\n"
+				+ "    -t    -  Time-to-live (TTL) for all tracking items, in hours\n"
+				+ "                > 0 : tracking events are deleted after the specified number of hours\n"
+				+ "                = 0 : tracking events are deleted based on Retention quota for repository (default)\n"
+				+ "                < 0 : tracking events are not persisted to data store (only processed by Real-time Grid)\n\n"
+				+ "For 'run' mode, must specify at least of one: '-T', '-G'";
+
+		System.out.println(usageStr);
 
 		System.exit(StringUtils.isEmpty(error) ? 0 : 1);
 	}
@@ -544,9 +536,10 @@ public class TNT4JSimulator {
 				// Determine number of lines in file
 				info("Analyzing file ...");
 				BufferedReader gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
-				for (numIterations = 0; (gwMsg = gwFile.readLine()) != null; ) {
-					if (!StringUtils.isEmpty(gwMsg))
+				for (numIterations = 0; (gwMsg = gwFile.readLine()) != null;) {
+					if (!StringUtils.isEmpty(gwMsg)) {
 						numIterations++;
+					}
 				}
 				gwFile.close();
 

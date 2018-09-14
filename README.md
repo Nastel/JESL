@@ -1,31 +1,31 @@
 #JESL - jKool Event Streaming Library
 JESL allows application developers stream time-series data to [jKoolCloud](https://www.jkoolcloud.com).
 To stream data to jKoolCloud your application must:
-	
+
 	1. Use TNT4J, or MQTT/slf4j/log4j/Logback in your application
 	   to log events, activities, metrics (see https://github.com/Nastel/tnt4j-streams)
-	
+
 	2. Obtain your jKool account and API access token 
 	   at https://www.jkoolcloud.com. API access token is required to stream
 	   data to your jKoolCloud repository.
-	
+
 	3. Use JESL Event Sink implementation (contained in this project) 
 	   within your tnt4j configuration. (Requires API access token)
-	
+
 	4. Configure your application for streaming to jKoolCloud 
 	   using JESL Event Sink (requires API access token).
 	   See (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
-	
+
 JESL package includes the following components:
 
 	1. TNT4J streaming library with SLF4j support (https://github.com/Nastel/TNT4J)
-	   	
+
 	2. TNT4J Syslog for streaming syslog to jkoolcloud.com. (https://github.com/Nastel/tnt4j-syslogd)
-	
+
 	3. JESL Simulator -- stream simulated events, activities and metrics
 	   to jKoolCloud. Simulations are defined in XML files.
-	   (see `sims/tnt4j-sim-template.xml` and `sims/order-process.xml`) 
-	
+	   (see `sims/tnt4j-sim-template.xml` and `sims/order-process.xml`)
+
 	4. JESL Event Sink -- TNT4J Event Sink implementation to stream events to jKoolCloud.
 
 ## JESL Simulator
@@ -60,7 +60,7 @@ The simulator can be run in one of two modes:
 	   optionally generating unique correlators and tags for each iteration of
 	   the simulation file (appends a unique value to end of defined correlator 
 	   and tags in simulation definition file).
-	
+
 	2. Replay (simulation type: `replay`)
 	   Reads previously-saved tracking data from the specified file
 	   and sends it to the JESL Event Sink
@@ -70,7 +70,7 @@ The simplest way to run the simulator is to execute the file `jksim.bat`
 
 	`jksim -A:api-access-token -f:sim-file -i:iterations`
 	Example: `jksim -A:MY-TOKEN -f:../sims/order-process.xml -i:5`
-		
+
 `api-access-token` is your API access token obtained during registration with jKool.
 `sim-file` simulation file that defines all interactions, events, metrics.
 Sample simulation files are located under `<jesl>/sims/` folder (e.g. `<jesl>/sims/order-process.xml`). 
@@ -98,12 +98,12 @@ Some of the available options are:
 			up or down by the specified percentage.  This prevents each
 			activity from looking exactly the same, showing some variation
 			in the event durations, as well as the times between events
-	
+
 	-u		Makes correlators and tags unique between iterations on the
 			input file by appending a time stamp to each one, so that each
 			iteration over the file	will generate independent activities
 			and events
-	
+
 To see the full set of supported options, run:
 
 	`jksim.bat help`
@@ -133,15 +133,15 @@ $ jksys -h localhost -p 5140 -l error -f user tcp "#pci(userId=john,eventType=au
 $ jksys -h localhost -p 5140 -f jksysd.json tcp
 ```
 where `jksysd.json` is JSON output of JESL syslog daemon.
-	
+
 That should do it.
 
 **NOTE:** JESL currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
 
 Streaming Log4j to jKoolCloud 
 ===============================
-Requires TNT4J Appender for Log4J 1.2 (https://github.com/Nastel/tnt4j-log4j12)	 
-	
+Requires TNT4J Appender for Log4J 1.2 (https://github.com/Nastel/tnt4j-log4j12)
+
 Log4J can be configured to stream events and metrics to jKoolCloud by using 
 JESL log4j appender (`com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender`) as follows:
 
@@ -193,8 +193,7 @@ log4j messages which map to JESL `jkoolcloud` appender will stream to jKoolCloud
 
 **NOTE**: Visit https://github.com/Nastel/TNT4J#log4j-integration for more information on `TNT4JAppender`.
 Optionally you may annotate your log4j messages to provide better context, timing as well as report
-user defined metrics. Example: 
-
+user defined metrics. Example:
 ```java
 logger.info("Starting a tnt4j activity #beg=Test, #app=" + Log4JTest.class.getName());
 logger.warn("First log message #app=" + Log4JTest.class.getName() + ", #msg='1 Test warning message'");
@@ -213,7 +212,7 @@ Configure your TNT4J source as follows (using `tnt4j.properties` file):
 	; event sink configuration: destination and data format
 	event.sink.factory: com.jkoolcloud.tnt4j.sink.impl.BufferedEventSinkFactory
 	event.sink.factory.PooledLoggerFactory: com.jkoolcloud.tnt4j.sink.impl.PooledLoggerFactoryImpl
-	
+
 	event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
 	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
@@ -231,14 +230,14 @@ JESL Event Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 	source.factory.DATACENTER: HQDC
 	source.factory.RootFQN: SERVER=?#DATACENTER=?#GEOADDR=?
 	source.factory.RootSSN: tnt4j-myapp
-	
+
 	tracker.factory: com.jkoolcloud.tnt4j.tracker.DefaultTrackerFactory
 	dump.sink.factory: com.jkoolcloud.tnt4j.dump.DefaultDumpSinkFactory
 
 	; event sink configuration: destination and data format
 	event.sink.factory: com.jkoolcloud.tnt4j.sink.impl.BufferedEventSinkFactory
 	event.sink.factory.PooledLoggerFactory: com.jkoolcloud.tnt4j.sink.impl.PooledLoggerFactoryImpl
-	
+
 	event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
 	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
@@ -251,7 +250,7 @@ JESL Event Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`):
 	; Timed event/activities greater or equal to given values will be logged
 	;event.sink.factory.Filter.ElapsedUsec: 100
 	;event.sink.factory.Filter.WaitUsec: 100
-	
+
 	tracking.selector: com.jkoolcloud.tnt4j.selector.DefaultTrackingSelector
 	tracking.selector.Repository: com.jkoolcloud.tnt4j.repository.FileTokenRepository
 }
@@ -268,9 +267,9 @@ special values on`TNT4J/JESL` side:
     event.formatter.SpecNumbersHandling: MAINTAIN
 ```
 `SpecNumbersHandling` property values:
-* `SUPPRESS` - suppress properties having special numeric value. Produced JSON will not contain these activity entity properties.      
+* `SUPPRESS` - suppress properties having special numeric value. Produced JSON will not contain these activity entity properties.
 * `ENQUOTE` - enquote special numeric value. Produced JSON will have enquoted values e.g.`"Infinity"`, `"NaN"`. 
-* `MAINTAIN` - maintain value as is. Produced JSON will have literal number values e.g. `Infnity`, `NaN`.   
+* `MAINTAIN` - maintain value as is. Produced JSON will have literal number values e.g. `Infnity`, `NaN`.
 
 # Sample jKQL Queries
 Sample queries you can run against your data using jKool dashboard.

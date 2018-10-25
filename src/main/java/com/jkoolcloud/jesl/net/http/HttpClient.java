@@ -177,6 +177,7 @@ public class HttpClient implements HttpStream {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public synchronized void connect() throws IOException {
 		try {
 			Registry schemeReg = null;

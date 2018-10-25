@@ -31,6 +31,7 @@ import org.apache.http.conn.SchemePortResolver;
 import org.apache.http.conn.UnsupportedSchemeException;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.conn.routing.RouteInfo;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.protocol.BasicHttpContext;
@@ -179,7 +180,7 @@ public class HttpClient implements HttpStream {
 	@Override
 	public synchronized void connect() throws IOException {
 		try {
-			Registry schemeReg = null;
+			Registry<ConnectionSocketFactory> schemeReg = null;
 			if (secure) {
 				SSLConnectionSocketFactory ssf = null;
 				if (!StringUtils.isEmpty(sslKeystore)) {
@@ -188,8 +189,8 @@ public class HttpClient implements HttpStream {
 				} else {
 					ssf = new SSLConnectionSocketFactory(SSLContext.getDefault());
 				}
-
-				schemeReg = RegistryBuilder.create().register("https", ssf).build();
+				RegistryBuilder<ConnectionSocketFactory> rcf = RegistryBuilder.create();
+				schemeReg = rcf.register("https", ssf).build();
 			}
 			if (schemeReg != null) {
 				SchemePortResolver spr = new SchemePortResolver() {
@@ -202,8 +203,7 @@ public class HttpClient implements HttpStream {
 			} else {
 				connMgr = new BasicHttpClientConnectionManager();
 			}
-			HttpRoute route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN,
-					RouteInfo.LayerType.PLAIN);
+			HttpRoute route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN, RouteInfo.LayerType.PLAIN);
 			ConnectionRequest connReq = connMgr.requestConnection(route, null);
 			connection = connReq.get(0, TimeUnit.MILLISECONDS);
 			connMgr.connect(connection, route, connTimeout * 1000, new BasicHttpContext());

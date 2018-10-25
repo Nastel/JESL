@@ -20,7 +20,7 @@ import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.*;
 import org.apache.http.message.BasicHttpEntityEnclosingRequest;
-import org.apache.http.params.HttpParams;
+
 
 import com.jkoolcloud.jesl.net.http.HttpRequest;
 
@@ -310,26 +310,6 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 			request.removeHeaders(name);
 		} else {
 			super.removeHeaders(name);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public HttpParams getParams() {
-		return (request != null ? request.getParams() : super.getParams());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setParams(HttpParams params) {
-		if (request != null) {
-			request.setParams(params);
-		} else {
-			super.setParams(params);
 		}
 	}
 

@@ -21,7 +21,6 @@ import java.util.Locale;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.*;
 import org.apache.http.message.BasicHttpResponse;
-import org.apache.http.params.HttpParams;
 
 import com.jkoolcloud.jesl.net.http.HttpResponse;
 
@@ -372,26 +371,6 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	@Override
 	public HeaderIterator headerIterator(String name) {
 		return (response != null ? response.headerIterator(name) : super.headerIterator(name));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public HttpParams getParams() {
-		return (response != null ? response.getParams() : super.getParams());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setParams(HttpParams params) {
-		if (response != null) {
-			response.setParams(params);
-		} else {
-			super.setParams(params);
-		}
 	}
 
 	/**

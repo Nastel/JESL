@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.commons.text.StringSubstitutor;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -105,7 +105,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 	private HashMap<String, Long> genValues = new HashMap<>();
 	private ConcurrentMap<String, String> vars = new ConcurrentHashMap<>();
-	StrSubstitutor sub = new StrSubstitutor(vars);
+	StringSubstitutor  sub = new StringSubstitutor(vars);
 
 	private Message curMsg;
 	private TrackingActivity curActivity;
@@ -1254,7 +1254,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	 * @return resolved variable or itself if not a variable
 	 */
 	public String expandEnvVars(String text) {
-		return StrSubstitutor.replaceSystemProperties(sub.replace(text));
+		return StringSubstitutor.replaceSystemProperties(sub.replace(text));
 	}
 
 	/**

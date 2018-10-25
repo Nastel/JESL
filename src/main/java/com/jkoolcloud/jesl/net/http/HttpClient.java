@@ -18,20 +18,21 @@ package com.jkoolcloud.jesl.net.http;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.*;
-import org.apache.http.conn.ClientConnectionRequest;
-import org.apache.http.conn.ManagedClientConnection;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.ConnectionRequest;
+import org.apache.http.conn.SchemePortResolver;
+import org.apache.http.conn.UnsupportedSchemeException;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.conn.routing.RouteInfo;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.impl.conn.BasicClientConnectionManager;
-import org.apache.http.params.BasicHttpParams;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.protocol.BasicHttpContext;
 
 import com.jkoolcloud.jesl.net.http.apache.HttpRequestImpl;
@@ -54,20 +55,20 @@ public class HttpClient implements HttpStream {
 	public static final String PRAGMA_VALUE_NO_RESPONSE = "no-response";
 	public static final String PRAGMA_VALUE_PING = "ping";
 
+	private static final int DEFAULT_CON_TIMEOUT = 10;
+
 	protected URI uri;
 	protected EventSink logger;
 	protected String host;
 	protected int port;
+	protected int connTimeout = DEFAULT_CON_TIMEOUT;
 	protected String uriPath;
 	protected String sslKeystore;
 	protected String sslKeystorePwd;
 	protected HttpHost httpHost;
 	protected HttpHost httpProxy;
-	protected BasicClientConnectionManager connMgr;
-	protected ClientConnectionRequest connReq;
-	protected ManagedClientConnection connection;
-	protected HttpRoute route;
-	protected SchemeRegistry schemeReg;
+	protected BasicHttpClientConnectionManager connMgr;
+	protected HttpClientConnection connection;
 	protected boolean secure = false;
 
 	/**
@@ -102,6 +103,29 @@ public class HttpClient implements HttpStream {
 	 */
 	public HttpClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger)
 			throws URISyntaxException {
+		this(urlStr, DEFAULT_CON_TIMEOUT, proxyHost, proxyPort, proxyScheme, logger);
+	}
+
+	/**
+	 * Create JESL HTTP[S} client stream with given attributes
+	 *
+	 * @param urlStr
+	 *            connection string to specified JESL server
+	 * @param connTimeout
+	 *            connection timeout in seconds
+	 * @param proxyHost
+	 *            proxy host name if any, null if none
+	 * @param proxyPort
+	 *            proxy port number if any, 0 of none
+	 * @param proxyScheme
+	 *            proxy communication scheme
+	 * @param logger
+	 *            event sink used for logging, null if none
+	 * @throws URISyntaxException
+	 *             if invalid connection string
+	 */
+	public HttpClient(String urlStr, Integer connTimeout, String proxyHost, int proxyPort, String proxyScheme,
+			EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
 		secure = "https".equalsIgnoreCase(scheme);
@@ -113,18 +137,19 @@ public class HttpClient implements HttpStream {
 		if (port <= 0) {
 			port = (secure ? 443 : 80);
 		}
-		init(host, port, uri.getPath(), secure, proxyHost, proxyPort, proxyScheme, logger);
+		init(host, port, uri.getPath(), secure, connTimeout, proxyHost, proxyPort, proxyScheme, logger);
 	}
 
 	/**
 	 *
 	 */
-	private void init(String host, int port, String uriPath, boolean secure, String proxyHost, int proxyPort,
-			String proxyScheme, EventSink logger) {
+	private void init(String host, int port, String uriPath, boolean secure, Integer connTimeout, String proxyHost,
+			int proxyPort, String proxyScheme, EventSink logger) {
 		this.host = host;
 		this.port = port;
 		this.uriPath = uriPath;
 		this.secure = secure;
+		this.connTimeout = connTimeout == null ? DEFAULT_CON_TIMEOUT : connTimeout;
 		this.logger = (logger != null ? logger : DefaultEventSinkFactory.defaultEventSink(HttpClient.class));
 
 		String scheme = (secure ? "https" : "http");
@@ -154,28 +179,34 @@ public class HttpClient implements HttpStream {
 	@Override
 	public synchronized void connect() throws IOException {
 		try {
+			Registry schemeReg = null;
 			if (secure) {
-				SSLSocketFactory ssf = null;
+				SSLConnectionSocketFactory ssf = null;
 				if (!StringUtils.isEmpty(sslKeystore)) {
 					SSLContextFactory scf = new SSLContextFactory(sslKeystore, sslKeystorePwd, sslKeystorePwd);
-					ssf = new SSLSocketFactory(scf.getSslContext(true));
+					ssf = new SSLConnectionSocketFactory(scf.getSslContext(true));
 				} else {
-					ssf = new SSLSocketFactory(SSLContext.getDefault());
+					ssf = new SSLConnectionSocketFactory(SSLContext.getDefault());
 				}
-				Scheme secureScheme = new Scheme("https", port, ssf);
-				schemeReg = new SchemeRegistry();
-				schemeReg.register(secureScheme);
+
+				schemeReg = RegistryBuilder.create().register("https", ssf).build();
 			}
-			route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN,
-					RouteInfo.LayerType.PLAIN);
 			if (schemeReg != null) {
-				connMgr = new BasicClientConnectionManager(schemeReg);
+				SchemePortResolver spr = new SchemePortResolver() {
+					@Override
+					public int resolve(HttpHost httpHost) throws UnsupportedSchemeException {
+						return port;
+					}
+				};
+				connMgr = new BasicHttpClientConnectionManager(schemeReg, null, spr, null);
 			} else {
-				connMgr = new BasicClientConnectionManager();
+				connMgr = new BasicHttpClientConnectionManager();
 			}
-			connReq = connMgr.requestConnection(route, null);
-			connection = connReq.getConnection(0, null);
-			connection.open(route, new BasicHttpContext(), new BasicHttpParams());
+			HttpRoute route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN,
+					RouteInfo.LayerType.PLAIN);
+			ConnectionRequest connReq = connMgr.requestConnection(route, null);
+			connection = connReq.get(0, TimeUnit.MILLISECONDS);
+			connMgr.connect(connection, route, connTimeout * 1000, new BasicHttpContext());
 			logger.log(OpLevel.DEBUG, "Connected to {0}{1}", uri, (httpProxy != null ? " via proxy " + httpProxy : ""));
 		} catch (Throwable e) {
 			close();
@@ -417,5 +448,24 @@ public class HttpClient implements HttpStream {
 	@Override
 	public URI getURI() {
 		return uri;
+	}
+
+	/**
+	 * Obtain HTTP connection timeout value in seconds.
+	 *
+	 * @return connection timeout value in seconds
+	 */
+	public int getConnTimeout() {
+		return connTimeout;
+	}
+
+	/**
+	 * Sets HTTP connection timeout value in seconds.
+	 * 
+	 * @param connTimeout
+	 *            connection timeout value in seconds
+	 */
+	public void setConnTimeout(int connTimeout) {
+		this.connTimeout = connTimeout;
 	}
 }

@@ -53,6 +53,22 @@ public class JKClient implements JKStream {
 	 *
 	 * @param urlStr
 	 *            connection string to specified JESL server
+	 * @param connTimeout
+	 *            connection timeout in seconds
+	 * @param logger
+	 *            event sink used for logging, null if none
+	 * @throws URISyntaxException
+	 *             if invalid connection string
+	 */
+	public JKClient(String urlStr, Integer connTimeout, EventSink logger) throws URISyntaxException {
+		this(urlStr, connTimeout, null, 0, null, logger);
+	}
+
+	/**
+	 * Create JESL client stream with given attributes
+	 *
+	 * @param urlStr
+	 *            connection string to specified JESL server
 	 * @param proxyHost
 	 *            proxy host name if any, null if none
 	 * @param proxyPort
@@ -66,6 +82,29 @@ public class JKClient implements JKStream {
 	 */
 	public JKClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger)
 			throws URISyntaxException {
+		this(urlStr, null, proxyHost, proxyPort, proxyScheme, logger);
+	}
+
+	/**
+	 * Create JESL client stream with given attributes
+	 *
+	 * @param urlStr
+	 *            connection string to specified JESL server
+	 * @param connTimeout
+	 *            connection timeout in seconds
+	 * @param proxyHost
+	 *            proxy host name if any, null if none
+	 * @param proxyPort
+	 *            proxy port number if any, 0 of none
+	 * @param proxyScheme
+	 *            proxy communication scheme
+	 * @param logger
+	 *            event sink used for logging, null if none
+	 * @throws URISyntaxException
+	 *             if invalid connection string
+	 */
+	public JKClient(String urlStr, Integer connTimeout, String proxyHost, int proxyPort, String proxyScheme,
+			EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
 		if (scheme.equalsIgnoreCase("tcp") || scheme.equalsIgnoreCase("tcps")) {
@@ -80,7 +119,7 @@ public class JKClient implements JKStream {
 			}
 			handle = new SocketClient(host, port, secure, proxyHost, proxyPort, logger);
 		} else {
-			handle = new HttpClient(urlStr, proxyHost, proxyPort, proxyScheme, logger);
+			handle = new HttpClient(urlStr, connTimeout, proxyHost, proxyPort, proxyScheme, logger);
 		}
 	}
 

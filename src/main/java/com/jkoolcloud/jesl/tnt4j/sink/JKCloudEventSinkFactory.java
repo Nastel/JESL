@@ -48,6 +48,7 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 	private String url = System.getProperty("tnt4j.sink.factory.socket.url", "http://localhost:6580");
 	// NOTE: server side uses 5min. to close inactive connection by default
 	private long idleTimeout = Long.getLong("tnt4j.sink.factory.socket.idle.timeout", TimeUnit.MINUTES.toMillis(4));
+	private int connTimeout = Integer.getInteger("tnt4j.sink.factory.socket.conn.timeout", 10);
 
 	private String proxyScheme = "http";
 	private String proxyHost;
@@ -90,6 +91,7 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 	@Override
 	protected EventSink configureSink(EventSink sink) {
 		EventSink jsink = super.configureSink(sink);
+		((JKCloudEventSink) jsink).setConnectionTimeout(connTimeout);
 		((JKCloudEventSink) jsink).setIdleTimeout(idleTimeout, TimeUnit.MILLISECONDS);
 		((JKCloudEventSink) jsink).setProxyParms(proxyScheme, proxyHost, proxyPort);
 		return jsink;
@@ -101,6 +103,7 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 
 		url = Utils.getString("Url", settings, url);
 		token = Utils.getString("Token", settings, token);
+		connTimeout = Utils.getInt("ConnTimeout", settings, connTimeout);
 		idleTimeout = Utils.getLong("IdleTimeout", settings, idleTimeout);
 		proxyScheme = Utils.getString("ProxyScheme", settings, proxyScheme);
 		proxyHost = Utils.getString("ProxyHost", settings, proxyHost);

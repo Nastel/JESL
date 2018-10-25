@@ -53,6 +53,7 @@ public class TNT4JSimulator {
 	private static String jkHost = null;
 	private static int jkPort = 443;
 	private static String jkAccessToken = null;
+	private static Integer jKConnTimeout = null;
 	private static String simFileName = "";
 	private static boolean uniqueTags = false;
 	private static boolean uniqueCorrs = false;
@@ -136,6 +137,10 @@ public class TNT4JSimulator {
 
 	public static String getAccessToken() {
 		return jkAccessToken;
+	}
+
+	public static Integer getConnectionTimeout() {
+		return jKConnTimeout;
 	}
 
 	public static boolean useUniqueTags() {
@@ -228,10 +233,10 @@ public class TNT4JSimulator {
 		}
 
 		String usageStr = "\nValid arguments:\n"
-				+ "  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-f:<sim_def_file_name>]\n"
+				+ "  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-O:<timeout_sec>] [-f:<sim_def_file_name>]\n"
 				+ "                              [-p:<percentage>] [-V:name=value] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>]\n\n"
 				+ "  to limit streaming:         [-LM:max-msgs-sec] [-LB:max-bytes-sec]\n\n"
-				+ "  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n\n"
+				+ "  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] [-O:<timeout_sec>] -G:<jk_file_name>\n\n"
 				+ "  for usage information:  help\n\n"
 				+ "where:                                                      \n"
 				+ "    -A    -  Streaming access token (required with '-T')\n"
@@ -240,6 +245,7 @@ public class TNT4JSimulator {
 				+ "    -V    -  Define a global variable (property) name=value pair\n"
 				+ "    -P    -  Data streaming port where service is listening on (default: SSL 443)\n"
 				+ "    -C    -  Connection type to use with data streaming service (default: https)\n"
+				+ "    -O    -  Data streaming service connection timeout in seconds (default: 10)\n"
 				+ "    -LB   -  Limit streaming to a maximum of a given bytes/sec rate per defined source\n"
 				+ "    -LM   -  Limit streaming to a maximum of a given msgs/sec rate per defined source\n"
 				+ "    -f    -  Use <sim_def_file_name> as simulation configuration\n"
@@ -326,6 +332,12 @@ public class TNT4JSimulator {
 				if (!"tcp".equals(jkProtocol) && !"http".equals(jkProtocol) && !"https".equals(jkProtocol)) {
 					printUsage(
 							"Invalid connection protocol for '-C' argument (must be one of: 'tcp', 'http', 'https')");
+				}
+			} else if (arg.startsWith("-O:")) {
+				try {
+					jKConnTimeout = Integer.parseInt(arg.substring(3));
+				} catch (NumberFormatException e) {
+					printUsage("Missing or invalid <timeout_sec> for '-O' argument");
 				}
 			} else if (runType == SimulatorRunType.RUN_SIM || runType == SimulatorRunType.REPLAY_SIM) {
 				if (arg.startsWith("-G:")) {
@@ -601,9 +613,9 @@ public class TNT4JSimulator {
 		}
 
 		String gwUrl = TNT4JSimulator.getConnectUrl();
-		TNT4JSimulator.debug(new UsecTimestamp(),
-				"Connecting to service=" + gwUrl + " with access token=" + jkAccessToken + " ...");
-		gwConn = new JKCloudConnection(gwUrl, jkAccessToken, logger);
+		TNT4JSimulator.debug(new UsecTimestamp(), "Connecting to service=" + gwUrl + " with access token="
+				+ jkAccessToken + (jKConnTimeout == null ? "" : " and connection timeout=" + jKConnTimeout) + " ...");
+		gwConn = new JKCloudConnection(gwUrl, jkAccessToken, jKConnTimeout, logger);
 		gwConn.open();
 
 		return gwConn;

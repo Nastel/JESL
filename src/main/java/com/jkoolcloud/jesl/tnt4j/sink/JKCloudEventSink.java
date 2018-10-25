@@ -66,6 +66,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 	private String proxyScheme = "http";
 	private String proxyHost;
 	private int proxyPort = 0;
+	private Integer connTimeout;
 
 	private long idleTimeout = 0;
 
@@ -128,6 +129,16 @@ public class JKCloudEventSink extends LoggedEventSink {
 		this.proxyScheme = scheme;
 		this.proxyHost = host;
 		this.proxyPort = port;
+	}
+
+	/**
+	 * Sets connection timeout.
+	 *
+	 * @param connTimeout
+	 *            connection timeout in seconds
+	 */
+	public void setConnectionTimeout(Integer connTimeout) {
+		this.connTimeout = connTimeout;
 	}
 
 	/**
@@ -238,9 +249,10 @@ public class JKCloudEventSink extends LoggedEventSink {
 	public synchronized void open() throws IOException {
 		try {
 			close();
-			logger.log(OpLevel.DEBUG, "Open name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url,
-					proxyHost, proxyPort, proxyScheme, this.getName());
-			jkHandle = new JKClient(url, proxyHost, proxyPort, proxyScheme, logger);
+			logger.log(OpLevel.DEBUG,
+					"Open name={4}, url={0}, timeout={5}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url,
+					proxyHost, proxyPort, proxyScheme, this.getName(), connTimeout);
+			jkHandle = new JKClient(url, connTimeout, proxyHost, proxyPort, proxyScheme, logger);
 			if (!StringUtils.isEmpty(accessToken)) {
 				jkHandle.connect(accessToken);
 			} else {

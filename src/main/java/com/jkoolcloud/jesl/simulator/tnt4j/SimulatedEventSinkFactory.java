@@ -35,8 +35,9 @@ public class SimulatedEventSinkFactory extends AbstractEventSinkFactory {
 
 	@Override
 	public EventSink getEventSink(String name) {
-		return configureSink(new SimulatedEventSink(name, TNT4JSimulator.getConnectUrl(),
-				TNT4JSimulator.getAccessToken(), null, getDefaultEventLimiter()));
+		return configureSink(
+				new SimulatedEventSink(name, TNT4JSimulator.getConnectUrl(), TNT4JSimulator.getAccessToken(),
+						TNT4JSimulator.getConnectionTimeout(), null, getDefaultEventLimiter()));
 	}
 
 	@Override

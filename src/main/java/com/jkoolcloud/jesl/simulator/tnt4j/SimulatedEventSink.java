@@ -45,12 +45,13 @@ public class SimulatedEventSink extends AbstractEventSink {
 	private EventFormatter formatter = new JSONFormatter();
 	private Sink outSink;
 
-	public SimulatedEventSink(String name, String url, String gwAccessToken, EventFormatter formatter,
-			EventLimiter limiter) {
+	public SimulatedEventSink(String name, String url, String gwAccessToken, Integer connTimeout,
+			EventFormatter formatter, EventLimiter limiter) {
 		super(name, formatter);
 
 		if (url.startsWith("http://") || url.startsWith("https://")) {
 			outSink = new JKCloudEventSink(name, url, gwAccessToken, new DefaultFormatter(), null);
+			((JKCloudEventSink) outSink).setConnectionTimeout(connTimeout);
 			((EventSink) outSink).setLimiter(limiter);
 		} else if (url.startsWith("file://")) {
 			String fileName = url.substring(FILE_PREFIX.length());
@@ -72,10 +73,10 @@ public class SimulatedEventSink extends AbstractEventSink {
 		if (isOpen()) {
 			incrementBytesSent(msg.length());
 			try {
-	            outSink.write(msg);
-            } catch (InterruptedException e) {
-            	throw new IOException(e);
-            }
+				outSink.write(msg);
+			} catch (InterruptedException e) {
+				throw new IOException(e);
+			}
 		}
 	}
 

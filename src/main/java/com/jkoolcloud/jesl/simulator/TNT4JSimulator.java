@@ -17,6 +17,7 @@ package com.jkoolcloud.jesl.simulator;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 import java.util.Random;
 
@@ -190,7 +191,7 @@ public class TNT4JSimulator {
 		double newValue = value * (1.0 + percentChg);
 
 		if (precision > 0) {
-			newValue = BigDecimal.valueOf(newValue).setScale(precision, BigDecimal.ROUND_HALF_UP).doubleValue();
+			newValue = BigDecimal.valueOf(newValue).setScale(precision, RoundingMode.HALF_UP).doubleValue();
 		}
 
 		if (newValue < 0.0 && value > 0.0) {
@@ -203,7 +204,7 @@ public class TNT4JSimulator {
 	public static void incrementValue(Map<String, Long> map, String item, long amount) {
 		Long prev = map.put(item, amount);
 		if (prev != null) {
-			map.put(item, prev.longValue() + amount);
+			map.put(item, prev + amount);
 		}
 	}
 
@@ -503,7 +504,7 @@ public class TNT4JSimulator {
 					}
 				}
 
-				StringBuffer simDef = new StringBuffer();
+				StringBuilder simDef = new StringBuilder();
 				BufferedReader simLoader = new BufferedReader(new FileReader(simFileName));
 				String line;
 				while ((line = simLoader.readLine()) != null) {

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<tnt4j-simulator>
+	<var name="blockchain" 			value="=?:ether"/>
+	<var name="poolname" 			value="=?:nanopool.org"/>
+	<var name="block-no"			value="=?:6654972"/>
+	<var name="block-max-bytes"		value="=?:1000000"/>
+	<var name="block-difficulty" 	value="=?:3001470348321628"/>
+	<var name="block-reward" 		value="=?:3.31"/>
+	<var name="gas-limit" 			value="=?:52646"/>
+	<var name="gas-used" 			value="=?:37646"/>
+	<var name="gas-price" 			value="=?:0.000008"/>
+	<var name="uncles-reward" 		value="=?:5.25"/>
+	<var name="extra-data" 			value="=?:nanopool.org"/>
+	<var name="tx-value" 			value="=?:10"/>
+	<var name="tx-location" 		value="=?:New York, NY"/>
+	
+
+	<source id="1" fqn="APPL=${poolname}#SERVER=www.${poolname}#DATACENTER=ETHPOOL#GEOADDR=${tx-location}"/>
+
+	<msg id="1">Function: transfer(address _to, uint256 _amount)</msg>
+
+	<activity name="Block-${block-no}" source="1" sev="ANY" loc="${tx-location}">
+		<event name="=0x" elapsed="3128973" res="${block-no}" msg="1" tags="${block-no}">
+			<prop name="txhash" type="STRING" value="=0x"/>
+			<prop name="block-no" type="INTEGER" value="${block-no}"/>
+			<prop name="from-addr" type="STRING" value="=0x"/>
+			<prop name="to-addr" type="STRING" value="=0x"/>
+			<prop name="value" type="LONG" value="[0:${tx-value}]"/>
+			<prop name="gas-limit" type="LONG" value="${gas-limit}"/>
+			<prop name="gas-used" type="LONG" value="[1000:${gas-limit}]"/>
+			<prop name="gas-price" type="DECIMAL" value="${gas-price}"/>
+		</event>
+		<event name="=0x" elapsed="2128973" res="${block-no}" msg="1" tags="${block-no}">
+			<prop name="txhash" type="STRING" value="=0x"/>
+			<prop name="block-no" type="INTEGER" value="${block-no}"/>
+			<prop name="from-addr" type="STRING" value="=0x"/>
+			<prop name="to-addr" type="STRING" value="=0x"/>
+			<prop name="value" type="LONG" value="[0:${tx-value}]"/>
+			<prop name="gas-limit" type="LONG" value="${gas-limit}"/>
+			<prop name="gas-used" type="LONG" value="[1000:${gas-limit}]"/>
+			<prop name="gas-price" type="DECIMAL" value="${gas-price}"/>
+		</event>
+		<event name="=0x" elapsed="4128973" res="${block-no}" msg="1" tags="${block-no}">
+			<prop name="txhash" type="STRING" value="=0x"/>
+			<prop name="block-no" type="INTEGER" value="${block-no}"/>
+			<prop name="from-addr" type="STRING" value="=0x"/>
+			<prop name="to-addr" type="STRING" value="=0x"/>
+			<prop name="value" type="LONG" value="[0:${tx-value}]"/>
+			<prop name="gas-limit" type="LONG" value="${gas-limit}"/>
+			<prop name="gas-used" type="LONG" value="[1000:${gas-limit}]"/>
+			<prop name="gas-price" type="DECIMAL" value="${gas-price}"/>
+		</event>
+		<event name="=0x" elapsed="4128973" res="${block-no}" msg="1" tags="${block-no}">
+			<prop name="txhash" type="STRING" value="=0x"/>
+			<prop name="block-no" type="INTEGER" value="${block-no}"/>
+			<prop name="from-addr" type="STRING" value="=0x"/>
+			<prop name="to-addr" type="STRING" value="=0x"/>
+			<prop name="value" type="LONG" value="[0:${tx-value}]"/>
+			<prop name="gas-limit" type="LONG" value="${gas-limit}"/>
+			<prop name="gas-used" type="LONG" value="[1000:${gas-limit}]"/>
+			<prop name="gas-price" type="DECIMAL" value="${gas-price}"/>
+		</event>
+		<prop name="block-no" type="LONG" value="${block-no}"/>
+		<prop name="block-height" type="LONG" value="${block-no}"/>
+		<prop name="block-size-bytes" type="LONG" value="[6217:${block-max-bytes}]"/>
+		<prop name="block-difficulty" type="LONG" value="${block-difficulty}"/>
+		<prop name="block-nonce" type="STRING" value="=0x"/>
+		<prop name="block-reward" type="DECIMAL" value="${block-reward}"/>
+		<prop name="uncles-reward" type="DECIMAL" value="${uncles-reward}"/>
+		<prop name="gas-limit" type="LONG" value="${gas-limit}"/>
+		<prop name="gas-used" type="LONG" value="[1000:${gas-limit}]"/>
+		<prop name="gas-price" type="DECIMAL" value="${gas-price}"/>
+		<prop name="extra-data" type="STRING" value="${extra-data}"/>
+	</activity>
+
+
+</tnt4j-simulator>

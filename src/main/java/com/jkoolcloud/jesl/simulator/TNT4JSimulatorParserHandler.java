@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
@@ -41,6 +42,7 @@ import com.jkoolcloud.tnt4j.tracker.Tracker;
 import com.jkoolcloud.tnt4j.tracker.TrackingActivity;
 import com.jkoolcloud.tnt4j.tracker.TrackingEvent;
 import com.jkoolcloud.tnt4j.utils.Utils;
+import com.jkoolcloud.tnt4j.uuid.DefaultUUIDFactory;
 
 /**
  * Implements the SAX DefaultHandler for parsing jKool TNT4J Activity Simulator XML.
@@ -327,6 +329,14 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			throw new SAXException("Failed processing definition for option '" + name + "': " + e, e);
 		}
 	}
+	
+	private String mapValue(String value) {
+		if (value.equals("=0x")) {
+			value = "0x" + Hex.encodeHexString(DefaultUUIDFactory.getInstance().newUUID().getBytes());
+		}		
+		return value;
+	}
+
 
 	private void defineVar(Attributes attributes) throws SAXException {
 		String name = null;
@@ -370,7 +380,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				value = (value == null || value.length() == 0) ? defVal : value;
 			}
 
-			String eVal = vars.putIfAbsent(name, value);
+			String eVal = vars.putIfAbsent(name, mapValue(value));
 			if (eVal != null) {
 				TNT4JSimulator.trace(simCurrTime,
 						"Skipping duplicate variable: '" + name + "=" + value + "', existing.value='" + eVal + "'");
@@ -547,7 +557,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				} else if (attName.equals(SIM_XML_ATTR_TYPE)) {
 					type = attValue;
 				} else if (attName.equals(SIM_XML_ATTR_VALUE)) {
-					value = attValue;
+					value = mapValue(attValue);
 				} else if (attName.equals(SIM_XML_ATTR_VALTYPE)) {
 					valType = attValue;
 				} else if (attName.equals(SIM_XML_ATTR_VARY)) {
@@ -625,7 +635,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				valType = ValueTypes.VALUE_TYPE_TIMESTAMP;
 			}
 		} else if ("STRING".equalsIgnoreCase(type)) {
-			propValue = value.toString();
+			propValue = mapValue(value.toString());
 		} else if (!StringUtils.isEmpty(type)) {
 			throw new SAXParseException("<" + SIM_XML_PROP + ">: invalid type: " + type, saxLocator);
 		}
@@ -804,7 +814,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				String attValue = expandEnvVars(attributes.getValue(i));
 
 				if (attName.equals(SIM_XML_ATTR_NAME)) {
-					name = attValue;
+					name = mapValue(attValue);
 				} else if (attName.equals(SIM_XML_ATTR_SOURCE)) {
 					srcId = Integer.parseInt(attValue);
 					if (srcId <= 0) {
@@ -953,7 +963,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private void runEvent(Attributes attributes) throws SAXException {
 		TNT4JSimulator.trace(simCurrTime, "Started event ...");
 
-		String name = expandEnvVars(attributes.getValue(SIM_XML_ATTR_NAME));
+		String name = mapValue(expandEnvVars(attributes.getValue(SIM_XML_ATTR_NAME)));
 
 		if (StringUtils.isEmpty(name)) {
 			throw new SAXParseException("<" + SIM_XML_EVENT + ">: '" + SIM_XML_ATTR_NAME + "' must be specified",

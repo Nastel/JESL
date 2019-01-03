@@ -309,9 +309,9 @@ public class HttpClient implements HttpStream {
 	public synchronized String read() throws IOException {
 		HttpResponse resp = getResponse();
 		String content = resp.getContentString();
-
-		logger.log(OpLevel.TRACE, "Received response from {0}: {1}", uri, content);
 		int status = resp.getStatus();
+
+		logger.log(OpLevel.TRACE, "Received response from={0}: code={1}, msg={2}", uri, status, content);
 		if (status >= 400) {
 			if (AccessResponse.isAccessResponse(content)) {
 				close();

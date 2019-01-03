@@ -57,11 +57,15 @@ public class JKCloudEventSink extends LoggedEventSink {
 	public static final String KEY_SERVICE_URL = "sink-service-url";
 	public static final String KEY_PROXY_URL = "sink-proxy-url";
 	public static final String KEY_LAST_WAGE = "sink-last-write-age-ms";
+	public static final String KEY_ACK_COUNT = "sink-ack-count";
+	public static final String KEY_LAST_ACK_MSG = "sink-ack-last-msg";
+	public static final String KEY_LAST_ACK_ELAPSED = "sink-ack-last-elapsed-ms";
 
 	private JKClient jkHandle;
 
 	private String url = "localhost";
 	private String accessToken;
+	private String lastAckMsg = "";
 
 	private String proxyScheme = "http";
 	private String proxyHost;
@@ -69,11 +73,14 @@ public class JKCloudEventSink extends LoggedEventSink {
 	private Integer connTimeout;
 
 	private long idleTimeout = 0;
+	private boolean ackSends = false;
 
 	private AtomicLong idleCount = new AtomicLong(0);
 	private AtomicLong lastWrite = new AtomicLong(0);
 	private AtomicLong lastBytes = new AtomicLong(0);
 	private AtomicLong sentMsgs = new AtomicLong(0);
+	private AtomicLong ackCount = new AtomicLong(0);
+	private AtomicLong ackElapsed = new AtomicLong(0);
 
 	/**
 	 * Create a socket event sink based on a given URL and formatter. Another sink can be associated with this sink
@@ -124,11 +131,13 @@ public class JKCloudEventSink extends LoggedEventSink {
 	 *            proxy host name if any, null if none
 	 * @param port
 	 *            proxy port number if any, 0 of none
+	 * @return itself
 	 */
-	public void setProxyParms(String scheme, String host, int port) {
+	public JKCloudEventSink setProxyParms(String scheme, String host, int port) {
 		this.proxyScheme = scheme;
 		this.proxyHost = host;
 		this.proxyPort = port;
+		return this;
 	}
 
 	/**
@@ -136,9 +145,23 @@ public class JKCloudEventSink extends LoggedEventSink {
 	 *
 	 * @param connTimeout
 	 *            connection timeout in seconds
+	 * @return itself
 	 */
-	public void setConnectionTimeout(Integer connTimeout) {
+	public JKCloudEventSink setConnectionTimeout(Integer connTimeout) {
 		this.connTimeout = connTimeout;
+		return this;
+	}
+
+	/**
+	 * Acknowledge every send (much slower if set to true)
+	 *
+	 * @param ackSends
+	 *            true to acknowledge every sends, false -- send and forget
+	 * @return itself
+	 */
+	public JKCloudEventSink ackSends(boolean ackSends) {
+		this.ackSends = ackSends;
+		return this;
 	}
 
 	/**
@@ -155,9 +178,11 @@ public class JKCloudEventSink extends LoggedEventSink {
 	 *
 	 * @param accessToken
 	 *            the access token
+	 * @return itself
 	 */
-	public void setAccessToken(String accessToken) {
+	public JKCloudEventSink setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
+		return this;
 	}
 
 	/**
@@ -167,9 +192,11 @@ public class JKCloudEventSink extends LoggedEventSink {
 	 *            idle timeout
 	 * @param tunit
 	 *            time out time units
+	 * @return itself
 	 */
-	public void setIdleTimeout(long timeOut, TimeUnit tunit) {
+	public JKCloudEventSink setIdleTimeout(long timeOut, TimeUnit tunit) {
 		this.idleTimeout = tunit.toMillis(timeOut);
+		return this;
 	}
 
 	/**
@@ -218,6 +245,9 @@ public class JKCloudEventSink extends LoggedEventSink {
 		idleCount.set(0);
 		lastBytes.set(0);
 		sentMsgs.set(0);
+		ackCount.set(0);
+		ackElapsed.set(0);
+		lastAckMsg = "";
 		super.resetStats();
 	}
 
@@ -228,6 +258,11 @@ public class JKCloudEventSink extends LoggedEventSink {
 		stats.put(Utils.qualify(this, KEY_SENT_MSGS), sentMsgs.get());
 		stats.put(Utils.qualify(this, KEY_LAST_WAGE), getLastWriteAge());
 		stats.put(Utils.qualify(this, KEY_IDLE_COUNT), idleCount.get());
+		if (ackSends) {
+			stats.put(Utils.qualify(this, KEY_ACK_COUNT), ackCount.get());
+			stats.put(Utils.qualify(this, KEY_LAST_ACK_ELAPSED), ackElapsed.get());
+			stats.put(Utils.qualify(this, KEY_LAST_ACK_MSG), lastAckMsg);			
+		}
 		stats.put(Utils.qualify(this, KEY_SERVICE_URL), url);
 		if (!Utils.isEmpty(proxyHost)) {
 			stats.put(Utils.qualify(this, KEY_PROXY_URL), (proxyScheme + "//" + proxyHost + ":" + proxyPort));
@@ -298,7 +333,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 	}
 
 	@Override
-	protected void writeLine(String msg) throws IOException {
+	protected synchronized void writeLine(String msg) throws IOException {
 		if (StringUtils.isEmpty(msg)) {
 			return;
 		}
@@ -306,12 +341,24 @@ public class JKCloudEventSink extends LoggedEventSink {
 		_checkState();
 		handleIdleReconnect();
 
-		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
+		String lineMsg = msg.endsWith("\n")? msg: msg + "\n";
 		incrementBytesSent(lineMsg.length());
-		jkHandle.send(lineMsg, false);
-
-		lastWrite.set(System.currentTimeMillis());
+		jkHandle.send(lineMsg, ackSends);
+		long timestamp = System.currentTimeMillis();
+		lastWrite.set(timestamp);
 		sentMsgs.incrementAndGet();
 		lastBytes.set(lineMsg.length());
+		if (ackSends) {
+			_handleAcks(timestamp);
+		}
+	}
+	
+	private void _handleAcks(long timestamp) throws IOException {
+		try {
+			lastAckMsg = jkHandle.read();
+		} finally {
+			ackCount.incrementAndGet();
+			ackElapsed.set(System.currentTimeMillis() - timestamp);
+		}		
 	}
 }

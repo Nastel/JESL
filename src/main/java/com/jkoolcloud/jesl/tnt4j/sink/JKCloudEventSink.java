@@ -149,7 +149,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 	 *            time out time units
 	 * @return itself
 	 */
-	public JKCloudEventSink setConnectionTimeout(Integer timeout, TimeUnit tunit) {
+	public JKCloudEventSink setConnectionTimeout(long timeout, TimeUnit tunit) {
 		this.connTimeout = tunit.toMillis(timeout);
 		return this;
 	}
@@ -263,7 +263,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 		if (ackSends) {
 			stats.put(Utils.qualify(this, KEY_ACK_COUNT), ackCount.get());
 			stats.put(Utils.qualify(this, KEY_LAST_ACK_ELAPSED), ackElapsed.get());
-			stats.put(Utils.qualify(this, KEY_LAST_ACK_MSG), lastAckMsg);			
+			stats.put(Utils.qualify(this, KEY_LAST_ACK_MSG), lastAckMsg);
 		}
 		stats.put(Utils.qualify(this, KEY_SERVICE_URL), url);
 		if (!Utils.isEmpty(proxyHost)) {
@@ -343,7 +343,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 		_checkState();
 		handleIdleReconnect();
 
-		String lineMsg = msg.endsWith("\n")? msg: msg + "\n";
+		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
 		incrementBytesSent(lineMsg.length());
 		jkHandle.send(lineMsg, ackSends);
 		long timestamp = System.currentTimeMillis();
@@ -354,13 +354,13 @@ public class JKCloudEventSink extends LoggedEventSink {
 			_handleAcks(timestamp);
 		}
 	}
-	
+
 	private void _handleAcks(long timestamp) throws IOException {
 		try {
 			lastAckMsg = jkHandle.read();
 		} finally {
 			ackCount.incrementAndGet();
 			ackElapsed.set(System.currentTimeMillis() - timestamp);
-		}		
+		}
 	}
 }

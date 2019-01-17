@@ -204,7 +204,8 @@ public class HttpClient implements HttpStream {
 			} else {
 				connMgr = new BasicHttpClientConnectionManager();
 			}
-			HttpRoute route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN, RouteInfo.LayerType.PLAIN);
+			HttpRoute route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN,
+					RouteInfo.LayerType.PLAIN);
 			ConnectionRequest connReq = connMgr.requestConnection(route, null);
 			connection = connReq.get(0, TimeUnit.MILLISECONDS);
 			connMgr.connect(connection, route, (int)connTimeout, new BasicHttpContext());
@@ -226,8 +227,16 @@ public class HttpClient implements HttpStream {
 	public synchronized void connect(String token) throws IOException {
 		connect();
 		if (!StringUtils.isEmpty(token)) {
-			AuthUtils.authenticate(this, token);
-			logger.log(OpLevel.DEBUG, "Authenticated connection={0} with token={1}", this, Utils.hide(token, "x", 4));
+			try {
+				logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token={1}", this,
+						Utils.hide(token, "x", 4));
+				AuthUtils.authenticate(this, token);
+				logger.log(OpLevel.DEBUG, "Authenticated connection={0} with token={1}", this,
+						Utils.hide(token, "x", 4));
+			} catch (SecurityException exc) {
+				close();
+				throw new IOException("Connect failed to complete", exc);
+			}
 		}
 	}
 

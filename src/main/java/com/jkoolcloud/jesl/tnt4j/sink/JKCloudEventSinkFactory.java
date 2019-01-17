@@ -92,10 +92,8 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 	@Override
 	protected EventSink configureSink(EventSink sink) {
 		JKCloudEventSink jsink = (JKCloudEventSink) super.configureSink(sink);
-		jsink.setConnectionTimeout(connTimeout)
-			.setIdleTimeout(idleTimeout, TimeUnit.MILLISECONDS)
-			.setProxyParms(proxyScheme, proxyHost, proxyPort)
-			.ackSends(ackSends);
+		jsink.setConnectionTimeout(connTimeout).setIdleTimeout(idleTimeout, TimeUnit.MILLISECONDS)
+				.setProxyParms(proxyScheme, proxyHost, proxyPort).ackSends(ackSends);
 		return jsink;
 	}
 

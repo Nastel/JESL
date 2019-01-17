@@ -46,13 +46,13 @@ public class SimulatedEventSink extends AbstractEventSink {
 	private EventFormatter formatter = new JSONFormatter();
 	private Sink outSink;
 
-	public SimulatedEventSink(String name, String url, String gwAccessToken, Integer connTimeout,
+	public SimulatedEventSink(String name, String url, String gwAccessToken, long connTimeout,
 			EventFormatter formatter, EventLimiter limiter) {
 		super(name, formatter);
 
 		if (url.startsWith("http://") || url.startsWith("https://")) {
 			outSink = new JKCloudEventSink(name, url, gwAccessToken, new DefaultFormatter(), null);
-			((JKCloudEventSink) outSink).setConnectionTimeout(connTimeout, TimeUnit.SECONDS);
+			((JKCloudEventSink) outSink).setConnectionTimeout(connTimeout, TimeUnit.MILLISECONDS);
 			((EventSink) outSink).setLimiter(limiter);
 		} else if (url.startsWith("file://")) {
 			String fileName = url.substring(FILE_PREFIX.length());

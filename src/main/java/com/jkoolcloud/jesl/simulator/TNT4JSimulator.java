@@ -54,7 +54,7 @@ public class TNT4JSimulator {
 	private static String jkHost = null;
 	private static int jkPort = 443;
 	private static String jkAccessToken = null;
-	private static Integer jKConnTimeout = null;
+	private static long jKConnTimeout = 10000;
 	private static String simFileName = "";
 	private static boolean uniqueTags = false;
 	private static boolean uniqueCorrs = false;
@@ -65,7 +65,6 @@ public class TNT4JSimulator {
 	private static Random ranGen = new Random();
 	private static long numIterations = 1;
 	private static boolean generateValues = false;
-	private static boolean ackSends = false;
 	private static long ttl = 0L;
 	private static long rateMPS = 0, rateBPS = 0;
 
@@ -141,7 +140,7 @@ public class TNT4JSimulator {
 		return jkAccessToken;
 	}
 
-	public static Integer getConnectionTimeout() {
+	public static long getConnectionTimeout() {
 		return jKConnTimeout;
 	}
 
@@ -337,7 +336,7 @@ public class TNT4JSimulator {
 				}
 			} else if (arg.startsWith("-O:")) {
 				try {
-					jKConnTimeout = Integer.parseInt(arg.substring(3));
+					jKConnTimeout = Long.parseLong(arg.substring(3))*1000; //convert to ms
 				} catch (NumberFormatException e) {
 					printUsage("Missing or invalid <timeout_sec> for '-O' argument");
 				}
@@ -616,7 +615,7 @@ public class TNT4JSimulator {
 
 		String gwUrl = TNT4JSimulator.getConnectUrl();
 		TNT4JSimulator.debug(new UsecTimestamp(), "Connecting to service=" + gwUrl + " with access token="
-				+ jkAccessToken + (jKConnTimeout == null ? "" : " and connection timeout=" + jKConnTimeout) + " ...");
+				+ jkAccessToken + " and connection timeout=" + jKConnTimeout + " ...");
 		gwConn = new JKCloudConnection(gwUrl, jkAccessToken, jKConnTimeout, false, logger);
 		gwConn.open();
 

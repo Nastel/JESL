@@ -32,13 +32,13 @@ import com.jkoolcloud.tnt4j.sink.EventSink;
 public class JKCloudConnection {
 	private String gwUrl;
 	private String accessToken;
-	private Integer connTimeout;
+	private long connTimeout;
 	private boolean ackSends = false;
 
 	private JKClient jkHandle;
 	private TrackingLogger logger;
 
-	public JKCloudConnection(String url, String accessToken, Integer connTimeout, boolean acks, TrackingLogger logger) {
+	public JKCloudConnection(String url, String accessToken, long connTimeout, boolean acks, TrackingLogger logger) {
 		this.gwUrl = url.toLowerCase();
 		this.accessToken = accessToken;
 		this.connTimeout = connTimeout;

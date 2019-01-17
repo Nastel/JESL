@@ -150,7 +150,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 	 *            time out time units
 	 * @return itself
 	 */
-	public JKCloudEventSink setConnectionTimeout(Integer timeout, TimeUnit tunit) {
+	public JKCloudEventSink setConnectionTimeout(long timeout, TimeUnit tunit) {
 		this.connTimeout = tunit.toMillis(timeout);
 		return this;
 	}

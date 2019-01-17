@@ -52,11 +52,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 
 		if (url.startsWith("http://") || url.startsWith("https://")) {
 			outSink = new JKCloudEventSink(name, url, gwAccessToken, new DefaultFormatter(), null);
-<<<<<<< HEAD
 			((JKCloudEventSink) outSink).setConnectionTimeout(connTimeout, TimeUnit.MILLISECONDS);
-=======
-			((JKCloudEventSink) outSink).setConnectionTimeout(connTimeout, TimeUnit.SECONDS);
->>>>>>> 50c4a4f952bdc8b4cda512100c09c4aa65d7757f
 			((EventSink) outSink).setLimiter(limiter);
 		} else if (url.startsWith("file://")) {
 			String fileName = url.substring(FILE_PREFIX.length());

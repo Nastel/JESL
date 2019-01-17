@@ -31,6 +31,7 @@ import com.jkoolcloud.jesl.net.security.AuthUtils;
 import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.sink.DefaultEventSinkFactory;
 import com.jkoolcloud.tnt4j.sink.EventSink;
+import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
  * This class provides TCP/SSL connection to the specified JESL server based on given URL. tcp[s]://host:port
@@ -120,8 +121,16 @@ public class SocketClient implements JKStream {
 	public synchronized void connect(String token) throws IOException {
 		connect();
 		if (!StringUtils.isEmpty(token)) {
-			logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token={1}", this, token);
-			AuthUtils.authenticate(this, token);
+			try {
+				logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token={1}", this,
+						Utils.hide(token, "x", 4));
+				AuthUtils.authenticate(this, token);
+				logger.log(OpLevel.DEBUG, "Authenticated connection={0} with token={1}", this,
+						Utils.hide(token, "x", 4));
+			} catch (SecurityException exc) {
+				close();
+				throw new IOException("Connect failed to complete", exc);
+			}
 		}
 	}
 
@@ -145,17 +154,10 @@ public class SocketClient implements JKStream {
 	 */
 	@Override
 	public synchronized void close() {
-		try {
-			if (socket != null) {
-				if (out != null) {
-					out.close();
-				}
-				if (in != null) {
-					in.close();
-				}
-				socket.close();
-			}
-		} catch (IOException e) {
+		if (socket != null) {
+			Utils.close(out);
+			Utils.close(in);
+			Utils.close(socket);
 		}
 	}
 

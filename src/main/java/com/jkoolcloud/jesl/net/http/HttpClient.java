@@ -204,18 +204,18 @@ public class HttpClient implements HttpStream {
 			} else {
 				connMgr = new BasicHttpClientConnectionManager();
 			}
-			HttpRoute route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN, RouteInfo.LayerType.PLAIN);
+			HttpRoute route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN,
+					RouteInfo.LayerType.PLAIN);
 			ConnectionRequest connReq = connMgr.requestConnection(route, null);
 			connection = connReq.get(0, TimeUnit.MILLISECONDS);
 			connMgr.connect(connection, route, (connTimeout * 1000), new BasicHttpContext());
-			logger.log(OpLevel.DEBUG, "Connected to {0}{1}, elapsed.ms={2}, timeout.sec={3}", 
-					uri, (httpProxy != null ? " via proxy " + httpProxy : ""), (System.currentTimeMillis() - startTime), connTimeout);
+			logger.log(OpLevel.DEBUG, "Connected to {0}{1}, elapsed.ms={2}, timeout.sec={3}", uri,
+					(httpProxy != null ? " via proxy " + httpProxy : ""), (System.currentTimeMillis() - startTime),
+					connTimeout);
 		} catch (Throwable e) {
 			close();
-			throw new IOException("Failed to connect to uri=" + uri 
-					+ ", timeout.sec=" + connTimeout
-					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
-					+ ", reason=" + e.getMessage(), e);
+			throw new IOException("Failed to connect to uri=" + uri + ", timeout.sec=" + connTimeout + ", elapsed.ms="
+					+ (System.currentTimeMillis() - startTime) + ", reason=" + e.getMessage(), e);
 		}
 	}
 
@@ -226,8 +226,16 @@ public class HttpClient implements HttpStream {
 	public synchronized void connect(String token) throws IOException {
 		connect();
 		if (!StringUtils.isEmpty(token)) {
-			AuthUtils.authenticate(this, token);
-			logger.log(OpLevel.DEBUG, "Authenticated connection={0} with token={1}", this, Utils.hide(token, "x", 4));
+			try {
+				logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token={1}", this,
+						Utils.hide(token, "x", 4));
+				AuthUtils.authenticate(this, token);
+				logger.log(OpLevel.DEBUG, "Authenticated connection={0} with token={1}", this,
+						Utils.hide(token, "x", 4));
+			} catch (SecurityException exc) {
+				close();
+				throw new IOException("Connect failed to complete", exc);
+			}
 		}
 	}
 

@@ -179,6 +179,7 @@ public class HttpClient implements HttpStream {
 	 */
 	@Override
 	public synchronized void connect() throws IOException {
+		long startTime = System.currentTimeMillis();
 		try {
 			Registry<ConnectionSocketFactory> schemeReg = null;
 			if (secure) {
@@ -206,11 +207,15 @@ public class HttpClient implements HttpStream {
 			HttpRoute route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN, RouteInfo.LayerType.PLAIN);
 			ConnectionRequest connReq = connMgr.requestConnection(route, null);
 			connection = connReq.get(0, TimeUnit.MILLISECONDS);
-			connMgr.connect(connection, route, connTimeout * 1000, new BasicHttpContext());
-			logger.log(OpLevel.DEBUG, "Connected to {0}{1}", uri, (httpProxy != null ? " via proxy " + httpProxy : ""));
+			connMgr.connect(connection, route, (connTimeout * 1000), new BasicHttpContext());
+			logger.log(OpLevel.DEBUG, "Connected to {0}{1}, elapsed.ms={2}, timeout.sec={3}", 
+					uri, (httpProxy != null ? " via proxy " + httpProxy : ""), (System.currentTimeMillis() - startTime), connTimeout);
 		} catch (Throwable e) {
 			close();
-			throw new IOException("Failed to connect to uri=" + uri + ", reason=" + e.getMessage(), e);
+			throw new IOException("Failed to connect to uri=" + uri 
+					+ ", timeout.sec=" + connTimeout
+					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
+					+ ", reason=" + e.getMessage(), e);
 		}
 	}
 

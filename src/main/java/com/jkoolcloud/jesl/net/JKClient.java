@@ -54,13 +54,13 @@ public class JKClient implements JKStream {
 	 * @param urlStr
 	 *            connection string to specified JESL server
 	 * @param connTimeout
-	 *            connection timeout in seconds
+	 *            connection timeout in milliseconds
 	 * @param logger
 	 *            event sink used for logging, null if none
 	 * @throws URISyntaxException
 	 *             if invalid connection string
 	 */
-	public JKClient(String urlStr, Integer connTimeout, EventSink logger) throws URISyntaxException {
+	public JKClient(String urlStr, long connTimeout, EventSink logger) throws URISyntaxException {
 		this(urlStr, connTimeout, null, 0, null, logger);
 	}
 
@@ -82,7 +82,7 @@ public class JKClient implements JKStream {
 	 */
 	public JKClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger)
 			throws URISyntaxException {
-		this(urlStr, null, proxyHost, proxyPort, proxyScheme, logger);
+		this(urlStr, 10000, proxyHost, proxyPort, proxyScheme, logger);
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class JKClient implements JKStream {
 	 * @throws URISyntaxException
 	 *             if invalid connection string
 	 */
-	public JKClient(String urlStr, Integer connTimeout, String proxyHost, int proxyPort, String proxyScheme,
+	public JKClient(String urlStr, long connTimeout, String proxyHost, int proxyPort, String proxyScheme,
 			EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();

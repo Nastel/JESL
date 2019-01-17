@@ -56,13 +56,13 @@ public class HttpClient implements HttpStream {
 	public static final String PRAGMA_VALUE_NO_RESPONSE = "no-response";
 	public static final String PRAGMA_VALUE_PING = "ping";
 
-	private static final int DEFAULT_CON_TIMEOUT = 10;
+	private static final int DEFAULT_CON_TIMEOUT = 10000;
 
 	protected URI uri;
 	protected EventSink logger;
 	protected String host;
 	protected int port;
-	protected int connTimeout = DEFAULT_CON_TIMEOUT;
+	protected long connTimeout = DEFAULT_CON_TIMEOUT;
 	protected String uriPath;
 	protected String sslKeystore;
 	protected String sslKeystorePwd;
@@ -113,7 +113,7 @@ public class HttpClient implements HttpStream {
 	 * @param urlStr
 	 *            connection string to specified JESL server
 	 * @param connTimeout
-	 *            connection timeout in seconds
+	 *            connection timeout in milliseconds
 	 * @param proxyHost
 	 *            proxy host name if any, null if none
 	 * @param proxyPort
@@ -125,7 +125,7 @@ public class HttpClient implements HttpStream {
 	 * @throws URISyntaxException
 	 *             if invalid connection string
 	 */
-	public HttpClient(String urlStr, Integer connTimeout, String proxyHost, int proxyPort, String proxyScheme,
+	public HttpClient(String urlStr, long connTimeout, String proxyHost, int proxyPort, String proxyScheme,
 			EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
@@ -144,13 +144,13 @@ public class HttpClient implements HttpStream {
 	/**
 	 *
 	 */
-	private void init(String host, int port, String uriPath, boolean secure, Integer connTimeout, String proxyHost,
+	private void init(String host, int port, String uriPath, boolean secure, long timeout, String proxyHost,
 			int proxyPort, String proxyScheme, EventSink logger) {
 		this.host = host;
 		this.port = port;
 		this.uriPath = uriPath;
 		this.secure = secure;
-		this.connTimeout = connTimeout == null ? DEFAULT_CON_TIMEOUT : connTimeout;
+		this.connTimeout = timeout;
 		this.logger = (logger != null ? logger : DefaultEventSinkFactory.defaultEventSink(HttpClient.class));
 
 		String scheme = (secure ? "https" : "http");
@@ -207,13 +207,13 @@ public class HttpClient implements HttpStream {
 			HttpRoute route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN, RouteInfo.LayerType.PLAIN);
 			ConnectionRequest connReq = connMgr.requestConnection(route, null);
 			connection = connReq.get(0, TimeUnit.MILLISECONDS);
-			connMgr.connect(connection, route, (connTimeout * 1000), new BasicHttpContext());
-			logger.log(OpLevel.DEBUG, "Connected to {0}{1}, elapsed.ms={2}, timeout.sec={3}", 
+			connMgr.connect(connection, route, (int)connTimeout, new BasicHttpContext());
+			logger.log(OpLevel.DEBUG, "Connected to {0}{1}, elapsed.ms={2}, timeout.ms={3}", 
 					uri, (httpProxy != null ? " via proxy " + httpProxy : ""), (System.currentTimeMillis() - startTime), connTimeout);
 		} catch (Throwable e) {
 			close();
 			throw new IOException("Failed to connect to uri=" + uri 
-					+ ", timeout.sec=" + connTimeout
+					+ ", timeout.ms=" + connTimeout
 					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
 					+ ", reason=" + e.getMessage(), e);
 		}
@@ -456,21 +456,21 @@ public class HttpClient implements HttpStream {
 	}
 
 	/**
-	 * Obtain HTTP connection timeout value in seconds.
+	 * Obtain HTTP connection timeout value in milliseconds.
 	 *
-	 * @return connection timeout value in seconds
+	 * @return connection timeout value in milliseconds
 	 */
-	public int getConnTimeout() {
+	public long getConnTimeout() {
 		return connTimeout;
 	}
 
 	/**
-	 * Sets HTTP connection timeout value in seconds.
+	 * Sets HTTP connection timeout value in milliseconds.
 	 * 
 	 * @param connTimeout
-	 *            connection timeout value in seconds
+	 *            connection timeout value in milliseconds
 	 */
-	public void setConnTimeout(int connTimeout) {
+	public void setConnTimeout(long connTimeout) {
 		this.connTimeout = connTimeout;
 	}
 }

@@ -70,9 +70,9 @@ public class JKCloudEventSink extends LoggedEventSink {
 	private String proxyScheme = "http";
 	private String proxyHost;
 	private int proxyPort = 0;
-	private Integer connTimeout;
-
-	private long idleTimeout = 0;
+	
+	private long connTimeout = 10000;
+	private long idleTimeout = 10000;
 	private boolean ackSends = false;
 
 	private AtomicLong idleCount = new AtomicLong(0);
@@ -143,12 +143,14 @@ public class JKCloudEventSink extends LoggedEventSink {
 	/**
 	 * Sets connection timeout.
 	 *
-	 * @param connTimeout
-	 *            connection timeout in seconds
+	 * @param timeout
+	 *            connection timeout
+	 * @param tunit
+	 *            time out time units
 	 * @return itself
 	 */
-	public JKCloudEventSink setConnectionTimeout(Integer connTimeout) {
-		this.connTimeout = connTimeout;
+	public JKCloudEventSink setConnectionTimeout(Integer timeout, TimeUnit tunit) {
+		this.connTimeout = tunit.toMillis(timeout);
 		return this;
 	}
 
@@ -188,14 +190,14 @@ public class JKCloudEventSink extends LoggedEventSink {
 	/**
 	 * Sets idle timeout for the sink. Connection is dropped on next write after timeout.
 	 *
-	 * @param timeOut
+	 * @param timeout
 	 *            idle timeout
 	 * @param tunit
 	 *            time out time units
 	 * @return itself
 	 */
-	public JKCloudEventSink setIdleTimeout(long timeOut, TimeUnit tunit) {
-		this.idleTimeout = tunit.toMillis(timeOut);
+	public JKCloudEventSink setIdleTimeout(long timeout, TimeUnit tunit) {
+		this.idleTimeout = tunit.toMillis(timeout);
 		return this;
 	}
 

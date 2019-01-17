@@ -23,14 +23,18 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.*;
+import org.apache.http.HttpClientConnection;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpException;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpHost;
+import org.apache.http.ProtocolVersion;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.ConnectionRequest;
 import org.apache.http.conn.SchemePortResolver;
 import org.apache.http.conn.UnsupportedSchemeException;
 import org.apache.http.conn.routing.HttpRoute;
-import org.apache.http.conn.routing.RouteInfo;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
@@ -204,16 +208,21 @@ public class HttpClient implements HttpStream {
 			} else {
 				connMgr = new BasicHttpClientConnectionManager();
 			}
-			HttpRoute route = new HttpRoute(httpHost, null, httpProxy, secure, RouteInfo.TunnelType.PLAIN,
-					RouteInfo.LayerType.PLAIN);
+			HttpRoute route = (httpProxy != null)? new HttpRoute(httpHost, null, httpProxy, secure): new HttpRoute(httpHost, null, secure);
 			ConnectionRequest connReq = connMgr.requestConnection(route, null);
 			connection = connReq.get(0, TimeUnit.MILLISECONDS);
 			connMgr.connect(connection, route, (int)connTimeout, new BasicHttpContext());
 			logger.log(OpLevel.DEBUG, "Connected to {0}{1}, elapsed.ms={2}, timeout.ms={3}", 
 					uri, (httpProxy != null ? " via proxy " + httpProxy : ""), (System.currentTimeMillis() - startTime), connTimeout);
 		} catch (Throwable e) {
+			logger.log(OpLevel.ERROR, "Failed to connect to uri=" + uri 
+					+ ", http.host=" + httpHost
+					+ ", timeout.ms=" + connTimeout
+					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
+					+ ", reason=" + e.getMessage(), e);
 			close();
 			throw new IOException("Failed to connect to uri=" + uri 
+					+ ", http.host=" + httpHost
 					+ ", timeout.ms=" + connTimeout
 					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
 					+ ", reason=" + e.getMessage(), e);
@@ -350,10 +359,8 @@ public class HttpClient implements HttpStream {
 		if (connection != null) {
 			try {
 				ensureAllRequestsSent();
-
 				connection.close();
 				connMgr.shutdown();
-
 				logger.log(OpLevel.DEBUG, "Closed connection to {0}", uri);
 			} catch (Throwable err) {
 			}

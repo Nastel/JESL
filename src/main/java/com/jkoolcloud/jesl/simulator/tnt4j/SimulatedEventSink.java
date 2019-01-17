@@ -17,6 +17,7 @@ package com.jkoolcloud.jesl.simulator.tnt4j;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSink;
 import com.jkoolcloud.tnt4j.core.KeyValueStats;
@@ -51,7 +52,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 
 		if (url.startsWith("http://") || url.startsWith("https://")) {
 			outSink = new JKCloudEventSink(name, url, gwAccessToken, new DefaultFormatter(), null);
-			((JKCloudEventSink) outSink).setConnectionTimeout(connTimeout);
+			((JKCloudEventSink) outSink).setConnectionTimeout(connTimeout, TimeUnit.SECONDS);
 			((EventSink) outSink).setLimiter(limiter);
 		} else if (url.startsWith("file://")) {
 			String fileName = url.substring(FILE_PREFIX.length());

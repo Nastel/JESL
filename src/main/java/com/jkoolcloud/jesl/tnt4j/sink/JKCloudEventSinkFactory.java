@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import com.jkoolcloud.jesl.net.http.HttpClient;
 import com.jkoolcloud.tnt4j.config.ConfigException;
 import com.jkoolcloud.tnt4j.format.EventFormatter;
 import com.jkoolcloud.tnt4j.format.JSONFormatter;
@@ -48,7 +49,8 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 	private String url = System.getProperty("jesl.sink.factory.socket.url", "http://localhost:6580");
 	// NOTE: server side uses 5min. to close inactive connection by default
 	private long idleTimeout = Long.getLong("jesl.sink.factory.socket.idle.timeout", TimeUnit.MINUTES.toMillis(4));
-	private int connTimeout = Integer.getInteger("jesl.sink.factory.socket.conn.timeout", 10);
+	private int connTimeout = Integer.getInteger("jesl.sink.factory.socket.conn.timeout",
+			(int) HttpClient.DEFAULT_CON_TIMEOUT);
 	private boolean ackSends = Boolean.getBoolean("jesl.sink.factory.ack.sends");
 
 	private String proxyScheme = "http";

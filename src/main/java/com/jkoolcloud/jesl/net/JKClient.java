@@ -82,7 +82,7 @@ public class JKClient implements JKStream {
 	 */
 	public JKClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger)
 			throws URISyntaxException {
-		this(urlStr, 10000, proxyHost, proxyPort, proxyScheme, logger);
+		this(urlStr, HttpClient.DEFAULT_CON_TIMEOUT, proxyHost, proxyPort, proxyScheme, logger);
 	}
 
 	/**

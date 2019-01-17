@@ -56,7 +56,7 @@ public class HttpClient implements HttpStream {
 	public static final String PRAGMA_VALUE_NO_RESPONSE = "no-response";
 	public static final String PRAGMA_VALUE_PING = "ping";
 
-	private static final int DEFAULT_CON_TIMEOUT = 10000;
+	public static final long DEFAULT_CON_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
 
 	protected URI uri;
 	protected EventSink logger;
@@ -208,15 +208,14 @@ public class HttpClient implements HttpStream {
 					RouteInfo.LayerType.PLAIN);
 			ConnectionRequest connReq = connMgr.requestConnection(route, null);
 			connection = connReq.get(0, TimeUnit.MILLISECONDS);
-			connMgr.connect(connection, route, (int)connTimeout, new BasicHttpContext());
-			logger.log(OpLevel.DEBUG, "Connected to {0}{1}, elapsed.ms={2}, timeout.ms={3}", 
-					uri, (httpProxy != null ? " via proxy " + httpProxy : ""), (System.currentTimeMillis() - startTime), connTimeout);
+			connMgr.connect(connection, route, (int) connTimeout, new BasicHttpContext());
+			logger.log(OpLevel.DEBUG, "Connected to {0}{1}, elapsed.ms={2}, timeout.ms={3}", uri,
+					(httpProxy != null ? " via proxy " + httpProxy : ""), (System.currentTimeMillis() - startTime),
+					connTimeout);
 		} catch (Throwable e) {
 			close();
-			throw new IOException("Failed to connect to uri=" + uri 
-					+ ", timeout.ms=" + connTimeout
-					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
-					+ ", reason=" + e.getMessage(), e);
+			throw new IOException("Failed to connect to uri=" + uri + ", timeout.ms=" + connTimeout + ", elapsed.ms="
+					+ (System.currentTimeMillis() - startTime) + ", reason=" + e.getMessage(), e);
 		}
 	}
 

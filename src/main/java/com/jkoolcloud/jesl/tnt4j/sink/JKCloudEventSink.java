@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.lang3.StringUtils;
 
 import com.jkoolcloud.jesl.net.JKClient;
+import com.jkoolcloud.jesl.net.http.HttpClient;
 import com.jkoolcloud.tnt4j.core.KeyValueStats;
 import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.format.EventFormatter;
@@ -70,9 +71,9 @@ public class JKCloudEventSink extends LoggedEventSink {
 	private String proxyScheme = "http";
 	private String proxyHost;
 	private int proxyPort = 0;
-	
-	private long connTimeout = 10000;
-	private long idleTimeout = 10000;
+
+	private long connTimeout = HttpClient.DEFAULT_CON_TIMEOUT;
+	private long idleTimeout = HttpClient.DEFAULT_CON_TIMEOUT;
 	private boolean ackSends = false;
 
 	private AtomicLong idleCount = new AtomicLong(0);

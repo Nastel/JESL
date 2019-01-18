@@ -24,6 +24,7 @@ import javax.net.ssl.SSLContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.*;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.ConnectionRequest;
@@ -33,7 +34,6 @@ import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
-import org.apache.http.protocol.BasicHttpContext;
 
 import com.jkoolcloud.jesl.net.http.apache.HttpRequestImpl;
 import com.jkoolcloud.jesl.net.http.apache.HttpResponseImpl;
@@ -206,8 +206,14 @@ public class HttpClient implements HttpStream {
 			HttpRoute route = (httpProxy != null) ? new HttpRoute(httpHost, null, httpProxy, secure)
 					: new HttpRoute(httpHost, null, secure);
 			ConnectionRequest connReq = connMgr.requestConnection(route, null);
-			connection = connReq.get(0, TimeUnit.MILLISECONDS);
-			connMgr.connect(connection, route, (int) connTimeout, new BasicHttpContext());
+			connection = connReq.get(connTimeout, TimeUnit.MILLISECONDS);
+			HttpClientContext context = HttpClientContext.create();
+
+			if (!connection.isOpen()) {
+				connMgr.connect(connection, route, (int) connTimeout, context);
+				connMgr.routeComplete(connection, route, context);
+			}
+
 			logger.log(OpLevel.DEBUG, "Connected to {0}{1}, elapsed.ms={2}, timeout.ms={3}", uri,
 					(httpProxy != null ? " via proxy " + httpProxy : ""), (System.currentTimeMillis() - startTime),
 					connTimeout);

@@ -115,7 +115,6 @@ public interface JKStream {
 
 	/**
 	 * Close the stream and release all resources
-	 *
 	 */
 	void close();
 }

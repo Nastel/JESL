@@ -18,6 +18,8 @@ package com.jkoolcloud.jesl.net.http;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
@@ -27,11 +29,13 @@ import org.apache.http.*;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.ConnectionPoolTimeoutException;
 import org.apache.http.conn.ConnectionRequest;
 import org.apache.http.conn.SchemePortResolver;
 import org.apache.http.conn.UnsupportedSchemeException;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 
@@ -173,6 +177,53 @@ public class HttpClient implements HttpStream {
 		this.sslKeystorePwd = sslKeystorePwd;
 	}
 
+	
+	/**
+	 * Initialize HTTP connection manager context should be called on connect.
+	 * 
+	 * @param startTime timestamp in milliseconds when connection initiation started
+	 */
+	private synchronized void initHttpConnMgr(long startTime) throws NoSuchAlgorithmException {
+		Registry<ConnectionSocketFactory> schemeReg = null;
+		if (secure) {
+			SSLConnectionSocketFactory ssf = null;
+			if (!StringUtils.isEmpty(sslKeystore)) {
+				SSLContextFactory scf = new SSLContextFactory(sslKeystore, sslKeystorePwd, sslKeystorePwd);
+				ssf = new SSLConnectionSocketFactory(scf.getSslContext(true), NoopHostnameVerifier.INSTANCE);
+			} else {
+				ssf = new SSLConnectionSocketFactory(SSLContext.getDefault(), NoopHostnameVerifier.INSTANCE);
+			}
+			RegistryBuilder<ConnectionSocketFactory> rcf = RegistryBuilder.create();
+			schemeReg = rcf.register("https", ssf).build();
+		}
+		connMgr = schemeReg != null ? new BasicHttpClientConnectionManager(schemeReg)
+				: new BasicHttpClientConnectionManager();
+		logger.log(OpLevel.DEBUG, "Created connection manager uri={0}, secure={1}, elapsed.ms={2}", 
+				uri, secure, (System.currentTimeMillis() - startTime));
+	}
+	
+	/**
+	 * Open HTTP connection
+	 * 
+	 * @param startTime timestamp in milliseconds when connection initiation started
+	 */
+	private synchronized void openHttpConn(long startTime)
+			throws InterruptedException, ExecutionException, IOException {
+		HttpRoute route = (httpProxy != null) ? new HttpRoute(httpHost, null, httpProxy, secure)
+				: new HttpRoute(httpHost, null, secure);
+		ConnectionRequest connReq = connMgr.requestConnection(route, null);
+		connection = connReq.get(connTimeout, TimeUnit.MILLISECONDS);
+		HttpClientContext context = HttpClientContext.create();
+
+		if (!connection.isOpen()) {
+			connMgr.connect(connection, route, (int) connTimeout, context);
+			connMgr.routeComplete(connection, route, context);
+		}
+		logger.log(OpLevel.DEBUG, "Connected to uri={0}, proxy={1}, elapsed.ms={2}, timeout.ms={3}", uri,
+				(httpProxy != null? httpProxy: "(noproxy)"), (System.currentTimeMillis() - startTime),
+				connTimeout);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -180,55 +231,17 @@ public class HttpClient implements HttpStream {
 	public synchronized void connect() throws IOException {
 		long startTime = System.currentTimeMillis();
 		try {
-			Registry<ConnectionSocketFactory> schemeReg = null;
-			if (secure) {
-				SSLConnectionSocketFactory ssf = null;
-				if (!StringUtils.isEmpty(sslKeystore)) {
-					SSLContextFactory scf = new SSLContextFactory(sslKeystore, sslKeystorePwd, sslKeystorePwd);
-					ssf = new SSLConnectionSocketFactory(scf.getSslContext(true));
-				} else {
-					ssf = new SSLConnectionSocketFactory(SSLContext.getDefault());
-				}
-				RegistryBuilder<ConnectionSocketFactory> rcf = RegistryBuilder.create();
-				schemeReg = rcf.register("https", ssf).build();
-			}
-			if (schemeReg != null) {
-				SchemePortResolver spr = new SchemePortResolver() {
-					@Override
-					public int resolve(HttpHost httpHost) throws UnsupportedSchemeException {
-						return port;
-					}
-				};
-				connMgr = new BasicHttpClientConnectionManager(schemeReg, null, spr, null);
-			} else {
-				connMgr = new BasicHttpClientConnectionManager();
-			}
-			HttpRoute route = (httpProxy != null) ? new HttpRoute(httpHost, null, httpProxy, secure)
-					: new HttpRoute(httpHost, null, secure);
-			ConnectionRequest connReq = connMgr.requestConnection(route, null);
-			connection = connReq.get(connTimeout, TimeUnit.MILLISECONDS);
-			HttpClientContext context = HttpClientContext.create();
-
-			if (!connection.isOpen()) {
-				connMgr.connect(connection, route, (int) connTimeout, context);
-				connMgr.routeComplete(connection, route, context);
-			}
-
-			logger.log(OpLevel.DEBUG, "Connected to {0}{1}, elapsed.ms={2}, timeout.ms={3}", uri,
-					(httpProxy != null ? " via proxy " + httpProxy : ""), (System.currentTimeMillis() - startTime),
-					connTimeout);
+			initHttpConnMgr(startTime);
+			openHttpConn(startTime);
 		} catch (Throwable e) {
-			logger.log(OpLevel.ERROR, "Failed to connect to uri=" + uri 
+			String errMsg = "Failed to connect to uri=" + uri 
 					+ ", http.host=" + httpHost
 					+ ", timeout.ms=" + connTimeout
 					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
-					+ ", reason=" + e.getMessage(), e);
+					+ ", reason=" + e.getMessage();
+			logger.log(OpLevel.ERROR, errMsg, e);
 			close();
-			throw new IOException("Failed to connect to uri=" + uri 
-					+ ", http.host=" + httpHost
-					+ ", timeout.ms=" + connTimeout
-					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
-					+ ", reason=" + e.getMessage(), e);
+			throw new IOException(errMsg, e);
 		}
 	}
 
@@ -240,10 +253,10 @@ public class HttpClient implements HttpStream {
 		connect();
 		if (!StringUtils.isEmpty(token)) {
 			try {
-				logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token={1}", this,
+				logger.log(OpLevel.DEBUG, "Authenticating connection={0}, token={1}", this,
 						Utils.hide(token, "x", 4));
 				AuthUtils.authenticate(this, token);
-				logger.log(OpLevel.DEBUG, "Authenticated connection={0} with token={1}", this,
+				logger.log(OpLevel.DEBUG, "Authenticated connection={0}, token={1}", this,
 						Utils.hide(token, "x", 4));
 			} catch (SecurityException exc) {
 				close();
@@ -265,7 +278,6 @@ public class HttpClient implements HttpStream {
 			if (!wantResponse) {
 				request.setHeader(HEADER_KEY_PRAGMA, PRAGMA_VALUE_NO_RESPONSE);
 			}
-
 			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", uri, request);
 			org.apache.http.HttpRequest httpRequest = (org.apache.http.HttpRequest) request;
 			connection.sendRequestHeader(httpRequest);
@@ -321,7 +333,6 @@ public class HttpClient implements HttpStream {
 			if (contentLen > 0 || !StringUtils.isEmpty(contentType)) {
 				connection.receiveResponseEntity(resp);
 			}
-
 			return resp;
 		} catch (Throwable ex) {
 			throw new IOException(ex.getMessage(), ex);

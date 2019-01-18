@@ -23,12 +23,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpClientConnection;
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpException;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpHost;
-import org.apache.http.ProtocolVersion;
+import org.apache.http.*;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.ConnectionRequest;
@@ -60,13 +55,13 @@ public class HttpClient implements HttpStream {
 	public static final String PRAGMA_VALUE_NO_RESPONSE = "no-response";
 	public static final String PRAGMA_VALUE_PING = "ping";
 
-	public static final long DEFAULT_CON_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
+	public static final long DEFAULT_CONN_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
 
 	protected URI uri;
 	protected EventSink logger;
 	protected String host;
 	protected int port;
-	protected long connTimeout = DEFAULT_CON_TIMEOUT;
+	protected long connTimeout = DEFAULT_CONN_TIMEOUT;
 	protected String uriPath;
 	protected String sslKeystore;
 	protected String sslKeystorePwd;
@@ -108,7 +103,7 @@ public class HttpClient implements HttpStream {
 	 */
 	public HttpClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger)
 			throws URISyntaxException {
-		this(urlStr, DEFAULT_CON_TIMEOUT, proxyHost, proxyPort, proxyScheme, logger);
+		this(urlStr, DEFAULT_CONN_TIMEOUT, proxyHost, proxyPort, proxyScheme, logger);
 	}
 
 	/**
@@ -208,7 +203,8 @@ public class HttpClient implements HttpStream {
 			} else {
 				connMgr = new BasicHttpClientConnectionManager();
 			}
-			HttpRoute route = (httpProxy != null)? new HttpRoute(httpHost, null, httpProxy, secure): new HttpRoute(httpHost, null, secure);
+			HttpRoute route = (httpProxy != null) ? new HttpRoute(httpHost, null, httpProxy, secure)
+					: new HttpRoute(httpHost, null, secure);
 			ConnectionRequest connReq = connMgr.requestConnection(route, null);
 			connection = connReq.get(0, TimeUnit.MILLISECONDS);
 			connMgr.connect(connection, route, (int) connTimeout, new BasicHttpContext());

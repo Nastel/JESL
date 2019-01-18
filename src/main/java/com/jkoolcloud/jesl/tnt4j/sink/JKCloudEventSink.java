@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.lang3.StringUtils;
 
 import com.jkoolcloud.jesl.net.JKClient;
-import com.jkoolcloud.jesl.net.http.HttpClient;
 import com.jkoolcloud.tnt4j.core.KeyValueStats;
 import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.format.EventFormatter;
@@ -62,6 +61,9 @@ public class JKCloudEventSink extends LoggedEventSink {
 	public static final String KEY_LAST_ACK_MSG = "sink-ack-last-msg";
 	public static final String KEY_LAST_ACK_ELAPSED = "sink-ack-last-elapsed-ms";
 
+	public static final long DEFAULT_IDLE_TIMEOUT = TimeUnit.MINUTES.toMillis(4);
+	public static final long DEFAULT_CONN_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
+
 	private JKClient jkHandle;
 
 	private String url = "localhost";
@@ -72,8 +74,8 @@ public class JKCloudEventSink extends LoggedEventSink {
 	private String proxyHost;
 	private int proxyPort = 0;
 
-	private long connTimeout = HttpClient.DEFAULT_CON_TIMEOUT;
-	private long idleTimeout = HttpClient.DEFAULT_CON_TIMEOUT;
+	private long connTimeout = DEFAULT_CONN_TIMEOUT;
+	private long idleTimeout = DEFAULT_IDLE_TIMEOUT;
 	private boolean ackSends = false;
 
 	private AtomicLong idleCount = new AtomicLong(0);

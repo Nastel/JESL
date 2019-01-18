@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -336,7 +337,7 @@ public class TNT4JSimulator {
 				}
 			} else if (arg.startsWith("-O:")) {
 				try {
-					jKConnTimeout = Long.parseLong(arg.substring(3))*1000; //convert to ms
+					jKConnTimeout = TimeUnit.SECONDS.toMillis(Long.parseLong(arg.substring(3)));
 				} catch (NumberFormatException e) {
 					printUsage("Missing or invalid <timeout_sec> for '-O' argument");
 				}

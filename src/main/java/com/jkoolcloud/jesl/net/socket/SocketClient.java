@@ -104,14 +104,27 @@ public class SocketClient implements JKStream {
 		if (isConnected()) {
 			return;
 		}
-		if (secure) {
-			SocketFactory socketFactory = SSLSocketFactory.getDefault();
-			socket = socketFactory.createSocket(host, port);
-		} else {
-			socket = new Socket(host, port);
+		long startTime = System.currentTimeMillis();
+		try {
+			if (secure) {
+				SocketFactory socketFactory = SSLSocketFactory.getDefault();
+				socket = socketFactory.createSocket(host, port);
+			} else {
+				socket = new Socket(host, port);
+			}
+			out = new DataOutputStream(socket.getOutputStream());
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} catch (Throwable exc) {
+			logger.log(OpLevel.ERROR, "Failed to connect to host=" + host
+					+ ", port=" + port
+					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
+					+ ", reason=" + exc.getMessage(), exc);
+			close();
+			throw new IOException("Failed to connect to host=" + host
+					+ ", port=" + port
+					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
+					+ ", reason=" + exc.getMessage(), exc);
 		}
-		out = new DataOutputStream(socket.getOutputStream());
-		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	}
 
 	/**

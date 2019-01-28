@@ -126,7 +126,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized void open() throws IOException {
+	protected synchronized void _open() throws IOException {
 		if (outSink != null) {
 			outSink.open();
 		}
@@ -136,15 +136,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isOpen() {
-		return Utils.isOpen(outSink);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public synchronized void close() throws IOException {
+	protected synchronized void _close() throws IOException {
 		try {
 			if (outSink != null) {
 				outSink.close();
@@ -152,6 +144,14 @@ public class SimulatedEventSink extends AbstractEventSink {
 		} finally {
 			outSink = null;
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isOpen() {
+		return Utils.isOpen(outSink);
 	}
 
 	/**

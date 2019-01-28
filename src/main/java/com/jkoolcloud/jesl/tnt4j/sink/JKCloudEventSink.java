@@ -286,7 +286,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 	}
 
 	@Override
-	public synchronized void open() throws IOException {
+	protected synchronized void _open() throws IOException {
 		try {
 			close();
 			logger.log(OpLevel.DEBUG,
@@ -311,7 +311,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 	}
 
 	@Override
-	public synchronized void close() throws IOException {
+	protected synchronized void _close() throws IOException {
 		try {
 			if (isOpen()) {
 				logger.log(OpLevel.DEBUG, "Closing name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}",

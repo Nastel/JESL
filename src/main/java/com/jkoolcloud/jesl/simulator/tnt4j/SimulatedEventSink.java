@@ -34,6 +34,7 @@ import com.jkoolcloud.tnt4j.sink.impl.FileSink;
 import com.jkoolcloud.tnt4j.source.Source;
 import com.jkoolcloud.tnt4j.tracker.TrackingActivity;
 import com.jkoolcloud.tnt4j.tracker.TrackingEvent;
+import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
  * JESL event sink implements event sink simulation used by JESL Simulator.
@@ -46,8 +47,8 @@ public class SimulatedEventSink extends AbstractEventSink {
 	private EventFormatter formatter = new JSONFormatter();
 	private Sink outSink;
 
-	public SimulatedEventSink(String name, String url, String gwAccessToken, long connTimeout,
-			EventFormatter formatter, EventLimiter limiter) {
+	public SimulatedEventSink(String name, String url, String gwAccessToken, long connTimeout, EventFormatter formatter,
+			EventLimiter limiter) {
 		super(name, formatter);
 
 		if (url.startsWith("http://") || url.startsWith("https://")) {
@@ -136,7 +137,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 */
 	@Override
 	public boolean isOpen() {
-		return (outSink != null && outSink.isOpen());
+		return Utils.isOpen(outSink);
 	}
 
 	/**

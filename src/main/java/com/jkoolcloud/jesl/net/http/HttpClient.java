@@ -179,11 +179,11 @@ public class HttpClient implements HttpStream {
 		this.sslKeystorePwd = sslKeystorePwd;
 	}
 
-	
 	/**
 	 * Initialize HTTP connection manager context should be called on connect.
 	 * 
-	 * @param startTime timestamp in milliseconds when connection initiation started
+	 * @param startTime
+	 *            timestamp in milliseconds when connection initiation started
 	 */
 	private synchronized void initHttpConnMgr(long startTime) throws NoSuchAlgorithmException {
 		Registry<ConnectionSocketFactory> schemeReg = null;
@@ -200,14 +200,15 @@ public class HttpClient implements HttpStream {
 		}
 		connMgr = schemeReg != null ? new BasicHttpClientConnectionManager(schemeReg)
 				: new BasicHttpClientConnectionManager();
-		logger.log(OpLevel.DEBUG, "Created connection manager uri={0}, secure={1}, elapsed.ms={2}", 
-				uri, secure, (System.currentTimeMillis() - startTime));
+		logger.log(OpLevel.DEBUG, "Created connection manager uri={0}, secure={1}, elapsed.ms={2}", uri, secure,
+				(System.currentTimeMillis() - startTime));
 	}
-	
+
 	/**
 	 * Open HTTP connection
 	 * 
-	 * @param startTime timestamp in milliseconds when connection initiation started
+	 * @param startTime
+	 *            timestamp in milliseconds when connection initiation started
 	 */
 	private synchronized void openHttpConn(long startTime)
 			throws InterruptedException, ExecutionException, IOException {
@@ -222,10 +223,9 @@ public class HttpClient implements HttpStream {
 			connMgr.routeComplete(connection, route, context);
 		}
 		logger.log(OpLevel.DEBUG, "Connected to uri={0}, proxy={1}, elapsed.ms={2}, timeout.ms={3}", uri,
-				(httpProxy != null? httpProxy: "(noproxy)"), (System.currentTimeMillis() - startTime),
-				connTimeout);
+				(httpProxy != null ? httpProxy : "(noproxy)"), (System.currentTimeMillis() - startTime), connTimeout);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -255,11 +255,9 @@ public class HttpClient implements HttpStream {
 		connect();
 		if (!StringUtils.isEmpty(token)) {
 			try {
-				logger.log(OpLevel.DEBUG, "Authenticating connection={0}, token={1}", this,
-						Utils.hide(token, "x", 4));
+				logger.log(OpLevel.DEBUG, "Authenticating connection={0}, token={1}", this, Utils.hide(token, "x", 4));
 				AuthUtils.authenticate(this, token);
-				logger.log(OpLevel.DEBUG, "Authenticated connection={0}, token={1}", this,
-						Utils.hide(token, "x", 4));
+				logger.log(OpLevel.DEBUG, "Authenticated connection={0}, token={1}", this, Utils.hide(token, "x", 4));
 			} catch (SecurityException exc) {
 				close();
 				throw new IOException("Connect failed to complete", exc);

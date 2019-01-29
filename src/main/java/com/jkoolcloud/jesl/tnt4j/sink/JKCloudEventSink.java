@@ -288,7 +288,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 	@Override
 	protected synchronized void _open() throws IOException {
 		try {
-			close();
+			_close();
 			logger.log(OpLevel.DEBUG,
 					"Open name={4}, url={0}, timeout={5}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url,
 					proxyHost, proxyPort, proxyScheme, this.getName(), connTimeout);
@@ -300,12 +300,12 @@ public class JKCloudEventSink extends LoggedEventSink {
 			}
 			lastWrite.set(System.currentTimeMillis());
 
-			super.open();
+			super._open();
 		} catch (URISyntaxException e) {
 			logger.log(OpLevel.ERROR,
 					"Failed to open name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url,
 					proxyHost, proxyPort, proxyScheme, this.getName(), e);
-			close();
+			_close();
 			throw new IOException(e.getMessage(), e);
 		}
 	}
@@ -319,7 +319,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 				jkHandle.close();
 			}
 		} finally {
-			super.close();
+			super._close();
 		}
 	}
 

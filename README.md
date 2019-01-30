@@ -325,7 +325,7 @@ Subscribe to events where message contains 'failure' show as linechart
 
 # Project Dependencies
 JESL requires the following (which will download automatically if using Maven):
-* JDK 1.7+
+* JDK 1.8+
 * TNT4J (https://github.com/Nastel/TNT4J)
 * Apache HTTP Client 4.2.5 (http://hc.apache.org/httpcomponents-client-ga/)
 * TNT4J-Syslogd (https://github.com/Nastel/tnt4j-syslogd/) (runtime)

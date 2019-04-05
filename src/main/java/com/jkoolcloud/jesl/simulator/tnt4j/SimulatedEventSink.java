@@ -137,12 +137,8 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 */
 	@Override
 	protected synchronized void _close() throws IOException {
-		try {
-			if (outSink != null) {
-				outSink.close();
-			}
-		} finally {
-			outSink = null;
+		if (outSink != null) {
+			outSink.close();
 		}
 	}
 

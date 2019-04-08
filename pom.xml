@@ -62,7 +62,7 @@
 
         <tnt4j.version>2.11-SNAPSHOT</tnt4j.version>
         <tnt4j.syslogd.version>0.3.3</tnt4j.syslogd.version>
-        <httpcomponents.version>4.5.6</httpcomponents.version>
+        <httpcomponents.version>4.5.7</httpcomponents.version>
     </properties>
 
     <dependencies>

@@ -63,6 +63,7 @@
         <tnt4j.version>2.11-SNAPSHOT</tnt4j.version>
         <tnt4j.syslogd.version>0.3.3</tnt4j.syslogd.version>
         <httpcomponents.version>4.5.7</httpcomponents.version>
+        <slf4j.version>1.7.26</slf4j.version>
     </properties>
 
     <dependencies>
@@ -70,12 +71,6 @@
             <groupId>com.jkoolcloud</groupId>
             <artifactId>tnt4j</artifactId>
             <version>${tnt4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.jkoolcloud.jesl.net</groupId>
-            <artifactId>tnt4j-syslogd</artifactId>
-            <version>${tnt4j.syslogd.version}</version>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -87,6 +82,19 @@
                     <artifactId>commons-codec</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <!-- optional dependencies for sim module -->
+        <dependency>
+            <groupId>com.jkoolcloud.jesl.net</groupId>
+            <artifactId>tnt4j-syslogd</artifactId>
+            <version>${tnt4j.syslogd.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

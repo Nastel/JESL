@@ -17,8 +17,10 @@ package com.jkoolcloud.jesl.simulator;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -53,6 +55,7 @@ public class TNT4JSimulator {
 	private static String jkHost = null;
 	private static int jkPort = 443;
 	private static String jkAccessToken = null;
+	private static long jKConnTimeout = 10000;
 	private static String simFileName = "";
 	private static boolean uniqueTags = false;
 	private static boolean uniqueCorrs = false;
@@ -138,6 +141,10 @@ public class TNT4JSimulator {
 		return jkAccessToken;
 	}
 
+	public static long getConnectionTimeout() {
+		return jKConnTimeout;
+	}
+
 	public static boolean useUniqueTags() {
 		return uniqueTags;
 	}
@@ -185,7 +192,7 @@ public class TNT4JSimulator {
 		double newValue = value * (1.0 + percentChg);
 
 		if (precision > 0) {
-			newValue = BigDecimal.valueOf(newValue).setScale(precision, BigDecimal.ROUND_HALF_UP).doubleValue();
+			newValue = BigDecimal.valueOf(newValue).setScale(precision, RoundingMode.HALF_UP).doubleValue();
 		}
 
 		if (newValue < 0.0 && value > 0.0) {
@@ -198,7 +205,7 @@ public class TNT4JSimulator {
 	public static void incrementValue(Map<String, Long> map, String item, long amount) {
 		Long prev = map.put(item, amount);
 		if (prev != null) {
-			map.put(item, prev.longValue() + amount);
+			map.put(item, prev + amount);
 		}
 	}
 
@@ -228,10 +235,10 @@ public class TNT4JSimulator {
 		}
 
 		String usageStr = "\nValid arguments:\n"
-				+ "  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-f:<sim_def_file_name>]\n"
+				+ "  to run simulation:      run -A:<access_token> [-T:<jk_host>] [-P:<jk_port>] [-C:tcp|http|https] [-O:<timeout_sec>] [-f:<sim_def_file_name>]\n"
 				+ "                              [-p:<percentage>] [-V:name=value] [-G:<jk_file_name>] [-i:<iterations>] [-u] [-t:<ttl_hours>]\n\n"
 				+ "  to limit streaming:         [-LM:max-msgs-sec] [-LB:max-bytes-sec]\n\n"
-				+ "  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] -G:<jk_file_name>\n\n"
+				+ "  to replay simulation:   replay -A:<access_token> -T:<jk_host> [-P:<jk_port>] [-C:tcp|http|https] [-O:<timeout_sec>] -G:<jk_file_name>\n\n"
 				+ "  for usage information:  help\n\n"
 				+ "where:                                                      \n"
 				+ "    -A    -  Streaming access token (required with '-T')\n"
@@ -240,6 +247,7 @@ public class TNT4JSimulator {
 				+ "    -V    -  Define a global variable (property) name=value pair\n"
 				+ "    -P    -  Data streaming port where service is listening on (default: SSL 443)\n"
 				+ "    -C    -  Connection type to use with data streaming service (default: https)\n"
+				+ "    -O    -  Data streaming service connection timeout in seconds (default: 10)\n"
 				+ "    -LB   -  Limit streaming to a maximum of a given bytes/sec rate per defined source\n"
 				+ "    -LM   -  Limit streaming to a maximum of a given msgs/sec rate per defined source\n"
 				+ "    -f    -  Use <sim_def_file_name> as simulation configuration\n"
@@ -326,6 +334,12 @@ public class TNT4JSimulator {
 				if (!"tcp".equals(jkProtocol) && !"http".equals(jkProtocol) && !"https".equals(jkProtocol)) {
 					printUsage(
 							"Invalid connection protocol for '-C' argument (must be one of: 'tcp', 'http', 'https')");
+				}
+			} else if (arg.startsWith("-O:")) {
+				try {
+					jKConnTimeout = TimeUnit.SECONDS.toMillis(Long.parseLong(arg.substring(3)));
+				} catch (NumberFormatException e) {
+					printUsage("Missing or invalid <timeout_sec> for '-O' argument");
 				}
 			} else if (runType == SimulatorRunType.RUN_SIM || runType == SimulatorRunType.REPLAY_SIM) {
 				if (arg.startsWith("-G:")) {
@@ -491,7 +505,7 @@ public class TNT4JSimulator {
 					}
 				}
 
-				StringBuffer simDef = new StringBuffer();
+				StringBuilder simDef = new StringBuilder();
 				BufferedReader simLoader = new BufferedReader(new FileReader(simFileName));
 				String line;
 				while ((line = simLoader.readLine()) != null) {
@@ -601,9 +615,9 @@ public class TNT4JSimulator {
 		}
 
 		String gwUrl = TNT4JSimulator.getConnectUrl();
-		TNT4JSimulator.debug(new UsecTimestamp(),
-				"Connecting to service=" + gwUrl + " with access token=" + jkAccessToken + " ...");
-		gwConn = new JKCloudConnection(gwUrl, jkAccessToken, logger);
+		TNT4JSimulator.debug(new UsecTimestamp(), "Connecting to service=" + gwUrl + " with access token="
+				+ jkAccessToken + " and connection timeout=" + jKConnTimeout + " ...");
+		gwConn = new JKCloudConnection(gwUrl, jkAccessToken, jKConnTimeout, false, logger);
 		gwConn.open();
 
 		return gwConn;

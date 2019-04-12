@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<tnt4j-simulator>
+  <var name="company" 	value="=?"/>
+  <var name="vertical" 	value="=?"/>
+  <var name="product" 	value="=?"/>
+  <var name="staff" 	value="=?"/>
+
+  <source id="1" fqn="APPL=BankingLead#SERVER=Bank1#DATACENTER=IOTDC#GEOADDR=Chicago, IL"/>
+  <source id="2" fqn="APPL=Issuer#SERVER=MarketStrategy#DATACENTER=IOTDC#GEOADDR=New York, NY"/>
+  <source id="3" fqn="APPL=CreditAnalyst#SERVER=CreditAgency#DATACENTER=IOTDC#GEOADDR=New York, NY"/>
+  <source id="4" fqn="APPL=MarketingAnalyst#SERVER=MarketingAgency#DATACENTER=IOTDC#GEOADDR=New York, NY"/>
+  <source id="5" fqn="APPL=Counsel#SERVER=CyrptoLLP#DATACENTER=IOTDC#GEOADDR=New York, NY"/>
+  
+  <msg id="1">Obtain description, business: ${company}, doc.url=https://google.docs/${company}-description.pdf</msg>
+  <msg id="2">Describe industry, products business:${company}, doc.url=https://google.docs/${company}-industry.pdf</msg>
+  <msg id="3">Disclose marketing strategy: business:${company}, doc.url=https://google.docs/${company}-market-strategy.pdf</msg>
+  <msg id="4">Disclose competition: business:${company}, doc.url=https://google.docs/${company}-market-competition.pdf</msg>
+  <msg id="5">Test the waters: business:${company}, doc.url=https://google.docs/${company}-market-interest.pdf</msg>
+  <msg id="6">Collateral offered: business:${company}, doc.url=https://google.docs/${company}-collateral.pdf</msg>
+  <msg id="7">Articles of inc: business:${company}, doc.url=https://google.docs/${company}-artciles-inc.pdf</msg>
+  <msg id="8">Insurance coverages: business:${company}, doc.url=https://google.docs/${company}-insurance-coverages.pdf</msg>
+  <msg id="9">Working list of existing lenders: business:${company}, doc.url=https://google.docs/${company}-list-lenders.pdf</msg>
+  <msg id="10">Summarize loans: business:${company}, doc.url=https://google.docs/${company}-summary-loans.pdf</msg>
+  <msg id="11">Legal review and disclosure: business:${company}, doc.url=https://google.docs/${company}-legal-review.pdf</msg>
+  
+  <activity name="ObtainSummary" source="1" sev="INFO" loc="Dallas, Texas">
+    <event name="CompanyDesc" elapsed="1465" res="BankingLead1" msg="1" user="Bob Smith" type="SEND" tags="${company}">
+		<prop name="company" type="STRING" value="${company}"/>
+		<prop name="staff.count" type="INTEGER" value="34" valtype="count"/>
+		<prop name="product" type="STRING" value="${product}"/>
+	</event>
+    <event name="DescribeIndustry" elapsed="1212" res="BankingLead2" msg="1" user="Jane Crane" type="RECEIVE" tags="${company}">
+		<prop name="company" type="STRING" value="${company}"/>
+		<prop name="vertical" type="STRING" value="${vertical}"/>
+		<prop name="product" type="STRING" value="${product}"/>
+		<prop name="staff.count" type="INTEGER" value="34" valtype="count"/>
+		<prop name="doc.folder" type="STRING" value="https://google.docs/${company}/"/>
+	</event>
+    <event name="SendIndustryDetails" elapsed="2982" res="BankingLead2" msg="2" user="Jane Crane" type="SEND" tags="${company}">
+		<prop name="company" type="STRING" value="${company}"/>
+		<prop name="vertical" type="STRING" value="${vertical}"/>
+		<prop name="product" type="STRING" value="${product}"/>
+		<prop name="staff.count" type="INTEGER" value="34" valtype="count"/>
+		<prop name="doc.folder" type="STRING" value="https://google.docs/${company}/"/>
+	</event>
+  </activity>
+  
+  <sleep msec="2000"/>
+ 
+  <activity name="DefineMarket" source="2" sev="INFO" loc="Dallas, Texas">
+	<event name="DiscloseMarketStrategy" source="2" elapsed="2723" res="Issuer1" msg="2" user="John Doe" type="RECEIVE" tags="${company}">
+		<prop name="company" type="STRING" value="${company}"/>
+		<prop name="staff.count" type="INTEGER" value="${staff}" valtype="size.count"/>
+		<prop name="vertical" type="STRING" value="${vertical}"/>
+		<prop name="product" type="STRING" value="${product}"/>
+		<prop name="doc.folder" type="STRING" value="https://google.docs/${company}/"/>
+	</event>
+
+	<event name="MarketStrategy" source="3" elapsed="2838" res="CreditAnalyst" msg="3" user="Kathy Bane" type="SEND" tags="${company}">
+		<prop name="company" type="STRING" value="${company}"/>
+		<prop name="staff.count" type="INTEGER" value="${staff}" valtype="size.count"/>
+		<prop name="vertical" type="STRING" value="${vertical}"/>
+		<prop name="product" type="STRING" value="${product}"/>
+		<prop name="doc.folder" type="STRING" value="https://google.docs/${company}/"/>
+	</event>
+  </activity>
+
+  <sleep msec="2000"/>
+
+  <activity name="FormationDocuments" source="2" sev="INFO" loc="Dallas, Texas">
+	<event name="ProcessMarketDocs" source="2" elapsed="1723" res="Issuer1" msg="3" user="John Doe" type="RECEIVE" tags="${company}">
+		<prop name="company" type="STRING" value="${company}"/>
+		<prop name="staff.count" type="INTEGER" value="${staff}" valtype="size.count"/>
+		<prop name="vertical" type="STRING" value="${vertical}"/>
+		<prop name="product" type="STRING" value="${product}"/>
+		<prop name="doc.folder" type="STRING" value="https://google.docs/${company}/"/>
+	</event>
+
+	<event name="CreateFormationDocs" source="2" elapsed="1872" res="Issuer1" msg="7" user="John Doe" type="SEND" tags="${company}">
+		<prop name="company" type="STRING" value="${company}"/>
+		<prop name="staff.count" type="INTEGER" value="${staff}" valtype="size.count"/>
+		<prop name="vertical" type="STRING" value="${vertical}"/>
+		<prop name="product" type="STRING" value="${product}"/>
+		<prop name="doc.folder" type="STRING" value="https://google.docs/${company}/"/>
+	</event>
+  </activity>
+
+  <sleep msec="2000"/>
+
+  <activity name="LegalReview" source="5" sev="INFO" loc="Dallas, Texas">
+	<event name="ProcessMarketDocs" source="5" elapsed="3763" res="Counsel" msg="7" user="Brian Fox" type="RECEIVE" tags="${company}">
+		<prop name="company" type="STRING" value="${company}"/>
+		<prop name="staff.count" type="INTEGER" value="${staff}" valtype="size.count"/>
+		<prop name="vertical" type="STRING" value="${vertical}"/>
+		<prop name="product" type="STRING" value="${product}"/>
+		<prop name="doc.folder" type="STRING" value="https://google.docs/${company}/"/>
+	</event>
+
+	<event name="ApproveLegal" source="5" elapsed="9732" res="Counsel" sev="ANY" msg="11" user="Brian Fox" type="SEND" tags="${company}">
+		<prop name="company" type="STRING" value="${company}"/>
+		<prop name="staff.count" type="INTEGER" value="${staff}" valtype="size.count"/>
+		<prop name="vertical" type="STRING" value="${vertical}"/>
+		<prop name="product" type="STRING" value="${product}"/>
+		<prop name="doc.folder" type="STRING" value="https://google.docs/${company}/"/>
+	</event>
+  </activity>
+  
+</tnt4j-simulator>

@@ -44,10 +44,12 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  */
 public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 
-	private String token = System.getProperty("tnt4j.sink.factory.socket.token", "");
-	private String url = System.getProperty("tnt4j.sink.factory.socket.url", "http://localhost:6580");
+	private String token = System.getProperty("jesl.sink.factory.socket.token", "");
+	private String url = System.getProperty("jesl.sink.factory.socket.url", "http://localhost:6580");
 	// NOTE: server side uses 5min. to close inactive connection by default
-	private long idleTimeout = Long.getLong("tnt4j.sink.factory.socket.idle.timeout", TimeUnit.MINUTES.toMillis(4));
+	private long idleTimeout = Long.getLong("jesl.sink.factory.socket.idle.timeout", JKCloudEventSink.DEFAULT_IDLE_TIMEOUT);
+	private long connTimeout = Long.getLong("jesl.sink.factory.socket.conn.timeout", JKCloudEventSink.DEFAULT_CONN_TIMEOUT);
+	private boolean ackSends = Boolean.getBoolean("jesl.sink.factory.ack.sends");
 
 	private String proxyScheme = "http";
 	private String proxyHost;
@@ -89,9 +91,10 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 
 	@Override
 	protected EventSink configureSink(EventSink sink) {
-		EventSink jsink = super.configureSink(sink);
-		((JKCloudEventSink) jsink).setIdleTimeout(idleTimeout, TimeUnit.MILLISECONDS);
-		((JKCloudEventSink) jsink).setProxyParms(proxyScheme, proxyHost, proxyPort);
+		JKCloudEventSink jsink = (JKCloudEventSink) super.configureSink(sink);
+		jsink.setConnectionTimeout(connTimeout, TimeUnit.MILLISECONDS)
+				.setIdleTimeout(idleTimeout, TimeUnit.MILLISECONDS).setProxyParms(proxyScheme, proxyHost, proxyPort)
+				.ackSends(ackSends);
 		return jsink;
 	}
 
@@ -101,10 +104,12 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 
 		url = Utils.getString("Url", settings, url);
 		token = Utils.getString("Token", settings, token);
+		connTimeout = Utils.getLong("ConnTimeout", settings, connTimeout);
 		idleTimeout = Utils.getLong("IdleTimeout", settings, idleTimeout);
 		proxyScheme = Utils.getString("ProxyScheme", settings, proxyScheme);
 		proxyHost = Utils.getString("ProxyHost", settings, proxyHost);
 		proxyPort = Utils.getInt("ProxyPort", settings, proxyPort);
+		ackSends = Utils.getBoolean("AckSends", settings, ackSends);
 
 		_applyConfig(settings);
 	}

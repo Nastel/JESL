@@ -15,26 +15,17 @@
  */
 package com.jkoolcloud.jesl.simulator;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
 import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.Stack;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.commons.text.StringSubstitutor;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -43,15 +34,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.jkoolcloud.tnt4j.config.DefaultConfigFactory;
 import com.jkoolcloud.tnt4j.config.TrackerConfig;
-import com.jkoolcloud.tnt4j.core.ActivityStatus;
-import com.jkoolcloud.tnt4j.core.Message;
-import com.jkoolcloud.tnt4j.core.OpCompCode;
-import com.jkoolcloud.tnt4j.core.OpLevel;
-import com.jkoolcloud.tnt4j.core.OpType;
-import com.jkoolcloud.tnt4j.core.Property;
-import com.jkoolcloud.tnt4j.core.PropertySnapshot;
-import com.jkoolcloud.tnt4j.core.UsecTimestamp;
-import com.jkoolcloud.tnt4j.core.ValueTypes;
+import com.jkoolcloud.tnt4j.core.*;
 import com.jkoolcloud.tnt4j.source.DefaultSourceFactory;
 import com.jkoolcloud.tnt4j.source.Source;
 import com.jkoolcloud.tnt4j.tracker.DefaultTrackerFactory;
@@ -59,6 +42,7 @@ import com.jkoolcloud.tnt4j.tracker.Tracker;
 import com.jkoolcloud.tnt4j.tracker.TrackingActivity;
 import com.jkoolcloud.tnt4j.tracker.TrackingEvent;
 import com.jkoolcloud.tnt4j.utils.Utils;
+import com.jkoolcloud.tnt4j.uuid.DefaultUUIDFactory;
 
 /**
  * Implements the SAX DefaultHandler for parsing jKool TNT4J Activity Simulator XML.
@@ -115,15 +99,15 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	public static final String SIM_XML_ATTR_MSEC = "msec";
 	public static final String SIM_XML_ATTR_USEC = "usec";
 
-	private HashMap<String, Source> sourceNames = new HashMap<String, Source>();
-	private HashMap<Integer, Source> sourceIds = new HashMap<Integer, Source>();
-	private HashMap<Integer, Message> messageIds = new HashMap<Integer, Message>();
-	private Stack<TrackingActivity> activeActivities = new Stack<TrackingActivity>();
-	private Stack<String> activeElements = new Stack<String>();
+	private HashMap<String, Source> sourceNames = new HashMap<>();
+	private HashMap<Integer, Source> sourceIds = new HashMap<>();
+	private HashMap<Integer, Message> messageIds = new HashMap<>();
+	private Stack<TrackingActivity> activeActivities = new Stack<>();
+	private Stack<String> activeElements = new Stack<>();
 
-	private HashMap<String, Long> genValues = new HashMap<String, Long>();
-	private ConcurrentMap<String, String> vars = new ConcurrentHashMap<String, String>();
-	StrSubstitutor sub = new StrSubstitutor(vars);
+	private HashMap<String, Long> genValues = new HashMap<>();
+	private ConcurrentMap<String, String> vars = new ConcurrentHashMap<>();
+	StringSubstitutor sub = new StringSubstitutor(vars);
 
 	private Message curMsg;
 	private TrackingActivity curActivity;
@@ -141,12 +125,12 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private Locator saxLocator = null;
 
 	private DefaultTrackerFactory trackerFactory = new DefaultTrackerFactory();
-	private HashMap<String, Tracker> trackers = new HashMap<String, Tracker>();
+	private HashMap<String, Tracker> trackers = new HashMap<>();
 	private Tracker curTracker = null;
 	private Random random = new Random();
 
 	public Map<String, Long> getSinkStats() {
-		TreeMap<String, Long> sinkStats = new TreeMap<String, Long>();
+		TreeMap<String, Long> sinkStats = new TreeMap<>();
 		for (Tracker tracker : trackers.values()) {
 			Map<String, Object> stats = tracker.getStats();
 			for (String stat : stats.keySet()) {
@@ -175,7 +159,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			} else {
 				Long val = genValues.get(valLabel);
 				if (val == null) {
-					val = new Long(Utils.currentTimeUsec() + (genValues.size() + 1));
+					val = Utils.currentTimeUsec() + (genValues.size() + 1);
 					genValues.put(valLabel, val);
 				}
 				newStr = newStr.replaceAll("%" + valLabel + "%", val.toString());
@@ -283,8 +267,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				int max = Integer.parseInt(value.substring(value.indexOf("bet") + 4, value.length()));
 				value = "" + (random.nextInt(max - min + 1) + min);
 			}
-		} else if ((value.indexOf("+") > 0 && (value.indexOf("*") < 0))
-				|| (value.indexOf("*") > 0 && (value.indexOf("+") < 0))) {
+		} else if ((value.indexOf("+") > 0 && !value.contains("*"))
+				|| (value.indexOf("*") > 0 && !value.contains("+"))) {
 			symbol = (value.indexOf("+") > 0) ? "+" : "*";
 			totalValue = symbol.equals("*") ? 1 : 0;
 			while (value.indexOf(symbol) > 0) {
@@ -301,7 +285,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			value = "" + totalValue;
 		} else if (value.indexOf("|") > 0) {
 			StringTokenizer tk = new StringTokenizer(value, "|");
-			ArrayList<String> tokens = new ArrayList<String>();
+			ArrayList<String> tokens = new ArrayList<>();
 			while (tk.hasMoreElements()) {
 				tokens.add((String) tk.nextElement());
 			}
@@ -345,6 +329,14 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			throw new SAXException("Failed processing definition for option '" + name + "': " + e, e);
 		}
 	}
+	
+	private String mapValue(String value) {
+		if (value.equals("=0x")) {
+			value = "0x" + Hex.encodeHexString(DefaultUUIDFactory.getInstance().newUUID().getBytes());
+		}		
+		return value;
+	}
+
 
 	private void defineVar(Attributes attributes) throws SAXException {
 		String name = null;
@@ -388,7 +380,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				value = (value == null || value.length() == 0) ? defVal : value;
 			}
 
-			String eVal = vars.putIfAbsent(name, value);
+			String eVal = vars.putIfAbsent(name, mapValue(value));
 			if (eVal != null) {
 				TNT4JSimulator.trace(simCurrTime,
 						"Skipping duplicate variable: '" + name + "=" + value + "', existing.value='" + eVal + "'");
@@ -565,7 +557,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				} else if (attName.equals(SIM_XML_ATTR_TYPE)) {
 					type = attValue;
 				} else if (attName.equals(SIM_XML_ATTR_VALUE)) {
-					value = attValue;
+					value = mapValue(attValue);
 				} else if (attName.equals(SIM_XML_ATTR_VALTYPE)) {
 					valType = attValue;
 				} else if (attName.equals(SIM_XML_ATTR_VARY)) {
@@ -606,22 +598,22 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 		if ("INTEGER".equalsIgnoreCase(type) || "INT".equalsIgnoreCase(type)) {
 			Integer num = Integer.parseInt(generateFromRange(type, value));
-			propValue = vary ? (int) TNT4JSimulator.varyValue(num.intValue()) : num;
+			propValue = vary ? (int) TNT4JSimulator.varyValue(num) : num;
 		} else if ("LONG".equalsIgnoreCase(type)) {
 			Long num = Long.parseLong(generateFromRange(type, value));
-			propValue = vary ? (long) TNT4JSimulator.varyValue(num.longValue()) : num;
+			propValue = vary ? (long) TNT4JSimulator.varyValue(num) : num;
 		} else if ("DECIMAL".equalsIgnoreCase(type)) {
 			Double num = Double.parseDouble(generateFromRange(type, value));
 			if (!vary) {
 				propValue = num;
-			}
-			else {
+			} else {
 				int precision = 2;
 				String numStr = Double.toString(num);
 				int dec = numStr.indexOf(DecimalFormatSymbols.getInstance().getDecimalSeparator());
-				if (dec >= 0)
+				if (dec >= 0) {
 					precision = numStr.length() - dec - 1;
-				propValue = TNT4JSimulator.varyValue(num.doubleValue(), precision);
+				}
+				propValue = TNT4JSimulator.varyValue(num, precision);
 			}
 		} else if ("BOOLEAN".equalsIgnoreCase(type)) {
 			if (StringUtils.isEmpty(valType)) {
@@ -643,7 +635,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				valType = ValueTypes.VALUE_TYPE_TIMESTAMP;
 			}
 		} else if ("STRING".equalsIgnoreCase(type)) {
-			propValue = value.toString();
+			propValue = mapValue(value.toString());
 		} else if (!StringUtils.isEmpty(type)) {
 			throw new SAXParseException("<" + SIM_XML_PROP + ">: invalid type: " + type, saxLocator);
 		}
@@ -732,7 +724,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					FileReader fileReader = null;
 					try {
 						fileReader = new FileReader(fileName);
-						StringBuffer msgData = new StringBuffer();
+						StringBuilder msgData = new StringBuilder();
 						char[] text = new char[2048];
 						int numRead = 0;
 						while ((numRead = fileReader.read(text, 0, text.length)) > 0) {
@@ -822,7 +814,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				String attValue = expandEnvVars(attributes.getValue(i));
 
 				if (attName.equals(SIM_XML_ATTR_NAME)) {
-					name = attValue;
+					name = mapValue(attValue);
 				} else if (attName.equals(SIM_XML_ATTR_SOURCE)) {
 					srcId = Integer.parseInt(attValue);
 					if (srcId <= 0) {
@@ -958,8 +950,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			tracker.tnt(curActivity);
 			try {
 				tracker.getEventSink().flush();
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				TNT4JSimulator.warn("Failed flushing event sink on stop of activity " + curActivity.getName(), e);
 			}
 		}
@@ -972,7 +963,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private void runEvent(Attributes attributes) throws SAXException {
 		TNT4JSimulator.trace(simCurrTime, "Started event ...");
 
-		String name = expandEnvVars(attributes.getValue(SIM_XML_ATTR_NAME));
+		String name = mapValue(expandEnvVars(attributes.getValue(SIM_XML_ATTR_NAME)));
 
 		if (StringUtils.isEmpty(name)) {
 			throw new SAXParseException("<" + SIM_XML_EVENT + ">: '" + SIM_XML_ATTR_NAME + "' must be specified",
@@ -1189,7 +1180,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			elapsed = TNT4JSimulator.varyValue(elapsed);
 
 			if (msgId != null && msgId > 0) {
-				Message eventMsg = messageIds.get(msgId.intValue());
+				Message eventMsg = messageIds.get(msgId);
 				if (eventMsg == null) {
 					throw new SAXParseException(
 							"Undefined " + SIM_XML_ATTR_MSG + " '" + msgId + "' for <" + SIM_XML_EVENT + ">",
@@ -1273,7 +1264,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	 * @return resolved variable or itself if not a variable
 	 */
 	public String expandEnvVars(String text) {
-		return StrSubstitutor.replaceSystemProperties(sub.replace(text));
+		return StringSubstitutor.replaceSystemProperties(sub.replace(text));
 	}
 
 	/**

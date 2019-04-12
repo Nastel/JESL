@@ -32,13 +32,17 @@ import com.jkoolcloud.tnt4j.sink.EventSink;
 public class JKCloudConnection {
 	private String gwUrl;
 	private String accessToken;
+	private long connTimeout;
+	private boolean ackSends = false;
 
 	private JKClient jkHandle;
 	private TrackingLogger logger;
 
-	public JKCloudConnection(String url, String accessToken, TrackingLogger logger) {
+	public JKCloudConnection(String url, String accessToken, long connTimeout, boolean acks, TrackingLogger logger) {
 		this.gwUrl = url.toLowerCase();
 		this.accessToken = accessToken;
+		this.connTimeout = connTimeout;
+		this.ackSends = acks;
 		this.logger = logger;
 	}
 
@@ -56,7 +60,7 @@ public class JKCloudConnection {
 		}
 
 		try {
-			jkHandle = new JKClient(gwUrl, getEventSink());
+			jkHandle = new JKClient(gwUrl, connTimeout, getEventSink());
 			jkHandle.connect(accessToken);
 		} catch (URISyntaxException e) {
 			close();
@@ -75,7 +79,10 @@ public class JKCloudConnection {
 
 		try {
 			if (jkHandle != null) {
-				jkHandle.send(msg, false);
+				jkHandle.send(msg, ackSends);
+				if (ackSends) {
+					jkHandle.read();
+				}
 			} else {
 				throw new IOException("Connection not opened");
 			}

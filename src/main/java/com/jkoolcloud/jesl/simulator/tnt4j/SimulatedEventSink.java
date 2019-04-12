@@ -17,6 +17,7 @@ package com.jkoolcloud.jesl.simulator.tnt4j;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSink;
 import com.jkoolcloud.tnt4j.core.KeyValueStats;
@@ -33,6 +34,7 @@ import com.jkoolcloud.tnt4j.sink.impl.FileSink;
 import com.jkoolcloud.tnt4j.source.Source;
 import com.jkoolcloud.tnt4j.tracker.TrackingActivity;
 import com.jkoolcloud.tnt4j.tracker.TrackingEvent;
+import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
  * JESL event sink implements event sink simulation used by JESL Simulator.
@@ -45,12 +47,13 @@ public class SimulatedEventSink extends AbstractEventSink {
 	private EventFormatter formatter = new JSONFormatter();
 	private Sink outSink;
 
-	public SimulatedEventSink(String name, String url, String gwAccessToken, EventFormatter formatter,
+	public SimulatedEventSink(String name, String url, String gwAccessToken, long connTimeout, EventFormatter formatter,
 			EventLimiter limiter) {
 		super(name, formatter);
 
 		if (url.startsWith("http://") || url.startsWith("https://")) {
 			outSink = new JKCloudEventSink(name, url, gwAccessToken, new DefaultFormatter(), null);
+			((JKCloudEventSink) outSink).setConnectionTimeout(connTimeout, TimeUnit.MILLISECONDS);
 			((EventSink) outSink).setLimiter(limiter);
 		} else if (url.startsWith("file://")) {
 			String fileName = url.substring(FILE_PREFIX.length());
@@ -72,10 +75,10 @@ public class SimulatedEventSink extends AbstractEventSink {
 		if (isOpen()) {
 			incrementBytesSent(msg.length());
 			try {
-	            outSink.write(msg);
-            } catch (InterruptedException e) {
-            	throw new IOException(e);
-            }
+				outSink.write(msg);
+			} catch (InterruptedException e) {
+				throw new IOException(e);
+			}
 		}
 	}
 
@@ -123,7 +126,7 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized void open() throws IOException {
+	protected synchronized void _open() throws IOException {
 		if (outSink != null) {
 			outSink.open();
 		}
@@ -133,22 +136,18 @@ public class SimulatedEventSink extends AbstractEventSink {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isOpen() {
-		return (outSink != null && outSink.isOpen());
+	protected synchronized void _close() throws IOException {
+		if (outSink != null) {
+			outSink.close();
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized void close() throws IOException {
-		try {
-			if (outSink != null) {
-				outSink.close();
-			}
-		} finally {
-			outSink = null;
-		}
+	public boolean isOpen() {
+		return Utils.isOpen(outSink);
 	}
 
 	/**

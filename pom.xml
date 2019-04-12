@@ -4,7 +4,7 @@
 
     <groupId>com.jkoolcloud</groupId>
     <artifactId>jesl</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.9-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>jesl</name>
@@ -60,10 +60,10 @@
         <gpg.skip.sign>true</gpg.skip.sign>
         <build.assemblies.attach>false</build.assemblies.attach>
 
-        <tnt4j.version>2.9-SNAPSHOT</tnt4j.version>
+        <tnt4j.version>2.11-SNAPSHOT</tnt4j.version>
         <tnt4j.syslogd.version>0.3</tnt4j.syslogd.version>
-        <httpcomponents.version>4.2.6</httpcomponents.version>
-        <httpcomponents.core.version>4.2.5</httpcomponents.core.version>
+        <httpcomponents.version>4.5.7</httpcomponents.version>
+        <slf4j.version>1.7.26</slf4j.version>
     </properties>
 
     <dependencies>
@@ -71,12 +71,6 @@
             <groupId>com.jkoolcloud</groupId>
             <artifactId>tnt4j</artifactId>
             <version>${tnt4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.jkoolcloud.jesl.net</groupId>
-            <artifactId>tnt4j-syslogd</artifactId>
-            <version>${tnt4j.syslogd.version}</version>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -88,6 +82,19 @@
                     <artifactId>commons-codec</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <!-- optional dependencies for sim module -->
+        <dependency>
+            <groupId>com.jkoolcloud.jesl.net</groupId>
+            <artifactId>tnt4j-syslogd</artifactId>
+            <version>${tnt4j.syslogd.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -110,7 +117,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.0</version>
                 <configuration>
                     <verbose>${java.compiler.verbose}</verbose>
                     <compilerVersion>${java.compiler.version}</compilerVersion>
@@ -136,7 +143,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
+                <version>3.0.1</version>
                 <configuration>
                     <failOnError>${javadoc.failOnError}</failOnError>
                 </configuration>
@@ -176,7 +183,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <inherited>false</inherited>
                 <configuration>
                     <filesets>
@@ -189,7 +196,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.20.1</version>
+                <version>2.22.1</version>
                 <inherited>true</inherited>
                 <configuration>
                     <skipTests>${skipTests}</skipTests>
@@ -198,7 +205,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.1.0</version>
                 <configuration>
                     <archive>
                         <!--<index>true</index>-->
@@ -219,7 +226,7 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.5.1</version>
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>

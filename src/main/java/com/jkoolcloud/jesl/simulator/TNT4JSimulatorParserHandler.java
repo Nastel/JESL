@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringSubstitutor;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -99,15 +99,15 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	public static final String SIM_XML_ATTR_MSEC = "msec";
 	public static final String SIM_XML_ATTR_USEC = "usec";
 
-	private HashMap<String, Source> sourceNames = new HashMap<>();
-	private HashMap<Integer, Source> sourceIds = new HashMap<>();
-	private HashMap<Integer, Message> messageIds = new HashMap<>();
-	private Stack<TrackingActivity> activeActivities = new Stack<>();
-	private Stack<String> activeElements = new Stack<>();
+	private HashMap<String, Source> sourceNames = new HashMap<String, Source>();
+	private HashMap<Integer, Source> sourceIds = new HashMap<Integer, Source>();
+	private HashMap<Integer, Message> messageIds = new HashMap<Integer, Message>();
+	private Stack<TrackingActivity> activeActivities = new Stack<TrackingActivity>();
+	private Stack<String> activeElements = new Stack<String>();
 
-	private HashMap<String, Long> genValues = new HashMap<>();
-	private ConcurrentMap<String, String> vars = new ConcurrentHashMap<>();
-	StringSubstitutor sub = new StringSubstitutor(vars);
+	private HashMap<String, Long> genValues = new HashMap<String, Long>();
+	private ConcurrentMap<String, String> vars = new ConcurrentHashMap<String, String>();
+	StrSubstitutor sub = new StrSubstitutor(vars);
 
 	private Message curMsg;
 	private TrackingActivity curActivity;
@@ -125,12 +125,12 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private Locator saxLocator = null;
 
 	private DefaultTrackerFactory trackerFactory = new DefaultTrackerFactory();
-	private HashMap<String, Tracker> trackers = new HashMap<>();
+	private HashMap<String, Tracker> trackers = new HashMap<String, Tracker>();
 	private Tracker curTracker = null;
 	private Random random = new Random();
 
 	public Map<String, Long> getSinkStats() {
-		TreeMap<String, Long> sinkStats = new TreeMap<>();
+		TreeMap<String, Long> sinkStats = new TreeMap<String, Long>();
 		for (Tracker tracker : trackers.values()) {
 			Map<String, Object> stats = tracker.getStats();
 			for (String stat : stats.keySet()) {
@@ -285,7 +285,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			value = "" + totalValue;
 		} else if (value.indexOf("|") > 0) {
 			StringTokenizer tk = new StringTokenizer(value, "|");
-			ArrayList<String> tokens = new ArrayList<>();
+			ArrayList<String> tokens = new ArrayList<String>();
 			while (tk.hasMoreElements()) {
 				tokens.add((String) tk.nextElement());
 			}
@@ -329,14 +329,13 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			throw new SAXException("Failed processing definition for option '" + name + "': " + e, e);
 		}
 	}
-	
+
 	private String mapValue(String value) {
 		if (value.equals("=0x")) {
 			value = "0x" + Hex.encodeHexString(DefaultUUIDFactory.getInstance().newUUID().getBytes());
-		}		
+		}
 		return value;
 	}
-
 
 	private void defineVar(Attributes attributes) throws SAXException {
 		String name = null;
@@ -1264,7 +1263,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	 * @return resolved variable or itself if not a variable
 	 */
 	public String expandEnvVars(String text) {
-		return StringSubstitutor.replaceSystemProperties(sub.replace(text));
+		return StrSubstitutor.replaceSystemProperties(sub.replace(text));
 	}
 
 	/**

@@ -55,7 +55,7 @@ public class TNT4JSimulator {
 	private static String jkHost = null;
 	private static int jkPort = 443;
 	private static String jkAccessToken = null;
-	private static long jKConnTimeout = 10000;
+	private static long jKConnTimeout = TimeUnit.SECONDS.toMillis(10);
 	private static String simFileName = "";
 	private static boolean uniqueTags = false;
 	private static boolean uniqueCorrs = false;

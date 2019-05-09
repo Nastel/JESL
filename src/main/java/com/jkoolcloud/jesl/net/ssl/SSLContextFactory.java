@@ -143,7 +143,7 @@ public class SSLContextFactory {
 	}
 
 	/**
-	 * Obtain <code>SSLContext</code> instance
+	 * Obtain {@link javax.net.ssl.SSLContext} instance
 	 *
 	 * @param isClient
 	 *            is client

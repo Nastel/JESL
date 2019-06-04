@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2018 JKOOL, LLC.
+ * Copyright 2015-2019 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -329,14 +329,13 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			throw new SAXException("Failed processing definition for option '" + name + "': " + e, e);
 		}
 	}
-	
+
 	private String mapValue(String value) {
 		if (value.equals("=0x")) {
 			value = "0x" + Hex.encodeHexString(DefaultUUIDFactory.getInstance().newUUID().getBytes());
-		}		
+		}
 		return value;
 	}
-
 
 	private void defineVar(Attributes attributes) throws SAXException {
 		String name = null;

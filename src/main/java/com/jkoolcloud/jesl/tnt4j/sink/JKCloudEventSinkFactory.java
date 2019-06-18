@@ -54,6 +54,8 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 	private String proxyScheme = "http";
 	private String proxyHost;
 	private int proxyPort = 0;
+	private String proxyUser;
+	private String proxyPass;
 
 	/**
 	 * Create a jKoolCloud Event Sink factory.
@@ -94,7 +96,7 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 		JKCloudEventSink jsink = (JKCloudEventSink) super.configureSink(sink);
 		jsink.setConnectionTimeout(connTimeout, TimeUnit.MILLISECONDS)
 				.setIdleTimeout(idleTimeout, TimeUnit.MILLISECONDS).setProxyParms(proxyScheme, proxyHost, proxyPort)
-				.ackSends(ackSends);
+				.setProxyCredentials(proxyUser, proxyPass).ackSends(ackSends);
 		return jsink;
 	}
 
@@ -109,6 +111,8 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 		proxyScheme = Utils.getString("ProxyScheme", settings, proxyScheme);
 		proxyHost = Utils.getString("ProxyHost", settings, proxyHost);
 		proxyPort = Utils.getInt("ProxyPort", settings, proxyPort);
+		proxyUser = Utils.getString("ProxyUser", settings, proxyUser);
+		proxyPass = Utils.getString("ProxyPass", settings, proxyPass);
 		ackSends = Utils.getBoolean("AckSends", settings, ackSends);
 
 		_applyConfig(settings);

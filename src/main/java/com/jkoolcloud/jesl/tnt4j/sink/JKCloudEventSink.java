@@ -73,6 +73,8 @@ public class JKCloudEventSink extends LoggedEventSink {
 	private String proxyScheme = "http";
 	private String proxyHost;
 	private int proxyPort = 0;
+	private String proxyUser;
+	private String proxyPass;
 
 	private long connTimeout = DEFAULT_CONN_TIMEOUT;
 	private long idleTimeout = DEFAULT_IDLE_TIMEOUT;
@@ -126,7 +128,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 	}
 
 	/**
-	 * Sets proxy communication parameters
+	 * Sets proxy communication parameters.
 	 *
 	 * @param scheme
 	 *            proxy communication scheme
@@ -140,6 +142,21 @@ public class JKCloudEventSink extends LoggedEventSink {
 		this.proxyScheme = scheme;
 		this.proxyHost = host;
 		this.proxyPort = port;
+		return this;
+	}
+
+	/**
+	 * Sets proxy basic authentication credentials.
+	 *
+	 * @param user
+	 *            proxy authentication user name
+	 * @param pass
+	 *            proxy authentication password
+	 * @return itself
+	 */
+	public JKCloudEventSink setProxyCredentials(String user, String pass) {
+		this.proxyUser = user;
+		this.proxyPass = pass;
 		return this;
 	}
 
@@ -290,9 +307,10 @@ public class JKCloudEventSink extends LoggedEventSink {
 		try {
 			_close();
 			logger.log(OpLevel.DEBUG,
-					"Open name={4}, url={0}, timeout={5}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url,
-					proxyHost, proxyPort, proxyScheme, this.getName(), connTimeout);
-			jkHandle = new JKClient(url, connTimeout, proxyHost, proxyPort, proxyScheme, logger);
+					"Open name={6}, url={0}, timeout={5}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
+					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx",
+					this.getName(), connTimeout);
+			jkHandle = new JKClient(url, connTimeout, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass, logger);
 			if (!StringUtils.isEmpty(accessToken)) {
 				jkHandle.connect(accessToken);
 			} else {
@@ -303,8 +321,9 @@ public class JKCloudEventSink extends LoggedEventSink {
 			super._open();
 		} catch (URISyntaxException e) {
 			logger.log(OpLevel.ERROR,
-					"Failed to open name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}", url,
-					proxyHost, proxyPort, proxyScheme, this.getName(), e);
+					"Failed to open name={6}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
+					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx",
+					this.getName(), e);
 			_close();
 			throw new IOException(e.getMessage(), e);
 		}

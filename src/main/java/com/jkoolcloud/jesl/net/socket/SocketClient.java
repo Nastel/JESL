@@ -21,8 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 
-import javax.net.SocketFactory;
-import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.SSLContext;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -35,8 +34,14 @@ import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
  * This class provides TCP/SSL connection to the specified JESL server based on given URL. tcp[s]://host:port
+ * <p>
+ * In case your SOCKS proxy requires authentication, use system properties to define credentials:
+ * <ul>
+ * <li>{@code java.net.socks.username} - proxy user name</li>
+ * <li>{@code java.net.socks.password} - proxy user password</li>
+ * </ul>
  *
- * @version $Revision: 3 $
+ * @version $Revision: 4 $
  */
 public class SocketClient implements JKStream {
 	protected EventSink logger;
@@ -96,9 +101,6 @@ public class SocketClient implements JKStream {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public synchronized void connect() throws IOException {
 		if (isConnected()) {
@@ -106,11 +108,14 @@ public class SocketClient implements JKStream {
 		}
 		long startTime = System.currentTimeMillis();
 		try {
+			socket = new Socket(proxy);
+			socket.connect(new InetSocketAddress(host, port));
+
 			if (secure) {
-				SocketFactory socketFactory = SSLSocketFactory.getDefault();
-				socket = socketFactory.createSocket(host, port);
-			} else {
-				socket = new Socket(host, port);
+				SSLContext sslContext = SSLContext.getInstance("SSL");
+				sslContext.init(null, null, null);
+				socket = sslContext.getSocketFactory().createSocket(socket, proxyAddr.getHostName(),
+						proxyAddr.getPort(), true);
 			}
 			out = new DataOutputStream(socket.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -127,9 +132,6 @@ public class SocketClient implements JKStream {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public synchronized void connect(String token) throws IOException {
 		connect();
@@ -147,9 +149,6 @@ public class SocketClient implements JKStream {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public synchronized void send(String msg, boolean wantResponse) throws IOException {
 		if (wantResponse) {
@@ -162,9 +161,6 @@ public class SocketClient implements JKStream {
 		out.flush();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public synchronized void close() {
 		if (socket != null) {
@@ -174,57 +170,36 @@ public class SocketClient implements JKStream {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getHost() {
 		return host;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int getPort() {
 		return port;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isSecure() {
 		return secure;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getProxyHost() {
 		return (proxyAddr != null ? proxyAddr.getHostName() : null);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int getProxyPort() {
 		return (proxyAddr != null ? proxyAddr.getPort() : 0);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isConnected() {
 		return (socket != null && socket.isConnected());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public synchronized String read() throws IOException {
 		if (socket == null) {
@@ -233,17 +208,11 @@ public class SocketClient implements JKStream {
 		return in.readLine();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		return "tcp" + (isSecure() ? "s" : "") + "://" + host + ":" + port;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public URI getURI() {
 		try {

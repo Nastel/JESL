@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.*;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -52,9 +53,8 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  * @version $Revision: 3 $
  */
 public class HttpClient implements HttpStream {
-	public static final String HEADER_KEY_PRAGMA = "Pragma";
-	public static final String PRAGMA_VALUE_NO_RESPONSE = "no-response";
-	public static final String PRAGMA_VALUE_PING = "ping";
+	private static final String PRAGMA_VALUE_NO_RESPONSE = "no-response";
+	private static final String PRAGMA_VALUE_PING = "ping";
 
 	public static final long DEFAULT_CONN_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
 
@@ -68,6 +68,7 @@ public class HttpClient implements HttpStream {
 	protected String sslKeystorePwd;
 	protected HttpHost httpHost;
 	protected HttpHost httpProxy;
+	protected String proxyCredentials;
 	protected BasicHttpClientConnectionManager connMgr;
 	protected HttpClientConnection connection;
 	protected boolean secure = false;
@@ -127,6 +128,33 @@ public class HttpClient implements HttpStream {
 	 */
 	public HttpClient(String urlStr, long connTimeout, String proxyHost, int proxyPort, String proxyScheme,
 			EventSink logger) throws URISyntaxException {
+		this(urlStr, connTimeout, proxyHost, proxyPort, proxyScheme, null, null, logger);
+	}
+
+	/**
+	 * Create JESL HTTP[S} client stream with given attributes
+	 *
+	 * @param urlStr
+	 *            connection string to specified JESL server
+	 * @param connTimeout
+	 *            connection timeout in milliseconds
+	 * @param proxyHost
+	 *            proxy host name if any, null if none
+	 * @param proxyPort
+	 *            proxy port number if any, 0 of none
+	 * @param proxyScheme
+	 *            proxy communication scheme
+	 * @param proxyUser
+	 *            proxy authentication user
+	 * @param proxyPass
+	 *            proxy authentication password
+	 * @param logger
+	 *            event sink used for logging, null if none
+	 * @throws URISyntaxException
+	 *             if invalid connection string
+	 */
+	public HttpClient(String urlStr, long connTimeout, String proxyHost, int proxyPort, String proxyScheme,
+			String proxyUser, String proxyPass, EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
 		secure = "https".equalsIgnoreCase(scheme);
@@ -138,14 +166,15 @@ public class HttpClient implements HttpStream {
 		if (port <= 0) {
 			port = (secure ? 443 : 80);
 		}
-		init(host, port, uri.getPath(), secure, connTimeout, proxyHost, proxyPort, proxyScheme, logger);
+		init(host, port, uri.getPath(), secure, connTimeout, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass,
+				logger);
 	}
 
 	/**
-	 *
+	 * Initializes client properties.
 	 */
 	private void init(String host, int port, String uriPath, boolean secure, long timeout, String proxyHost,
-			int proxyPort, String proxyScheme, EventSink logger) {
+			int proxyPort, String proxyScheme, String proxyUser, String proxyPass, EventSink logger) {
 		this.host = host;
 		this.port = port;
 		this.uriPath = uriPath;
@@ -153,11 +182,15 @@ public class HttpClient implements HttpStream {
 		this.connTimeout = timeout;
 		this.logger = (logger != null ? logger : DefaultEventSinkFactory.defaultEventSink(HttpClient.class));
 
-		String scheme = (secure ? "https" : "http");
+		String scheme = secure ? "https" : "http";
 
 		httpHost = new HttpHost(host, port, scheme);
 		if (!StringUtils.isEmpty(proxyHost)) {
 			httpProxy = new HttpHost(proxyHost, proxyPort, proxyScheme);
+		}
+		if (StringUtils.isNotEmpty(proxyUser)) {
+			proxyCredentials = proxyUser.trim() + ":" + proxyPass == null ? "" : proxyPass;
+			proxyCredentials = Base64.encodeBase64String(proxyCredentials.getBytes());
 		}
 	}
 
@@ -221,9 +254,6 @@ public class HttpClient implements HttpStream {
 				(httpProxy != null ? httpProxy : "(noproxy)"), (System.currentTimeMillis() - startTime), connTimeout);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public synchronized void connect() throws IOException {
 		long startTime = System.currentTimeMillis();
@@ -242,9 +272,6 @@ public class HttpClient implements HttpStream {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public synchronized void connect(String token) throws IOException {
 		connect();
@@ -260,9 +287,6 @@ public class HttpClient implements HttpStream {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public synchronized void sendRequest(HttpRequest request, boolean wantResponse) throws IOException {
 		if (!(request instanceof org.apache.http.HttpRequest)) {
@@ -271,7 +295,10 @@ public class HttpClient implements HttpStream {
 
 		try {
 			if (!wantResponse) {
-				request.setHeader(HEADER_KEY_PRAGMA, PRAGMA_VALUE_NO_RESPONSE);
+				request.setHeader(HttpHeaders.PRAGMA, PRAGMA_VALUE_NO_RESPONSE);
+			}
+			if (StringUtils.isNotEmpty(proxyCredentials)) {
+				request.setHeader(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + proxyCredentials);
 			}
 			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", uri, request);
 			org.apache.http.HttpRequest httpRequest = (org.apache.http.HttpRequest) request;
@@ -285,16 +312,13 @@ public class HttpClient implements HttpStream {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse)
 			throws IOException {
 		try {
 			HttpRequest req = newRequest(method, reqUri);
 			if (!StringUtils.isEmpty(content)) {
-				req.setContent(contentType, content, "UTF-8");
+				req.setContent(contentType, content, Utils.UTF8);
 			}
 			sendRequest(req, wantResponse);
 		} catch (IllegalStateException ise) {
@@ -306,18 +330,12 @@ public class HttpClient implements HttpStream {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void send(String msg, boolean wantResponse) throws IOException {
 		String contentType = (msg != null && msg.startsWith("<?xml") ? "text/xml" : "text/plain");
 		sendRequest("POST", uriPath, contentType, msg, wantResponse);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public synchronized HttpResponse getResponse() throws IOException {
 		try {
@@ -334,9 +352,6 @@ public class HttpClient implements HttpStream {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public synchronized String read() throws IOException {
 		HttpResponse resp = getResponse();
@@ -360,9 +375,6 @@ public class HttpClient implements HttpStream {
 		return content;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public synchronized void close() {
 		if (connection != null) {
@@ -384,7 +396,7 @@ public class HttpClient implements HttpStream {
 		try {
 			logger.log(OpLevel.DEBUG, "Ping {0}: ensure all requests have been sent to {1}", this, uri);
 			HttpRequest pingReq = newDefaultRequest();
-			pingReq.setHeader(HEADER_KEY_PRAGMA, PRAGMA_VALUE_PING);
+			pingReq.setHeader(HttpHeaders.PRAGMA, PRAGMA_VALUE_PING);
 			sendRequest(pingReq, true);
 			HttpResponse pingResp = getResponse();
 			logger.log(OpLevel.DEBUG, "Ping {0}: response received from {1}, response={2}", this, uri, pingResp);
@@ -392,65 +404,41 @@ public class HttpClient implements HttpStream {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getHost() {
 		return (httpHost != null ? httpHost.getHostName() : null);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int getPort() {
 		return (httpHost != null ? httpHost.getPort() : 0);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getProxyHost() {
 		return (httpProxy != null ? httpProxy.getHostName() : null);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int getProxyPort() {
 		return (httpProxy != null ? httpProxy.getPort() : 0);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isSecure() {
 		return (httpHost != null && "https".equals(httpHost.getSchemeName()));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isConnected() {
 		return (connection != null && connection.isOpen());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		return httpHost.toString();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public HttpRequest newRequest(String method, String uri) {
 		if (StringUtils.isEmpty(uri)) {
@@ -464,17 +452,11 @@ public class HttpClient implements HttpStream {
 		return newRequest("POST", uriPath);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public HttpResponse newResponse(String protocol, int major, int minor, int status) {
 		return new HttpResponseImpl(new ProtocolVersion(protocol, major, minor), status);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public URI getURI() {
 		return uri;

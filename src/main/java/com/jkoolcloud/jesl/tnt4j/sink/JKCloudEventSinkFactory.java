@@ -103,7 +103,14 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 		super.setConfiguration(settings);
 
 		url = Utils.getString("Url", settings, url);
-		token = Utils.getString("Token", settings, token);
+		String accessToken = Utils.getString("Token", settings, token);
+		if (!accessToken.startsWith("/")) {
+			// wrap access token with identification path
+			token = makeTokenID(accessToken);
+		} else {
+			// use old style token as is (must be prefixed with /).
+			token = accessToken.substring(1);
+		}
 		connTimeout = Utils.getLong("ConnTimeout", settings, connTimeout);
 		idleTimeout = Utils.getLong("IdleTimeout", settings, idleTimeout);
 		proxyScheme = Utils.getString("ProxyScheme", settings, proxyScheme);
@@ -123,5 +130,13 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 			ce.initCause(e1);
 			throw ce;
 		}
+	}
+	
+	private String makeTokenID(String tk) {
+		return  "/" + Utils.getLocalHostName() + 
+				"/" + Utils.getLocalHostAddress() + 
+				"/" + Utils.getVMName() + 
+				"/" + Utils.getVMPID() + 
+				"/" + tk;	
 	}
 }

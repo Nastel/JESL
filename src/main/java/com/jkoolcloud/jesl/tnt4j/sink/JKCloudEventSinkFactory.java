@@ -44,7 +44,7 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  */
 public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 
-	private String token = System.getProperty("jesl.sink.factory.socket.token", "");
+	private String token = System.getProperty("jesl.sink.factory.socket.token", "incognito");
 	private String url = System.getProperty("jesl.sink.factory.socket.url", "http://localhost:6580");
 	// NOTE: server side uses 5min. to close inactive connection by default
 	private long idleTimeout = Long.getLong("jesl.sink.factory.socket.idle.timeout", JKCloudEventSink.DEFAULT_IDLE_TIMEOUT);

@@ -103,21 +103,13 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 		super.setConfiguration(settings);
 
 		url = Utils.getString("Url", settings, url);
-		String accessToken = Utils.getString("Token", settings, token);
-		if (!accessToken.startsWith("/")) {
-			// wrap access token with identification path
-			token = makeTokenID(accessToken);
-		} else {
-			// use old style token as is (must be prefixed with /).
-			token = accessToken.substring(1);
-		}
+		token = makeAccessToken(Utils.getString("Token", settings, token));
 		connTimeout = Utils.getLong("ConnTimeout", settings, connTimeout);
 		idleTimeout = Utils.getLong("IdleTimeout", settings, idleTimeout);
 		proxyScheme = Utils.getString("ProxyScheme", settings, proxyScheme);
 		proxyHost = Utils.getString("ProxyHost", settings, proxyHost);
 		proxyPort = Utils.getInt("ProxyPort", settings, proxyPort);
 		ackSends = Utils.getBoolean("AckSends", settings, ackSends);
-
 		_applyConfig(settings);
 	}
 
@@ -132,11 +124,17 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 		}
 	}
 	
-	private String makeTokenID(String tk) {
-		return  "/" + Utils.getLocalHostName() + 
-				"/" + Utils.getLocalHostAddress() + 
-				"/" + Utils.getVMName() + 
-				"/" + Utils.getVMPID() + 
-				"/" + tk;	
+	private String makeAccessToken(String tk) {
+		if (!tk.startsWith("/")) {
+			// wrap access token with identification path of originator
+			return  "/" + Utils.getLocalHostName() + 
+					"/" + Utils.getLocalHostAddress() + 
+					"/" + Utils.getVMName() + 
+					"/" + Utils.getVMPID() + 
+					"/" + tk;	
+		} else {
+			// use old style token as is (must be prefixed with /).
+			return tk.substring(1);
+		}
 	}
 }

@@ -44,7 +44,7 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  */
 public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 
-	private String token = System.getProperty("jesl.sink.factory.socket.token", "");
+	private String token = System.getProperty("jesl.sink.factory.socket.token", "incognito");
 	private String url = System.getProperty("jesl.sink.factory.socket.url", "http://localhost:6580");
 	// NOTE: server side uses 5min. to close inactive connection by default
 	private long idleTimeout = Long.getLong("jesl.sink.factory.socket.idle.timeout", JKCloudEventSink.DEFAULT_IDLE_TIMEOUT);
@@ -105,7 +105,7 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 		super.setConfiguration(settings);
 
 		url = Utils.getString("Url", settings, url);
-		token = Utils.getString("Token", settings, token);
+		token = makeAccessToken(Utils.getString("Token", settings, token));
 		connTimeout = Utils.getLong("ConnTimeout", settings, connTimeout);
 		idleTimeout = Utils.getLong("IdleTimeout", settings, idleTimeout);
 		proxyScheme = Utils.getString("ProxyScheme", settings, proxyScheme);
@@ -114,7 +114,6 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 		proxyUser = Utils.getString("ProxyUser", settings, proxyUser);
 		proxyPass = Utils.getString("ProxyPass", settings, proxyPass);
 		ackSends = Utils.getBoolean("AckSends", settings, ackSends);
-
 		_applyConfig(settings);
 	}
 
@@ -126,6 +125,20 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 			ConfigException ce = new ConfigException(e1.toString(), settings);
 			ce.initCause(e1);
 			throw ce;
+		}
+	}
+	
+	private String makeAccessToken(String tk) {
+		if (!tk.startsWith("/")) {
+			// wrap access token with identification path of originator
+			return  "/" + Utils.getLocalHostName() + 
+					"/" + Utils.getLocalHostAddress() + 
+					"/" + Utils.getVMName() + 
+					"/" + Utils.getVMPID() + 
+					"/" + tk;	
+		} else {
+			// use old style token as is (must be prefixed with /).
+			return tk.substring(1);
 		}
 	}
 }

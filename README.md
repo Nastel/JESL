@@ -323,6 +323,16 @@ Subscribe to number of activities show as linechart
 Subscribe to events where message contains 'failure' show as linechart
 ```
 
+# Building
+
+* To build the project, run maven goals `clean package`
+* To build the project and install to local repo, run maven goals `clean install`
+* To make distributable release assemblies use one of profiles: `pack-bin` or `pack-all`:
+    * containing only binary distribution: run `mvn -P pack-bin`
+    * containing binary, source and javadoc distribution: run `mvn -P pack-all`
+
+Release assemblies are built to `../build/JESL` directory.
+
 # Project Dependencies
 JESL requires the following (which will download automatically if using Maven):
 * JDK 1.8+

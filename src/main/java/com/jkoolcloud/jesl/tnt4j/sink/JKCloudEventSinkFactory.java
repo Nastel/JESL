@@ -129,6 +129,8 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 	}
 	
 	private String makeAccessToken(String tk) {
+		return tk;
+		/* AM: re-think token identification since breaks streaming authentication 
 		if (!tk.startsWith("/")) {
 			// wrap access token with identification path of originator
 			return  "/" + Utils.getLocalHostName() + 
@@ -140,5 +142,6 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 			// use old style token as is (must be prefixed with /).
 			return tk.substring(1);
 		}
+		*/
 	}
 }

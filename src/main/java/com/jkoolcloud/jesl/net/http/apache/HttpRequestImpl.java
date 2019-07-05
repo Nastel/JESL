@@ -30,10 +30,16 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  * @version $Revision: 1 $
  */
 public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements HttpRequest {
-	public static final String CLIENT_HOSTNAME = "J-Client-Host";
-	public static final String CLIENT_HOSTADDR = "J-Client-Addr";
-	public static final String CLIENT_VMNAME = "J-Client-VM";
-	
+	public static final String CLIENT_HOSTNAME = "J-Client-Host-Name";
+	public static final String CLIENT_HOSTADDR = "J-Client-Host-Addr";
+	public static final String CLIENT_RUNTIME = "J-Client-Runtime";
+	public static final String CLIENT_VERSION = "J-Client-Version";
+
+	private static final String VALUE_VERSION = HttpRequestImpl.class.getClass().getPackage().getImplementationVersion();
+	private static final String VALUE_HOSTNAME = Utils.getLocalHostName();
+	private static final String VALUE_HOSTADDR = Utils.getLocalHostAddress();
+	private static final String VALUE_VMNAME= Utils.getVMName();
+
 	protected HttpEntityEnclosingRequest request;
 
 	/**
@@ -75,9 +81,12 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 *
 	 */
 	protected static void initHeader(HttpEntityEnclosingRequest request) {
-		request.addHeader(CLIENT_HOSTNAME, Utils.getLocalHostName());
-		request.addHeader(CLIENT_HOSTADDR, Utils.getLocalHostAddress());
-		request.addHeader(CLIENT_VMNAME, Utils.getVMName());	
+		request.addHeader(CLIENT_HOSTNAME, VALUE_HOSTNAME);
+		request.addHeader(CLIENT_HOSTADDR, VALUE_HOSTADDR);
+		request.addHeader(CLIENT_RUNTIME, VALUE_VMNAME);	
+		if (VALUE_VERSION != null) {
+			request.addHeader(CLIENT_VERSION, VALUE_VERSION);	
+		}
 	}
 	///////////////////// HttpRequest methods
 

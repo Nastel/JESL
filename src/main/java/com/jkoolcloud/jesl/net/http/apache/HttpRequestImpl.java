@@ -22,6 +22,7 @@ import org.apache.http.*;
 import org.apache.http.message.BasicHttpEntityEnclosingRequest;
 
 import com.jkoolcloud.jesl.net.http.HttpRequest;
+import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
  * JESL HTTP Request implementation class based on Apache HTTP Core package.
@@ -29,6 +30,10 @@ import com.jkoolcloud.jesl.net.http.HttpRequest;
  * @version $Revision: 1 $
  */
 public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements HttpRequest {
+	public static final String CLIENT_HOSTNAME = "J-Client-Host";
+	public static final String CLIENT_HOSTADDR = "J-Client-Addr";
+	public static final String CLIENT_VMNAME = "J-Client-VM";
+	
 	protected HttpEntityEnclosingRequest request;
 
 	/**
@@ -40,6 +45,7 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	public HttpRequestImpl(HttpEntityEnclosingRequest request) {
 		super(request.getRequestLine());
 		this.request = request;
+		initHeader(this);
 	}
 
 	/**
@@ -52,6 +58,7 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 */
 	public HttpRequestImpl(String method, String uri) {
 		super(method, uri, HttpVersion.HTTP_1_1);
+		initHeader(this);
 	}
 
 	/**
@@ -63,6 +70,15 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 		return (request != null ? request : this);
 	}
 
+	/**
+	 * Initialize HTTP header with default fields
+	 *
+	 */
+	protected static void initHeader(HttpEntityEnclosingRequest request) {
+		request.addHeader(CLIENT_HOSTNAME, Utils.getLocalHostName());
+		request.addHeader(CLIENT_HOSTADDR, Utils.getLocalHostAddress());
+		request.addHeader(CLIENT_VMNAME, Utils.getVMName());	
+	}
 	///////////////////// HttpRequest methods
 
 	/**

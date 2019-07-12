@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.jkoolcloud.jesl.net.http.HttpClient;
 import com.jkoolcloud.jesl.net.socket.SocketClient;
 import com.jkoolcloud.tnt4j.sink.EventSink;
@@ -144,6 +146,16 @@ public class JKClient implements JKStream {
 			if (port <= 0) {
 				port = (secure ? 443 : 80);
 			}
+
+			if (StringUtils.isNotEmpty(proxyUser)) {
+				if (System.getProperty("java.net.socks.username") == null) {
+					System.setProperty("java.net.socks.username", proxyUser);
+				}
+				if (System.getProperty("java.net.socks.password") == null) {
+					System.setProperty("java.net.socks.password", proxyPass);
+				}
+			}
+
 			handle = new SocketClient(host, port, secure, proxyHost, proxyPort, logger);
 		} else {
 			handle = new HttpClient(urlStr, connTimeout, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass,

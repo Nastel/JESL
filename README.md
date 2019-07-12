@@ -140,7 +140,7 @@ That should do it.
 
 Streaming Log4j to jKoolCloud 
 ===============================
-Requires TNT4J Appender for Log4J 1.2 (https://github.com/Nastel/tnt4j-log4j12)
+Requires [TNT4J Appender for Log4J 1.2](https://github.com/Nastel/tnt4j-log4j12)
 
 Log4J can be configured to stream events and metrics to jKoolCloud by using 
 JESL log4j appender (`com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender`) as follows:
@@ -184,14 +184,14 @@ Also include tnt4-log4j12 appender library `tnt4j-log4j12-<version>.jar`.
 #### Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 This allows streaming data to be associated with your private repository.
 
-**NOTE**: Make sure your firewall allows outgoing `https` connections to https://data.jkoolcloud.com
+**NOTE**: Make sure your firewall allows outgoing `https` connections to [jKoolCloud](https://data.jkoolcloud.com).
 
 #### Restart your application
-log4j messages which map to JESL `jkoolcloud` appender will stream to jKoolCloud @ https://data.jkoolcloud.com
+log4j messages which map to JESL `jkoolcloud` appender will stream to [jKoolCloud](https://data.jkoolcloud.com)
 
-#### Login to "My Dashboard" @ https://www.jkoolcloud.com/
+#### Login to "My Dashboard" @ [jKoolCloud](https://jkool.jkoolcloud.com/jKool/login.jsp)
 
-**NOTE**: Visit https://github.com/Nastel/TNT4J#log4j-integration for more information on `TNT4JAppender`.
+**NOTE**: See [TNT4J documentation](https://github.com/Nastel/TNT4J#slf4j-event-sink-integration) for more information on `TNT4JAppender`.
 Optionally you may annotate your log4j messages to provide better context, timing as well as report
 user defined metrics. Example:
 ```java
@@ -268,8 +268,56 @@ special values on`TNT4J/JESL` side:
 ```
 `SpecNumbersHandling` property values:
 * `SUPPRESS` - suppress properties having special numeric value. Produced JSON will not contain these activity entity properties.
-* `ENQUOTE` - enquote special numeric value. Produced JSON will have enquoted values e.g.`"Infinity"`, `"NaN"`. 
+* `ENQUOTE` - enquote special numeric value. Produced JSON will have en-quoted values e.g.`"Infinity"`, `"NaN"`. 
 * `MAINTAIN` - maintain value as is. Produced JSON will have literal number values e.g. `Infnity`, `NaN`.
+
+## Proxy configuration
+
+Proxy can be used do deliver data over JESL Event Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`) for both `HTTP(S)` and 
+`TCP(S)` layers.
+
+* To use `HTTP` proxy, set such configuration properties:
+    * `ProxyScheme` - defines proxy scheme to be used, one of: `http` or `https`. Default value - `http`. Optional.
+    * `ProxyHost` - defines proxy host name or IP address.
+    * `ProxyPort` - defines proxy port number.
+    * `ProxyUser` - defines proxy login user. Optional.
+    * `ProxyPass` - defines proxy user password. Optional.
+
+    Sample:
+    ```properties
+        event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
+        event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
+        event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
+        event.sink.factory.EventSinkFactory.ProxyScheme: http
+        event.sink.factory.EventSinkFactory.ProxyHost: proxy.host.com
+        event.sink.factory.EventSinkFactory.ProxyPort: 8060
+        event.sink.factory.EventSinkFactory.ProxyUser: proxy-user
+        event.sink.factory.EventSinkFactory.ProxyPass: proxy-pass
+    ```
+
+* To use `SOCKSv5` proxy, set such configuration properties:
+    * `ProxyHost` - defines proxy host name or IP address.
+    * `ProxyPort` - defines proxy port number.
+    * `ProxyUser` - defines proxy login user. Optional.
+    * `ProxyPass` - defines proxy user password. Optional.
+
+    Sample:
+    ```properties
+        event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
+        event.sink.factory.EventSinkFactory.Url: tcp://172.16.6.25:6004
+        event.sink.factory.EventSinkFactory.ProxyHost: proxy.host.com
+        event.sink.factory.EventSinkFactory.ProxyPort: 8060
+        event.sink.factory.EventSinkFactory.ProxyUser: proxy-user
+        event.sink.factory.EventSinkFactory.ProxyPass: proxy-pass
+    ```
+  Proxy authentication credentials can be also passed through JVM system properties `java.net.socks.username` and `java.net.socks.password`, 
+  e.g.:
+  ```cmd
+  -Djava.net.socks.username=proxy-user -Djava.net.socks.password=proxy-pass
+  ```
+
+  Also see [Java SE documentation](https://docs.oracle.com/javase/8/docs/api/java/net/doc-files/net-properties.html#proxies) for additional 
+  proxy configuration details using JVM system properties.
 
 # Sample jKQL Queries
 Sample queries you can run against your data using jKool dashboard.
@@ -336,17 +384,17 @@ Release assemblies are built to `../build/JESL` directory.
 # Project Dependencies
 JESL requires the following (which will download automatically if using Maven):
 * JDK 1.8+
-* TNT4J (https://github.com/Nastel/TNT4J)
-* Apache HTTP Client 4.2.5 (http://hc.apache.org/httpcomponents-client-ga/)
-* TNT4J-Syslogd (https://github.com/Nastel/tnt4j-syslogd/) (runtime)
+* [TNT4J](https://github.com/Nastel/TNT4J)
+* [Apache HTTP Client 4.2.5](http://hc.apache.org/httpcomponents-client-ga/)
+* [TNT4J-Syslogd](https://github.com/Nastel/tnt4j-syslogd/) (runtime)
 
 # Related Projects
-* TNT4J (https://github.com/Nastel/TNT4J)
-* TNT4J-Log4J12 Appender (https://github.com/Nastel/tnt4j-log4j12)
-* TNT4J-Logback Appender (https://github.com/Nastel/tnt4j-logback)
-* TNT4J-Servlet-Filter (http://nastel.github.io/tnt4j-servlet-filter/)
-* TNT4J-Stream-JMX (http://nastel.github.io/tnt4j-stream-jmx/)
-* TNT4J-Stream-GC (http://nastel.github.io/tnt4j-stream-gc/)
+* [TNT4J](https://github.com/Nastel/TNT4J)
+* [TNT4J-Log4J12 Appender](https://github.com/Nastel/tnt4j-log4j12)
+* [TNT4J-Logback Appender](https://github.com/Nastel/tnt4j-logback)
+* [TNT4J-Servlet-Filter](http://nastel.github.io/tnt4j-servlet-filter/)
+* [TNT4J-Stream-JMX](http://nastel.github.io/tnt4j-stream-jmx/)
+* [TNT4J-Stream-GC](http://nastel.github.io/tnt4j-stream-gc/)
 
 # Available Integrations
-* jkoolcloud.com (https://www.jkoolcloud.com)
+* [jkoolcloud.com](https://www.jkoolcloud.com)

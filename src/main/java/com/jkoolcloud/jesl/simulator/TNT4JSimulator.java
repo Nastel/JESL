@@ -596,7 +596,7 @@ public class TNT4JSimulator {
 			}
 		} finally {
 			try {
-				Thread.sleep(2000L);
+				TimeUnit.SECONDS.sleep(2);
 			} catch (Exception e) {
 			}
 			TNT4JSimulator.disconnect();

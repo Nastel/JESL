@@ -561,12 +561,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	}
 
 	private void recordDataset(Attributes attributes) throws SAXException {
-		if ((curActivity == null || !SIM_XML_ACTIVITY.equals(curElement))
-				&& (curEvent == null || !SIM_XML_EVENT.equals(curElement))) {
-			throw new SAXParseException("<" + SIM_XML_SNAPSHOT + ">: must have <" + SIM_XML_ACTIVITY + "> or <"
-					+ SIM_XML_EVENT + "> as parent element", saxLocator);
-		}
-
 		String name = null;
 		String category = null;
 		int srcId = 0;

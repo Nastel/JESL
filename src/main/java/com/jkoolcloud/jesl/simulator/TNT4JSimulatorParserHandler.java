@@ -56,6 +56,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	public static final String SIM_XML_SOURCE = "source";
 	public static final String SIM_XML_MSG = "msg";
 	public static final String SIM_XML_SNAPSHOT = "snapshot";
+	public static final String SIM_XML_DATASET = "dataset";
 	public static final String SIM_XML_PROP = "prop";
 	public static final String SIM_XML_VAR = "var";
 	public static final String SIM_XML_OPTION = "option";
@@ -222,6 +223,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			recordSource(attributes);
 		} else if (name.equals(SIM_XML_SNAPSHOT)) {
 			recordSnapshot(attributes);
+		}  else if (name.equals(SIM_XML_DATASET)) {
+			recordDataset(attributes);
 		} else if (name.equals(SIM_XML_PROP)) {
 			recordProperty(attributes);
 		} else if (name.equals(SIM_XML_MSG)) {
@@ -496,6 +499,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		String name = null;
 		String category = null;
 		OpLevel severity = OpLevel.INFO;
+		int srcId = 0;
 
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
@@ -505,6 +509,13 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				if (attName.equals(SIM_XML_ATTR_NAME)) {
 					name = attValue;
 					TNT4JSimulator.trace(simCurrTime, "Recording Snapshot: " + attValue + " ...");
+				} else if (attName.equals(SIM_XML_ATTR_SOURCE)) {
+					srcId = Integer.parseInt(attValue);
+					if (srcId <= 0) {
+						throw new SAXParseException(
+								"Invalid <" + SIM_XML_SNAPSHOT + "> attribute '" + attName + "', must be > 0",
+								saxLocator);
+					}
 				} else if (attName.equals(SIM_XML_ATTR_CAT)) {
 					category = attValue;
 				} else if (attName.equals(SIM_XML_ATTR_SEVERITY)) {
@@ -514,16 +525,31 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 							saxLocator);
 				}
 			}
-
 			if (StringUtils.isEmpty(name)) {
 				throw new SAXParseException("<" + SIM_XML_SNAPSHOT + ">: missing '" + SIM_XML_ATTR_NAME + "'",
 						saxLocator);
 			}
-
+			
 			if (StringUtils.isEmpty(category)) {
 				category = null;
 			}
 
+
+			if (srcId > 0) {
+				Source source = sourceIds.get(srcId);
+				if (source == null) {
+					throw new SAXParseException(
+					        "<" + SIM_XML_SNAPSHOT + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined",
+					        saxLocator);
+				}
+
+				curTracker = trackers.get(source.getFQName());
+				if (curTracker == null) {
+					throw new SAXParseException(
+					        "<" + SIM_XML_SNAPSHOT + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined",
+					        saxLocator);
+				}
+			}
 			curSnapshot = new PropertySnapshot(category, name, severity, simCurrTime);
 			curSnapshot.setTTL(TNT4JSimulator.getTTL());
 		} catch (Exception e) {
@@ -531,6 +557,70 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				throw (SAXException) e;
 			}
 			throw new SAXException("Failed processing definition for snapshot '" + name + "': " + e, e);
+		}
+	}
+
+	private void recordDataset(Attributes attributes) throws SAXException {
+		if ((curActivity == null || !SIM_XML_ACTIVITY.equals(curElement))
+				&& (curEvent == null || !SIM_XML_EVENT.equals(curElement))) {
+			throw new SAXParseException("<" + SIM_XML_SNAPSHOT + ">: must have <" + SIM_XML_ACTIVITY + "> or <"
+					+ SIM_XML_EVENT + "> as parent element", saxLocator);
+		}
+
+		String name = null;
+		String category = null;
+		int srcId = 0;
+		try {
+			for (int i = 0; i < attributes.getLength(); i++) {
+				String attName = attributes.getQName(i);
+				String attValue = expandEnvVars(attributes.getValue(i));
+
+				if (attName.equals(SIM_XML_ATTR_NAME)) {
+					name = attValue;
+					TNT4JSimulator.trace(simCurrTime, "Recording Dataset: " + attValue + " ...");
+				} else if (attName.equals(SIM_XML_ATTR_CAT)) {
+					category = attValue;
+				} else if (attName.equals(SIM_XML_ATTR_SOURCE)) {
+					srcId = Integer.parseInt(attValue);
+					if (srcId <= 0) {
+						throw new SAXParseException(
+								"Invalid <" + SIM_XML_DATASET + "> attribute '" + attName + "', must be > 0",
+								saxLocator);
+					}
+				} else {
+					throw new SAXParseException("Unknown <" + SIM_XML_DATASET + "> attribute '" + attName + "'",
+							saxLocator);
+				}
+			}
+			if (StringUtils.isEmpty(name)) {
+				throw new SAXParseException("<" + SIM_XML_DATASET + ">: missing '" + SIM_XML_ATTR_NAME + "'",
+						saxLocator);
+			}
+
+			if (StringUtils.isEmpty(category)) {
+				category = null;
+			}
+	
+			Source source = sourceIds.get(srcId);
+			if (source == null) {
+				throw new SAXParseException(
+						"<" + SIM_XML_DATASET + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined",
+						saxLocator);
+			}
+			curTracker = trackers.get(source.getFQName());
+			if (curTracker == null) {
+				throw new SAXParseException(
+						"<" + SIM_XML_DATASET + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined",
+						saxLocator);
+			}			
+			curSnapshot = new Dataset(category, name);
+			curSnapshot.setTimeStamp(simCurrTime);
+			curSnapshot.setTTL(TNT4JSimulator.getTTL());
+		} catch (Exception e) {
+			if (e instanceof SAXException) {
+				throw (SAXException) e;
+			}
+			throw new SAXException("Failed processing definition for dataset '" + name + "': " + e, e);
 		}
 	}
 
@@ -577,6 +667,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			Property prop = processPropertyValue(name, type, value, valType, vary);
 
 			if (SIM_XML_SNAPSHOT.equals(curElement)) {
+				curSnapshot.add(prop);
+			} else if (SIM_XML_DATASET.equals(curElement)) {
 				curSnapshot.add(prop);
 			} else if (SIM_XML_EVENT.equals(curElement)) {
 				curEvent.getOperation().addProperty(prop);
@@ -1274,13 +1366,17 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		if (name.equals(SIM_XML_MSG)) {
 			recordMsgData();
 			curMsg = null;
-		} else if (name.equals(SIM_XML_SNAPSHOT)) {
+		} else if (name.equals(SIM_XML_SNAPSHOT) || name.equals(SIM_XML_DATASET)) {
 			if (curEvent != null) {
 				curEvent.getOperation().addSnapshot(curSnapshot);
-			} else {
+			} else if (curActivity != null) {
 				curActivity.add(curSnapshot);
+			} else if (curTracker != null) {
+				curTracker.tnt(curSnapshot);
+			} else {
+				curSnapshot = null;
+				throw new RuntimeException("Missing handling for " + uri + ", " + localName + ", " + name);
 			}
-			curSnapshot = null;
 		} else if (name.equals(SIM_XML_ACTIVITY)) {
 			stopActivity();
 		} else if (name.equals(SIM_XML_EVENT)) {
@@ -1294,7 +1390,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 			curEvent = null;
 		}
-
 		curElement = activeElements.pop();
 	}
 

@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>jesl</name>
-    <url>http://www.jkoolcloud.com/</url>
+    <url>https://github.com/Nastel/JESL</url>
     <description>jKool Event Streaming Library</description>
     <licenses>
         <license>
@@ -16,6 +16,10 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+    <organization>
+        <name>jKool, LLC</name>
+        <url>https://www.jkoolcloud.com/</url>
+    </organization>
     <developers>
         <developer>
             <name>jKool Team</name>

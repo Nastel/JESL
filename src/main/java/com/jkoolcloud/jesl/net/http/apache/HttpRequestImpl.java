@@ -30,10 +30,10 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  * @version $Revision: 1 $
  */
 public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements HttpRequest {
-	public static final String CLIENT_HOSTNAME = "J-Client-Host-Name";
-	public static final String CLIENT_HOSTADDR = "J-Client-Host-Addr";
-	public static final String CLIENT_RUNTIME = "J-Client-Runtime";
-	public static final String CLIENT_VERSION = "J-Client-Version";
+	public static final String CLIENT_HOSTNAME = "X-API-Host-Name";
+	public static final String CLIENT_HOSTADDR = "X-API-Host-Addr";
+	public static final String CLIENT_RUNTIME = "X-API-Runtime";
+	public static final String CLIENT_VERSION = "X-API-Version";
 
 	private static final String VALUE_VERSION = HttpRequestImpl.class.getPackage().getImplementationVersion();
 	private static final String VALUE_HOSTNAME = Utils.getLocalHostName();

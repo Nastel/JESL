@@ -95,6 +95,8 @@ public interface JKStream {
 	/**
 	 * Stream message to the underlying stream. Message must end with new line '\n'.
 	 *
+	 * @param token
+	 *            API access token
 	 * @param msg
 	 *            new line terminated message
 	 * @param wantResponse
@@ -102,7 +104,7 @@ public interface JKStream {
 	 * @throws IOException
 	 *             if error occurs when sending a message
 	 */
-	void send(String msg, boolean wantResponse) throws IOException;
+	void send(String token, String msg, boolean wantResponse) throws IOException;
 
 	/**
 	 * Read a message (reply) from the stream.

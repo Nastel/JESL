@@ -55,6 +55,7 @@ import com.jkoolcloud.tnt4j.utils.Utils;
 public class HttpClient implements HttpStream {
 	private static final String PRAGMA_VALUE_NO_RESPONSE = "no-response";
 	private static final String PRAGMA_VALUE_PING = "ping";
+	private static final String X_API_KEY = "X-API-Key";
 
 	public static final long DEFAULT_CONN_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
 
@@ -313,12 +314,15 @@ public class HttpClient implements HttpStream {
 	}
 
 	@Override
-	public void sendRequest(String method, String reqUri, String contentType, String content, boolean wantResponse)
+	public void sendRequest(String token, String method, String reqUri, String contentType, String content, boolean wantResponse)
 			throws IOException {
 		try {
 			HttpRequest req = newRequest(method, reqUri);
 			if (!StringUtils.isEmpty(content)) {
 				req.setContent(contentType, content, Utils.UTF8);
+			}
+			if (StringUtils.isNotEmpty(token)) {
+				req.setHeader(X_API_KEY, token);
 			}
 			sendRequest(req, wantResponse);
 		} catch (IllegalStateException ise) {
@@ -331,9 +335,9 @@ public class HttpClient implements HttpStream {
 	}
 
 	@Override
-	public void send(String msg, boolean wantResponse) throws IOException {
+	public void send(String token, String msg, boolean wantResponse) throws IOException {
 		String contentType = (msg != null && msg.startsWith("<?xml") ? "text/xml" : "text/plain");
-		sendRequest("POST", uriPath, contentType, msg, wantResponse);
+		sendRequest(token, "POST", uriPath, contentType, msg, wantResponse);
 	}
 
 	@Override

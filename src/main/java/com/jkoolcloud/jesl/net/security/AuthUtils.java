@@ -37,7 +37,7 @@ public class AuthUtils {
 	public static void authenticate(JKStream client, String token) throws SecurityException {
 		String respStr = null;
 		try {
-			client.send(new AccessRequest(token).generateMsg(), true);
+			client.send(token, new AccessRequest(token).generateMsg(), true);
 			respStr = client.read();
 		} catch (Throwable e) {
 			throw new SecurityException("Failed to authenticate with service='" + client.getURI() + "' token='"

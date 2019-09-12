@@ -204,8 +204,8 @@ public class JKClient implements JKStream {
 	}
 
 	@Override
-	public void send(String msg, boolean wantResponse) throws IOException {
-		handle.send(msg, wantResponse);
+	public void send(String token, String msg, boolean wantResponse) throws IOException {
+		handle.send(token, msg, wantResponse);
 	}
 
 	@Override

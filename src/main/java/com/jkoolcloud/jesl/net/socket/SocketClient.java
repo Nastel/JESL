@@ -150,7 +150,7 @@ public class SocketClient implements JKStream {
 	}
 
 	@Override
-	public synchronized void send(String msg, boolean wantResponse) throws IOException {
+	public synchronized void send(String token, String msg, boolean wantResponse) throws IOException {
 		if (wantResponse) {
 			throw new UnsupportedOperationException("Responses are not supported for TCP connections");
 		}

@@ -367,7 +367,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
 		incrementBytesSent(lineMsg.length());
-		jkHandle.send(lineMsg, ackSends);
+		jkHandle.send(accessToken, lineMsg, ackSends);
 		long timestamp = System.currentTimeMillis();
 		lastWrite.set(timestamp);
 		sentMsgs.incrementAndGet();

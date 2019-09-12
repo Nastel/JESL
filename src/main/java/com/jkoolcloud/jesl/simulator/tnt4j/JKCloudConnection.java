@@ -79,12 +79,12 @@ public class JKCloudConnection {
 
 		try {
 			if (jkHandle != null) {
-				jkHandle.send(msg, ackSends);
+				jkHandle.send(accessToken, msg, ackSends);
 				if (ackSends) {
 					jkHandle.read();
 				}
 			} else {
-				throw new IOException("Connection not opened");
+				throw new IOException("Connection closed");
 			}
 		} catch (IOException e) {
 			close();

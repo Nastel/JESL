@@ -4,7 +4,7 @@
 
     <groupId>com.jkoolcloud</groupId>
     <artifactId>jesl</artifactId>
-    <version>0.9.1</version>
+    <version>0.10-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>jesl</name>
@@ -71,7 +71,7 @@
 
         <build.assemblies.attach>false</build.assemblies.attach>
 
-        <tnt4j.version>2.11.1</tnt4j.version>
+        <tnt4j.version>2.12-SNAPSHOT</tnt4j.version>
         <tnt4j.syslogd.version>0.3.3</tnt4j.syslogd.version>
         <httpcomponents.version>4.5.10</httpcomponents.version>
         <slf4j.version>1.7.28</slf4j.version>

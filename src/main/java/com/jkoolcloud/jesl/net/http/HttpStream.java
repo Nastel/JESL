@@ -58,7 +58,7 @@ public interface HttpStream extends JKStream {
 	 *             if error writing request
 	 */
 	void sendRequest(String token, String method, String reqUri, String contentType, String content,
-	        boolean wantResponse) throws IOException;
+			boolean wantResponse) throws IOException;
 
 	/**
 	 * Get/receive HTTP response

@@ -120,15 +120,13 @@ public class SocketClient implements JKStream {
 			out = new DataOutputStream(socket.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (Throwable exc) {
-			logger.log(OpLevel.ERROR, "Failed to connect to host=" + host
-					+ ", port=" + port
-					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
-					+ ", reason=" + exc.getMessage(), exc);
+			String errMsg = "Failed to connect to host=" + host //
+					+ ", port=" + port //
+					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime) //
+					+ ", reason=" + exc.getMessage();
+			logger.log(OpLevel.ERROR, errMsg, exc);
 			close();
-			throw new IOException("Failed to connect to host=" + host
-					+ ", port=" + port
-					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
-					+ ", reason=" + exc.getMessage(), exc);
+			throw new IOException(errMsg, exc);
 		}
 	}
 

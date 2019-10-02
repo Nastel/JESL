@@ -314,8 +314,8 @@ public class HttpClient implements HttpStream {
 	}
 
 	@Override
-	public void sendRequest(String token, String method, String reqUri, String contentType, String content, boolean wantResponse)
-			throws IOException {
+	public void sendRequest(String token, String method, String reqUri, String contentType, String content,
+			boolean wantResponse) throws IOException {
 		try {
 			HttpRequest req = newRequest(method, reqUri);
 			if (!StringUtils.isEmpty(content)) {

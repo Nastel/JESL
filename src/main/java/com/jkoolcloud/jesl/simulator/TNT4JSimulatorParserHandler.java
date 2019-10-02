@@ -223,7 +223,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			recordSource(attributes);
 		} else if (name.equals(SIM_XML_SNAPSHOT)) {
 			recordSnapshot(attributes);
-		}  else if (name.equals(SIM_XML_DATASET)) {
+		} else if (name.equals(SIM_XML_DATASET)) {
 			recordDataset(attributes);
 		} else if (name.equals(SIM_XML_PROP)) {
 			recordProperty(attributes);
@@ -529,25 +529,24 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				throw new SAXParseException("<" + SIM_XML_SNAPSHOT + ">: missing '" + SIM_XML_ATTR_NAME + "'",
 						saxLocator);
 			}
-			
+
 			if (StringUtils.isEmpty(category)) {
 				category = null;
 			}
-
 
 			if (srcId > 0) {
 				Source source = sourceIds.get(srcId);
 				if (source == null) {
 					throw new SAXParseException(
-					        "<" + SIM_XML_SNAPSHOT + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined",
-					        saxLocator);
+							"<" + SIM_XML_SNAPSHOT + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined",
+							saxLocator);
 				}
 
 				curTracker = trackers.get(source.getFQName());
 				if (curTracker == null) {
 					throw new SAXParseException(
-					        "<" + SIM_XML_SNAPSHOT + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined",
-					        saxLocator);
+							"<" + SIM_XML_SNAPSHOT + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined",
+							saxLocator);
 				}
 			}
 			curSnapshot = new PropertySnapshot(category, name, severity, simCurrTime);
@@ -594,7 +593,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			if (StringUtils.isEmpty(category)) {
 				category = null;
 			}
-	
+
 			Source source = sourceIds.get(srcId);
 			if (source == null) {
 				throw new SAXParseException(
@@ -606,7 +605,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				throw new SAXParseException(
 						"<" + SIM_XML_DATASET + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined",
 						saxLocator);
-			}			
+			}
 			curSnapshot = new Dataset(category, name);
 			curSnapshot.setTimeStamp(simCurrTime);
 			curSnapshot.setTTL(TNT4JSimulator.getTTL());

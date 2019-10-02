@@ -127,7 +127,7 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 			throw ce;
 		}
 	}
-	
+
 	private String makeAccessToken(String tk) {
 		return tk;
 		/* AM: re-think token identification since breaks streaming authentication 

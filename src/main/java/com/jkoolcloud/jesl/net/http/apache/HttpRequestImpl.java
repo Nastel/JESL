@@ -79,6 +79,8 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	/**
 	 * Initialize HTTP header with default fields
 	 *
+	 * @param request
+	 *            apache HTTP request
 	 */
 	protected static void initHeader(HttpEntityEnclosingRequest request) {
 		request.addHeader(CLIENT_HOSTNAME, VALUE_HOSTNAME);

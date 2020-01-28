@@ -100,6 +100,16 @@
             <artifactId>tnt4j-syslogd</artifactId>
             <version>${tnt4j.syslogd.version}</version>
             <scope>runtime</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-lang3</artifactId>
+                    <groupId>org.apache.commons</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>tnt4j</artifactId>
+                    <groupId>com.jkoolcloud</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

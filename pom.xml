@@ -73,7 +73,7 @@
 
         <tnt4j.version>2.13-SNAPSHOT</tnt4j.version>
         <tnt4j.syslogd.version>0.3.3</tnt4j.syslogd.version>
-        <httpcomponents.version>4.5.10</httpcomponents.version>
+        <httpcomponents.version>4.5.11</httpcomponents.version>
         <slf4j.version>1.7.30</slf4j.version>
     </properties>
 
@@ -144,6 +144,12 @@
                 <skip.source.pack>false</skip.source.pack>
                 <skip.javadoc.pack>false</skip.javadoc.pack>
                 <skip.assembly.pack>false</skip.assembly.pack>
+            </properties>
+        </profile>
+        <profile>
+            <id>run-tests</id>
+            <properties>
+                <skip.tests>false</skip.tests>
             </properties>
         </profile>
     </profiles>

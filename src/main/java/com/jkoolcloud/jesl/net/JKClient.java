@@ -222,4 +222,9 @@ public class JKClient implements JKStream {
 	public URI getURI() {
 		return handle.getURI();
 	}
+
+	@Override
+	public String toString() {
+		return handle.toString();
+	}
 }

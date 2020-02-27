@@ -349,14 +349,6 @@ public class JKCloudEventSink extends LoggedEventSink {
 	}
 
 	@Override
-	protected void _checkState() throws IllegalStateException {
-		if (!isOpen()) {
-			throw new IllegalStateException(
-					"EventSink closed: name=" + getName() + ", url=" + url + ", handle=" + jkHandle);
-		}
-	}
-
-	@Override
 	protected synchronized void writeLine(String msg) throws IOException {
 		if (StringUtils.isEmpty(msg)) {
 			return;

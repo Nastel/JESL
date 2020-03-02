@@ -344,8 +344,11 @@ public class JKCloudEventSink extends LoggedEventSink {
 
 	@Override
 	public String toString() {
-		return super.toString() + "{url: " + url + ", token: " + Utils.hide(accessToken, "x", 4) + ", jk.handle: "
-				+ jkHandle + "}";
+		return super.toString() //
+				+ "{url: " + url //
+				+ ", token: " + Utils.hide(accessToken, "x", 4) //
+				+ ", jk.handle: " + jkHandle //
+				+ "}";
 	}
 
 	@Override

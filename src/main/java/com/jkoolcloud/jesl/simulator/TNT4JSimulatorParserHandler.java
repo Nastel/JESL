@@ -1278,7 +1278,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 
 			curEvent.start(simCurrTime);
-			simCurrTime.add(0, elapsed);
+			simCurrTime.add(elapsed);
 			curEvent.stop(simCurrTime, elapsed);
 			TNT4JSimulator.debug(simCurrTime, "Ran event: " + name + ", elapsed.usec=" + elapsed);
 		} catch (Exception e) {
@@ -1307,7 +1307,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		}
 
 		if (usec > 0) {
-			simCurrTime.add(0L, TNT4JSimulator.varyValue(usec));
+			simCurrTime.add(TNT4JSimulator.varyValue(usec));
 			TNT4JSimulator.trace(simCurrTime, "Executed sleep, usec=" + usec);
 		}
 	}

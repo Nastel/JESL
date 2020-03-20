@@ -257,8 +257,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 	protected void handleIdleReconnect() throws IOException {
 		if ((idleTimeout > 0) && (getLastWriteAge() > idleTimeout)) {
 			idleCount.incrementAndGet();
-			Utils.close(this);
-			this.open();
+			reopen();
 		}
 	}
 

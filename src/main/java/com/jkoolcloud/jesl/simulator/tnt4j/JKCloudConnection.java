@@ -15,6 +15,7 @@
  */
 package com.jkoolcloud.jesl.simulator.tnt4j;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -29,7 +30,7 @@ import com.jkoolcloud.tnt4j.sink.EventSink;
  *
  * @version $Revision: $
  */
-public class JKCloudConnection {
+public class JKCloudConnection implements Closeable {
 	private String gwUrl;
 	private String accessToken;
 	private long connTimeout;
@@ -92,6 +93,7 @@ public class JKCloudConnection {
 		}
 	}
 
+	@Override
 	public synchronized void close() throws IOException {
 		if (jkHandle != null) {
 			jkHandle.close();

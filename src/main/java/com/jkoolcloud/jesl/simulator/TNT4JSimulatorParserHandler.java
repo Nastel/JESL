@@ -797,12 +797,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					} catch (Exception e) {
 						throw new SAXParseException("Failed loading message data from " + fileName, saxLocator, e);
 					} finally {
-						if (fileReader != null) {
-							try {
-								fileReader.close();
-							} catch (Exception e1) {
-							}
-						}
+						Utils.close(fileReader);
 					}
 				} else {
 					FileReader fileReader = null;
@@ -818,12 +813,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					} catch (Exception e) {
 						throw new SAXParseException("Failed loading message data from " + fileName, saxLocator, e);
 					} finally {
-						if (fileReader != null) {
-							try {
-								fileReader.close();
-							} catch (Exception e1) {
-							}
-						}
+						Utils.close(fileReader);
 					}
 				}
 

@@ -625,10 +625,7 @@ public class TNT4JSimulator {
 
 	public static void disconnect() {
 		if (gwConn != null) {
-			try {
-				gwConn.close();
-			} catch (Exception e) {
-			}
+			Utils.close(gwConn);
 			gwConn = null;
 		}
 	}

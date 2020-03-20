@@ -23,6 +23,8 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
+import com.jkoolcloud.tnt4j.utils.Utils;
+
 /**
  * Implements a factory for generating client- and server-side SSL Contexts.
  *
@@ -109,9 +111,7 @@ public class SSLContextFactory {
 			try {
 				ks.load(new FileInputStream(keyStoreFileName), keyStorePassword.toCharArray());
 			} finally {
-				if (fis != null) {
-					fis.close();
-				}
+				Utils.close(fis);
 			}
 
 			// Set up key manager factory to use our keystore

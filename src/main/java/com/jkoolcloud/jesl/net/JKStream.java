@@ -15,6 +15,7 @@
  */
 package com.jkoolcloud.jesl.net;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
 
@@ -24,7 +25,7 @@ import java.net.URI;
  *
  * @version $Revision: 1 $
  */
-public interface JKStream {
+public interface JKStream extends Closeable {
 	/**
 	 * Obtain {@link java.net.URI} associated with this stream.
 	 *
@@ -114,9 +115,4 @@ public interface JKStream {
 	 *             if error occurs when sending a message
 	 */
 	String read() throws IOException;
-
-	/**
-	 * Close the stream and release all resources
-	 */
-	void close();
 }

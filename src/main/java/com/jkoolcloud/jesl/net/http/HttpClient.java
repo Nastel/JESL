@@ -259,13 +259,16 @@ public class HttpClient implements HttpStream {
 	public synchronized void connect() throws IOException {
 		long startTime = System.currentTimeMillis();
 		try {
+			if (isConnected()) {
+				return;
+			}
 			initHttpConnMgr(startTime);
 			openHttpConn(startTime);
 		} catch (Throwable e) {
-			String errMsg = "Failed to connect to uri=" + uri 
-					+ ", http.host=" + httpHost
-					+ ", timeout.ms=" + connTimeout
-					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime)
+			String errMsg = "Failed to connect to uri=" + uri //
+					+ ", http.host=" + httpHost //
+					+ ", timeout.ms=" + connTimeout //
+					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime) //
 					+ ", reason=" + e.getMessage();
 			logger.log(OpLevel.ERROR, errMsg, e);
 			close();
@@ -381,15 +384,12 @@ public class HttpClient implements HttpStream {
 
 	@Override
 	public synchronized void close() {
-		if (connection != null) {
-			try {
-				ensureAllRequestsSent();
-				connection.close();
-				connMgr.shutdown();
-				logger.log(OpLevel.DEBUG, "Closed connection to {0}", uri);
-			} catch (Throwable err) {
-			}
-		}
+		ensureAllRequestsSent();
+		Utils.close(connection);
+		connMgr.shutdown();
+		logger.log(OpLevel.DEBUG, "Closed connection to {0}", uri);
+
+		connection = null;
 	}
 
 	/**

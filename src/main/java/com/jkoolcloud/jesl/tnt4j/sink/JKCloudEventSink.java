@@ -16,7 +16,6 @@
 package com.jkoolcloud.jesl.tnt4j.sink;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -304,11 +303,13 @@ public class JKCloudEventSink extends LoggedEventSink {
 	@Override
 	protected synchronized void _open() throws IOException {
 		try {
-			_close();
+			if (isOpen()) {
+				_close();
+			}
 			logger.log(OpLevel.DEBUG,
 					"Open name={6}, url={0}, timeout={5}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
-					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx",
-					this.getName(), connTimeout);
+					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx", getName(),
+					connTimeout);
 			jkHandle = new JKClient(url, connTimeout, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass, logger);
 			if (!StringUtils.isEmpty(accessToken)) {
 				jkHandle.connect(accessToken);
@@ -318,11 +319,11 @@ public class JKCloudEventSink extends LoggedEventSink {
 			lastWrite.set(System.currentTimeMillis());
 
 			super._open();
-		} catch (URISyntaxException e) {
+		} catch (Throwable e) {
 			logger.log(OpLevel.ERROR,
-					"Failed to open name={6}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
-					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx",
-					this.getName(), e);
+					"Failed to open sink name={6}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
+					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx", getName(),
+					e);
 			_close();
 			throw new IOException(e.getMessage(), e);
 		}
@@ -330,15 +331,11 @@ public class JKCloudEventSink extends LoggedEventSink {
 
 	@Override
 	protected synchronized void _close() throws IOException {
-		try {
-			if (isOpen()) {
-				logger.log(OpLevel.DEBUG, "Closing name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}",
-						url, proxyHost, proxyPort, proxyScheme, this.getName());
-				jkHandle.close();
-			}
-		} finally {
-			super._close();
-		}
+		logger.log(OpLevel.DEBUG, "Closing sink name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}",
+				url, proxyHost, proxyPort, proxyScheme, getName());
+		Utils.close(jkHandle);
+
+		super._close();
 	}
 
 	@Override

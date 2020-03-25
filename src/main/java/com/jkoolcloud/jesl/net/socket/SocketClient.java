@@ -103,11 +103,11 @@ public class SocketClient implements JKStream {
 
 	@Override
 	public synchronized void connect() throws IOException {
-		if (isConnected()) {
-			return;
-		}
 		long startTime = System.currentTimeMillis();
 		try {
+			if (isConnected()) {
+				return;
+			}
 			socket = new Socket(proxy);
 			socket.connect(new InetSocketAddress(host, port));
 
@@ -161,11 +161,11 @@ public class SocketClient implements JKStream {
 
 	@Override
 	public synchronized void close() {
-		if (socket != null) {
-			Utils.close(out);
-			Utils.close(in);
-			Utils.close(socket);
-		}
+		Utils.close(out);
+		Utils.close(in);
+		Utils.close(socket);
+
+		socket = null;
 	}
 
 	@Override

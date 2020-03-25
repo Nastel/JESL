@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.jkoolcloud.jesl.net.http.HttpClient;
 import com.jkoolcloud.jesl.net.socket.SocketClient;
 import com.jkoolcloud.tnt4j.sink.EventSink;
+import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
  * JESL Client Stream class that enables client applications to connect to JESL server using http, https, and tcp[s]
@@ -215,7 +216,7 @@ public class JKClient implements JKStream {
 
 	@Override
 	public void close() {
-		handle.close();
+		Utils.close(handle);
 	}
 
 	@Override

@@ -306,6 +306,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 			if (isOpen()) {
 				_close();
 			}
+			setErrorState(null);
 			logger.log(OpLevel.DEBUG,
 					"Open name={6}, url={0}, timeout={5}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
 					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx", getName(),
@@ -325,7 +326,12 @@ public class JKCloudEventSink extends LoggedEventSink {
 					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx", getName(),
 					e);
 			_close();
-			throw new IOException(e.getMessage(), e);
+
+			if (e instanceof IOException) {
+				throw (IOException) e;
+			} else {
+				throw new IOException(e.getMessage(), e);
+			}
 		}
 	}
 

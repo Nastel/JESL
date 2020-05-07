@@ -78,15 +78,29 @@ public class TNT4JSimulator {
 	}
 
 	public static void error(String msg, Throwable e) {
-		logger.tnt(OpLevel.ERROR, null, null, msg, e);
+		if (logger != null) {
+			logger.tnt(OpLevel.ERROR, null, null, msg, e);
+		} else {
+			System.err.println(msg);
+			e.printStackTrace();
+		}
 	}
 
 	public static void warn(String msg, Throwable e) {
-		logger.tnt(OpLevel.WARNING, null, null, msg, e);
+		if (logger != null) {
+			logger.tnt(OpLevel.WARNING, null, null, msg, e);
+		} else {
+			System.err.println(msg);
+			e.printStackTrace();
+		}
 	}
 
 	public static void info(String msg) {
-		logger.tnt(OpLevel.INFO, null, null, msg, (Object[]) null);
+		if (logger != null) {
+			logger.tnt(OpLevel.INFO, null, null, msg, (Object[]) null);
+		} else {
+			System.out.println(msg);
+		}
 	}
 
 	public static boolean isDebugEnabled() {
@@ -479,14 +493,15 @@ public class TNT4JSimulator {
 		long startTime = System.currentTimeMillis();
 
 		try {
+			TrackerConfig simConfig = DefaultConfigFactory.getInstance().getConfig(TNT4JSimulator.class);
+			logger = TrackingLogger.getInstance(simConfig.build());
+
 			SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 			SAXParser theParser = parserFactory.newSAXParser();
 			TNT4JSimulatorParserHandler xmlHandler = new TNT4JSimulatorParserHandler();
 
 			processArgs(xmlHandler, args);
 
-			TrackerConfig simConfig = DefaultConfigFactory.getInstance().getConfig(TNT4JSimulator.class.getName());
-			logger = TrackingLogger.getInstance(simConfig.build());
 			if (logger.isSet(OpLevel.TRACE)) {
 				traceLevel = OpLevel.TRACE;
 			} else if (logger.isSet(OpLevel.DEBUG)) {
@@ -580,19 +595,16 @@ public class TNT4JSimulator {
 				info("jKool Activity Simulator Replay finished, tracking.msg.count=" + iteration + ", elasped.time="
 						+ DurationFormatUtils.formatDurationHMS(endTime - startTime));
 			}
+		} catch (SAXParseException spe) {
+			error("Error at line: " + spe.getLineNumber() + ", column: " + spe.getColumnNumber(), spe);
 		} catch (Exception e) {
-			if (e instanceof SAXParseException) {
-				SAXParseException spe = (SAXParseException) e;
-				error("Error at line: " + spe.getLineNumber() + ", column: " + spe.getColumnNumber(), e);
-			} else {
-				error("Error running simulator", e);
-				if (runType == SimulatorRunType.RUN_SIM) {
-					info("jKool Activity Simulator Run failed, completed " + iteration + " out of " + numIterations
-							+ " iterations");
-				} else if (runType == SimulatorRunType.REPLAY_SIM) {
-					info("jKool Activity Simulator Replay failed, processed " + iteration + " out of " + numIterations
-							+ " records");
-				}
+			error("Error running simulator", e);
+			if (runType == SimulatorRunType.RUN_SIM) {
+				info("jKool Activity Simulator Run failed, completed " + iteration + " out of " + numIterations
+						+ " iterations");
+			} else if (runType == SimulatorRunType.REPLAY_SIM) {
+				info("jKool Activity Simulator Replay failed, processed " + iteration + " out of " + numIterations
+						+ " records");
 			}
 		} finally {
 			try {

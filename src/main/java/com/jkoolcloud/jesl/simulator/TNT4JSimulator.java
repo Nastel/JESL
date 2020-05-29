@@ -565,27 +565,34 @@ public class TNT4JSimulator {
 				// Determine number of lines in file
 				info("Analyzing file ...");
 				BufferedReader gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
-				for (numIterations = 0; (gwMsg = gwFile.readLine()) != null;) {
-					if (!StringUtils.isEmpty(gwMsg)) {
-						numIterations++;
+				try {
+					for (numIterations = 0; (gwMsg = gwFile.readLine()) != null;) {
+						if (!StringUtils.isEmpty(gwMsg)) {
+							numIterations++;
+						}
 					}
+				} finally {
+					gwFile.close();
 				}
-				gwFile.close();
 
 				// Reopen the file and send each line (tracking msg) to gateway
 				gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
-				if (showProgress) {
-					System.out.print("Processing Line: ");
-				}
-				iteration = 0;
-				while ((gwMsg = gwFile.readLine()) != null) {
+				try {
 					if (showProgress) {
-						itTrcWidth = printProgress("Processing Line", iteration, itTrcWidth);
+						System.out.print("Processing Line: ");
 					}
-					if (!StringUtils.isEmpty(gwMsg)) {
-						gwConn.write(gwMsg);
-						iteration++;
+					iteration = 0;
+					while ((gwMsg = gwFile.readLine()) != null) {
+						if (showProgress) {
+							itTrcWidth = printProgress("Processing Line", iteration, itTrcWidth);
+						}
+						if (!StringUtils.isEmpty(gwMsg)) {
+							gwConn.write(gwMsg);
+							iteration++;
+						}
 					}
+				} finally {
+					gwFile.close();
 				}
 				if (showProgress) {
 					System.out.println("");

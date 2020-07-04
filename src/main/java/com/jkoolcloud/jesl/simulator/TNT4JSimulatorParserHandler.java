@@ -1263,7 +1263,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 
 				curEvent.setTrackingId(eventMsg.getTrackingId());
 				curEvent.setMessage(expandEnvVars(eventMsg.getMessage()));
-			} else if (msgtext != null) {
+			} else {
 				curEvent.setMessage(expandEnvVars(msgtext));
 			}
 

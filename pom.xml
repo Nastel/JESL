@@ -80,7 +80,7 @@
     <dependencies>
         <dependency>
             <groupId>com.jkoolcloud</groupId>
-            <artifactId>tnt4j</artifactId>
+            <artifactId>tnt4j-core</artifactId>
             <version>${tnt4j.version}</version>
         </dependency>
         <dependency>
@@ -117,6 +117,24 @@
             <version>${slf4j.version}</version>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- Optional runtime dependencies -->
+        <!-- Uncomment if Kafka sink needed -->
+        <!--dependency>
+            <groupId>com.jkoolcloud</groupId>
+            <artifactId>tnt4j-kafka-sink</artifactId>
+            <version>${tnt4j.version}</version>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency-->
+        <!-- Uncomment if MQTT sink needed -->
+        <!--dependency>
+            <groupId>com.jkoolcloud</groupId>
+            <artifactId>tnt4j-mqtt-sink</artifactId>
+            <version>${tnt4j.version}</version>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency-->
     </dependencies>
 
     <profiles>

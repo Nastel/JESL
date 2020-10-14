@@ -100,6 +100,7 @@
             <artifactId>tnt4j-syslogd</artifactId>
             <version>${tnt4j.syslogd.version}</version>
             <scope>runtime</scope>
+            <optional>true</optional>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-lang3</artifactId>
@@ -116,6 +117,7 @@
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
             <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
 
         <!-- Optional runtime dependencies -->

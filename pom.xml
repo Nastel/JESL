@@ -67,6 +67,7 @@
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <assembly.skipAssembly>true</assembly.skipAssembly>
         <skipTests>true</skipTests>
+        <!--<maven.test.skip>true</maven.test.skip>-->
         <gpg.skip>true</gpg.skip>
 
         <build.assemblies.attach>false</build.assemblies.attach>

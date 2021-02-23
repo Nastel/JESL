@@ -113,6 +113,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	private Message curMsg;
 	private TrackingActivity curActivity;
 	private TrackingEvent curEvent;
+	private Dataset curDataset;
 	private PropertySnapshot curSnapshot;
 	private UsecTimestamp curActivityStart;
 	private UsecTimestamp simCurrTime;
@@ -563,6 +564,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		String name = null;
 		String category = null;
 		int srcId = 0;
+		OpLevel severity = OpLevel.INFO;
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
 				String attName = attributes.getQName(i);
@@ -573,6 +575,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					TNT4JSimulator.trace(simCurrTime, "Recording Dataset: " + attValue + " ...");
 				} else if (attName.equals(SIM_XML_ATTR_CAT)) {
 					category = attValue;
+				} else if (attName.equals(SIM_XML_ATTR_SEVERITY)) {
+					severity = getLevel(attValue);
 				} else if (attName.equals(SIM_XML_ATTR_SOURCE)) {
 					srcId = Integer.parseInt(attValue);
 					if (srcId <= 0) {
@@ -606,9 +610,10 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 						"<" + SIM_XML_DATASET + ">: " + SIM_XML_ATTR_SOURCE + " '" + srcId + "' is not defined",
 						saxLocator);
 			}
-			curSnapshot = new Dataset(category, name);
-			curSnapshot.setTimeStamp(simCurrTime);
-			curSnapshot.setTTL(TNT4JSimulator.getTTL());
+			curDataset = new Dataset(name);
+			curDataset.setSeverity(severity);
+			curDataset.setTimeStamp(simCurrTime);
+			curDataset.setTTL(TNT4JSimulator.getTTL());
 		} catch (Exception e) {
 			if (e instanceof SAXException) {
 				throw (SAXException) e;
@@ -662,7 +667,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			if (SIM_XML_SNAPSHOT.equals(curElement)) {
 				curSnapshot.add(prop);
 			} else if (SIM_XML_DATASET.equals(curElement)) {
-				curSnapshot.add(prop);
+				curDataset.add(prop);
 			} else if (SIM_XML_EVENT.equals(curElement)) {
 				curEvent.getOperation().addProperty(prop);
 			} else if (SIM_XML_ACTIVITY.equals(curElement)) {
@@ -1349,7 +1354,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		if (name.equals(SIM_XML_MSG)) {
 			recordMsgData();
 			curMsg = null;
-		} else if (name.equals(SIM_XML_SNAPSHOT) || name.equals(SIM_XML_DATASET)) {
+		} else if (name.equals(SIM_XML_SNAPSHOT)) {
 			if (curEvent != null) {
 				curEvent.getOperation().addSnapshot(curSnapshot);
 			} else if (curActivity != null) {
@@ -1373,6 +1378,14 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 			curEvent = null;
 		}
+		else if (name.equals(SIM_XML_DATASET)) {
+			if (curTracker != null) {
+				curTracker.tnt(curDataset);
+			} else {
+				curDataset = null;
+				throw new RuntimeException("Missing handling for " + uri + ", " + localName + ", " + name);
+			}
+		} 
 		curElement = activeElements.pop();
 	}
 

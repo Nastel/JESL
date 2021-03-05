@@ -65,6 +65,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 	public static final String SIM_XML_SLEEP = "sleep";
 
 	public static final String SIM_XML_ATTR_ID = "id";
+	public static final String SIM_XML_ATTR_GUID = "guid";
 	public static final String SIM_XML_ATTR_NAME = "name";
 	public static final String SIM_XML_ATTR_TYPE = "type";
 	public static final String SIM_XML_ATTR_VALTYPE = "valtype";
@@ -501,6 +502,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		String category = null;
 		OpLevel severity = OpLevel.INFO;
 		int srcId = 0;
+		String guid = null;
 
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
@@ -521,6 +523,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					category = attValue;
 				} else if (attName.equals(SIM_XML_ATTR_SEVERITY)) {
 					severity = getLevel(attValue);
+				} else if (attName.equals(SIM_XML_ATTR_GUID)) {
+					guid = attValue;
 				} else {
 					throw new SAXParseException("Unknown <" + SIM_XML_SNAPSHOT + "> attribute '" + attName + "'",
 							saxLocator);
@@ -552,6 +556,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 			curSnapshot = new PropertySnapshot(category, name, severity, simCurrTime);
 			curSnapshot.setTTL(TNT4JSimulator.getTTL());
+			if (StringUtils.isNotEmpty(guid)) {
+				curSnapshot.setGUID(guid);
+			}
 		} catch (Exception e) {
 			if (e instanceof SAXException) {
 				throw (SAXException) e;
@@ -565,6 +572,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		String category = null;
 		int srcId = 0;
 		OpLevel severity = OpLevel.INFO;
+		String guid = null;
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
 				String attName = attributes.getQName(i);
@@ -584,6 +592,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 								"Invalid <" + SIM_XML_DATASET + "> attribute '" + attName + "', must be > 0",
 								saxLocator);
 					}
+				} else if (attName.equals(SIM_XML_ATTR_GUID)) {
+					guid = attValue;
 				} else {
 					throw new SAXParseException("Unknown <" + SIM_XML_DATASET + "> attribute '" + attName + "'",
 							saxLocator);
@@ -614,6 +624,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			curDataset.setSeverity(severity);
 			curDataset.setTimeStamp(simCurrTime);
 			curDataset.setTTL(TNT4JSimulator.getTTL());
+			if (StringUtils.isNotEmpty(guid)) {
+				curDataset.setGUID(guid);
+			}
 		} catch (Exception e) {
 			if (e instanceof SAXException) {
 				throw (SAXException) e;
@@ -886,6 +899,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		String res = null;
 		String user = null;
 		String[] corrs = null;
+		String guid = null;
 
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
@@ -941,6 +955,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 							corrs[c] += corSuffix;
 						}
 					}
+				} else if (attName.equals(SIM_XML_ATTR_GUID)) {
+					guid = attValue;
 				} else {
 					throw new SAXParseException("Unknown <" + SIM_XML_ACTIVITY + "> attribute '" + attName + "'",
 							saxLocator);
@@ -999,6 +1015,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 			if (!ArrayUtils.isEmpty(corrs)) {
 				curActivity.setCorrelator(corrs);
+			}
+			if (StringUtils.isNotEmpty(guid)) {
+				curActivity.setGUID(guid);
 			}
 
 			TNT4JSimulator.debug(simCurrTime, "Started activity: " + name);
@@ -1082,6 +1101,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		long elapsed = 0L;
 		long msgAge = 0L;
 		Integer msgId = 0;
+		String guid = null;
 
 		try {
 			for (int i = 0; i < attributes.getLength(); i++) {
@@ -1161,6 +1181,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 					msgId = Integer.parseInt(attValue);
 				} else if (attName.equals(SIM_XML_ATTR_MSG_TEXT)) {
 					msgtext = attValue;
+				} else if (attName.equals(SIM_XML_ATTR_GUID)) {
+					guid = attValue;
 				} else {
 					throw new SAXParseException("Unknown <" + SIM_XML_EVENT + "> attribute '" + attName + "'",
 							saxLocator);
@@ -1254,6 +1276,9 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 			}
 			if (msgAge > 0L) {
 				curEvent.setMessageAge(TNT4JSimulator.varyValue(msgAge));
+			}
+			if (StringUtils.isNotEmpty(guid)) {
+				curEvent.setGUID(guid);
 			}
 
 			elapsed = TNT4JSimulator.varyValue(elapsed);
@@ -1377,15 +1402,14 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 				}
 			}
 			curEvent = null;
-		}
-		else if (name.equals(SIM_XML_DATASET)) {
+		} else if (name.equals(SIM_XML_DATASET)) {
 			if (curTracker != null) {
 				curTracker.tnt(curDataset);
 			} else {
 				curDataset = null;
 				throw new RuntimeException("Missing handling for " + uri + ", " + localName + ", " + name);
 			}
-		} 
+		}
 		curElement = activeElements.pop();
 	}
 

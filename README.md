@@ -17,8 +17,6 @@ JESL package includes the following components:
 
 1. TNT4J streaming library with SLF4j support (https://github.com/Nastel/TNT4J)
 
-1. TNT4J Syslog for streaming syslog to jkoolcloud.com. (https://github.com/Nastel/tnt4j-syslogd)
-
 1. JESL Simulator -- stream simulated events, activities and metrics to [jKoolCloud](https://jkool.jkoolcloud.com). Simulations are defined 
 in XML files. (see [`tnt4j-sim-template.xml`](sims/tnt4j-sim-template.xml) and [`order-process.xml`](sims/order-process.xml))
 
@@ -94,36 +92,6 @@ Some of the available options are:
 To see the full set of supported options, run:
 
 	`jksim.bat help`
-
-Streaming Syslog to jKoolCloud 
-===============================
-JESL includes Syslog Daemon implementation. Please follow these steps to stream syslog to `jkoolcloud.com`:
-
-* Obtain jKoolCloud account. Edit `config/tnt4j.properties`, 
-	* Locate `com.jkoolcloud.jesl.net.syslogd` stanza and provide your API access token.
-* Run JESL syslogd `<jesl-home>/bin/jksysd > jksysd.json`. 
-	* By default JESL `jksysd` binds to TCP port `5140` and writes JSON formatted syslog messages.
-	* JSON output can be played back using `<jesl-home>/bin/jksys` utility.
-* Configure `syslog/rsyslog` to forward to JESL syslog daemon over TCP (`hostname` is where JESL `jksysd` is running)
-	* RFC 3164 (e.g. `*.* @@hostname:5140`)
-	* RFC 5424 (e.g. `*.* @@hostname:5140;RSYSLOG_SyslogProtocol23Format`)
-* Sending syslog messages from command line (`<jesl-home>/bin/jksys`):
-```
-$ jksys -h localhost -p 5140 -l error -f user tcp "appl-name[883]: my syslog mesasge about appl-name pid=883"
-```
-* Sending PCI messages from command line (`<jesl-home>/bin/jksys`):
-```
-$ jksys -h localhost -p 5140 -l error -f user tcp "#pci(userId=john,eventType=audit,status=success,origination=CreditCards,affectedResource=Payment)"
-```
-* Playback syslog JSON messages from command line (`<jesl-home>/bin/jksys`):
-```
-$ jksys -h localhost -p 5140 -f jksysd.json tcp
-```
-where `jksysd.json` is JSON output of JESL syslog daemon.
-
-That should do it.
-
-**NOTE:** JESL currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
 
 Streaming Log4j to jKoolCloud 
 ===============================
@@ -374,7 +342,6 @@ JESL requires the following (which will download automatically if using Maven):
 * JDK 1.8+
 * [TNT4J](https://github.com/Nastel/TNT4J/)
 * [Apache HTTP Client](http://hc.apache.org/httpcomponents-client-ga/)
-* [TNT4J-Syslogd](https://github.com/Nastel/tnt4j-syslogd/) (runtime, optional)
 * [SLF4J-Simple](http://www.slf4j.org/) (runtime, optional)
 
 # Related Projects

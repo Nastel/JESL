@@ -73,7 +73,6 @@
         <build.assemblies.attach>false</build.assemblies.attach>
 
         <tnt4j.version>2.15-SNAPSHOT</tnt4j.version>
-        <tnt4j.syslogd.version>0.3.3</tnt4j.syslogd.version>
         <httpcomponents.version>4.5.13</httpcomponents.version>
         <slf4j.version>1.7.30</slf4j.version>
     </properties>
@@ -96,23 +95,6 @@
             </exclusions>
         </dependency>
         <!-- optional dependencies for sim module -->
-        <dependency>
-            <groupId>com.jkoolcloud.jesl.net</groupId>
-            <artifactId>tnt4j-syslogd</artifactId>
-            <version>${tnt4j.syslogd.version}</version>
-            <scope>runtime</scope>
-            <optional>true</optional>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-lang3</artifactId>
-                    <groupId>org.apache.commons</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>tnt4j</artifactId>
-                    <groupId>com.jkoolcloud</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>

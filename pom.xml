@@ -35,15 +35,21 @@
     </scm>
     <distributionManagement>
         <repository>
-            <id>bintray-amavashev2-jkoolcloud</id>
-            <name>amavashev2-jkoolcloud</name>
-            <url>https://api.bintray.com/maven/amavashev2/jkoolcloud/jesl/;publish=1;override=1</url>
+            <id>oss.sonatype.org</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
+        <snapshotRepository>
+            <id>github</id>
+            <name>GitHub Nastel Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Nastel/JESL</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <properties>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.resources.encoding>UTF-8</project.resources.encoding>
         <product.vendor>jKool, LLC</product.vendor>
 
         <project.java.version>1.8</project.java.version>
@@ -155,6 +161,12 @@
                 <skipTests>false</skipTests>
             </properties>
         </profile>
+        <profile>
+            <id>maven-release</id>
+            <properties>
+                <gpg.skip>false</gpg.skip>
+            </properties>
+        </profile>
     </profiles>
 
     <build>
@@ -171,6 +183,14 @@
                     <target>${java.target.version}</target>
                     <debuglevel>${java.compiler.debuglevel}</debuglevel>
                     <fork>${java.compiler.fork}</fork>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <encoding>${project.resources.encoding}</encoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -271,7 +291,7 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>5.1.1</version>
+                <version>5.1.2</version>
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
@@ -292,6 +312,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>1.6</version>
+                <configuration>
+                    <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </gpgArguments>
+                </configuration>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -303,9 +329,45 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>oss.sonatype.org</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <!--<description>${project.version}</description>-->
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>deploy-to-sonatype</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                            <!--<goal>release</goal>-->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
             </plugin>
         </plugins>
     </build>

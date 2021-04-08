@@ -344,7 +344,7 @@ Subscribe to events where message contains 'failure' show as linechart
     * containing only binary distribution: run `mvn -P pack-bin`
     * containing binary, source and javadoc distribution: run `mvn -P pack-all`
 
-Release assemblies are built to `../build/JESL` directory.
+Release assemblies are built to `/build` directory.
 
 # Project Dependencies
 JESL requires the following (which will download automatically if using Maven):

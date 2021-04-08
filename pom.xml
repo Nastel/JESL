@@ -61,7 +61,7 @@
         <java.compiler.fork>false</java.compiler.fork>
 
         <release.deploy.name>${project.artifactId}</release.deploy.name>
-        <release.deploy.dir>../build/${release.deploy.name}</release.deploy.dir>
+        <release.deploy.dir>build/</release.deploy.dir>
         <release.deploy.finalName>${release.deploy.name}-${project.version}</release.deploy.finalName>
         <release.deploy.zip.assembly>src/assembly/zipDeployAssembly.xml</release.deploy.zip.assembly>
         <release.deploy.gz.assembly>src/assembly/gzDeployAssembly.xml</release.deploy.gz.assembly>
@@ -257,6 +257,10 @@
                     <filesets>
                         <fileset>
                             <directory>${release.deploy.dir}</directory>
+                            <includes>
+                                <include>${release.deploy.finalName}/</include>
+                                <include>${release.deploy.finalName}.*</include>
+                            </includes>
                         </fileset>
                     </filesets>
                 </configuration>

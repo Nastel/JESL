@@ -10,14 +10,14 @@ application must:
 
 1. Use JESL Event Sink implementation (contained in this project) within your tnt4j configuration. (Requires API access token)
 
-Use Maven dependency:
-```xml
+   Use Maven dependency:
+   ```xml
         <dependency>
             <groupId>com.jkoolcloud</groupId>
             <artifactId>jesl</artifactId>
             <version>0.9.9</version>
         </dependency>
-```
+   ```
 
 1. Configure your application for streaming to [jKoolCloud](https://jkool.jkoolcloud.com) using JESL Event Sink (requires API access token). 
 See (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`)

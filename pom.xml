@@ -39,9 +39,8 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
         <snapshotRepository>
-            <id>github</id>
-            <name>GitHub Nastel Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/Nastel/JESL</url>
+            <id>oss.sonatype.org</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -72,8 +71,6 @@
         <maven.source.skip>true</maven.source.skip>
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <assembly.skipAssembly>true</assembly.skipAssembly>
-        <skipTests>true</skipTests>
-        <!--<maven.test.skip>true</maven.test.skip>-->
         <gpg.skip>true</gpg.skip>
 
         <build.assemblies.attach>false</build.assemblies.attach>
@@ -156,14 +153,17 @@
             </properties>
         </profile>
         <profile>
-            <id>run-tests</id>
+            <id>pack-maven</id>
             <properties>
-                <skipTests>false</skipTests>
+                <maven.source.skip>false</maven.source.skip>
+                <maven.javadoc.skip>false</maven.javadoc.skip>
             </properties>
         </profile>
         <profile>
             <id>maven-release</id>
             <properties>
+                <maven.source.skip>false</maven.source.skip>
+                <maven.javadoc.skip>false</maven.javadoc.skip>
                 <gpg.skip>false</gpg.skip>
             </properties>
         </profile>
@@ -267,12 +267,6 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
-                <inherited>true</inherited>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
@@ -321,6 +315,8 @@
                         <arg>--pinentry-mode</arg>
                         <arg>loopback</arg>
                     </gpgArguments>
+                    <keyname>${gpg.keyname}</keyname>
+                    <passphraseServerId>${gpg.keyname}</passphraseServerId>
                 </configuration>
                 <executions>
                     <execution>
@@ -348,7 +344,6 @@
                 <configuration>
                     <serverId>oss.sonatype.org</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <!--<description>${project.version}</description>-->
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
                 <executions>
@@ -357,7 +352,6 @@
                         <phase>deploy</phase>
                         <goals>
                             <goal>deploy</goal>
-                            <!--<goal>release</goal>-->
                         </goals>
                     </execution>
                 </executions>

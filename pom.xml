@@ -77,7 +77,7 @@
 
         <tnt4j.version>2.15-SNAPSHOT</tnt4j.version>
         <httpcomponents.version>4.5.13</httpcomponents.version>
-        <slf4j.version>1.7.30</slf4j.version>
+        <slf4j.version>1.7.32</slf4j.version>
     </properties>
 
     <dependencies>

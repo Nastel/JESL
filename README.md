@@ -104,7 +104,7 @@ To see the full set of supported options, run:
 
 Streaming Log4j to jKoolCloud 
 ===============================
-Requires [TNT4J Appender for Log4J 1.2](https://github.com/Nastel/tnt4j-log4j12)
+Requires [TNT4J Appender for Log4J](https://github.com/Nastel/tnt4j-log4j)
 
 Log4J can be configured to stream events and metrics to jKoolCloud by using JESL log4j appender 
 (`com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender`) as follows:
@@ -143,7 +143,7 @@ Optionally you can add the following parameters to define default data center na
 -Dtnt4j.source.DATACENTER=YourDataCenterName -Dtnt4j.source.GEOADDR="Melville, NY" 
 ```
 Make sure `<jesl.home>/jesl-<version>.jar` and all dependent jar files in `<jesl.home>/lib` are in your class path. Also include 
-`tnt4-log4j12` appender library `tnt4j-log4j12-<version>.jar`.
+`tnt4j-log4j` appender library `tnt4j-log4j-<version>.jar`.
 
 #### Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 This allows streaming data to be associated with your private repository.
@@ -357,7 +357,7 @@ JESL requires the following (which will download automatically if using Maven):
 
 # Related Projects
 * [TNT4J](https://github.com/Nastel/TNT4J/)
-* [TNT4J-Log4J12 Appender](https://github.com/Nastel/tnt4j-log4j12/)
+* [TNT4J-Log4j Appender](https://github.com/Nastel/tnt4j-log4j/)
 * [TNT4J-Logback Appender](https://github.com/Nastel/tnt4j-logback/)
 * [TNT4J-Servlet-Filter](http://nastel.github.io/tnt4j-servlet-filter/)
 * [TNT4J-Stream-JMX](http://nastel.github.io/tnt4j-stream-jmx/)

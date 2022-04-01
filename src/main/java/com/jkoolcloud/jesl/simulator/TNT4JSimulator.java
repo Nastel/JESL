@@ -599,7 +599,7 @@ public class TNT4JSimulator {
 				}
 				long endTime = System.currentTimeMillis();
 
-				info("jKool Activity Simulator Replay finished, tracking.msg.count=" + iteration + ", elasped.time="
+				info("jKool Activity Simulator Replay finished, tracking.msg.count=" + iteration + ", elapsed.time="
 						+ DurationFormatUtils.formatDurationHMS(endTime - startTime));
 			}
 		} catch (SAXParseException spe) {

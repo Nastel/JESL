@@ -91,7 +91,7 @@
 
         <build.assemblies.attach>false</build.assemblies.attach>
 
-        <tnt4j.version>2.15-SNAPSHOT</tnt4j.version>
+        <tnt4j.version>2.16-SNAPSHOT</tnt4j.version>
         <httpcomponents.version>4.5.13</httpcomponents.version>
         <slf4j.version>1.7.36</slf4j.version>
     </properties>

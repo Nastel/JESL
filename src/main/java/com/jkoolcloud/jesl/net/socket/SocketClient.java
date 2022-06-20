@@ -155,6 +155,9 @@ public class SocketClient implements JKStream {
 
 		String lineMsg = msg.endsWith("\n") ? msg : msg + "\n";
 		byte[] bytes = lineMsg.getBytes();
+
+		checkState(token);
+
 		out.write(bytes, 0, bytes.length);
 		out.flush();
 	}
@@ -200,9 +203,8 @@ public class SocketClient implements JKStream {
 
 	@Override
 	public synchronized String read() throws IOException {
-		if (socket == null) {
-			connect();
-		}
+		checkState();
+
 		return in.readLine();
 	}
 

@@ -34,42 +34,42 @@ public interface JKStream extends Closeable {
 	URI getURI();
 
 	/**
-	 * Obtain host name associated with the stream
+	 * Obtain host name associated with the stream.
 	 *
-	 * @return Obtain host name associated with the stream
+	 * @return host name associated with the stream
 	 */
 	String getHost();
 
 	/**
-	 * Obtain port number associated with the stream
+	 * Obtain port number associated with the stream.
 	 *
 	 * @return port number associated with the stream
 	 */
 	int getPort();
 
 	/**
-	 * True if stream is via a secure protocol (e.g. SSL), false otherwise
+	 * Checks if this stream is via a secure protocol (e.g. SSL).
 	 *
-	 * @return true if stream is via a secure protocol (e.g. SSL), false otherwise
+	 * @return {@code true} if stream is via a secure protocol (e.g. SSL), {@code false} otherwise
 	 */
 	boolean isSecure();
 
 	/**
-	 * Obtain proxy host name associated with the stream
+	 * Obtain proxy host name associated with the stream.
 	 *
-	 * @return Obtain proxy host name associated with the stream, null if not defined
+	 * @return proxy host name associated with the stream, null if not defined
 	 */
 	String getProxyHost();
 
 	/**
-	 * Obtain proxy port number associated with the stream
+	 * Obtain proxy port number associated with the stream.
 	 *
 	 * @return proxy port number associated with the stream, 0 if non defined
 	 */
 	int getProxyPort();
 
 	/**
-	 * Connect the stream to the underlying URI connection
+	 * Connect the stream to the underlying URI connection.
 	 *
 	 * @throws IOException
 	 *             if error establishing connection
@@ -77,7 +77,7 @@ public interface JKStream extends Closeable {
 	void connect() throws IOException;
 
 	/**
-	 * Connect the stream to the underlying URI connection
+	 * Connect the stream to the underlying URI connection.
 	 *
 	 * @param token
 	 *            access token (security token)
@@ -87,9 +87,9 @@ public interface JKStream extends Closeable {
 	void connect(String token) throws IOException;
 
 	/**
-	 * True if stream connected, false otherwise
+	 * Checks if this stream is connected.
 	 *
-	 * @return true if stream connected, false otherwise
+	 * @return {@code true} if stream connected, {@code false} otherwise
 	 */
 	boolean isConnected();
 
@@ -115,4 +115,37 @@ public interface JKStream extends Closeable {
 	 *             if error occurs when sending a message
 	 */
 	String read() throws IOException;
+
+	/**
+	 * Checks if this stream is connected and (re)connects it if it is not.
+	 * 
+	 * @throws IOException
+	 *             if error establishing connection
+	 * 
+	 * @see #isConnected()
+	 * @see #connect()
+	 */
+	default void checkState() throws IOException {
+		if (!isConnected()) {
+			connect();
+		}
+	}
+
+	/**
+	 * Checks if this stream is connected and (re)connects it if it is not.
+	 * 
+	 * @param token
+	 *            access token (security token)
+	 * 
+	 * @throws IOException
+	 *             if error establishing connection
+	 *
+	 * @see #isConnected()
+	 * @see #connect(String)
+	 */
+	default void checkState(String token) throws IOException {
+		if (!isConnected()) {
+			connect(token);
+		}
+	}
 }

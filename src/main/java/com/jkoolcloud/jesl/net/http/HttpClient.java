@@ -306,6 +306,9 @@ public class HttpClient implements HttpStream {
 			}
 			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", uri, request);
 			org.apache.http.HttpRequest httpRequest = (org.apache.http.HttpRequest) request;
+
+			checkState(request.getHeader(X_API_KEY));
+
 			connection.sendRequestHeader(httpRequest);
 			if (httpRequest instanceof HttpEntityEnclosingRequest && request.hasContent()) {
 				connection.sendRequestEntity((HttpEntityEnclosingRequest) httpRequest);
@@ -346,6 +349,8 @@ public class HttpClient implements HttpStream {
 	@Override
 	public synchronized HttpResponse getResponse() throws IOException {
 		try {
+			checkState();
+
 			HttpResponseImpl resp = new HttpResponseImpl(connection.receiveResponseHeader());
 			String contentLenStr = resp.getHeader(HttpHeaders.CONTENT_LENGTH);
 			String contentType = resp.getHeader(HttpHeaders.CONTENT_TYPE);

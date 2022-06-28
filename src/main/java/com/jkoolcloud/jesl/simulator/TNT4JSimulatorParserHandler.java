@@ -51,7 +51,7 @@ import com.jkoolcloud.tnt4j.uuid.DefaultUUIDFactory;
  *
  * @version $Revision: $
  */
-public class TNT4JSimulatorParserHandler extends DefaultHandler {
+public class TNT4JSimulatorParserHandler extends DefaultHandler implements AutoCloseable {
 	public static final String SIM_XML_ROOT = "tnt4j-simulator";
 	public static final String SIM_XML_SOURCE = "source";
 	public static final String SIM_XML_MSG = "msg";
@@ -145,6 +145,15 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler {
 		}
 		sinkStats.put(Utils.qualify(this, "tracker-sources"), (long) trackers.size());
 		return sinkStats;
+	}
+
+	@Override
+	public void close() {
+		for (Tracker tracker : trackers.values()) {
+			Utils.close(tracker);
+		}
+
+		trackers.clear();
 	}
 
 	private String generateValues(String base) {

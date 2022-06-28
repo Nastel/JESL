@@ -498,109 +498,110 @@ public class TNT4JSimulator {
 
 			SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 			SAXParser theParser = parserFactory.newSAXParser();
-			TNT4JSimulatorParserHandler xmlHandler = new TNT4JSimulatorParserHandler();
 
-			processArgs(xmlHandler, args);
+			try (TNT4JSimulatorParserHandler xmlHandler = new TNT4JSimulatorParserHandler()) {
+				processArgs(xmlHandler, args);
 
-			if (logger.isSet(OpLevel.TRACE)) {
-				traceLevel = OpLevel.TRACE;
-			} else if (logger.isSet(OpLevel.DEBUG)) {
-				traceLevel = OpLevel.DEBUG;
-			}
+				if (logger.isSet(OpLevel.TRACE)) {
+					traceLevel = OpLevel.TRACE;
+				} else if (logger.isSet(OpLevel.DEBUG)) {
+					traceLevel = OpLevel.DEBUG;
+				}
 
-			if (runType == SimulatorRunType.RUN_SIM) {
-				showProgress = (isTTY && numIterations > 1);
+				if (runType == SimulatorRunType.RUN_SIM) {
+					showProgress = (isTTY && numIterations > 1);
 
-				if (StringUtils.isEmpty(simFileName)) {
-					simFileName = "tnt4j-sim.xml";
-					String fileName = readFromConsole("Simulation file [" + simFileName + "]: ");
+					if (StringUtils.isEmpty(simFileName)) {
+						simFileName = "tnt4j-sim.xml";
+						String fileName = readFromConsole("Simulation file [" + simFileName + "]: ");
 
-					if (!StringUtils.isEmpty(fileName)) {
-						simFileName = fileName;
+						if (!StringUtils.isEmpty(fileName)) {
+							simFileName = fileName;
+						}
 					}
-				}
 
-				StringBuilder simDef = new StringBuilder();
-				BufferedReader simLoader = new BufferedReader(new FileReader(simFileName));
-				String line;
-				while ((line = simLoader.readLine()) != null) {
-					simDef.append(line).append("\n");
-				}
-				simLoader.close();
+					StringBuilder simDef = new StringBuilder();
+					BufferedReader simLoader = new BufferedReader(new FileReader(simFileName));
+					String line;
+					while ((line = simLoader.readLine()) != null) {
+						simDef.append(line).append("\n");
+					}
+					simLoader.close();
 
-				info("jKool Activity Simulator Run starting: file=" + simFileName + ", iterations=" + numIterations
-						+ ", ttl.sec=" + ttl);
+					info("jKool Activity Simulator Run starting: file=" + simFileName + ", iterations=" + numIterations
+							+ ", ttl.sec=" + ttl);
 
-				startTime = System.currentTimeMillis();
-				if (showProgress) {
-					System.out.print("Iteration: ");
-				}
-				for (iteration = 1; iteration <= numIterations; iteration++) {
+					startTime = System.currentTimeMillis();
 					if (showProgress) {
-						itTrcWidth = printProgress("Executing Iteration", iteration, itTrcWidth);
+						System.out.print("Iteration: ");
+					}
+					for (iteration = 1; iteration <= numIterations; iteration++) {
+						if (showProgress) {
+							itTrcWidth = printProgress("Executing Iteration", iteration, itTrcWidth);
+						}
+
+						theParser.parse(new InputSource(new StringReader(simDef.toString())), xmlHandler);
+
+						if (!Utils.isEmpty(jkFileName)) {
+							PrintWriter gwFile = new PrintWriter(new FileOutputStream(jkFileName, true));
+							gwFile.println("");
+							gwFile.close();
+						}
+					}
+					if (showProgress) {
+						System.out.println("");
 					}
 
-					theParser.parse(new InputSource(new StringReader(simDef.toString())), xmlHandler);
+					info("jKool Activity Simulator Run finished, elapsed time="
+							+ DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - startTime));
+					printMetrics(xmlHandler.getSinkStats(), "Total Sink Statistics");
+				} else if (runType == SimulatorRunType.REPLAY_SIM) {
+					showProgress = isTTY;
+					info("jKool Activity Simulator Replay starting: file=" + jkFileName);
+					connect();
+					startTime = System.currentTimeMillis();
+					String gwMsg;
 
-					if (!Utils.isEmpty(jkFileName)) {
-						PrintWriter gwFile = new PrintWriter(new FileOutputStream(jkFileName, true));
-						gwFile.println("");
+					// Determine number of lines in file
+					info("Analyzing file ...");
+					BufferedReader gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
+					try {
+						for (numIterations = 0; (gwMsg = gwFile.readLine()) != null;) {
+							if (!StringUtils.isEmpty(gwMsg)) {
+								numIterations++;
+							}
+						}
+					} finally {
 						gwFile.close();
 					}
-				}
-				if (showProgress) {
-					System.out.println("");
-				}
 
-				info("jKool Activity Simulator Run finished, elapsed time="
-						+ DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - startTime));
-				printMetrics(xmlHandler.getSinkStats(), "Total Sink Statistics");
-			} else if (runType == SimulatorRunType.REPLAY_SIM) {
-				showProgress = isTTY;
-				info("jKool Activity Simulator Replay starting: file=" + jkFileName);
-				connect();
-				startTime = System.currentTimeMillis();
-				String gwMsg;
-
-				// Determine number of lines in file
-				info("Analyzing file ...");
-				BufferedReader gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
-				try {
-					for (numIterations = 0; (gwMsg = gwFile.readLine()) != null;) {
-						if (!StringUtils.isEmpty(gwMsg)) {
-							numIterations++;
-						}
-					}
-				} finally {
-					gwFile.close();
-				}
-
-				// Reopen the file and send each line (tracking msg) to gateway
-				gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
-				try {
-					if (showProgress) {
-						System.out.print("Processing Line: ");
-					}
-					iteration = 0;
-					while ((gwMsg = gwFile.readLine()) != null) {
+					// Reopen the file and send each line (tracking msg) to gateway
+					gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
+					try {
 						if (showProgress) {
-							itTrcWidth = printProgress("Processing Line", iteration, itTrcWidth);
+							System.out.print("Processing Line: ");
 						}
-						if (!StringUtils.isEmpty(gwMsg)) {
-							gwConn.write(gwMsg);
-							iteration++;
+						iteration = 0;
+						while ((gwMsg = gwFile.readLine()) != null) {
+							if (showProgress) {
+								itTrcWidth = printProgress("Processing Line", iteration, itTrcWidth);
+							}
+							if (!StringUtils.isEmpty(gwMsg)) {
+								gwConn.write(gwMsg);
+								iteration++;
+							}
 						}
+					} finally {
+						gwFile.close();
 					}
-				} finally {
-					gwFile.close();
-				}
-				if (showProgress) {
-					System.out.println("");
-				}
-				long endTime = System.currentTimeMillis();
+					if (showProgress) {
+						System.out.println("");
+					}
+					long endTime = System.currentTimeMillis();
 
-				info("jKool Activity Simulator Replay finished, tracking.msg.count=" + iteration + ", elapsed.time="
-						+ DurationFormatUtils.formatDurationHMS(endTime - startTime));
+					info("jKool Activity Simulator Replay finished, tracking.msg.count=" + iteration + ", elapsed.time="
+							+ DurationFormatUtils.formatDurationHMS(endTime - startTime));
+				}
 			}
 		} catch (SAXParseException spe) {
 			error("Error at line: " + spe.getLineNumber() + ", column: " + spe.getColumnNumber(), spe);
@@ -619,6 +620,7 @@ public class TNT4JSimulator {
 			} catch (Exception e) {
 			}
 			TNT4JSimulator.disconnect();
+			logger.close();
 		}
 
 		System.exit(0);

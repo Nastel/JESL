@@ -137,7 +137,7 @@ public class JKClient implements JKStream {
 			String proxyUser, String proxyPass, EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
-		if (scheme.equalsIgnoreCase("tcp") || scheme.equalsIgnoreCase("tcps")) {
+		if (StringUtils.equalsAnyIgnoreCase(scheme, "tcp", "tcps")) {
 			String host = uri.getHost();
 			if (host == null) {
 				host = "localhost";

@@ -284,19 +284,13 @@
                 <version>3.2.0</version>
                 <executions>
                     <execution>
-                        <id>clean-target</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                    <execution>
                         <id>clean-build</id>
-                        <phase>initialize</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>clean</goal>
                         </goals>
                         <configuration>
+                            <excludeDefaultDirectories>true</excludeDefaultDirectories>
                             <skip>${assembly.skipAssembly}</skip>
                             <filesets>
                                 <fileset>

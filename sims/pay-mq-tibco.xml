@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--
-  ~ Copyright 2014-2021 JKOOL, LLC.
+  ~ Copyright 2014-2022 JKOOL, LLC.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,185 +17,187 @@
 
 <tnt4j-simulator>
 
-  <var name="custid" 	value="=?"/>
-  <var name="amount" 	value="=?"/>
-  <var name="payid" 	value="=?"/>
-  <var name="filename"  value="=?"/>
-  <var name="orderid"   value="=?"/>
-  <var name="orderdb" 	value="jdbc://oracle/ora1/order_db"/>
+    <var name="custid" value="=?"/>
+    <var name="amount" value="=?"/>
+    <var name="payid" value="=?"/>
+    <var name="filename" value="=?"/>
+    <var name="orderid" value="=?"/>
+    <var name="orderdb" value="jdbc://oracle/ora1/order_db"/>
 
-  <source id="1" fqn="APPL=WebPayments#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
-          user="webuser" url="https://www.mybank.com/payments"/>
-  <source id="2" fqn="APPL=VerifyPayment#SERVER=MQSERVER01#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=Los Angeles, CA"
-          user="ebay-proc"/>
-  <source id="3" fqn="APPL=ProcessPayment#SERVER=TIBEMS01#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=London, England"
-          user="SYSPRC"/>
-  <source id="4" fqn="APPL=VerifyCredit#SERVER=TIBEMS02#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=Paris, France"
-          user="system"/>
-  <source id="5" fqn="APPL=DebitCredit#SERVER=TIBEMS03#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=Miami, Florida"
-          user="system"/>
-  <source id="6" fqn="APPL=FraudAlert#SERVER=MQSERVER02#NETADDR=162.159.122.123#DATACENTER=Washington#GEOADDR=Washington, Virginia"
-          user="mqm"/>
-  <source id="7" fqn="APPL=PaymentRouter#SERVER=MQSERVER03#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=Las Vegas, Nevada"
-          user="mqm"/>
-  
-  <msg id="1">PaymentId=${payid}, Filename=${filename}, CustomerID=${custid}</msg>
-  <msg id="2">Verify PaymentId=${payid}, Filename=${filename}, CustomerID=${custid}</msg>
-  <msg id="3">Process Payment PaymentId=${payid}, Filename=${filename}, CustomerID=${custid}</msg>
-  <msg id="4">Validate PaymentId=${payid}, Filename=${filename}, CustomerID=${custid}</msg>
-  <msg id="5">Confirm PaymentId=${payid}, Filename=${filename}, CustomerID=${custid}</msg>
-  <msg id="6">SELECT * FROM ORDERS WHERE order_id = ${orderid} and customer_id = ${custid}</msg>
-  <msg id="7">SELECT * FROM PAYMENTS WHERE payment_id = ${payid}</msg>
-  
-  <activity name="AcceptPayment" source="1" pid="5432" tid="4">
-    <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="${orderid}"/>
-    <event name="SQL.execute" type="CALL" elapsed="7187" sev="ANY" res="${orderdb}" msg="6" corrs="${orderid}"/>
-	<event name="SQL.execute" type="CALL" elapsed="5472" sev="ANY" res="${orderdb}" msg="7" corrs="${orderid}"/>
-    <event name="ValidatePayment" type="SEND" elapsed="823" res="VALIDATE.PAY.QUEUE" msg="2" corrs="${orderid}"/>
-	<prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
-	<prop name="Customer" type="STRING" value="${custid}" />
-	<prop name="Filename" type="STRING" value="${filename}" />
-    <snapshot name="CPU" cat="Java">
-      <prop name="Count" type="LONG" value="8" valtype="size"/>
-      <prop name="TotalCpuUsec" type="DECIMAL" value="46800.3" valtype="age.usec"/>
-      <prop name="TotalCpuUserUsec" type="DECIMAL" value="46800.3" valtype="age.usec"/>
-    </snapshot>
-    <snapshot name="Thread" cat="Java">
-      <prop name="Count" type="LONG" value="69" valtype="size"/>
-      <prop name="DaemonCount" type="LONG" value="15" valtype="size"/>
-      <prop name="StartedCount" type="LONG" value="71" valtype="size"/>
-      <prop name="PeakCount" type="LONG" value="69" valtype="size"/>
-      <prop name="BlockedCount" type="LONG" value="69" valtype="size"/>
-      <prop name="WaitedCount" type="LONG" value="4" valtype="size"/>
-      <prop name="BlockedUsec" type="LONG" value="35000" valtype="age.usec"/>
-      <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
-    </snapshot>
-    <snapshot name="Memory" cat="Java">
-      <prop name="MaxBytes" type="LONG" value="7635533824" valtype="size"/>
-      <prop name="TotalBytes" type="LONG" value="514523136" valtype="size"/>
-      <prop name="FreeBytes" type="LONG" value="450058552" valtype="size"/>
-      <prop name="UsedBytes" type="LONG" value="64464584" valtype="size"/>
-      <prop name="Usage" type="LONG" value="12" valtype="percent"/>
-    </snapshot>
-    <snapshot name="PS Scavenge" cat="GarbageCollector">
-      <prop name="Count" type="LONG" value="1" valtype="size"/>
-      <prop name="Time" type="LONG" value="9" valtype="age.msec"/>
-      <prop name="isValid" type="BOOLEAN" value="true"/>
-    </snapshot>
-    <snapshot name="PS MarkSweep" cat="GarbageCollector">
-      <prop name="Count" type="LONG" value="10" valtype="size"/>
-      <prop name="Time" type="LONG" value="12200" valtype="age.msec"/>
-      <prop name="isValid" type="BOOLEAN" value="true"/>
-    </snapshot>
-    <snapshot name="Activity" cat="Java">
-      <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
-      <prop name="SlackUsec" type="LONG" value="1399" valtype="age.usec"/>
-      <prop name="WallUsec" type="DECIMAL" value="3.25116001E7" valtype="age.usec"/>
-      <prop name="BlockedCount" type="LONG" value="1090" valtype="size"/>
-      <prop name="WaitedCount" type="LONG" value="547" valtype="size"/>
-      <prop name="BlockedUsec" type="LONG" value="3000" valtype="age.usec"/>
-      <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
-      <prop name="OverheadUsec" type="DECIMAL" value="962.175" valtype="age.usec"/>
-    </snapshot>
-  </activity>
-  
-  <sleep msec="163"/>
+    <source id="1" fqn="APPL=WebPayments#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
+            user="webuser" url="https://www.mybank.com/payments"/>
+    <source id="2" fqn="APPL=VerifyPayment#SERVER=MQSERVER01#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=Los Angeles, CA"
+            user="ebay-proc"/>
+    <source id="3" fqn="APPL=ProcessPayment#SERVER=TIBEMS01#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=London, England"
+            user="SYSPRC"/>
+    <source id="4" fqn="APPL=VerifyCredit#SERVER=TIBEMS02#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=Paris, France"
+            user="system"/>
+    <source id="5" fqn="APPL=DebitCredit#SERVER=TIBEMS03#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=Miami, Florida"
+            user="system"/>
+    <source id="6" fqn="APPL=FraudAlert#SERVER=MQSERVER02#NETADDR=162.159.122.123#DATACENTER=Washington#GEOADDR=Washington, Virginia"
+            user="mqm"/>
+    <source id="7" fqn="APPL=PaymentRouter#SERVER=MQSERVER03#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=Las Vegas, Nevada"
+            user="mqm"/>
 
-  <activity name="ValidatePayment" source="2" pid="7373" tid="15">
-    <event name="MQGET" type="RECEIVE" elapsed="626" res="VALIDATE.PAY.QUEUE" msg="2" corrs="${orderid}"/>
-    <event name="MPUT" type="SEND" elapsed="2323" res="CREDIT.PAY.QUEUE" msg="2" corrs="${orderid}"/>
-	<prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
-	<prop name="Customer" type="STRING" value="${custid}" />
-	<prop name="Filename" type="STRING" value="${filename}" />
-  </activity>
+    <msg id="1">PaymentId=${payid}, Filename=${filename}, CustomerID=${custid}</msg>
+    <msg id="2">Verify PaymentId=${payid}, Filename=${filename}, CustomerID=${custid}</msg>
+    <msg id="3">Process Payment PaymentId=${payid}, Filename=${filename}, CustomerID=${custid}</msg>
+    <msg id="4">Validate PaymentId=${payid}, Filename=${filename}, CustomerID=${custid}</msg>
+    <msg id="5">Confirm PaymentId=${payid}, Filename=${filename}, CustomerID=${custid}</msg>
+    <msg id="6">SELECT * FROM ORDERS WHERE order_id = ${orderid} and customer_id = ${custid}</msg>
+    <msg id="7">SELECT * FROM PAYMENTS WHERE payment_id = ${payid}</msg>
 
-  <activity name="CreditValidate" source="4" pid="432" tid="64">
-    <event name="onMessage" type="RECEIVE" elapsed="2782" res="CREDIT.PAY.QUEUE" msg="2" corrs="${orderid}"/>
-    <event name="send" type="SEND" elapsed="7189" res="ROUTE.PAY.QUEUE" msg="1" corrs="${orderid}"/>
-	<prop name="PaymentAmount" type="DECIMAL" value="210.38" valtype="currency.usd"/>
-	<prop name="Customer" type="STRING" value="${custid}" valtype="currency.usd"/>
-  </activity>
+    <activity name="AcceptPayment" source="1" pid="5432" tid="4">
+        <event name="ReceiveOrder" type="RECEIVE" elapsed="465" res="order/parts" msg="1" corrs="${orderid}"/>
+        <event name="SQL.execute" type="CALL" elapsed="7187" sev="ANY" res="${orderdb}" msg="6" corrs="${orderid}"/>
+        <event name="SQL.execute" type="CALL" elapsed="5472" sev="ANY" res="${orderdb}" msg="7" corrs="${orderid}"/>
+        <event name="ValidatePayment" type="SEND" elapsed="823" res="VALIDATE.PAY.QUEUE" msg="2" corrs="${orderid}"/>
+        <prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
+        <prop name="Customer" type="STRING" value="${custid}"/>
+        <prop name="Filename" type="STRING" value="${filename}"/>
+        <snapshot name="CPU" cat="Java">
+            <prop name="Count" type="LONG" value="8" valtype="size"/>
+            <prop name="TotalCpuUsec" type="DECIMAL" value="46800.3" valtype="age.usec"/>
+            <prop name="TotalCpuUserUsec" type="DECIMAL" value="46800.3" valtype="age.usec"/>
+        </snapshot>
+        <snapshot name="Thread" cat="Java">
+            <prop name="Count" type="LONG" value="69" valtype="size"/>
+            <prop name="DaemonCount" type="LONG" value="15" valtype="size"/>
+            <prop name="StartedCount" type="LONG" value="71" valtype="size"/>
+            <prop name="PeakCount" type="LONG" value="69" valtype="size"/>
+            <prop name="BlockedCount" type="LONG" value="69" valtype="size"/>
+            <prop name="WaitedCount" type="LONG" value="4" valtype="size"/>
+            <prop name="BlockedUsec" type="LONG" value="35000" valtype="age.usec"/>
+            <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
+        </snapshot>
+        <snapshot name="Memory" cat="Java">
+            <prop name="MaxBytes" type="LONG" value="7635533824" valtype="size"/>
+            <prop name="TotalBytes" type="LONG" value="514523136" valtype="size"/>
+            <prop name="FreeBytes" type="LONG" value="450058552" valtype="size"/>
+            <prop name="UsedBytes" type="LONG" value="64464584" valtype="size"/>
+            <prop name="Usage" type="LONG" value="12" valtype="percent"/>
+        </snapshot>
+        <snapshot name="PS Scavenge" cat="GarbageCollector">
+            <prop name="Count" type="LONG" value="1" valtype="size"/>
+            <prop name="Time" type="LONG" value="9" valtype="age.msec"/>
+            <prop name="isValid" type="BOOLEAN" value="true"/>
+        </snapshot>
+        <snapshot name="PS MarkSweep" cat="GarbageCollector">
+            <prop name="Count" type="LONG" value="10" valtype="size"/>
+            <prop name="Time" type="LONG" value="12200" valtype="age.msec"/>
+            <prop name="isValid" type="BOOLEAN" value="true"/>
+        </snapshot>
+        <snapshot name="Activity" cat="Java">
+            <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
+            <prop name="SlackUsec" type="LONG" value="1399" valtype="age.usec"/>
+            <prop name="WallUsec" type="DECIMAL" value="3.25116001E7" valtype="age.usec"/>
+            <prop name="BlockedCount" type="LONG" value="1090" valtype="size"/>
+            <prop name="WaitedCount" type="LONG" value="547" valtype="size"/>
+            <prop name="BlockedUsec" type="LONG" value="3000" valtype="age.usec"/>
+            <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
+            <prop name="OverheadUsec" type="DECIMAL" value="962.175" valtype="age.usec"/>
+        </snapshot>
+    </activity>
 
-  <activity name="RoutePayment" source="7" pid="67126" tid="43">
-    <event name="onMessage" type="RECEIVE" elapsed="626" res="ROUTE.PAY.QUEUE" msg="1" corrs="${orderid}"/>
-    <event name="send" type="SEND" elapsed="128" res="PAYMENT.PAY.QUEUE" msg="3" corrs="${orderid}"/>
-    <event name="send" type="SEND" elapsed="234" res="FRAUD.PAY.QUEUE" msg="1" corrs="${orderid}"/>
-	<prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
-	<prop name="Customer" type="STRING" value="${custid}" />
-	<prop name="Filename" type="STRING" value="${filename}" />
-  </activity>
-    
-  <sleep msec="891"/>
-    
-  <activity name="ProcessFraudAlerts" source="6" pid="3423" tid="548">
-    <event name="MQGET" type="RECEIVE" elapsed="728" res="FRAUD.PAY.QUEUE" msg="1" sev="WARNING" exc="Possible fraud" corrs="${orderid}"/>
-	<prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
-	<prop name="Customer" type="STRING" value="${custid}" />
-	<prop name="Filename" type="STRING" value="${filename}" />
-  </activity>
+    <sleep msec="163"/>
 
-  <activity name="PaymentProcess" source="3" pid="8154" tid="12" sev="WARNING">
-    <event name="onMessage" type="RECEIVE" elapsed="28000" res="PAYMENT.PAY.QUEUE" msg="3" sev="ERROR" corrs="${orderid}" exc="javax.jms.IllegalStateException: Attempt to acknowledge message not valid for this consumer"/>
-    <sleep msec="11"/>
-    <event name="send" type="SEND" elapsed="293" res="CREDIT.DEBIT.QUEUE" msg="4"/>
-	<prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
-	<prop name="Customer" type="STRING" value="${custid}" />
-	<prop name="Filename" type="STRING" value="${filename}" />
-  </activity>
-    
-  <sleep msec="512"/>
-    
-  <activity name="CreditAndDebit" source="5" pid="39572" tid="183">
-    <event name="onMessage" type="RECEIVE" elapsed="32679" res="CREDIT.DEBIT.QUEUE" msg="4" msgage="7272" corrs="${orderid}"/>
-    <sleep msec="412"/>
-    <event name="PrepareShippingSlip" type="EVENT" elapsed="4821"/>
-    <sleep msec="835"/>
-    <event name="send" type="SEND" elapsed="142" msg="5"/>
-	<prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
-	<prop name="Customer" type="STRING" value="${custid}" />
-	<prop name="Filename" type="STRING" value="${filename}" />
-    <snapshot name="CPU" cat="Java">
-      <prop name="Count" type="INTEGER" value="8" valtype="size"/>
-      <prop name="TotalCpuUsec" type="DECIMAL" value="78000.5" valtype="age.usec"/>
-      <prop name="TotalCpuUserUsec" type="DECIMAL" value="62400.4" valtype="age.usec"/>
-    </snapshot>
-    <snapshot name="Thread" cat="Java">
-      <prop name="Count" type="LONG" value="69" valtype="size"/>
-      <prop name="DaemonCount" type="LONG" value="15" valtype="size"/>
-      <prop name="StartedCount" type="LONG" value="71" valtype="size"/>
-      <prop name="PeakCount" type="LONG" value="69" valtype="size"/>
-      <prop name="BlockedCount" type="LONG" value="76" valtype="size"/>
-      <prop name="WaitedCount" type="LONG" value="6" valtype="size"/>
-      <prop name="BlockedUsec" type="LONG" value="36000" valtype="age.usec"/>
-      <prop name="WaitUsec" type="LONG" value="8075000" valtype="age.usec"/>
-    </snapshot>
-    <snapshot name="Memory" cat="Java">
-      <prop name="MaxBytes" type="LONG" value="7635533824" valtype="size"/>
-      <prop name="TotalBytes" type="LONG" value="514523136" valtype="size"/>
-      <prop name="FreeBytes" type="LONG" value="428179112" valtype="size"/>
-      <prop name="UsedBytes" type="LONG" value="86344024" valtype="size"/>
-      <prop name="Usage" type="LONG" value="16" valtype="percent"/>
-    </snapshot>
-    <snapshot name="PS Scavenge" cat="GarbageCollector">
-      <prop name="Count" type="LONG" value="1378" valtype="size"/>
-      <prop name="Time" type="LONG" value="734737" valtype="age.msec"/>
-      <prop name="isValid" type="BOOLEAN" value="true"/>
-    </snapshot>
-    <snapshot name="PS MarkSweep" cat="GarbageCollector">
-      <prop name="Count" type="LONG" value="213" valtype="size"/>
-      <prop name="Time" type="LONG" value="272881" valtype="age.msec"/>
-      <prop name="isValid" type="BOOLEAN" value="true"/>
-    </snapshot>
-    <snapshot name="Activity" cat="Java">
-      <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
-      <prop name="SlackUsec" type="LONG" value="-6600" valtype="age.usec"/>
-      <prop name="WallUsec" type="DECIMAL" value="201600.1" valtype="age.usec"/>
-      <prop name="BlockedCount" type="LONG" value="7382" valtype="size"/>
-      <prop name="WaitedCount" type="LONG" value="12312" valtype="size"/>
-      <prop name="BlockedUsec" type="LONG" value="17812828" valtype="age.usec"/>
-      <prop name="WaitUsec" type="LONG" value="186000" valtype="age.usec"/>
-      <prop name="OverheadUsec" type="DECIMAL" value="181.7" valtype="age.usec"/>
-    </snapshot>
-  </activity>
- 
+    <activity name="ValidatePayment" source="2" pid="7373" tid="15">
+        <event name="MQGET" type="RECEIVE" elapsed="626" res="VALIDATE.PAY.QUEUE" msg="2" corrs="${orderid}"/>
+        <event name="MPUT" type="SEND" elapsed="2323" res="CREDIT.PAY.QUEUE" msg="2" corrs="${orderid}"/>
+        <prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
+        <prop name="Customer" type="STRING" value="${custid}"/>
+        <prop name="Filename" type="STRING" value="${filename}"/>
+    </activity>
+
+    <activity name="CreditValidate" source="4" pid="432" tid="64">
+        <event name="onMessage" type="RECEIVE" elapsed="2782" res="CREDIT.PAY.QUEUE" msg="2" corrs="${orderid}"/>
+        <event name="send" type="SEND" elapsed="7189" res="ROUTE.PAY.QUEUE" msg="1" corrs="${orderid}"/>
+        <prop name="PaymentAmount" type="DECIMAL" value="210.38" valtype="currency.usd"/>
+        <prop name="Customer" type="STRING" value="${custid}" valtype="currency.usd"/>
+    </activity>
+
+    <activity name="RoutePayment" source="7" pid="67126" tid="43">
+        <event name="onMessage" type="RECEIVE" elapsed="626" res="ROUTE.PAY.QUEUE" msg="1" corrs="${orderid}"/>
+        <event name="send" type="SEND" elapsed="128" res="PAYMENT.PAY.QUEUE" msg="3" corrs="${orderid}"/>
+        <event name="send" type="SEND" elapsed="234" res="FRAUD.PAY.QUEUE" msg="1" corrs="${orderid}"/>
+        <prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
+        <prop name="Customer" type="STRING" value="${custid}"/>
+        <prop name="Filename" type="STRING" value="${filename}"/>
+    </activity>
+
+    <sleep msec="891"/>
+
+    <activity name="ProcessFraudAlerts" source="6" pid="3423" tid="548">
+        <event name="MQGET" type="RECEIVE" elapsed="728" res="FRAUD.PAY.QUEUE" msg="1" sev="WARNING" exc="Possible fraud"
+               corrs="${orderid}"/>
+        <prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
+        <prop name="Customer" type="STRING" value="${custid}"/>
+        <prop name="Filename" type="STRING" value="${filename}"/>
+    </activity>
+
+    <activity name="PaymentProcess" source="3" pid="8154" tid="12" sev="WARNING">
+        <event name="onMessage" type="RECEIVE" elapsed="28000" res="PAYMENT.PAY.QUEUE" msg="3" sev="ERROR" corrs="${orderid}"
+               exc="javax.jms.IllegalStateException: Attempt to acknowledge message not valid for this consumer"/>
+        <sleep msec="11"/>
+        <event name="send" type="SEND" elapsed="293" res="CREDIT.DEBIT.QUEUE" msg="4"/>
+        <prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
+        <prop name="Customer" type="STRING" value="${custid}"/>
+        <prop name="Filename" type="STRING" value="${filename}"/>
+    </activity>
+
+    <sleep msec="512"/>
+
+    <activity name="CreditAndDebit" source="5" pid="39572" tid="183">
+        <event name="onMessage" type="RECEIVE" elapsed="32679" res="CREDIT.DEBIT.QUEUE" msg="4" msgage="7272" corrs="${orderid}"/>
+        <sleep msec="412"/>
+        <event name="PrepareShippingSlip" type="EVENT" elapsed="4821"/>
+        <sleep msec="835"/>
+        <event name="send" type="SEND" elapsed="142" msg="5"/>
+        <prop name="PaymentAmount" type="DECIMAL" value="${amount}" valtype="currency.usd"/>
+        <prop name="Customer" type="STRING" value="${custid}"/>
+        <prop name="Filename" type="STRING" value="${filename}"/>
+        <snapshot name="CPU" cat="Java">
+            <prop name="Count" type="INTEGER" value="8" valtype="size"/>
+            <prop name="TotalCpuUsec" type="DECIMAL" value="78000.5" valtype="age.usec"/>
+            <prop name="TotalCpuUserUsec" type="DECIMAL" value="62400.4" valtype="age.usec"/>
+        </snapshot>
+        <snapshot name="Thread" cat="Java">
+            <prop name="Count" type="LONG" value="69" valtype="size"/>
+            <prop name="DaemonCount" type="LONG" value="15" valtype="size"/>
+            <prop name="StartedCount" type="LONG" value="71" valtype="size"/>
+            <prop name="PeakCount" type="LONG" value="69" valtype="size"/>
+            <prop name="BlockedCount" type="LONG" value="76" valtype="size"/>
+            <prop name="WaitedCount" type="LONG" value="6" valtype="size"/>
+            <prop name="BlockedUsec" type="LONG" value="36000" valtype="age.usec"/>
+            <prop name="WaitUsec" type="LONG" value="8075000" valtype="age.usec"/>
+        </snapshot>
+        <snapshot name="Memory" cat="Java">
+            <prop name="MaxBytes" type="LONG" value="7635533824" valtype="size"/>
+            <prop name="TotalBytes" type="LONG" value="514523136" valtype="size"/>
+            <prop name="FreeBytes" type="LONG" value="428179112" valtype="size"/>
+            <prop name="UsedBytes" type="LONG" value="86344024" valtype="size"/>
+            <prop name="Usage" type="LONG" value="16" valtype="percent"/>
+        </snapshot>
+        <snapshot name="PS Scavenge" cat="GarbageCollector">
+            <prop name="Count" type="LONG" value="1378" valtype="size"/>
+            <prop name="Time" type="LONG" value="734737" valtype="age.msec"/>
+            <prop name="isValid" type="BOOLEAN" value="true"/>
+        </snapshot>
+        <snapshot name="PS MarkSweep" cat="GarbageCollector">
+            <prop name="Count" type="LONG" value="213" valtype="size"/>
+            <prop name="Time" type="LONG" value="272881" valtype="age.msec"/>
+            <prop name="isValid" type="BOOLEAN" value="true"/>
+        </snapshot>
+        <snapshot name="Activity" cat="Java">
+            <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
+            <prop name="SlackUsec" type="LONG" value="-6600" valtype="age.usec"/>
+            <prop name="WallUsec" type="DECIMAL" value="201600.1" valtype="age.usec"/>
+            <prop name="BlockedCount" type="LONG" value="7382" valtype="size"/>
+            <prop name="WaitedCount" type="LONG" value="12312" valtype="size"/>
+            <prop name="BlockedUsec" type="LONG" value="17812828" valtype="age.usec"/>
+            <prop name="WaitUsec" type="LONG" value="186000" valtype="age.usec"/>
+            <prop name="OverheadUsec" type="DECIMAL" value="181.7" valtype="age.usec"/>
+        </snapshot>
+    </activity>
+
 </tnt4j-simulator>

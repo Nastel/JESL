@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--
-  ~ Copyright 2014-2021 JKOOL, LLC.
+  ~ Copyright 2014-2022 JKOOL, LLC.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,164 +18,210 @@
 <!-- Run once for each source -->
 
 <tnt4j-simulator>
-<var name="user1" value="10000000 bet 99999999"/>
-<var name="user2" value="1000 bet 9999"/>
-<var name="user3" value="1000 bet 9999"/>
-<var name="user4" value="1000 bet 9999"/>
-<var name="user5" value="100000000000 bet 999999999999"/>      
-<var name="deviceNumber1" value="1 bet 999999"/>   
-<var name="deviceNumber2" value="1 bet 999999"/> 
-<var name="deviceNumber3" value="1 bet 999999"/> 
-<var name="deviceNumber4" value="1 bet 999999"/>       
+    <var name="user1" value="10000000 bet 99999999"/>
+    <var name="user2" value="1000 bet 9999"/>
+    <var name="user3" value="1000 bet 9999"/>
+    <var name="user4" value="1000 bet 9999"/>
+    <var name="user5" value="100000000000 bet 999999999999"/>
+    <var name="deviceNumber1" value="1 bet 999999"/>
+    <var name="deviceNumber2" value="1 bet 999999"/>
+    <var name="deviceNumber3" value="1 bet 999999"/>
+    <var name="deviceNumber4" value="1 bet 999999"/>
 
-<source id="12" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
-<source id="13" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
-<source id="14" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>      
+    <source id="12"
+            fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
+    <source id="13"
+            fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
+    <source id="14"
+            fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber1}#NETADDR=11.0.0.10#DATACENTER=DC2-Los-Angeles#GEOADDR=34.05223,-118.24368"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
 
-<source id="15" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-<source id="16" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-<source id="17" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+    <source id="15"
+            fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
+    <source id="16"
+            fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
+    <source id="17"
+            fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber2}#NETADDR=11.0.0.55#DATACENTER=DC12-Hong-Kong#GEOADDR=22.28552,114.15769"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
 
-<source id="18" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-<source id="19" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
-<source id="20" fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574" user="${user1}-${user2}-${user3}-${user4}-${user5}"/> 
+    <source id="18"
+            fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
+    <source id="19"
+            fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
+    <source id="20"
+            fqn="APPL=MobileOrdersV3.0#SERVER=iphone-${deviceNumber3}#NETADDR=11.0.0.32#DATACENTER=DC13-London#GEOADDR=51.50853,-0.12574"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
 
-<source id="21" fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
-<source id="22" fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
-<source id="23" fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289" user="${user1}-${user2}-${user3}-${user4}-${user5}"/>           	
+    <source id="21"
+            fqn="APPL=MobileOrdersV2.3#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
+    <source id="22"
+            fqn="APPL=MobileOrdersV2.4#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
+    <source id="23"
+            fqn="APPL=MobileOrdersV3.1#SERVER=iphone-${deviceNumber4}#NETADDR=11.0.0.72#DATACENTER=DC14-New-York#GEOADDR=40.84288,-73.29289"
+            user="${user1}-${user2}-${user3}-${user4}-${user5}"/>
 
+    <source id="5" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=40.7818,-73.4737" user="webuser"
+            url="https://www.sample.com/orders/parts"/>
+    <source id="6" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=34.05223,-118.24368"
+            user="ebay-proc"/>
+    <source id="7" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=51.50853,-0.12574"
+            user="SYSPRC"/>
+    <source id="8" fqn="APPL=VerifyCreditAndShipping#SERVER=CreditServerVISA#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=48.85341,2.3488"
+            user="system"/>
+    <source id="9" fqn="APPL=ShipProduct#SERVER=SupplyChainServer#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=25.77427,-80.19366"
+            user="system"/>
+    <source id="10"
+            fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Texas#GEOADDR=30.192601199591976,-95.71681155627338"
+            user="mqm"/>
+    <source id="11" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=36.17497,-115.13722"
+            user="mqm"/>
 
-<source id="5" fqn="APPL=WebOrders#SERVER=WebServer100#NETADDR=11.0.0.2#DATACENTER=DC1#GEOADDR=40.7818,-73.4737" user="webuser" url="https://www.sample.com/orders/parts"/>
-<source id="6" fqn="APPL=VerifyOrders#SERVER=ProcessServer110#NETADDR=11.0.0.10#DATACENTER=DC2#GEOADDR=34.05223,-118.24368" user="ebay-proc"/>
-<source id="7" fqn="APPL=ProcessPayment#SERVER=PaymentServerSWIFT#NETADDR=162.123.74.18#DATACENTER=DC5#GEOADDR=51.50853,-0.12574" user="SYSPRC"/>
-<source id="8" fqn="APPL=VerifyCreditAndShipping#SERVER=CreditServerVISA#NETADDR=182.175.23.34#DATACENTER=DC10#GEOADDR=48.85341,2.3488" user="system"/>
-<source id="9" fqn="APPL=ShipProduct#SERVER=SupplyChainServer#NETADDR=132.157.134.67#DATACENTER=Warehouse1#GEOADDR=25.77427,-80.19366" user="system"/>
-<source id="10" fqn="APPL=FraudAlert#SERVER=FraudDetection#NETADDR=162.159.122.123#DATACENTER=Texas#GEOADDR=30.192601199591976,-95.71681155627338" user="mqm"/>
-<source id="11" fqn="APPL=OrderRouter#SERVER=RoutingServer#NETADDR=145.178.172.12#DATACENTER=DC15#GEOADDR=36.17497,-115.13722" user="mqm"/>
+    <var name="sleep" value="2000000 bet 90000000"/>
+    <var name="source" value="23"/>
+    <var name="netAddr1" value="100 bet 999"/>
+    <var name="netAddr2" value="100 bet 999"/>
+    <var name="netAddr3" value="1 bet 9"/>
+    <var name="netAddr4" value="10 bet 99"/>
+    <var name="freeMemory" value="3000000000 bet 6000000000"/>
+    <var name="corr" value="100000 bet 999999"/>
+    <var name="iOSVersion" value="9.1"/>
+    <var name="phoneCarrier" value="Verizon"/>
+    <var name="model" value="iPhone7|iPhone6s|iPhone5s|iPad|iPad2|iPadMini|iPhone5"/>
+    <var name="amount" value="10 bet 300"/>
+    <var name="numberOfItems" value="1 bet 5"/>
+    <var name="custid" value="750000 bet 850000"/>
+    <var name="prodid" value="10000 bet 90000"/>
+    <var name="orderid" value="30000 bet 90000"/>
+    <var name="orderdb" value="jdbc://oracle/ora1/order_db"/>
+    <var name="numberOfClicksV2" value="5 bet 10"/>
+    <var name="numberOfClicksV3" value="8 bet 13"/>
+    <msg id="1">Shoes ProductId=${prodid}, CustomerID=${custid}</msg>
+    <msg id="2">Verify ProductId=${prodid}, CustomerID=${custid}</msg>
+    <msg id="3">Process Payment ProductId=${prodid}, CustomerID=${custid}</msg>
+    <msg id="4">Ship ProductId=${prodid}, CustomerID=${custid}</msg>
+    <msg id="5">Confirm ProductId=${prodid}, CustomerID=${custid}</msg>
+    <msg id="6">SELECT * FROM ORDERS WHERE order_id = ${orderid} and customer_id = ${custid}</msg>
+    <msg id="7">SELECT * FROM PRODUCTS WHERE product_id = ${prodid}</msg>
+    <msg id="8">SELECT * FROM SHIPPING WHERE address_id = ${addressid}</msg>
 
-<var name="sleep" value="2000000 bet 90000000"/>
-<var name="source" value="23"/>
-<var name="netAddr1" value="100 bet 999"/>
-<var name="netAddr2" value="100 bet 999"/>
-<var name="netAddr3" value="1 bet 9"/>
-<var name="netAddr4" value="10 bet 99"/>
-<var name="freeMemory" value="3000000000 bet 6000000000"/>
-<var name="corr" value="100000 bet 999999"/>
-<var name="iOSVersion" value="9.1"/>
-<var name="phoneCarrier" value="Verizon"/>
-<var name="model" value="iPhone7|iPhone6s|iPhone5s|iPad|iPad2|iPadMini|iPhone5"/>
-<var name="amount" value="10 bet 300"/>
-<var name="numberOfItems" value="1 bet 5"/>
-<var name="custid" 	value="750000 bet 850000"/>
-<var name="prodid" 	value="10000 bet 90000"/>
-<var name="orderid" 	value="30000 bet 90000"/>
-<var name="orderdb" 	value="jdbc://oracle/ora1/order_db"/>
-<var name="numberOfClicksV2" 	value="5 bet 10"/>
-<var name="numberOfClicksV3" 	value="8 bet 13"/>
-<msg id="1">Shoes ProductId=${prodid}, CustomerID=${custid}</msg>
-<msg id="2">Verify ProductId=${prodid}, CustomerID=${custid}</msg>
-<msg id="3">Process Payment ProductId=${prodid}, CustomerID=${custid}</msg>
-<msg id="4">Ship ProductId=${prodid}, CustomerID=${custid}</msg>
-<msg id="5">Confirm ProductId=${prodid}, CustomerID=${custid}</msg>
-<msg id="6">SELECT * FROM ORDERS WHERE order_id = ${orderid} and customer_id = ${custid}</msg>
-<msg id="7">SELECT * FROM PRODUCTS WHERE product_id = ${prodid}</msg>
-<msg id="8">SELECT * FROM SHIPPING WHERE address_id = ${addressid}</msg>
+    <activity name="TRACKING_ACTIVITY" source="${source}" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+              user="${user1}-${user2}-${user3}-${user4}-${user5}" corrs="${corr}">
+        <prop name="freeMemory" type="STRING" value="${freeMemory}"/>
+        <prop name="hardware" type="STRING" value="x86_64"/>
+        <prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
+        <prop name="model" type="STRING" value="${model}"/>
+        <prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
+        <prop name="amount" type="INTEGER" value="${amount}"/>
+        <prop name="numberOfItems" type="INTEGER" value="${numberOfItems}"/>
+        <prop name="clicks" type="INTEGER" value="${numberOfClicksV2}"/>
+        <prop name="itemsLeftInCart" type="INTEGER" value="0"/>
+        <event name="ViewAppearing" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="buttonSearchClick:" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="ViewDisAppearing" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="ViewAppearing" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="colorSelectedClick:" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="sizeSelectedClick:" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="qtySelectedClick:" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="buttonAddToCartClick:" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="buttonCheckoutClick:" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="ViewDisAppearing" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="ViewAppearing" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="buttonPlaceOrderClick:" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="processingOrder" msg="1" source="${source}" elapsed="789321" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="ViewDisAppearing" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="${model}"/>
+        <sleep usec="${sleep}"/>
+        <event name="ViewAppearing" source="${source}" elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}"
+               user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="orderConfirmationViewController" tags="${model}"/>
+    </activity>
 
-  <activity name="TRACKING_ACTIVITY" source="${source}"  loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" corrs="${corr}">
-  	 <prop name="freeMemory" type="STRING" value="${freeMemory}"/>
-	 <prop name="hardware" type="STRING" value="x86_64"/>
-	 <prop name="iOSVersion" type="STRING" value="${iOSVersion}"/>
-	 <prop name="model" type="STRING" value="${model}"/>
-	 <prop name="phoneCarrier" type="STRING" value="${phoneCarrier}"/>
-	 <prop name="amount" type="INTEGER" value="${amount}"/>
-	 <prop name="numberOfItems" type="INTEGER" value="${numberOfItems}"/>
-	 <prop name="clicks" type="INTEGER" value="${numberOfClicksV2}"/>
-	 <prop name="itemsLeftInCart" type="INTEGER" value="0"/>
-	 <event name="ViewAppearing" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonSearchClick:" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="allProductsViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="colorSelectedClick:" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="sizeSelectedClick:" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="qtySelectedClick:" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonAddToCartClick:" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonCheckoutClick:" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="productViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="buttonPlaceOrderClick:" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="processingOrder" msg="1" source="${source}"  elapsed="789321" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="SEND" res="cartViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewDisAppearing" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="cartViewController" tags="${model}"/>
-	 <sleep usec="${sleep}"/>
-	 <event name="ViewAppearing" source="${source}"  elapsed="0" loc="${netAddr1}.${netAddr2}.${netAddr3}.${netAddr4}" user="${user1}-${user2}-${user3}-${user4}-${user5}" type="CALL" res="orderConfirmationViewController" tags="${model}"/>       
-  </activity>
-  
-  <sleep usec="500"/>     
+    <sleep usec="500"/>
 
-  <activity name="AcceptOrder" source="5" corrs="${corr}">
-    <event name="ReceiveOrder" type="RECEIVE" elapsed="485" res="order/parts" msg="1" />
-    <event name="execute" type="CALL" elapsed="7787"  res="${orderdb}" msg="6" />
-	<event name="execute" type="CALL" elapsed="5192"  res="${orderdb}" msg="7" />
-    <event name="ValidateOrder" type="SEND" elapsed="323" res="queue::VALIDATE.ORDERS.QUEUE" msg="2" />
-    <sleep usec="121"/>
-  </activity>
-  
-  <sleep msec="163"/>
+    <activity name="AcceptOrder" source="5" corrs="${corr}">
+        <event name="ReceiveOrder" type="RECEIVE" elapsed="485" res="order/parts" msg="1"/>
+        <event name="execute" type="CALL" elapsed="7787" res="${orderdb}" msg="6"/>
+        <event name="execute" type="CALL" elapsed="5192" res="${orderdb}" msg="7"/>
+        <event name="ValidateOrder" type="SEND" elapsed="323" res="queue::VALIDATE.ORDERS.QUEUE" msg="2"/>
+        <sleep usec="121"/>
+    </activity>
 
-  <activity name="Validate" source="8" corrs="${corr}">
-      <event name="InitiateValidate" type="RECEIVE" elapsed="4444" res="queue::VALIDATE.ORDERS.QUEUE" msg="2" />
-	  <activity name="ValidateCredit" source="8" corrs="${corr}">
-	      <event name="ValidateBillingAddress" type="CALL" elapsed="2758" res="order/validate"/>
-	 	  <activity name="ValidateWithCreditor" source="8" corrs="${corr}">
-		    <event name="ValidateAccount" type="SEND" elapsed="527" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
-		    <activity name="ValidateAmount" source="8" corrs="${corr}">		   
-		    	<event name="ObtainCreditLimit" type="RECEIVE" elapsed="295748" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
-		    	<event name="AmountWithinCreditLimit" type="CALL" elapsed="927" res="orders/validate"/>
-		    	<event name="InitiateShippingValidate" type="SEND" elapsed="3829" res="queue::VALIDATE.ORDERS.QUEUE" msg="8" />
-		    </activity> 
-	     </activity>
-	  </activity>
-	  <activity name="ValidateShipping" source="8" corrs="${corr}">
-	    <event name="ReceiveShippingValidateRequest" type="RECEIVE" elapsed="143" res="shipping/validate" msg="8"/>
-    	<event name="ValidateAddress" type="CALL" elapsed="472" res="shipping/validate"/>
-    	<event name="ValidateEmail" type="CALL" elapsed="7285" res="shipping/validate"/>
-    	<event name="InitiateOrderRouting" type="SEND" elapsed="2091" res="queue::ROUTE.ORDERS.QUEUE" msg="1" />
-  	  </activity> 
-  </activity>
-  
-  <sleep msec="563"/>
+    <sleep msec="163"/>
 
-  <activity name="RouteOrder" source="11" corrs="${corr}">
-    <event name="ReadAndRoute" type="RECEIVE" elapsed="9012" res="queue::ROUTE.ORDERS.QUEUE" msg="1" />
-    <event name="ProcessPayment" type="SEND" elapsed="312" res="queue::PAYMENT.ORDERS.QUEUE" msg="3" />
-    <event name="PossibleFraud" type="SEND" elapsed="254" res="queue::FRAUD.ORDERS.QUEUE" msg="1" />
-  </activity>
-    
-  <sleep msec="891"/>
-    
-  <activity name="ProcessFraudAlerts" source="10" corrs="${corr}">
-    <event name="EvaluateFraud" type="RECEIVE" elapsed="828" res="queue::FRAUD.ORDERS.QUEUE" msg="1"  />
-  </activity>
-  
-  <sleep msec="998"/>
+    <activity name="Validate" source="8" corrs="${corr}">
+        <event name="InitiateValidate" type="RECEIVE" elapsed="4444" res="queue::VALIDATE.ORDERS.QUEUE" msg="2"/>
+        <activity name="ValidateCredit" source="8" corrs="${corr}">
+            <event name="ValidateBillingAddress" type="CALL" elapsed="2758" res="order/validate"/>
+            <activity name="ValidateWithCreditor" source="8" corrs="${corr}">
+                <event name="ValidateAccount" type="SEND" elapsed="527" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
+                <activity name="ValidateAmount" source="8" corrs="${corr}">
+                    <event name="ObtainCreditLimit" type="RECEIVE" elapsed="295748" res="queue::VALIDATE.CREDITOR.QUEUE" msg="2"/>
+                    <event name="AmountWithinCreditLimit" type="CALL" elapsed="927" res="orders/validate"/>
+                    <event name="InitiateShippingValidate" type="SEND" elapsed="3829" res="queue::VALIDATE.ORDERS.QUEUE" msg="8"/>
+                </activity>
+            </activity>
+        </activity>
+        <activity name="ValidateShipping" source="8" corrs="${corr}">
+            <event name="ReceiveShippingValidateRequest" type="RECEIVE" elapsed="143" res="shipping/validate" msg="8"/>
+            <event name="ValidateAddress" type="CALL" elapsed="472" res="shipping/validate"/>
+            <event name="ValidateEmail" type="CALL" elapsed="7285" res="shipping/validate"/>
+            <event name="InitiateOrderRouting" type="SEND" elapsed="2091" res="queue::ROUTE.ORDERS.QUEUE" msg="1"/>
+        </activity>
+    </activity>
 
-  <activity name="PaymentProcess" source="7" sev="WARNING" corrs="${corr}">
-    <event name="ReadOrder" type="RECEIVE" elapsed="40183" res="queue::PAYMENT.ORDERS.QUEUE" msg="3" />
-    <sleep msec="11"/>
-    <event name="SendShipment" type="SEND" elapsed="349" res="queue::SHIP.ORDERS.QUEUE" msg="4"/>
-  </activity>
- 
+    <sleep msec="563"/>
+
+    <activity name="RouteOrder" source="11" corrs="${corr}">
+        <event name="ReadAndRoute" type="RECEIVE" elapsed="9012" res="queue::ROUTE.ORDERS.QUEUE" msg="1"/>
+        <event name="ProcessPayment" type="SEND" elapsed="312" res="queue::PAYMENT.ORDERS.QUEUE" msg="3"/>
+        <event name="PossibleFraud" type="SEND" elapsed="254" res="queue::FRAUD.ORDERS.QUEUE" msg="1"/>
+    </activity>
+
+    <sleep msec="891"/>
+
+    <activity name="ProcessFraudAlerts" source="10" corrs="${corr}">
+        <event name="EvaluateFraud" type="RECEIVE" elapsed="828" res="queue::FRAUD.ORDERS.QUEUE" msg="1"/>
+    </activity>
+
+    <sleep msec="998"/>
+
+    <activity name="PaymentProcess" source="7" sev="WARNING" corrs="${corr}">
+        <event name="ReadOrder" type="RECEIVE" elapsed="40183" res="queue::PAYMENT.ORDERS.QUEUE" msg="3"/>
+        <sleep msec="11"/>
+        <event name="SendShipment" type="SEND" elapsed="349" res="queue::SHIP.ORDERS.QUEUE" msg="4"/>
+    </activity>
 
 </tnt4j-simulator>

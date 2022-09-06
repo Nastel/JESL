@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--
-  ~ Copyright 2014-2021 JKOOL, LLC.
+  ~ Copyright 2014-2022 JKOOL, LLC.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,71 +17,69 @@
 
 <tnt4j-simulator>
 
-  <var name="custid" 	value="=?"/>
-  <var name="payid" 	value="=?"/>
-  <var name="payto"  	value="=?"/>
-  <var name="tranid"	value="=?"/>
-  <var name="paydb" 	value="jdbc://db2/order_db"/>
+    <var name="custid" value="=?"/>
+    <var name="payid" value="=?"/>
+    <var name="payto" value="=?"/>
+    <var name="tranid" value="=?"/>
+    <var name="paydb" value="jdbc://db2/order_db"/>
 
-  <source id="1" fqn="APPL=CICSPROD#SERVER=ZOS1#NETADDR=12.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
-          user="ADC1"/>
-   <source id="2" fqn="APPL=BTCH1245#SERVER=ZOS1#NETADDR=12.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
-          user=""/>
-   <source id="3" fqn="APPL=BTCH3456#SERVER=ZOS1#NETADDR=12.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
-          user="CHRIS"/>
-   <source id="4" fqn="APPL=MQP1MSTR#SERVER=ZOS1#NETADDR=12.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
-          user="MQP1MSTR"/>
-  
-  
-  <msg id="1">ICH408I USER(MQP1MSTR) GROUP(PSTC2 ) NAME(**STC-MQSERIES/M505 MQP1.SYSTEM.CSQ.REPLY.D145BEE951C2534C CL(MQQUEUE ) INSUFFICIENT ACCESS AUTHORITY FROM MQP1.SYSTEM.CSQ*.** (G) ACCESS INTENT(UPDATE ) ACCESS ALLOWED(NONE ) </msg>
-  <msg id="2">CSQN207I MQP1 COMMAND SERVER UNABLE TO OPEN REPLY TO QUEUE </msg>
-  <msg id="3">CSQN203I MQP1 QUEUE SYSTEM.CSQ.REPLY.D145BEE951C2534C, MQCC=2 MQRC=2035</msg>
-  <msg id="4">CICH408I LOGON/JOB INITIATION - NOT AUTHORIZED TO APPLICATION</msg>
-  
-  
-  <activity name="RACFError" source="1" pid="4362" tid="1">
-    <event name="SYSLOG" type="SEND" elapsed="823" res="STC54362" msg="1" />
-    <snapshot name="Task" cat="MQ">
-      <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
-      <prop name="SlackUsec" type="LONG" value="1399" valtype="age.usec"/>
-      <prop name="WallUsec" type="DECIMAL" value="3.25116001E7" valtype="age.usec"/>
-      <prop name="BlockedCount" type="LONG" value="1090" valtype="size"/>
-      <prop name="WaitedCount" type="LONG" value="547" valtype="size"/>
-      <prop name="BlockedUsec" type="LONG" value="3000" valtype="age.usec"/>
-      <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
-      <prop name="OverheadUsec" type="DECIMAL" value="962.175" valtype="age.usec"/>
-    </snapshot>
-  </activity>
-  
-   <activity name="SecurityError" source="1" pid="4362" tid="4">
-	<event name="SYSLOG" type="SEND" elapsed="823" res="STC54400" msg="2" />
-	<event name="SYSLOG" type="SEND" elapsed="823" res="STC54400" msg="3" />    
-    <snapshot name="Task" cat="CICS">
-      <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
-      <prop name="SlackUsec" type="LONG" value="1399" valtype="age.usec"/>
-      <prop name="WallUsec" type="DECIMAL" value="3.25116001E7" valtype="age.usec"/>
-      <prop name="BlockedCount" type="LONG" value="1090" valtype="size"/>
-      <prop name="WaitedCount" type="LONG" value="547" valtype="size"/>
-      <prop name="BlockedUsec" type="LONG" value="3000" valtype="age.usec"/>
-      <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
-      <prop name="OverheadUsec" type="DECIMAL" value="962.175" valtype="age.usec"/>
-    </snapshot>
-  </activity>
-  
-  <activity name="BatchAccess" source="1" pid="4362" tid="2">
-	<event name="SYSLOG" type="SEND" elapsed="823" res="STC54362" msg="4" />    
-    <snapshot name="Task" cat="CICS">
-      <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
-      <prop name="SlackUsec" type="LONG" value="1399" valtype="age.usec"/>
-      <prop name="WallUsec" type="DECIMAL" value="3.25116001E7" valtype="age.usec"/>
-      <prop name="BlockedCount" type="LONG" value="1090" valtype="size"/>
-      <prop name="WaitedCount" type="LONG" value="547" valtype="size"/>
-      <prop name="BlockedUsec" type="LONG" value="3000" valtype="age.usec"/>
-      <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
-      <prop name="OverheadUsec" type="DECIMAL" value="962.175" valtype="age.usec"/>
-    </snapshot>
-  </activity>
-  
-  
- 
+    <source id="1" fqn="APPL=CICSPROD#SERVER=ZOS1#NETADDR=12.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
+            user="ADC1"/>
+    <source id="2" fqn="APPL=BTCH1245#SERVER=ZOS1#NETADDR=12.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
+            user=""/>
+    <source id="3" fqn="APPL=BTCH3456#SERVER=ZOS1#NETADDR=12.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
+            user="CHRIS"/>
+    <source id="4" fqn="APPL=MQP1MSTR#SERVER=ZOS1#NETADDR=12.0.0.2#DATACENTER=DC1#GEOADDR=New York, NY"
+            user="MQP1MSTR"/>
+
+    <msg id="1">ICH408I USER(MQP1MSTR) GROUP(PSTC2 ) NAME(**STC-MQSERIES/M505 MQP1.SYSTEM.CSQ.REPLY.D145BEE951C2534C CL(MQQUEUE )
+        INSUFFICIENT ACCESS AUTHORITY FROM MQP1.SYSTEM.CSQ*.** (G) ACCESS INTENT(UPDATE ) ACCESS ALLOWED(NONE )
+    </msg>
+    <msg id="2">CSQN207I MQP1 COMMAND SERVER UNABLE TO OPEN REPLY TO QUEUE</msg>
+    <msg id="3">CSQN203I MQP1 QUEUE SYSTEM.CSQ.REPLY.D145BEE951C2534C, MQCC=2 MQRC=2035</msg>
+    <msg id="4">CICH408I LOGON/JOB INITIATION - NOT AUTHORIZED TO APPLICATION</msg>
+
+    <activity name="RACFError" source="1" pid="4362" tid="1">
+        <event name="SYSLOG" type="SEND" elapsed="823" res="STC54362" msg="1"/>
+        <snapshot name="Task" cat="MQ">
+            <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
+            <prop name="SlackUsec" type="LONG" value="1399" valtype="age.usec"/>
+            <prop name="WallUsec" type="DECIMAL" value="3.25116001E7" valtype="age.usec"/>
+            <prop name="BlockedCount" type="LONG" value="1090" valtype="size"/>
+            <prop name="WaitedCount" type="LONG" value="547" valtype="size"/>
+            <prop name="BlockedUsec" type="LONG" value="3000" valtype="age.usec"/>
+            <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
+            <prop name="OverheadUsec" type="DECIMAL" value="962.175" valtype="age.usec"/>
+        </snapshot>
+    </activity>
+
+    <activity name="SecurityError" source="1" pid="4362" tid="4">
+        <event name="SYSLOG" type="SEND" elapsed="823" res="STC54400" msg="2"/>
+        <event name="SYSLOG" type="SEND" elapsed="823" res="STC54400" msg="3"/>
+        <snapshot name="Task" cat="CICS">
+            <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
+            <prop name="SlackUsec" type="LONG" value="1399" valtype="age.usec"/>
+            <prop name="WallUsec" type="DECIMAL" value="3.25116001E7" valtype="age.usec"/>
+            <prop name="BlockedCount" type="LONG" value="1090" valtype="size"/>
+            <prop name="WaitedCount" type="LONG" value="547" valtype="size"/>
+            <prop name="BlockedUsec" type="LONG" value="3000" valtype="age.usec"/>
+            <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
+            <prop name="OverheadUsec" type="DECIMAL" value="962.175" valtype="age.usec"/>
+        </snapshot>
+    </activity>
+
+    <activity name="BatchAccess" source="1" pid="4362" tid="2">
+        <event name="SYSLOG" type="SEND" elapsed="823" res="STC54362" msg="4"/>
+        <snapshot name="Task" cat="CICS">
+            <prop name="TotalCpuUsec" type="DECIMAL" value="15600.1" valtype="age.usec"/>
+            <prop name="SlackUsec" type="LONG" value="1399" valtype="age.usec"/>
+            <prop name="WallUsec" type="DECIMAL" value="3.25116001E7" valtype="age.usec"/>
+            <prop name="BlockedCount" type="LONG" value="1090" valtype="size"/>
+            <prop name="WaitedCount" type="LONG" value="547" valtype="size"/>
+            <prop name="BlockedUsec" type="LONG" value="3000" valtype="age.usec"/>
+            <prop name="WaitUsec" type="LONG" value="32493000" valtype="age.usec"/>
+            <prop name="OverheadUsec" type="DECIMAL" value="962.175" valtype="age.usec"/>
+        </snapshot>
+    </activity>
+
 </tnt4j-simulator>

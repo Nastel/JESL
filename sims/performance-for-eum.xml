@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!--
-  ~ Copyright 2014-2021 JKOOL, LLC.
+  ~ Copyright 2014-2022 JKOOL, LLC.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,58 +17,58 @@
 
 <tnt4j-simulator>
 
-  <source id="7" fqn="SERVER=MQServer#NETADDR=145.178.172.12#DATACENTER=DC15-Nevada#GEOADDR=36.17497,-115.13722"
-          user="mqm"/>
- 
-  <var name="netAddr"  value="145.178.172.12"/>
- 
-  <var name="cpuCount"  value="5 bet 15"/>
-  <var name="cpuTotalCpuUsec"  value="75000 bet 85000"/>
-  <var name="cpuTotalCpuUserUsec"  value="60000 bet 70000"/>
-  <var name="threadCount"  value="65 bet 75"/>
-  <var name="threadDaemonCount"  value="10 bet 20"/>
-  <var name="threadStartedCount"  value="65 bet 75"/>
-  <var name="threadPeakCount"  value="65 bet 75"/>
-  <var name="threadBlockedCount"  value="70 bet 85"/>
-  <var name="threadWaitedCount"  value="1 bet 10"/>
-  <var name="threadBlockedUsec"  value="30000 bet 40000"/>
-  <var name="threadWaitUsec"  value="8000000 bet 9000000"/>
-  <var name="memoryMaxBytes"  value="7000000000 bet 8000000000"/>
-  <var name="memoryTotalBytes"  value="500000000 bet 600000000"/>
-  <var name="memoryFreeBytes"  value="400000000 bet 500000000"/>
-  <var name="memoryUsedBytes"  value="70000000 bet 80000000"/>  
-  <var name="memoryUsage"  value="10 bet 20"/>
-  <var name="jmxHitRatio"  value="100 bet 200"/>
-  <!-- Bad in China -->
-<!--   <var name="jmxHitRatio"  value="10"/> -->
-  
-  <activity name="PERFORMANCE" source="7" sev="INFO" loc="${netAddr}">
-	  <snapshot name="CPU" cat="Java">
-		  <prop name="Count" type="INTEGER" value="${cpuCount}" valtype="size"/>
-		  <prop name="TotalCpuUsec" type="DECIMAL" value="${cpuTotalCpuUsec}" valtype="age.usec"/>
-		  <prop name="TotalCpuUserUsec" type="DECIMAL" value="${cpuTotalCpuUserUsec}" valtype="age.usec"/>
-	  </snapshot>
-	  <snapshot name="Thread" cat="Java">
-		  <prop name="Count" type="LONG" value="${threadCount}" valtype="size"/>
-		  <prop name="DaemonCount" type="LONG" value="${threadDaemonCount}" valtype="size"/>
-		  <prop name="StartedCount" type="LONG" value="${threadStartedCount}" valtype="size"/>
-		  <prop name="PeakCount" type="LONG" value="${threadPeakCount}" valtype="size"/>
-		  <prop name="BlockedCount" type="LONG" value="${threadBlockedCount}" valtype="size"/>
-		  <prop name="WaitedCount" type="LONG" value="${threadWaitedCount}" valtype="size"/>
-		  <prop name="BlockedUsec" type="LONG" value="${threadBlockedUsec}" valtype="age.usec"/>
-		  <prop name="WaitUsec" type="LONG" value="${threadWaitUsec}" valtype="age.usec"/>
-	  </snapshot>
-	  <snapshot name="Memory" cat="Java">
-		  <prop name="MaxBytes" type="LONG" value="${memoryMaxBytes}" valtype="size"/>
-		  <prop name="TotalBytes" type="LONG" value="${memoryTotalBytes}" valtype="size"/>
-		  <prop name="FreeBytes" type="LONG" value="${memoryFreeBytes}" valtype="size"/>
-		  <prop name="UsedBytes" type="LONG" value="${memoryUsedBytes}" valtype="size"/>
-		  <prop name="Usage" type="LONG" value="${memoryUsage}" valtype="percent"/>
-	  </snapshot>
-	  <snapshot name="JMX" cat="JMX">
-		  <prop name="database" type="STRING" value="database::billing database"/>
-		  <prop name="hitRatio" type="INTEGER" value="${jmxHitRatio}" valtype="per-hour"/>
-	  </snapshot>
-  </activity>
+    <source id="7" fqn="SERVER=MQServer#NETADDR=145.178.172.12#DATACENTER=DC15-Nevada#GEOADDR=36.17497,-115.13722"
+            user="mqm"/>
+
+    <var name="netAddr" value="145.178.172.12"/>
+
+    <var name="cpuCount" value="5 bet 15"/>
+    <var name="cpuTotalCpuUsec" value="75000 bet 85000"/>
+    <var name="cpuTotalCpuUserUsec" value="60000 bet 70000"/>
+    <var name="threadCount" value="65 bet 75"/>
+    <var name="threadDaemonCount" value="10 bet 20"/>
+    <var name="threadStartedCount" value="65 bet 75"/>
+    <var name="threadPeakCount" value="65 bet 75"/>
+    <var name="threadBlockedCount" value="70 bet 85"/>
+    <var name="threadWaitedCount" value="1 bet 10"/>
+    <var name="threadBlockedUsec" value="30000 bet 40000"/>
+    <var name="threadWaitUsec" value="8000000 bet 9000000"/>
+    <var name="memoryMaxBytes" value="7000000000 bet 8000000000"/>
+    <var name="memoryTotalBytes" value="500000000 bet 600000000"/>
+    <var name="memoryFreeBytes" value="400000000 bet 500000000"/>
+    <var name="memoryUsedBytes" value="70000000 bet 80000000"/>
+    <var name="memoryUsage" value="10 bet 20"/>
+    <var name="jmxHitRatio" value="100 bet 200"/>
+    <!-- Bad in China -->
+    <!--   <var name="jmxHitRatio"  value="10"/> -->
+
+    <activity name="PERFORMANCE" source="7" sev="INFO" loc="${netAddr}">
+        <snapshot name="CPU" cat="Java">
+            <prop name="Count" type="INTEGER" value="${cpuCount}" valtype="size"/>
+            <prop name="TotalCpuUsec" type="DECIMAL" value="${cpuTotalCpuUsec}" valtype="age.usec"/>
+            <prop name="TotalCpuUserUsec" type="DECIMAL" value="${cpuTotalCpuUserUsec}" valtype="age.usec"/>
+        </snapshot>
+        <snapshot name="Thread" cat="Java">
+            <prop name="Count" type="LONG" value="${threadCount}" valtype="size"/>
+            <prop name="DaemonCount" type="LONG" value="${threadDaemonCount}" valtype="size"/>
+            <prop name="StartedCount" type="LONG" value="${threadStartedCount}" valtype="size"/>
+            <prop name="PeakCount" type="LONG" value="${threadPeakCount}" valtype="size"/>
+            <prop name="BlockedCount" type="LONG" value="${threadBlockedCount}" valtype="size"/>
+            <prop name="WaitedCount" type="LONG" value="${threadWaitedCount}" valtype="size"/>
+            <prop name="BlockedUsec" type="LONG" value="${threadBlockedUsec}" valtype="age.usec"/>
+            <prop name="WaitUsec" type="LONG" value="${threadWaitUsec}" valtype="age.usec"/>
+        </snapshot>
+        <snapshot name="Memory" cat="Java">
+            <prop name="MaxBytes" type="LONG" value="${memoryMaxBytes}" valtype="size"/>
+            <prop name="TotalBytes" type="LONG" value="${memoryTotalBytes}" valtype="size"/>
+            <prop name="FreeBytes" type="LONG" value="${memoryFreeBytes}" valtype="size"/>
+            <prop name="UsedBytes" type="LONG" value="${memoryUsedBytes}" valtype="size"/>
+            <prop name="Usage" type="LONG" value="${memoryUsage}" valtype="percent"/>
+        </snapshot>
+        <snapshot name="JMX" cat="JMX">
+            <prop name="database" type="STRING" value="database::billing database"/>
+            <prop name="hitRatio" type="INTEGER" value="${jmxHitRatio}" valtype="per-hour"/>
+        </snapshot>
+    </activity>
 
 </tnt4j-simulator>

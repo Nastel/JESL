@@ -18,6 +18,9 @@ package com.jkoolcloud.jesl.simulator;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -543,7 +546,8 @@ public class TNT4JSimulator {
 						theParser.parse(new InputSource(new StringReader(simDef.toString())), xmlHandler);
 
 						if (!Utils.isEmpty(jkFileName)) {
-							PrintWriter gwFile = new PrintWriter(new FileOutputStream(jkFileName, true));
+							PrintWriter gwFile = new PrintWriter(
+									Files.newOutputStream(Paths.get(jkFileName), StandardOpenOption.APPEND));
 							gwFile.println("");
 							gwFile.close();
 						}

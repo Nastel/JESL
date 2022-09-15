@@ -16,6 +16,8 @@
 package com.jkoolcloud.jesl.net.ssl;
 
 import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.security.Security;
 
@@ -109,7 +111,7 @@ public class SSLContextFactory {
 			KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
 			FileInputStream fis = null;
 			try {
-				ks.load(new FileInputStream(keyStoreFileName), keyStorePassword.toCharArray());
+				ks.load(Files.newInputStream(Paths.get(keyStoreFileName)), keyStorePassword.toCharArray());
 			} finally {
 				Utils.close(fis);
 			}

@@ -15,8 +15,12 @@
  */
 package com.jkoolcloud.jesl.simulator;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -810,7 +814,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler implements AutoC
 					BufferedInputStream fileReader = null;
 					try {
 						File f = new File(fileName);
-						fileReader = new BufferedInputStream(new FileInputStream(f));
+						fileReader = new BufferedInputStream(Files.newInputStream(f.toPath()));
 						byte[] binData = new byte[(int) f.length()];
 						int totalBytesRead = 0;
 						while (totalBytesRead < binData.length) {

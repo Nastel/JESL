@@ -254,32 +254,6 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>deploy-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <descriptors>
-                                <descriptor>${release.deploy.dir.assembly}</descriptor>
-                                <descriptor>${release.deploy.zip.assembly}</descriptor>
-                                <descriptor>${release.deploy.gz.assembly}</descriptor>
-                            </descriptors>
-                            <attach>${build.assemblies.attach}</attach>
-                            <outputDirectory>${release.deploy.dir}</outputDirectory>
-                            <finalName>${release.deploy.finalName}</finalName>
-                            <tarLongFileMode>gnu</tarLongFileMode>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>3.2.0</version>
                 <executions>
@@ -301,6 +275,32 @@
                                     </includes>
                                 </fileset>
                             </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>deploy-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>${release.deploy.dir.assembly}</descriptor>
+                                <descriptor>${release.deploy.zip.assembly}</descriptor>
+                                <descriptor>${release.deploy.gz.assembly}</descriptor>
+                            </descriptors>
+                            <attach>${build.assemblies.attach}</attach>
+                            <outputDirectory>${release.deploy.dir}</outputDirectory>
+                            <finalName>${release.deploy.finalName}</finalName>
+                            <tarLongFileMode>gnu</tarLongFileMode>
                         </configuration>
                     </execution>
                 </executions>

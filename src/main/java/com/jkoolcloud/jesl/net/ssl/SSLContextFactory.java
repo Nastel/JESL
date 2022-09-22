@@ -25,6 +25,7 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
+import com.jkoolcloud.jesl.net.security.AuthUtils;
 import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
@@ -33,7 +34,7 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  * @version $Revision: 1 $
  */
 public class SSLContextFactory {
-	protected static final String PROTOCOL = "SSL";
+
 	protected static final String KEYSTORE_TYPE = "JKS"; // default to javax.net.ssl.keyStoreType/trustStoreType
 
 	protected SSLContext serverContext = null;
@@ -129,7 +130,7 @@ public class SSLContextFactory {
 
 		try {
 			// Initialize the server SSLContext to work with our key managers.
-			serverContext = SSLContext.getInstance(PROTOCOL);
+			serverContext = SSLContext.getInstance(AuthUtils.SSL_PROTOCOL);
 			serverContext.init(kmf.getKeyManagers(), null, null);
 		} catch (Exception e) {
 			throw new SecurityException("Failed to initialize the server-side SSLContext", e);
@@ -137,7 +138,7 @@ public class SSLContextFactory {
 
 		try {
 			// Initialize the client SSLContext to work with our trust manager
-			clientContext = SSLContext.getInstance(PROTOCOL);
+			clientContext = SSLContext.getInstance(AuthUtils.SSL_PROTOCOL);
 			clientContext.init(null, tmf.getTrustManagers(), null);
 		} catch (Exception e) {
 			throw new SecurityException("Failed to initialize the client-side SSLContext", e);

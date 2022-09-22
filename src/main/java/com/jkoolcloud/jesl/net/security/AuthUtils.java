@@ -24,6 +24,12 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  * @version $Revision: 1 $
  */
 public class AuthUtils {
+
+	/**
+	 * Name of secure layer protocol used by JESL networking API.
+	 */
+	public static final String SSL_PROTOCOL = "TLS";
+
 	/**
 	 * Authenticate with jKool servers using client handle and a given access token.
 	 *

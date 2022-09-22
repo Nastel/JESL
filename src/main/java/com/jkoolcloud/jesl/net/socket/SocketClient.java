@@ -112,7 +112,7 @@ public class SocketClient implements JKStream {
 			socket.connect(new InetSocketAddress(host, port));
 
 			if (secure) {
-				SSLContext sslContext = SSLContext.getInstance("SSL");
+				SSLContext sslContext = SSLContext.getInstance(AuthUtils.SSL_PROTOCOL);
 				sslContext.init(null, null, null);
 				socket = sslContext.getSocketFactory().createSocket(socket, proxyAddr.getHostName(),
 						proxyAddr.getPort(), true);

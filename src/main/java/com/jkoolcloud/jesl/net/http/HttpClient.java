@@ -217,13 +217,15 @@ public class HttpClient implements HttpStream {
 	private synchronized void initHttpConnMgr(long startTime) throws NoSuchAlgorithmException {
 		Registry<ConnectionSocketFactory> schemeReg = null;
 		if (secure) {
-			SSLConnectionSocketFactory ssf = null;
+			SSLContext sslCtx;
 			if (!StringUtils.isEmpty(sslKeystore)) {
 				SSLContextFactory scf = new SSLContextFactory(sslKeystore, sslKeystorePwd, sslKeystorePwd);
-				ssf = new SSLConnectionSocketFactory(scf.getSslContext(true), NoopHostnameVerifier.INSTANCE);
+				sslCtx = scf.getSslContext(true);
 			} else {
-				ssf = new SSLConnectionSocketFactory(SSLContext.getDefault(), NoopHostnameVerifier.INSTANCE);
+				sslCtx = SSLContext.getDefault();
 			}
+			SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sslCtx,
+					new String[] { "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3" }, null, NoopHostnameVerifier.INSTANCE);
 			RegistryBuilder<ConnectionSocketFactory> rcf = RegistryBuilder.create();
 			schemeReg = rcf.register("https", ssf).build();
 		}

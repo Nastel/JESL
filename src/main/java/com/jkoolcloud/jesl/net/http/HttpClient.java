@@ -57,6 +57,10 @@ public class HttpClient implements HttpStream {
 	private static final String PRAGMA_VALUE_PING = "ping";
 	private static final String X_API_KEY = "X-API-Key";
 
+	private static final String SCHEME_HTTP = "http";
+	private static final String SCHEME_HTTPS = "https";
+	private static final String LOCAL_HOST = "localhost";
+
 	public static final long DEFAULT_CONN_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
 
 	protected URI uri;
@@ -75,7 +79,7 @@ public class HttpClient implements HttpStream {
 	protected boolean secure = false;
 
 	/**
-	 * Create JESL HTTP[S} client stream with given attributes
+	 * Create JESL HTTP[S] client stream with given attributes
 	 *
 	 * @param urlStr
 	 *            connection string to specified JESL server
@@ -89,7 +93,7 @@ public class HttpClient implements HttpStream {
 	}
 
 	/**
-	 * Create JESL HTTP[S} client stream with given attributes
+	 * Create JESL HTTP[S] client stream with given attributes
 	 *
 	 * @param urlStr
 	 *            connection string to specified JESL server
@@ -110,7 +114,7 @@ public class HttpClient implements HttpStream {
 	}
 
 	/**
-	 * Create JESL HTTP[S} client stream with given attributes
+	 * Create JESL HTTP[S] client stream with given attributes
 	 *
 	 * @param urlStr
 	 *            connection string to specified JESL server
@@ -133,7 +137,7 @@ public class HttpClient implements HttpStream {
 	}
 
 	/**
-	 * Create JESL HTTP[S} client stream with given attributes
+	 * Create JESL HTTP[S] client stream with given attributes
 	 *
 	 * @param urlStr
 	 *            connection string to specified JESL server
@@ -158,10 +162,10 @@ public class HttpClient implements HttpStream {
 			String proxyUser, String proxyPass, EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
-		secure = "https".equalsIgnoreCase(scheme);
+		secure = SCHEME_HTTPS.equalsIgnoreCase(scheme);
 		host = uri.getHost();
 		if (host == null) {
-			host = "localhost";
+			host = LOCAL_HOST;
 		}
 		port = uri.getPort();
 		if (port <= 0) {
@@ -183,7 +187,7 @@ public class HttpClient implements HttpStream {
 		this.connTimeout = timeout;
 		this.logger = (logger != null ? logger : DefaultEventSinkFactory.defaultEventSink(HttpClient.class));
 
-		String scheme = secure ? "https" : "http";
+		String scheme = secure ? SCHEME_HTTPS : SCHEME_HTTP;
 
 		httpHost = new HttpHost(host, port, scheme);
 		if (!StringUtils.isEmpty(proxyHost)) {
@@ -227,7 +231,7 @@ public class HttpClient implements HttpStream {
 			SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sslCtx,
 					new String[] { "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3" }, null, NoopHostnameVerifier.INSTANCE);
 			RegistryBuilder<ConnectionSocketFactory> rcf = RegistryBuilder.create();
-			schemeReg = rcf.register("https", ssf).build();
+			schemeReg = rcf.register(SCHEME_HTTPS, ssf).build();
 		}
 		connMgr = schemeReg != null ? new BasicHttpClientConnectionManager(schemeReg)
 				: new BasicHttpClientConnectionManager();
@@ -254,7 +258,7 @@ public class HttpClient implements HttpStream {
 			connMgr.routeComplete(connection, route, context);
 		}
 		logger.log(OpLevel.DEBUG, "Connected to uri={0}, proxy={1}, elapsed.ms={2}, timeout.ms={3}", uri,
-				(httpProxy != null ? httpProxy : "(noproxy)"), (System.currentTimeMillis() - startTime), connTimeout);
+				(httpProxy != null ? httpProxy : "(no-proxy)"), (System.currentTimeMillis() - startTime), connTimeout);
 	}
 
 	@Override
@@ -437,7 +441,7 @@ public class HttpClient implements HttpStream {
 
 	@Override
 	public boolean isSecure() {
-		return (httpHost != null && "https".equals(httpHost.getSchemeName()));
+		return (httpHost != null && SCHEME_HTTPS.equals(httpHost.getSchemeName()));
 	}
 
 	@Override

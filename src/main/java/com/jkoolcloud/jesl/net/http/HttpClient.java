@@ -458,7 +458,7 @@ public class HttpClient implements HttpStream {
 
 	@Override
 	public boolean isConnected() {
-		return (connection != null && connection.isOpen() && !connection.isStale());
+		return (connection != null && connection.isOpen());
 	}
 
 	@Override

@@ -277,7 +277,7 @@ public class HttpClient implements HttpStream {
 					+ ", elapsed.ms=" + (System.currentTimeMillis() - startTime) //
 					+ ", reason=" + e.getMessage();
 			logger.log(OpLevel.ERROR, errMsg, e);
-			close();
+			_close();
 			throw new IOException(errMsg, e);
 		}
 	}
@@ -291,7 +291,7 @@ public class HttpClient implements HttpStream {
 				AuthUtils.authenticate(this, token);
 				logger.log(OpLevel.DEBUG, "Authenticated connection={0}, token={1}", this, Utils.hide(token, "x", 4));
 			} catch (SecurityException exc) {
-				close();
+				_close();
 				throw new IOException("Connect failed to complete", exc);
 			}
 		}
@@ -379,7 +379,7 @@ public class HttpClient implements HttpStream {
 		logger.log(OpLevel.TRACE, "Received response from={0}: code={1}, msg={2}", uri, status, content);
 		if (status >= 400) {
 			if (AccessResponse.isAccessResponse(content)) {
-				close();
+				_close();
 				AccessResponse accessResp = AccessResponse.parseMsg(content);
 				String reason = accessResp.getReason();
 				if (StringUtils.isEmpty(reason)) {
@@ -393,14 +393,26 @@ public class HttpClient implements HttpStream {
 		return content;
 	}
 
-	@Override
-	public synchronized void close() {
-		ensureAllRequestsSent();
+	protected synchronized void _close() {
+		if (connection == null) {
+			return;
+		}
+
 		Utils.close(connection);
 		connMgr.shutdown();
 		logger.log(OpLevel.DEBUG, "Closed connection to {0}", uri);
 
 		connection = null;
+	}
+
+	@Override
+	public synchronized void close() {
+		if (connection == null) {
+			return;
+		}
+
+		ensureAllRequestsSent();
+		_close();
 	}
 
 	/**
@@ -446,7 +458,7 @@ public class HttpClient implements HttpStream {
 
 	@Override
 	public boolean isConnected() {
-		return (connection != null && connection.isOpen());
+		return (connection != null && connection.isOpen() && !connection.isStale());
 	}
 
 	@Override

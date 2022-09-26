@@ -377,6 +377,10 @@ public class JKCloudEventSink extends LoggedEventSink {
 	private void _handleAcks(long timestamp) throws IOException {
 		try {
 			lastAckMsg = jkHandle.read();
+		} catch (IOException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new IOException(e);
 		} finally {
 			ackCount.incrementAndGet();
 			ackElapsed.set(System.currentTimeMillis() - timestamp);

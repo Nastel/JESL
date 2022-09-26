@@ -16,11 +16,14 @@
 package com.jkoolcloud.jesl.net.http.apache;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.*;
-import org.apache.http.message.BasicHttpResponse;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.message.BasicClassicHttpResponse;
+import org.apache.hc.core5.http.message.HeaderGroup;
+import org.apache.hc.core5.io.Closer;
 
 import com.jkoolcloud.jesl.net.http.HttpResponse;
 
@@ -29,8 +32,8 @@ import com.jkoolcloud.jesl.net.http.HttpResponse;
  *
  * @version $Revision: 1 $
  */
-public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse {
-	protected org.apache.http.HttpResponse response;
+public class HttpResponseImpl extends BasicClassicHttpResponse implements HttpResponse {
+	protected ClassicHttpResponse response;
 
 	/**
 	 * Create HTTP response object
@@ -38,8 +41,8 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 * @param response
 	 *            apache HTTP response
 	 */
-	public HttpResponseImpl(org.apache.http.HttpResponse response) {
-		super(response.getStatusLine());
+	public HttpResponseImpl(ClassicHttpResponse response) {
+		super(response.getCode());
 		this.response = response;
 	}
 
@@ -52,7 +55,7 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 *            HTTP status code
 	 */
 	public HttpResponseImpl(ProtocolVersion version, int statusCode) {
-		super(version, statusCode, null);
+		super(statusCode);
 	}
 
 	/**
@@ -60,40 +63,37 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 	 *
 	 * @return apache response implementation object instance
 	 */
-	protected org.apache.http.HttpResponse getRawResp() {
+	protected ClassicHttpResponse getRawResp() {
 		return (response != null ? response : this);
 	}
 
 	///////////////////// HttpResponse methods
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setStatus(int status) {
-		getRawResp().setStatusCode(status);
+		if (response != null) {
+			response.setCode(status);
+		} else {
+			super.setCode(status);
+		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int getStatus() {
-		return getRawResp().getStatusLine().getStatusCode();
+		return response != null ? response.getCode() : super.getCode();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public String getHeader(String name) {
-		Header header = getRawResp().getFirstHeader(name);
+	public Header getHeader(String name) {
+		return response != null ? response.getFirstHeader(name) : super.getFirstHeader(name);
+	}
+
+	@Override
+	public String getHeaderStr(String name) {
+		Header header = getHeader(name);
 		return (header == null ? null : header.getValue());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void addHeader(String name, String value) {
 		if (response != null) {
@@ -103,9 +103,6 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setHeader(String name, String value) {
 		if (response != null) {
@@ -115,229 +112,8 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void removeHeader(String name) {
-		getRawResp().removeHeaders(name);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean hasContent() {
-		return HttpMessageUtils.hasContent(getRawResp());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public byte[] getContentBytes() throws IOException {
-		return HttpMessageUtils.getContentBytes(getRawResp());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getContentString() throws IOException {
-		return HttpMessageUtils.getContentString(getRawResp());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getContentString(String charset) throws IOException {
-		return HttpMessageUtils.getContentString(getRawResp(), charset);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setContent(String contentType, byte[] content, String contentEncoding) throws IOException {
-		HttpMessageUtils.setContent(getRawResp(), contentType, content, contentEncoding);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setContent(String contentType, String content) throws IOException {
-		HttpMessageUtils.setContent(getRawResp(), contentType, content);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setContent(String contentType, String content, String charset) throws IOException {
-		HttpMessageUtils.setContent(getRawResp(), contentType, content, charset);
-	}
-
-	///////////////////// BasicHttpResponse methods
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ProtocolVersion getProtocolVersion() {
-		return (response != null ? response.getProtocolVersion() : super.getProtocolVersion());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public StatusLine getStatusLine() {
-		return (response != null ? response.getStatusLine() : super.getStatusLine());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setStatusLine(StatusLine statusline) {
-		if (response != null) {
-			response.setStatusLine(statusline);
-		} else {
-			super.setStatusLine(statusline);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setStatusLine(ProtocolVersion ver, int code) {
-		if (response != null) {
-			response.setStatusLine(ver, code);
-		} else {
-			super.setStatusLine(ver, code);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
-		if (response != null) {
-			response.setStatusLine(ver, code, reason);
-		} else {
-			super.setStatusLine(ver, code, reason);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setStatusCode(int code) {
-		if (response != null) {
-			response.setStatusCode(code);
-		} else {
-			super.setStatusCode(code);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setReasonPhrase(String reason) {
-		if (response != null) {
-			response.setReasonPhrase(reason);
-		} else {
-			super.setReasonPhrase(reason);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Header getFirstHeader(String name) {
-		return (response != null ? response.getFirstHeader(name) : super.getFirstHeader(name));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Header getLastHeader(String name) {
-		return (response != null ? response.getLastHeader(name) : super.getLastHeader(name));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean containsHeader(String name) {
-		return (response != null ? response.containsHeader(name) : super.containsHeader(name));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Header[] getHeaders(String name) {
-		return (response != null ? response.getHeaders(name) : super.getHeaders(name));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Header[] getAllHeaders() {
-		return (response != null ? response.getAllHeaders() : super.getAllHeaders());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void addHeader(Header header) {
-		if (response != null) {
-			response.addHeader(header);
-		} else {
-			super.addHeader(header);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setHeader(Header header) {
-		if (response != null) {
-			response.setHeader(header);
-		} else {
-			super.setHeader(header);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setHeaders(Header[] headers) {
-		if (response != null) {
-			response.setHeaders(headers);
-		} else {
-			super.setHeaders(headers);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void removeHeaders(String name) {
 		if (response != null) {
 			response.removeHeaders(name);
 		} else {
@@ -345,45 +121,48 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void removeHeader(Header header) {
-		if (response != null) {
-			response.removeHeader(header);
-		} else {
-			super.removeHeader(header);
-		}
+	public boolean hasContent() {
+		return HttpMessageUtils.hasContent(getRawResp());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public HeaderIterator headerIterator() {
-		return (response != null ? response.headerIterator() : super.headerIterator());
+	public byte[] getContentBytes() throws IOException {
+		return HttpMessageUtils.getContentBytes(getRawResp());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public HeaderIterator headerIterator(String name) {
-		return (response != null ? response.headerIterator(name) : super.headerIterator(name));
+	public String getContentString() throws IOException, ParseException {
+		return HttpMessageUtils.getContentString(getRawResp());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
+	public String getContentString(String charset) throws IOException, ParseException {
+		return HttpMessageUtils.getContentString(getRawResp(), charset);
+	}
+
+	@Override
+	public void setContent(String contentType, byte[] content, String contentEncoding) throws IOException {
+		HttpMessageUtils.setContent(getRawResp(), contentType, content, contentEncoding);
+	}
+
+	@Override
+	public void setContent(String contentType, String content) throws IOException {
+		HttpMessageUtils.setContent(getRawResp(), contentType, content);
+	}
+
+	@Override
+	public void setContent(String contentType, String content, String charset) throws IOException {
+		HttpMessageUtils.setContent(getRawResp(), contentType, content, charset);
+	}
+
+	///////////////////// BasicClassicHttpResponse methods
+
 	@Override
 	public HttpEntity getEntity() {
 		return (response != null ? response.getEntity() : super.getEntity());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setEntity(HttpEntity entity) {
 		if (response != null) {
@@ -393,17 +172,180 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	@Override
+	public void close() throws IOException {
+		if (response != null) {
+			Closer.close(response);
+		} else {
+			super.close();
+		}
+	}
+
+	///////////////////// BasicHttpResponse methods
+
+	@Override
+	public void setVersion(ProtocolVersion version) {
+		if (response != null) {
+			response.setVersion(version);
+		} else {
+			super.setVersion(version);
+		}
+	}
+
+	@Override
+	public void addHeader(String name, Object value) {
+		if (response != null) {
+			response.addHeader(name, value);
+		} else {
+			super.addHeader(name, value);
+		}
+	}
+
+	@Override
+	public void setHeader(String name, Object value) {
+		if (response != null) {
+			response.setHeader(name, value);
+		} else {
+			super.setHeader(name, value);
+		}
+	}
+
+	@Override
+	public ProtocolVersion getVersion() {
+		return (response != null ? response.getVersion() : super.getVersion());
+	}
+
+	@Override
+	public void setCode(int code) {
+		if (response != null) {
+			response.setCode(code);
+		} else {
+			super.setCode(code);
+		}
+	}
+
+	@Override
+	public int getCode() {
+		return response != null ? response.getCode() : super.getCode();
+	}
+
+	@Override
+	public String getReasonPhrase() {
+		return response != null ? response.getReasonPhrase() : super.getReasonPhrase();
+	}
+
+	@Override
+	public void setReasonPhrase(String reason) {
+		if (response != null) {
+			response.setReasonPhrase(reason);
+		} else {
+			super.setReasonPhrase(reason);
+		}
+	}
+
+	@Override
+	public Header getFirstHeader(String name) {
+		return (response != null ? response.getFirstHeader(name) : super.getFirstHeader(name));
+	}
+
+	@Override
+	public Header getLastHeader(String name) {
+		return (response != null ? response.getLastHeader(name) : super.getLastHeader(name));
+	}
+
+	@Override
+	public boolean containsHeader(String name) {
+		return (response != null ? response.containsHeader(name) : super.containsHeader(name));
+	}
+
+	@Override
+	public Header getCondensedHeader(String name) {
+		return (response instanceof HeaderGroup ? ((HeaderGroup) response).getCondensedHeader(name)
+				: super.getCondensedHeader(name));
+	}
+
+	@Override
+	public Header[] getHeaders(String name) {
+		return (response != null ? response.getHeaders(name) : super.getHeaders(name));
+	}
+
+	@Override
+	public Header[] getHeaders() {
+		return (response != null ? response.getHeaders() : super.getHeaders());
+	}
+
+	@Override
+	public void addHeader(Header header) {
+		if (response != null) {
+			response.addHeader(header);
+		} else {
+			super.addHeader(header);
+		}
+	}
+
+	@Override
+	public void clear() {
+		if (response instanceof HeaderGroup) {
+			((HeaderGroup) response).clear();
+		} else {
+			super.clear();
+		}
+	}
+
+	@Override
+	public boolean removeHeaders(Header header) {
+		return response instanceof HeaderGroup ? ((HeaderGroup) response).removeHeaders(header)
+				: super.removeHeaders(header);
+	}
+
+	@Override
+	public void setHeader(Header header) {
+		if (response != null) {
+			response.setHeader(header);
+		} else {
+			super.setHeader(header);
+		}
+	}
+
+	@Override
+	public void setHeaders(Header... headers) {
+		if (response != null) {
+			response.setHeaders(headers);
+		} else {
+			super.setHeaders(headers);
+		}
+	}
+
+	@Override
+	public boolean removeHeaders(String name) {
+		return response != null ? response.removeHeaders(name) : super.removeHeaders(name);
+	}
+
+	@Override
+	public boolean removeHeader(Header header) {
+		return response != null ? response.removeHeader(header) : super.removeHeader(header);
+	}
+
+	@Override
+	public int countHeaders(String name) {
+		return response != null ? response.countHeaders(name) : super.countHeaders(name);
+	}
+
+	@Override
+	public Iterator<Header> headerIterator() {
+		return (response != null ? response.headerIterator() : super.headerIterator());
+	}
+
+	@Override
+	public Iterator<Header> headerIterator(String name) {
+		return (response != null ? response.headerIterator(name) : super.headerIterator(name));
+	}
+
 	@Override
 	public Locale getLocale() {
 		return (response != null ? response.getLocale() : super.getLocale());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setLocale(Locale loc) {
 		if (response != null) {
@@ -413,9 +355,6 @@ public class HttpResponseImpl extends BasicHttpResponse implements HttpResponse 
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder();

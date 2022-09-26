@@ -16,26 +16,29 @@
 package com.jkoolcloud.jesl.net.http;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.*;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.config.Registry;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.ConnectionRequest;
-import org.apache.http.conn.routing.HttpRoute;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
+import org.apache.hc.client5.http.HttpRoute;
+import org.apache.hc.client5.http.impl.io.BasicHttpClientConnectionManager;
+import org.apache.hc.client5.http.io.ConnectionEndpoint;
+import org.apache.hc.client5.http.io.LeaseRequest;
+import org.apache.hc.client5.http.protocol.HttpClientContext;
+import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.config.Registry;
+import org.apache.hc.core5.http.config.RegistryBuilder;
+import org.apache.hc.core5.http.io.HttpClientConnection;
+import org.apache.hc.core5.util.Timeout;
 
 import com.jkoolcloud.jesl.net.http.apache.HttpRequestImpl;
 import com.jkoolcloud.jesl.net.http.apache.HttpResponseImpl;
@@ -189,9 +192,9 @@ public class HttpClient implements HttpStream {
 
 		String scheme = secure ? SCHEME_HTTPS : SCHEME_HTTP;
 
-		httpHost = new HttpHost(host, port, scheme);
+		httpHost = new HttpHost(scheme, host, port);
 		if (!StringUtils.isEmpty(proxyHost)) {
-			httpProxy = new HttpHost(proxyHost, proxyPort, proxyScheme);
+			httpProxy = new HttpHost(proxyScheme, proxyHost, proxyPort);
 		}
 		if (StringUtils.isNotEmpty(proxyUser)) {
 			proxyCredentials = proxyUser.trim() + ":" + proxyPass == null ? "" : proxyPass;
@@ -229,7 +232,7 @@ public class HttpClient implements HttpStream {
 				sslCtx = SSLContext.getDefault();
 			}
 			SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sslCtx,
-					new String[] { "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3" }, null, NoopHostnameVerifier.INSTANCE);
+					new String[] { "TLSv1.2", "TLSv1.3" }, null, NoopHostnameVerifier.INSTANCE);
 			RegistryBuilder<ConnectionSocketFactory> rcf = RegistryBuilder.create();
 			schemeReg = rcf.register(SCHEME_HTTPS, ssf).build();
 		}
@@ -245,17 +248,24 @@ public class HttpClient implements HttpStream {
 	 * @param startTime
 	 *            timestamp in milliseconds when connection initiation started
 	 */
-	private synchronized void openHttpConn(long startTime)
-			throws InterruptedException, ExecutionException, IOException {
+	private synchronized void openHttpConn(long startTime) throws Exception {
 		HttpRoute route = (httpProxy != null) ? new HttpRoute(httpHost, null, httpProxy, secure)
 				: new HttpRoute(httpHost, null, secure);
-		ConnectionRequest connReq = connMgr.requestConnection(route, null);
-		connection = connReq.get(connTimeout, TimeUnit.MILLISECONDS);
+		Timeout timeout = Timeout.of(connTimeout, TimeUnit.MILLISECONDS);
+		LeaseRequest connLeaseReq = connMgr.lease(null, route, timeout, null);
+		ConnectionEndpoint connectionEndpoint = connLeaseReq.get(timeout);
+
+		// httpclient5 API hides connection instance and handling internally within connection manager/endpoint.
+		// To make as little changes as possible for now will use reflection to get connection instance.
+		Method connMethod = connectionEndpoint.getClass().getDeclaredMethod("getConnection");
+		connMethod.setAccessible(true);
+		connection = (HttpClientConnection) connMethod.invoke(connectionEndpoint);
+
 		HttpClientContext context = HttpClientContext.create();
 
 		if (!connection.isOpen()) {
-			connMgr.connect(connection, route, (int) connTimeout, context);
-			connMgr.routeComplete(connection, route, context);
+			connMgr.connect(connectionEndpoint, timeout, context);
+			connectionEndpoint.setSocketTimeout(timeout);
 		}
 		logger.log(OpLevel.DEBUG, "Connected to uri={0}, proxy={1}, elapsed.ms={2}, timeout.ms={3}", uri,
 				(httpProxy != null ? httpProxy : "(no-proxy)"), (System.currentTimeMillis() - startTime), connTimeout);
@@ -299,8 +309,9 @@ public class HttpClient implements HttpStream {
 
 	@Override
 	public synchronized void sendRequest(HttpRequest request, boolean wantResponse) throws IOException {
-		if (!(request instanceof org.apache.http.HttpRequest)) {
-			throw new IllegalArgumentException("request must be an instance of org.apache.http.HttpRequest");
+		if (!(request instanceof ClassicHttpRequest)) {
+			throw new IllegalArgumentException(
+					"request must be an instance of org.apache.hc.core5.http.ClassicHttpRequest");
 		}
 
 		try {
@@ -311,13 +322,13 @@ public class HttpClient implements HttpStream {
 				request.setHeader(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + proxyCredentials);
 			}
 			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", uri, request);
-			org.apache.http.HttpRequest httpRequest = (org.apache.http.HttpRequest) request;
+			ClassicHttpRequest httpRequest = (ClassicHttpRequest) request;
 
-			checkState(request.getHeader(X_API_KEY));
+			checkState(request.getHeaderStr(X_API_KEY));
 
 			connection.sendRequestHeader(httpRequest);
-			if (httpRequest instanceof HttpEntityEnclosingRequest && request.hasContent()) {
-				connection.sendRequestEntity((HttpEntityEnclosingRequest) httpRequest);
+			if (request.hasContent()) {
+				connection.sendRequestEntity(httpRequest);
 			}
 			connection.flush();
 		} catch (HttpException he) {
@@ -358,8 +369,8 @@ public class HttpClient implements HttpStream {
 			checkState();
 
 			HttpResponseImpl resp = new HttpResponseImpl(connection.receiveResponseHeader());
-			String contentLenStr = resp.getHeader(HttpHeaders.CONTENT_LENGTH);
-			String contentType = resp.getHeader(HttpHeaders.CONTENT_TYPE);
+			String contentLenStr = resp.getHeaderStr(HttpHeaders.CONTENT_LENGTH);
+			String contentType = resp.getHeaderStr(HttpHeaders.CONTENT_TYPE);
 			int contentLen = (StringUtils.isEmpty(contentLenStr) ? 0 : Integer.parseInt(contentLenStr));
 			if (contentLen > 0 || !StringUtils.isEmpty(contentType)) {
 				connection.receiveResponseEntity(resp);
@@ -371,13 +382,13 @@ public class HttpClient implements HttpStream {
 	}
 
 	@Override
-	public synchronized String read() throws IOException {
+	public synchronized String read() throws IOException, ParseException {
 		HttpResponse resp = getResponse();
 		String content = resp.getContentString();
 		int status = resp.getStatus();
 
 		logger.log(OpLevel.TRACE, "Received response from={0}: code={1}, msg={2}", uri, status, content);
-		if (status >= 400) {
+		if (status >= HttpStatus.SC_CLIENT_ERROR) {
 			if (AccessResponse.isAccessResponse(content)) {
 				_close();
 				AccessResponse accessResp = AccessResponse.parseMsg(content);
@@ -398,8 +409,8 @@ public class HttpClient implements HttpStream {
 			return;
 		}
 
-		Utils.close(connection);
-		connMgr.shutdown();
+		// Utils.close(connection);
+		Utils.close(connMgr);
 		logger.log(OpLevel.DEBUG, "Closed connection to {0}", uri);
 
 		connection = null;

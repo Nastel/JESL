@@ -22,7 +22,7 @@ package com.jkoolcloud.jesl.net.http;
  */
 public interface HttpResponse extends HttpMessage {
 	/**
-	 * Set HTTP status code
+	 * Set HTTP status code.
 	 * 
 	 * @param status
 	 *            HTTP status code
@@ -30,7 +30,7 @@ public interface HttpResponse extends HttpMessage {
 	void setStatus(int status);
 
 	/**
-	 * Get HTTP status code
+	 * Get HTTP status code.
 	 * 
 	 * @return HTTP status code
 	 */

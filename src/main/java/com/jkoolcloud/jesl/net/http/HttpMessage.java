@@ -17,6 +17,8 @@ package com.jkoolcloud.jesl.net.http;
 
 import java.io.IOException;
 
+import org.apache.hc.core5.http.ParseException;
+
 /**
  * This interface defines JESL HTTP message.
  *
@@ -24,16 +26,16 @@ import java.io.IOException;
  */
 public interface HttpMessage {
 	/**
-	 * Get HTTP header field from HTTP header
+	 * Get HTTP header field value as string.
 	 *
 	 * @param name
 	 *            field name
-	 * @return value associated with the header field name
+	 * @return header field value string
 	 */
-	String getHeader(String name);
+	String getHeaderStr(String name);
 
 	/**
-	 * Add HTTP header field to HTTP header
+	 * Add HTTP header field to HTTP header.
 	 *
 	 * @param name
 	 *            field name
@@ -43,7 +45,7 @@ public interface HttpMessage {
 	void addHeader(String name, String value);
 
 	/**
-	 * Set/replace HTTP header field/value
+	 * Set/replace HTTP header field/value.
 	 *
 	 * @param name
 	 *            field name
@@ -53,7 +55,7 @@ public interface HttpMessage {
 	void setHeader(String name, String value);
 
 	/**
-	 * Remove HTTP header field
+	 * Remove HTTP header field.
 	 *
 	 * @param name
 	 *            field name
@@ -61,14 +63,14 @@ public interface HttpMessage {
 	void removeHeader(String name);
 
 	/**
-	 * True if HTTP message has content
+	 * True if HTTP message has content.
 	 *
 	 * @return true if HTTP message has content, false otherwise
 	 */
 	boolean hasContent();
 
 	/**
-	 * Obtain content from HTTP message
+	 * Obtain content from HTTP message.
 	 *
 	 * @return bytes associated with HTTP content
 	 * @throws IOException
@@ -77,27 +79,31 @@ public interface HttpMessage {
 	byte[] getContentBytes() throws IOException;
 
 	/**
-	 * Obtain content from HTTP message
+	 * Obtain content from HTTP message.
 	 *
 	 * @return string message associated with HTTP content
 	 * @throws IOException
 	 *             if error reading message content
+	 * @throws org.apache.hc.core5.http.ParseException
+	 *             if header elements cannot be parsed
 	 */
-	String getContentString() throws IOException;
+	String getContentString() throws IOException, ParseException;
 
 	/**
-	 * Obtain content from HTTP message with a given character set
+	 * Obtain content from HTTP message with a given character set.
 	 *
 	 * @param charset
 	 *            character set
 	 * @return string message associated with HTTP content
 	 * @throws IOException
 	 *             if error reading message content
+	 * @throws org.apache.hc.core5.http.ParseException
+	 *             if header elements cannot be parsed
 	 */
-	String getContentString(String charset) throws IOException;
+	String getContentString(String charset) throws IOException, ParseException;
 
 	/**
-	 * Set HTTP message content
+	 * Set HTTP message content.
 	 *
 	 * @param contentType
 	 *            contentType
@@ -109,7 +115,7 @@ public interface HttpMessage {
 	void setContent(String contentType, String content) throws IOException;
 
 	/**
-	 * Set HTTP message content
+	 * Set HTTP message content.
 	 *
 	 * @param contentType
 	 *            contentType
@@ -123,7 +129,7 @@ public interface HttpMessage {
 	void setContent(String contentType, byte[] content, String contentEncoding) throws IOException;
 
 	/**
-	 * Set HTTP message content
+	 * Set HTTP message content.
 	 *
 	 * @param contentType
 	 *            contentType

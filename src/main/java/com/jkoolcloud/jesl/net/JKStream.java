@@ -111,10 +111,10 @@ public interface JKStream extends Closeable {
 	 * Read a message (reply) from the stream.
 	 *
 	 * @return a message from the stream.
-	 * @throws IOException
+	 * @throws Exception
 	 *             if error occurs when sending a message
 	 */
-	String read() throws IOException;
+	String read() throws Exception;
 
 	/**
 	 * Checks if this stream is connected and (re)connects it if it is not.

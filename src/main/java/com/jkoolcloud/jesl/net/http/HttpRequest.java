@@ -22,16 +22,16 @@ package com.jkoolcloud.jesl.net.http;
  */
 public interface HttpRequest extends HttpMessage {
 	/**
-	 * Get HTTP method
+	 * Get HTTP method.
 	 * 
 	 * @return HTTP method
 	 */
 	String getMethod();
 
 	/**
-	 * Get URI
+	 * Get URI string.
 	 * 
-	 * @return HTTP URI
+	 * @return HTTP URI string
 	 */
-	String getUri();
+	String getUriStr();
 }

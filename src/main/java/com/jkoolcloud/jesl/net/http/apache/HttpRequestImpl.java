@@ -16,10 +16,17 @@
 package com.jkoolcloud.jesl.net.http.apache;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Iterator;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.*;
-import org.apache.http.message.BasicHttpEntityEnclosingRequest;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.ProtocolVersion;
+import org.apache.hc.core5.http.message.BasicClassicHttpRequest;
+import org.apache.hc.core5.net.URIAuthority;
 
 import com.jkoolcloud.jesl.net.http.HttpRequest;
 import com.jkoolcloud.tnt4j.utils.Utils;
@@ -29,7 +36,7 @@ import com.jkoolcloud.tnt4j.utils.Utils;
  *
  * @version $Revision: 1 $
  */
-public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements HttpRequest {
+public class HttpRequestImpl extends BasicClassicHttpRequest implements HttpRequest {
 	public static final String CLIENT_HOSTNAME = "X-API-Host-Name";
 	public static final String CLIENT_HOSTADDR = "X-API-Host-Addr";
 	public static final String CLIENT_RUNTIME = "X-API-Runtime";
@@ -40,7 +47,7 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	private static final String VALUE_HOSTADDR = Utils.getLocalHostAddress();
 	private static final String VALUE_VMNAME = Utils.getVMName();
 
-	protected HttpEntityEnclosingRequest request;
+	protected BasicClassicHttpRequest request;
 
 	/**
 	 * Create HTTP request object
@@ -48,8 +55,8 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 * @param request
 	 *            apache HTTP request
 	 */
-	public HttpRequestImpl(HttpEntityEnclosingRequest request) {
-		super(request.getRequestLine());
+	public HttpRequestImpl(BasicClassicHttpRequest request) throws URISyntaxException {
+		super(request.getMethod(), request.getUri());
 		this.request = request;
 		initHeader(this);
 	}
@@ -63,7 +70,7 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 *            URI
 	 */
 	public HttpRequestImpl(String method, String uri) {
-		super(method, uri, HttpVersion.HTTP_1_1);
+		super(method, URI.create(uri));
 		initHeader(this);
 	}
 
@@ -72,7 +79,7 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 *
 	 * @return apache request implementation object instance
 	 */
-	protected HttpEntityEnclosingRequest getRawReq() {
+	protected BasicClassicHttpRequest getRawReq() {
 		return (request != null ? request : this);
 	}
 
@@ -82,7 +89,7 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	 * @param request
 	 *            apache HTTP request
 	 */
-	protected static void initHeader(HttpEntityEnclosingRequest request) {
+	protected static void initHeader(BasicClassicHttpRequest request) {
 		request.addHeader(CLIENT_HOSTNAME, VALUE_HOSTNAME);
 		request.addHeader(CLIENT_HOSTADDR, VALUE_HOSTADDR);
 		request.addHeader(CLIENT_RUNTIME, VALUE_VMNAME);
@@ -90,21 +97,123 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 			request.addHeader(CLIENT_VERSION, VALUE_VERSION);
 		}
 	}
-	///////////////////// HttpRequest methods
+	///////////////////// BasicHttpRequest methods
+
+	@Override
+	public void addHeader(String name, Object value) {
+		if (request != null) {
+			request.addHeader(name, value);
+		} else {
+			super.addHeader(name, value);
+		}
+	}
+
+	@Override
+	public void setHeader(String name, Object value) {
+		if (request != null) {
+			request.setHeader(name, value);
+		} else {
+			super.setHeader(name, value);
+		}
+	}
+
+	@Override
+	public void setVersion(ProtocolVersion version) {
+		if (request != null) {
+			request.setVersion(version);
+		} else {
+			super.setVersion(version);
+		}
+	}
+
+	@Override
+	public ProtocolVersion getVersion() {
+		return request != null ? request.getVersion() : super.getVersion();
+	}
 
 	@Override
 	public String getMethod() {
-		return getRawReq().getRequestLine().getMethod();
+		return request != null ? request.getMethod() : super.getMethod();
 	}
 
 	@Override
-	public String getUri() {
-		return getRawReq().getRequestLine().getUri();
+	public String getPath() {
+		return request != null ? request.getPath() : super.getPath();
 	}
 
 	@Override
-	public String getHeader(String name) {
-		Header header = getRawReq().getFirstHeader(name);
+	public void setPath(String path) {
+		if (request != null) {
+			request.setPath(path);
+		} else {
+			super.setPath(path);
+		}
+	}
+
+	@Override
+	public String getScheme() {
+		return request != null ? request.getScheme() : super.getScheme();
+	}
+
+	@Override
+	public void setScheme(String scheme) {
+		if (request != null) {
+			request.setScheme(scheme);
+		} else {
+			super.setScheme(scheme);
+		}
+	}
+
+	@Override
+	public URIAuthority getAuthority() {
+		return request != null ? request.getAuthority() : super.getAuthority();
+	}
+
+	@Override
+	public void setAuthority(URIAuthority authority) {
+		if (request != null) {
+			request.setAuthority(authority);
+		} else {
+			super.setAuthority(authority);
+		}
+	}
+
+	@Override
+	public void setUri(URI requestUri) {
+		if (request != null) {
+			request.setUri(requestUri);
+		} else {
+			super.setUri(requestUri);
+		}
+	}
+
+	@Override
+	public URI getUri() throws URISyntaxException {
+		return request != null ? request.getUri() : super.getUri();
+	}
+
+	@Override
+	public String getRequestUri() {
+		return request != null ? request.getRequestUri() : super.getRequestUri();
+	}
+
+	@Override
+	public String getUriStr() {
+		try {
+			return getUri().toString();
+		} catch (URISyntaxException exc) {
+			return getRequestUri();
+		}
+	}
+
+	@Override
+	public Header getHeader(String name) {
+		return request != null ? request.getFirstHeader(name) : super.getFirstHeader(name);
+	}
+
+	@Override
+	public String getHeaderStr(String name) {
+		Header header = getHeader(name);
 		return (header == null ? null : header.getValue());
 	}
 
@@ -128,7 +237,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 
 	@Override
 	public void removeHeader(String name) {
-		getRawReq().removeHeaders(name);
+		if (request != null) {
+			request.removeHeaders(name);
+		} else {
+			super.removeHeaders(name);
+		}
 	}
 
 	@Override
@@ -142,12 +255,12 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	}
 
 	@Override
-	public String getContentString() throws IOException {
+	public String getContentString() throws IOException, ParseException {
 		return HttpMessageUtils.getContentString(getRawReq());
 	}
 
 	@Override
-	public String getContentString(String charset) throws IOException {
+	public String getContentString(String charset) throws IOException, ParseException {
 		return HttpMessageUtils.getContentString(getRawReq(), charset);
 	}
 
@@ -169,16 +282,6 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	///////////////////// BasicHttpEntityEnclosingRequest methods
 
 	@Override
-	public ProtocolVersion getProtocolVersion() {
-		return (request != null ? request.getProtocolVersion() : super.getProtocolVersion());
-	}
-
-	@Override
-	public RequestLine getRequestLine() {
-		return (request != null ? request.getRequestLine() : super.getRequestLine());
-	}
-
-	@Override
 	public Header getFirstHeader(String name) {
 		return (request != null ? request.getFirstHeader(name) : super.getFirstHeader(name));
 	}
@@ -189,8 +292,17 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	}
 
 	@Override
-	public Header[] getAllHeaders() {
-		return (request != null ? request.getAllHeaders() : super.getAllHeaders());
+	public Header[] getHeaders() {
+		return (request != null ? request.getHeaders() : super.getHeaders());
+	}
+
+	@Override
+	public void clear() {
+		if (request != null) {
+			request.clear();
+		} else {
+			super.clear();
+		}
 	}
 
 	@Override
@@ -203,6 +315,11 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	}
 
 	@Override
+	public boolean removeHeaders(Header header) {
+		return request != null ? request.removeHeaders(header) : super.removeHeaders(header);
+	}
+
+	@Override
 	public void setHeader(Header header) {
 		if (request != null) {
 			request.setHeader(header);
@@ -212,7 +329,7 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	}
 
 	@Override
-	public void setHeaders(Header[] headers) {
+	public void setHeaders(Header... headers) {
 		if (request != null) {
 			request.setHeaders(headers);
 		} else {
@@ -221,21 +338,22 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	}
 
 	@Override
-	public void removeHeader(Header header) {
-		if (request != null) {
-			request.removeHeader(header);
-		} else {
-			super.removeHeader(header);
-		}
+	public boolean removeHeader(Header header) {
+		return request != null ? request.removeHeader(header) : super.removeHeader(header);
 	}
 
 	@Override
-	public HeaderIterator headerIterator() {
+	public Iterator<Header> headerIterator() {
 		return (request != null ? request.headerIterator() : super.headerIterator());
 	}
 
 	@Override
-	public HeaderIterator headerIterator(String name) {
+	public int countHeaders(String name) {
+		return request != null ? request.countHeaders(name) : super.countHeaders(name);
+	}
+
+	@Override
+	public Iterator<Header> headerIterator(String name) {
 		return (request != null ? request.headerIterator(name) : super.headerIterator(name));
 	}
 
@@ -245,17 +363,18 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 	}
 
 	@Override
+	public Header getCondensedHeader(String name) {
+		return (request != null ? request.getCondensedHeader(name) : super.getCondensedHeader(name));
+	}
+
+	@Override
 	public Header[] getHeaders(String name) {
 		return (request != null ? request.getHeaders(name) : super.getHeaders(name));
 	}
 
 	@Override
-	public void removeHeaders(String name) {
-		if (request != null) {
-			request.removeHeaders(name);
-		} else {
-			super.removeHeaders(name);
-		}
+	public boolean removeHeaders(String name) {
+		return request != null ? request.removeHeaders(name) : super.removeHeaders(name);
 	}
 
 	@Override
@@ -270,11 +389,6 @@ public class HttpRequestImpl extends BasicHttpEntityEnclosingRequest implements 
 		} else {
 			super.setEntity(entity);
 		}
-	}
-
-	@Override
-	public boolean expectContinue() {
-		return (request != null ? request.expectContinue() : super.expectContinue());
 	}
 
 	@Override

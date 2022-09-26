@@ -210,7 +210,7 @@ public class JKClient implements JKStream {
 	}
 
 	@Override
-	public String read() throws IOException {
+	public String read() throws Exception {
 		return handle.read();
 	}
 

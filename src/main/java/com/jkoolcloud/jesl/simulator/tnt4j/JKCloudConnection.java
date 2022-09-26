@@ -69,7 +69,7 @@ public class JKCloudConnection implements Closeable {
 		}
 	}
 
-	public synchronized void write(String msg) throws IOException {
+	public synchronized void write(String msg) throws Exception {
 		if (StringUtils.isEmpty(msg)) {
 			return;
 		}
@@ -87,7 +87,7 @@ public class JKCloudConnection implements Closeable {
 			} else {
 				throw new IOException("Connection closed");
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			close();
 			throw e;
 		}

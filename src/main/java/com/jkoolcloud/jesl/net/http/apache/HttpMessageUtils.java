@@ -18,9 +18,9 @@ package com.jkoolcloud.jesl.net.http.apache;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.*;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 
 /**
  * JESL HTTP common message utilities class
@@ -36,11 +36,8 @@ public class HttpMessageUtils {
 	 * @return HTTP entity object
 	 */
 	protected static HttpEntity getEntity(HttpMessage message) {
-		if (message instanceof HttpEntityEnclosingRequest) {
-			return ((HttpEntityEnclosingRequest) message).getEntity();
-		}
-		if (message instanceof HttpResponse) {
-			return ((HttpResponse) message).getEntity();
+		if (message instanceof HttpEntityContainer) {
+			return ((HttpEntityContainer) message).getEntity();
 		}
 		return null;
 	}
@@ -54,10 +51,8 @@ public class HttpMessageUtils {
 	 *            HTTP entity object
 	 */
 	protected static void setEntity(HttpMessage message, HttpEntity entity) {
-		if (message instanceof HttpEntityEnclosingRequest) {
-			((HttpEntityEnclosingRequest) message).setEntity(entity);
-		} else if (message instanceof HttpResponse) {
-			((HttpResponse) message).setEntity(entity);
+		if (message instanceof HttpEntityContainer) {
+			((HttpEntityContainer) message).setEntity(entity);
 		}
 	}
 
@@ -97,8 +92,10 @@ public class HttpMessageUtils {
 	 * @return string associated with HTTP content
 	 * @throws IOException
 	 *             if error reading message content
+	 * @throws org.apache.hc.core5.http.ParseException
+	 *             if header elements cannot be parsed
 	 */
-	public static String getContentString(HttpMessage message) throws IOException {
+	public static String getContentString(HttpMessage message) throws IOException, ParseException {
 		HttpEntity entity = getEntity(message);
 		if (entity == null) {
 			return null;
@@ -116,8 +113,10 @@ public class HttpMessageUtils {
 	 * @return string associated with HTTP content in the specified character set
 	 * @throws IOException
 	 *             if error reading message content
+	 * @throws org.apache.hc.core5.http.ParseException
+	 *             if header elements cannot be parsed
 	 */
-	public static String getContentString(HttpMessage message, String charset) throws IOException {
+	public static String getContentString(HttpMessage message, String charset) throws IOException, ParseException {
 		HttpEntity entity = getEntity(message);
 		if (entity == null) {
 			return null;
@@ -141,10 +140,7 @@ public class HttpMessageUtils {
 	 */
 	public static void setContent(HttpMessage message, String contentType, byte[] content, String contentEncoding)
 			throws IOException {
-		ByteArrayEntity httpContent = new ByteArrayEntity(content);
-		if (!StringUtils.isEmpty(contentEncoding)) {
-			httpContent.setContentEncoding(contentEncoding);
-		}
+		ByteArrayEntity httpContent = new ByteArrayEntity(content, ContentType.parse(contentType), contentEncoding);
 		message.addHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(httpContent.getContentLength()));
 		if (!StringUtils.isEmpty(contentType)) {
 			message.addHeader(HttpHeaders.CONTENT_TYPE, contentType);

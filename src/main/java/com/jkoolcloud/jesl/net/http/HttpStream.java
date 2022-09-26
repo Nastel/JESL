@@ -28,7 +28,7 @@ import com.jkoolcloud.jesl.net.JKStream;
  */
 public interface HttpStream extends JKStream {
 	/**
-	 * Send HTTP request
+	 * Send HTTP request.
 	 *
 	 * @param request
 	 *            HTTP request message
@@ -40,7 +40,7 @@ public interface HttpStream extends JKStream {
 	void sendRequest(HttpRequest request, boolean wantResponse) throws IOException;
 
 	/**
-	 * Send HTTP request
+	 * Send HTTP request.
 	 *
 	 * @param token
 	 *            API access token
@@ -61,7 +61,7 @@ public interface HttpStream extends JKStream {
 			boolean wantResponse) throws IOException;
 
 	/**
-	 * Get/receive HTTP response
+	 * Get/receive HTTP response.
 	 *
 	 * @return HTTP response object
 	 * @throws IOException
@@ -70,7 +70,7 @@ public interface HttpStream extends JKStream {
 	HttpResponse getResponse() throws IOException;
 
 	/**
-	 * Create a new response object with a given method and URI
+	 * Create a new response object with a given method and URI.
 	 *
 	 * @param method
 	 *            HTTP method
@@ -81,7 +81,7 @@ public interface HttpStream extends JKStream {
 	HttpRequest newRequest(String method, String uri);
 
 	/**
-	 * Create a new response object with
+	 * Create a new response object with.
 	 *
 	 * @param protocol
 	 *            HTTP protocol

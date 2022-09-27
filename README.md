@@ -1,12 +1,13 @@
 # JESL - jKool Event Streaming Library
+
 JESL allows application developers stream time-series data to [jKoolCloud](https://www.jkoolcloud.com). To stream data to jKoolCloud your 
 application must:
 
 1. Use TNT4J, or MQTT/slf4j/log4j/Logback in your application to log events, activities, metrics 
-(see [TNT4J-Streams](https://github.com/Nastel/tnt4j-streams/))
+   (see [TNT4J-Streams](https://github.com/Nastel/tnt4j-streams/))
 
 1. Obtain your jKool account and API access token at https://www.jkoolcloud.com. API access token is required to stream data to your 
-[jKoolCloud](https://jkool.jkoolcloud.com) repository.
+   [jKoolCloud](https://jkool.jkoolcloud.com) repository.
 
 1. Use JESL Event Sink implementation (contained in this project) within your TNT4J configuration. (Requires API access token)
 
@@ -20,18 +21,23 @@ application must:
    ```
 
 1. Configure your application for streaming to [jKoolCloud](https://jkool.jkoolcloud.com) using JESL Event Sink (requires API access token). 
-See (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
+   See (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
+
+**NOTE:** To initiate `HTTPS` connection, JESL uses `TLSv1.2+` protocol:
+ * `TLSv1.2` - for all `1.8+` Java versions.
+ * `TLSv1.3` - for Java version `1.8` build `261+` (Oracle)/`262+` (OpenJDK) and later versions (`11`, `15`, `17`...).
 
 JESL package includes the following components:
 
 1. TNT4J streaming library with SLF4j support (https://github.com/Nastel/TNT4J)
 
 1. JESL Simulator -- stream simulated events, activities and metrics to [jKoolCloud](https://jkool.jkoolcloud.com). Simulations are defined 
-in XML files. (see [`tnt4j-sim-template.xml`](sims/tnt4j-sim-template.xml) and [`order-process.xml`](sims/order-process.xml))
+   in XML files. (See [`tnt4j-sim-template.xml`](sims/tnt4j-sim-template.xml) and [`order-process.xml`](sims/order-process.xml))
 
 1. JESL Event Sink -- TNT4J Event Sink implementation to stream events to [jKoolCloud](https://jkool.jkoolcloud.com).
 
 ## JESL Simulator
+
 The JESL Simulator provides the ability to simulate tracking activities and events. The activities, events, and their components are defined 
 using an XML format. There are three major parts to a simulation definition:
 
@@ -107,51 +113,53 @@ Requires [TNT4J Appender for Log4J](https://github.com/Nastel/tnt4j-log4j)
 Log4J can be configured to stream events and metrics to jKoolCloud by using JESL log4j appender 
 (`com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender`) as follows:
 
-#### Add JESL log4j appender to your log4j configuration
-```
-### Default JESL Appender configuration
-log4j.appender.jkoolcloud=com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender
-log4j.appender.jkoolcloud.SourceName=com.jkoolcloud.jesl.stream
-log4j.appender.jkoolcloud.SourceType=APPL
-log4j.appender.jkoolcloud.MetricsOnException=true
-log4j.appender.jkoolcloud.MetricsFrequency=60
-log4j.appender.jkoolcloud.layout=org.apache.log4j.EnhancedPatternLayout
-log4j.appender.jkoolcloud.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] %m%n
+1. Add JESL log4j appender to your log4j configuration
+   ```
+   ### Default JESL Appender configuration
+   log4j.appender.jkoolcloud=com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender
+   log4j.appender.jkoolcloud.SourceName=com.jkoolcloud.jesl.stream
+   log4j.appender.jkoolcloud.SourceType=APPL
+   log4j.appender.jkoolcloud.MetricsOnException=true
+   log4j.appender.jkoolcloud.MetricsFrequency=60
+   log4j.appender.jkoolcloud.layout=org.apache.log4j.EnhancedPatternLayout
+   log4j.appender.jkoolcloud.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] %m%n
 
-## JESL Configuration
-log4j.logger.com.jkoolcloud.jesl.stream=off
-log4j.logger.com.jkoolcloud=info
-log4j.logger.com.jkoolcloud.jesl=info
-```
-Define categories that you want mapped to `jkoolcloud` appender. Example:
-```
-log4j.logger.com.myco.mypackage=info,jkoolcloud
-```
+   ## JESL Configuration
+   log4j.logger.com.jkoolcloud.jesl.stream=off
+   log4j.logger.com.jkoolcloud=info
+   log4j.logger.com.jkoolcloud.jesl=info
+   ```
+   Define categories that you want mapped to `jkoolcloud` appender. Example:
+   ```
+   log4j.logger.com.myco.mypackage=info,jkoolcloud
+   ```
 
-#### Add the following arguments to your java start-up
-```
--Dtnt4j.config=<jesl.home>/log4j/tnt4j.properties -Dtnt4j.token.repository=<jesl.home>/log4j/tnt4j-tokens.properties 
-```
-To enable automatic application dump add the following arguments:
-```
--Dtnt4j.dump.on.vm.shutdown=true -Dtnt4j.dump.on.exception=true -Dtnt4j.dump.provider.default=true 
-```
-Optionally you can add the following parameters to define default data center name and geolocation:
-```
--Dtnt4j.source.DATACENTER=YourDataCenterName -Dtnt4j.source.GEOADDR="Melville, NY" 
-```
-Make sure `<jesl.home>/jesl-<version>.jar` and all dependent jar files in `<jesl.home>/lib` are in your class path. Also include 
-`tnt4j-log4j` appender library `tnt4j-log4j-<version>.jar`.
+1. Add the following arguments to your java start-up
+   ```
+   -Dtnt4j.config=<jesl.home>/log4j/tnt4j.properties -Dtnt4j.token.repository=<jesl.home>/log4j/tnt4j-tokens.properties 
+   ```
+   To enable automatic application dump add the following arguments:
+   ```
+   -Dtnt4j.dump.on.vm.shutdown=true -Dtnt4j.dump.on.exception=true -Dtnt4j.dump.provider.default=true 
+   ```
+   Optionally you can add the following parameters to define default data center name and geolocation:
+   ```
+   -Dtnt4j.source.DATACENTER=YourDataCenterName -Dtnt4j.source.GEOADDR="Melville, NY" 
+   ```
+   Make sure `<jesl.home>/jesl-<version>.jar` and all dependent jar files in `<jesl.home>/lib` are in your class path. Also include 
+   `tnt4j-log4j` appender library `tnt4j-log4j-<version>.jar`.
 
-#### Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
-This allows streaming data to be associated with your private repository.
+1. Edit `<jesl.home>/log4j/tnt4j.properties` and replace `YOUR-ACCESS-TOKEN` with your jKool API access token.
 
-**NOTE**: Make sure your firewall allows outgoing `https` connections to [jKoolCloud](https://data.jkoolcloud.com).
+   This allows streaming data to be associated with your private repository.
 
-#### Restart your application
-log4j messages which map to JESL `jkoolcloud` appender will stream to [jKoolCloud](https://data.jkoolcloud.com)
+   **NOTE**: Make sure your firewall allows outgoing `https` connections to [jKoolCloud](https://data.jkoolcloud.com).
 
-#### Login to "My Dashboard" @ [jKoolCloud](https://jkool.jkoolcloud.com/jKool/login.jsp)
+1. Restart your application
+
+   log4j messages which map to JESL `jkoolcloud` appender will stream to [jKoolCloud](https://data.jkoolcloud.com)
+
+1. Login to "My Dashboard" @ [jKoolCloud](https://jkool.jkoolcloud.com/jKool/login.jsp)
 
 **NOTE**: See [TNT4J documentation](https://github.com/Nastel/TNT4J#slf4j-event-sink-integration) for more information on `TNT4JAppender`.
 Optionally you may annotate your log4j messages to provide better context, timing as well as report user defined metrics. Example:
@@ -282,6 +290,7 @@ Proxy can be used do deliver data over JESL Event Sink (`com.jkoolcloud.jesl.tnt
   proxy configuration details using JVM system properties.
 
 # Sample jKQL Queries
+
 Sample queries you can run against your data using jKool dashboard.
 
 jKQL queries follow this convention:
@@ -294,6 +303,7 @@ Get events where severity > INFO show as linechart
 ```
 
 ## Sample Get queries
+
 ```sql
 Get relatives show as topology
 Get relatives show as geomap
@@ -312,12 +322,14 @@ Get number of activities group by Properties('browser') show as piechart
 ```
 
 ## Sample Compare queries
+
 ```sql
 Compare only diffs latest 3 events
 Compare only diffs longest 5 events show as table
 ```
 
 ## Sample Snapshot queries
+
 ```sql
 Get number of snapshots where Category In (Log4J, Java, GarbageCollector) group by severity, category show as piechart
 Get snapshots Memory fields snapshottime, map(FreeBytes) for latest day where map(FreeBytes) < 1500000000 show as colchart
@@ -327,6 +339,7 @@ Get snapshot ShopingCart avg map(ShippingCost), sum map(ShippingCost) group by l
 ```
 
 ## Sample Real-time queries
+
 ```sql
 Subscribe to events show as linechart
 Subscribe to number of events show as linechart
@@ -347,6 +360,7 @@ Subscribe to events where message contains 'failure' show as linechart
 Release assemblies are built to `/build` directory.
 
 # Project Dependencies
+
 JESL requires the following (which will download automatically if using Maven):
 * JDK 1.8+
 * [TNT4J](https://github.com/Nastel/TNT4J/)
@@ -354,6 +368,7 @@ JESL requires the following (which will download automatically if using Maven):
 * [SLF4J-Simple](http://www.slf4j.org/) (runtime, optional)
 
 # Related Projects
+
 * [TNT4J](https://github.com/Nastel/TNT4J/)
 * [TNT4J-Log4j Appender](https://github.com/Nastel/tnt4j-log4j/)
 * [TNT4J-Logback Appender](https://github.com/Nastel/tnt4j-logback/)
@@ -363,4 +378,5 @@ JESL requires the following (which will download automatically if using Maven):
 * [TNT4J-Streams](https://github.com/Nastel/tnt4j-streams/)
 
 # Available Integrations
+
 * [jkoolcloud.com](https://www.jkoolcloud.com/)

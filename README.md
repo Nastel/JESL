@@ -1,4 +1,4 @@
-#JESL - jKool Event Streaming Library
+# JESL - jKool Event Streaming Library
 JESL allows application developers stream time-series data to [jKoolCloud](https://www.jkoolcloud.com). To stream data to jKoolCloud your 
 application must:
 
@@ -8,7 +8,7 @@ application must:
 1. Obtain your jKool account and API access token at https://www.jkoolcloud.com. API access token is required to stream data to your 
 [jKoolCloud](https://jkool.jkoolcloud.com) repository.
 
-1. Use JESL Event Sink implementation (contained in this project) within your tnt4j configuration. (Requires API access token)
+1. Use JESL Event Sink implementation (contained in this project) within your TNT4J configuration. (Requires API access token)
 
    Use Maven dependency:
    ```xml
@@ -33,7 +33,7 @@ in XML files. (see [`tnt4j-sim-template.xml`](sims/tnt4j-sim-template.xml) and [
 
 ## JESL Simulator
 The JESL Simulator provides the ability to simulate tracking activities and events. The activities, events, and their components are defined 
-using a XML format. There are three major parts to a simulation definition:
+using an XML format. There are three major parts to a simulation definition:
 
 1. `Sources` - defines the sources involved in simulated activities and events
 
@@ -73,17 +73,17 @@ The simplest way to run the simulator is to execute the file `jksim.bat` (or `jk
 Sample simulation files are located under `<jesl>/sims/` folder (e.g. `<jesl>/sims/order-process.xml`). 
 `iterations` is the number of iterations for a given simulation (1 default).
 
-**NOTE:** You will may to alter `jksim` shell script to specify custom simulator parameters such as simulation type as well as other 
-advanced options.
+**NOTE:** You may to alter `jksim` shell script to specify custom simulator parameters such as simulation type as well as other advanced
+options.
 
-The simulator also contains options for allowing the data values used for some of the tracking component attributes to be altered to provide 
+The simulator also contains options for allowing the data values used for some tracking component attributes to be altered to provide 
 unique values for these attributes for each tracking activity so that each activity definition in the input file serves as a template for 
 the activities to generate, allowing each to be a unique instance of an activity with the defined components. An example of such an 
 attribute is the Correlator.  If a Correlator is defined and the correlator value is not unique across each activity then all activities 
 will get stitched together into one large activity.
 
-Some of the available options are:
-
+Some available options are:
+```
 	-A		This option specifies the access token to use to validate
 			connection to JESL Event Sink.  This option is required
 			when using `-T` option
@@ -97,13 +97,11 @@ Some of the available options are:
 			input file by appending a time stamp to each one, so that each
 			iteration over the file	will generate independent activities
 			and events
+```
+To see the full set of supported options, run: `jksim.bat help`
 
-To see the full set of supported options, run:
+# Streaming Log4j to jKoolCloud
 
-	`jksim.bat help`
-
-Streaming Log4j to jKoolCloud 
-===============================
 Requires [TNT4J Appender for Log4J](https://github.com/Nastel/tnt4j-log4j)
 
 Log4J can be configured to stream events and metrics to jKoolCloud by using JESL log4j appender 
@@ -138,7 +136,7 @@ To enable automatic application dump add the following arguments:
 ```
 -Dtnt4j.dump.on.vm.shutdown=true -Dtnt4j.dump.on.exception=true -Dtnt4j.dump.provider.default=true 
 ```
-Optionally you can add the following parameters to define default data center name and geo location:
+Optionally you can add the following parameters to define default data center name and geolocation:
 ```
 -Dtnt4j.source.DATACENTER=YourDataCenterName -Dtnt4j.source.GEOADDR="Melville, NY" 
 ```
@@ -164,8 +162,8 @@ logger.error("Second log message #app=" + Log4JTest.class.getName() + ", #msg='2
 logger.info("Ending a tnt4j activity #end=Test, #app=" + Log4JTest.class.getName() + " #%i/order-no=" + orderNo);
 ```
 
-Streaming TNT4J to jKoolCloud 
-==============================
+# Streaming TNT4J to jKoolCloud
+
 Applications that use TNT4J can be configured to stream events and metrics to jKoolCloud by configuring application source to use JESL Event 
 Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`).
 

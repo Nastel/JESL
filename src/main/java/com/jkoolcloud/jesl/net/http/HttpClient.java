@@ -38,6 +38,7 @@ import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.apache.hc.core5.http.io.HttpClientConnection;
+import org.apache.hc.core5.http.ssl.TLS;
 import org.apache.hc.core5.util.Timeout;
 
 import com.jkoolcloud.jesl.net.http.apache.HttpRequestImpl;
@@ -231,8 +232,12 @@ public class HttpClient implements HttpStream {
 			} else {
 				sslCtx = SSLContext.getDefault();
 			}
-			SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sslCtx,
-					new String[] { "TLSv1.2", "TLSv1.3" }, null, NoopHostnameVerifier.INSTANCE);
+
+			String[] supportedProtocols = sslCtx.getSupportedSSLParameters().getProtocols();
+			supportedProtocols = TLS.excludeWeak(supportedProtocols);
+
+			SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(sslCtx, supportedProtocols, null,
+					NoopHostnameVerifier.INSTANCE);
 			RegistryBuilder<ConnectionSocketFactory> rcf = RegistryBuilder.create();
 			schemeReg = rcf.register(SCHEME_HTTPS, ssf).build();
 		}

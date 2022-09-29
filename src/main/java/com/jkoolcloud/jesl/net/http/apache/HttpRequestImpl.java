@@ -54,6 +54,9 @@ public class HttpRequestImpl extends BasicClassicHttpRequest implements HttpRequ
 	 * 
 	 * @param request
 	 *            apache HTTP request
+	 * 
+	 * @throws URISyntaxException
+	 *             if request URI is malformed
 	 */
 	public HttpRequestImpl(BasicClassicHttpRequest request) throws URISyntaxException {
 		super(request.getMethod(), request.getUri());

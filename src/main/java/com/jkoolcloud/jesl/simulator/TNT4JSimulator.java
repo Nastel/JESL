@@ -546,8 +546,8 @@ public class TNT4JSimulator {
 						theParser.parse(new InputSource(new StringReader(simDef.toString())), xmlHandler);
 
 						if (!Utils.isEmpty(jkFileName)) {
-							PrintWriter gwFile = new PrintWriter(
-									Files.newOutputStream(Paths.get(jkFileName), StandardOpenOption.APPEND));
+							PrintWriter gwFile = new PrintWriter(Files.newOutputStream(Paths.get(jkFileName),
+									StandardOpenOption.CREATE, StandardOpenOption.APPEND));
 							gwFile.println("");
 							gwFile.close();
 						}

@@ -107,7 +107,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
-            <version>5.1.3</version>
+            <version>5.2</version>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-codec</artifactId>
@@ -160,12 +160,17 @@
             </properties>
         </profile>
         <profile>
+            <id>java9-plus-target</id>
+            <properties>
+                <project.java.version>${java.specification.version}</project.java.version>
+            </properties>
+        </profile>
+        <profile>
             <id>java9-plus</id>
             <activation>
                 <jdk>[9,)</jdk>
             </activation>
             <properties>
-                <project.java.version>${java.specification.version}</project.java.version>
                 <java.source.version>${project.java.version}</java.source.version>
                 <java.target.version>${project.java.version}</java.target.version>
                 <java.compiler.version>${project.java.version}</java.compiler.version>

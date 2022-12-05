@@ -49,22 +49,6 @@ jobs:
           echo "Found project version: $VERSION"
           echo "pom-version=$VERSION" >> $GITHUB_OUTPUT
 
-  #  cleanup:
-  #    needs: build
-  #    runs-on: ubuntu-latest
-  #    continue-on-error: true
-  #    if: ${{ contains(needs.build.outputs.pom-version, 'SNAPSHOT') }}
-  #
-  #    steps:
-  #      - name: Remove jesl package assets
-  #        uses: abrkn/delete-old-github-package-versions@v1
-  #        with:
-  #          token: ${{ secrets.GITHUB_TOKEN }}
-  #          owner: Nastel
-  #          packageName: com.jkoolcloud.jesl
-  #          minAge: 30s
-  #        continue-on-error: true
-
   publish-snapshot:
     needs: build
     runs-on: ubuntu-latest

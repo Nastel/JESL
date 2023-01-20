@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2022 JKOOL, LLC.
+ * Copyright 2014-2023 JKOOL, LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -142,6 +142,6 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 			// use old style token as is (must be prefixed with /).
 			return tk.substring(1);
 		}
-		*/
+		 */
 	}
 }

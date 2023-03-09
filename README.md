@@ -16,7 +16,7 @@ application must:
         <dependency>
             <groupId>com.jkoolcloud</groupId>
             <artifactId>jesl</artifactId>
-            <version>0.10.1</version>
+            <version>0.10.2</version>
         </dependency>
    ```
 

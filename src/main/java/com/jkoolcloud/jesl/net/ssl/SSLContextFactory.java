@@ -15,7 +15,7 @@
  */
 package com.jkoolcloud.jesl.net.ssl;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyStore;
@@ -26,7 +26,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 import com.jkoolcloud.jesl.net.security.AuthUtils;
-import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
  * Implements a factory for generating client- and server-side SSL Contexts.
@@ -110,11 +109,9 @@ public class SSLContextFactory {
 		try {
 			// Load keystore
 			KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
-			FileInputStream fis = null;
-			try {
-				ks.load(Files.newInputStream(Paths.get(keyStoreFileName)), keyStorePassword.toCharArray());
-			} finally {
-				Utils.close(fis);
+
+			try (InputStream fis = Files.newInputStream(Paths.get(keyStoreFileName))) {
+				ks.load(fis, keyStorePassword.toCharArray());
 			}
 
 			// Set up key manager factory to use our keystore

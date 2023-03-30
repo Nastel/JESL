@@ -811,10 +811,8 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler implements AutoC
 
 			if (fileName != null) {
 				if (isBinary) {
-					BufferedInputStream fileReader = null;
-					try {
-						File f = new File(fileName);
-						fileReader = new BufferedInputStream(Files.newInputStream(f.toPath()));
+					File f = new File(fileName);
+					try (BufferedInputStream fileReader = new BufferedInputStream(Files.newInputStream(f.toPath()))) {
 						byte[] binData = new byte[(int) f.length()];
 						int totalBytesRead = 0;
 						while (totalBytesRead < binData.length) {
@@ -827,8 +825,6 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler implements AutoC
 						}
 					} catch (Exception e) {
 						throw new SAXParseException("Failed loading message data from " + fileName, saxLocator, e);
-					} finally {
-						Utils.close(fileReader);
 					}
 				} else {
 					FileReader fileReader = null;

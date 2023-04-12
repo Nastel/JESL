@@ -38,6 +38,7 @@ import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.apache.hc.core5.http.io.HttpClientConnection;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.ssl.TLS;
 import org.apache.hc.core5.util.Timeout;
 
@@ -326,6 +327,9 @@ public class HttpClient implements HttpStream {
 			if (StringUtils.isNotEmpty(proxyCredentials)) {
 				request.setHeader(HttpHeaders.PROXY_AUTHORIZATION, "Basic " + proxyCredentials);
 			}
+			if (request.getVersion() == null || request.getVersion().greaterEquals(HttpVersion.HTTP_1_1)) {
+				request.setHeader(HttpHeaders.HOST, host + ":" + port);
+			}
 			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", uri, request);
 			ClassicHttpRequest httpRequest = (ClassicHttpRequest) request;
 
@@ -370,10 +374,11 @@ public class HttpClient implements HttpStream {
 
 	@Override
 	public synchronized HttpResponse getResponse() throws IOException {
+		HttpResponseImpl resp = null;
 		try {
 			checkState();
 
-			HttpResponseImpl resp = new HttpResponseImpl(connection.receiveResponseHeader());
+			resp = new HttpResponseImpl(connection.receiveResponseHeader());
 			String contentLenStr = resp.getHeaderStr(HttpHeaders.CONTENT_LENGTH);
 			String contentType = resp.getHeaderStr(HttpHeaders.CONTENT_TYPE);
 			int contentLen = (StringUtils.isEmpty(contentLenStr) ? 0 : Integer.parseInt(contentLenStr));
@@ -382,30 +387,44 @@ public class HttpClient implements HttpStream {
 			}
 			return resp;
 		} catch (Throwable ex) {
+			if (resp != null) {
+				EntityUtils.consumeQuietly(resp.getEntity());
+				Utils.close(resp);
+			}
 			throw new IOException(ex.getMessage(), ex);
 		}
 	}
 
 	@Override
 	public synchronized String read() throws IOException, ParseException {
-		HttpResponse resp = getResponse();
-		String content = resp.getContentString();
-		int status = resp.getStatus();
+		HttpResponseImpl resp = null;
+		String content = "";
+		try {
+			resp = (HttpResponseImpl) getResponse();
+			content = resp.getContentString();
+			int status = resp.getStatus();
 
-		logger.log(OpLevel.TRACE, "Received response from={0}: code={1}, msg={2}", uri, status, content);
-		if (status >= HttpStatus.SC_CLIENT_ERROR) {
-			if (AccessResponse.isAccessResponse(content)) {
-				_close();
-				AccessResponse accessResp = AccessResponse.parseMsg(content);
-				String reason = accessResp.getReason();
-				if (StringUtils.isEmpty(reason)) {
-					reason = "Access Denied";
+			logger.log(OpLevel.TRACE, "Received response from={0}: code={1}, msg={2}", uri, status, content);
+			if (status >= HttpStatus.SC_CLIENT_ERROR) {
+				if (AccessResponse.isAccessResponse(content)) {
+					_close();
+					AccessResponse accessResp = AccessResponse.parseMsg(content);
+					String reason = accessResp.getReason();
+					if (StringUtils.isEmpty(reason)) {
+						reason = "Access Denied";
+					}
+					throw new SecurityException(reason);
+				} else {
+					throw new HttpRequestException(status, content);
 				}
-				throw new SecurityException(reason);
-			} else {
-				throw new HttpRequestException(status, content);
+			}
+		} finally {
+			if (resp != null) {
+				EntityUtils.consumeQuietly(resp.getEntity());
+				Utils.close(resp);
 			}
 		}
+
 		return content;
 	}
 
@@ -441,8 +460,16 @@ public class HttpClient implements HttpStream {
 			HttpRequest pingReq = newDefaultRequest();
 			pingReq.setHeader(HttpHeaders.PRAGMA, PRAGMA_VALUE_PING);
 			sendRequest(pingReq, true);
-			HttpResponse pingResp = getResponse();
-			logger.log(OpLevel.DEBUG, "Ping {0}: response received from {1}, response={2}", this, uri, pingResp);
+			HttpResponseImpl pingResp = null;
+			try {
+				pingResp = (HttpResponseImpl) getResponse();
+				logger.log(OpLevel.DEBUG, "Ping {0}: response received from {1}, response={2}", this, uri, pingResp);
+			} finally {
+				if (pingResp != null) {
+					EntityUtils.consumeQuietly(pingResp.getEntity());
+					Utils.close(pingResp);
+				}
+			}
 		} catch (Throwable exc) {
 		}
 	}
@@ -488,7 +515,10 @@ public class HttpClient implements HttpStream {
 			uri = "/";
 		}
 
-		return new HttpRequestImpl(method, uri);
+		HttpRequestImpl req = new HttpRequestImpl(method, uri);
+		req.setVersion(HttpVersion.HTTP_1_1);
+
+		return req;
 	}
 
 	private HttpRequest newDefaultRequest() {

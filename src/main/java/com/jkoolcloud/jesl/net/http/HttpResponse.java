@@ -15,12 +15,14 @@
  */
 package com.jkoolcloud.jesl.net.http;
 
+import java.io.Closeable;
+
 /**
  * This interface defines JESL HTTP Response.
  *
  * @version $Revision: 1 $
  */
-public interface HttpResponse extends HttpMessage {
+public interface HttpResponse extends HttpMessage, Closeable {
 	/**
 	 * Set HTTP status code.
 	 * 

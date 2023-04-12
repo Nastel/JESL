@@ -18,6 +18,7 @@ package com.jkoolcloud.jesl.net.http;
 import java.io.IOException;
 
 import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.ProtocolVersion;
 
 /**
  * This interface defines JESL HTTP message.
@@ -141,4 +142,12 @@ public interface HttpMessage {
 	 *             if error writing message content
 	 */
 	void setContent(String contentType, String content, String charset) throws IOException;
+
+	/**
+	 * Returns protocol version or {@code null} when not available. It represents a hint what protocol version should be
+	 * used to transmit the message.
+	 *
+	 * @return protocol version or {@code null} when not available
+	 */
+	ProtocolVersion getVersion();
 }

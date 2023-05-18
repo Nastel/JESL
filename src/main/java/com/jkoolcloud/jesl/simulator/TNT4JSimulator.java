@@ -15,7 +15,11 @@
  */
 package com.jkoolcloud.jesl.simulator;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.Files;
@@ -563,7 +567,6 @@ public class TNT4JSimulator {
 					showProgress = isTTY;
 					info("jKool Activity Simulator Replay starting: file=" + jkFileName);
 					connect();
-					startTime = System.currentTimeMillis();
 					String gwMsg;
 
 					// Determine number of lines in file
@@ -580,6 +583,8 @@ public class TNT4JSimulator {
 					}
 
 					// Reopen the file and send each line (tracking msg) to gateway
+					info("Replaying file ...");
+					startTime = System.currentTimeMillis();
 					gwFile = new BufferedReader(new java.io.FileReader(jkFileName));
 					try {
 						if (showProgress) {

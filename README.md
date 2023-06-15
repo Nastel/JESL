@@ -111,27 +111,29 @@ To see the full set of supported options, run: `jksim.bat help`
 Requires [TNT4J Appender for Log4J](https://github.com/Nastel/tnt4j-log4j)
 
 Log4J can be configured to stream events and metrics to jKoolCloud by using JESL log4j appender 
-(`com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender`) as follows:
+`com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender` as follows:
 
 1. Add JESL log4j appender to your log4j configuration
-   ```
-   ### Default JESL Appender configuration
-   log4j.appender.jkoolcloud=com.jkoolcloud.tnt4j.logger.log4j.TNT4JAppender
-   log4j.appender.jkoolcloud.SourceName=com.jkoolcloud.jesl.stream
-   log4j.appender.jkoolcloud.SourceType=APPL
-   log4j.appender.jkoolcloud.MetricsOnException=true
-   log4j.appender.jkoolcloud.MetricsFrequency=60
-   log4j.appender.jkoolcloud.layout=org.apache.log4j.EnhancedPatternLayout
-   log4j.appender.jkoolcloud.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c{1}] %m%n
+   ```xml
+   <!-- ### Default JESL Appender configuration ### -->
+   <Tnt4j name="jkoolcloud" sourceName="com.jkoolcloud.jesl.stream" sourceType="APPL" metricsOnException="true" metricsFrequency="60">
+       <PatternLayout>
+           <Pattern>%d{ABSOLUTE} %-5p [%c{1}] %m%n</Pattern>
+       </PatternLayout>
+   </Tnt4j>
 
-   ## JESL Configuration
-   log4j.logger.com.jkoolcloud.jesl.stream=off
-   log4j.logger.com.jkoolcloud=info
-   log4j.logger.com.jkoolcloud.jesl=info
+   <!-- ### jesl stream API logger -->
+   <AsyncLogger name="com.jkoolcloud.jesl.stream" level="OFF"/>
+   <!-- ### jkoolcloud API logger -->
+   <AsyncLogger name="com.jkoolcloud" level="INFO"/>
+   <!-- ### jesl API logger -->
+   <AsyncLogger name="com.jkoolcloud.jesl" level="INFO"/>
    ```
    Define categories that you want mapped to `jkoolcloud` appender. Example:
-   ```
-   log4j.logger.com.myco.mypackage=info,jkoolcloud
+   ```xml
+   <Logger name="com.myco.mypackage" level="INFO">
+       <AppenderRef ref="jkoolcloud"/>
+   </Logger>
    ```
 
 1. Add the following arguments to your java start-up

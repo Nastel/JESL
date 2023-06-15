@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2014-2023 JKOOL, LLC.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<Configuration strict="true" shutdownHook="disable"
+               xmlns="http://logging.apache.org/log4j/2.0/config"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://logging.apache.org/log4j/2.0/config
+                                   https://raw.githubusercontent.com/apache/logging-log4j2/main/log4j-core/src/main/resources/Log4j-config.xsd">
+    <Appenders>
+        <!-- ### Default JKoolCloud Appender configuration ### -->
+        <Tnt4j name="jkoolcloud" sourceName="com.jkoolcloud.jesl.stream" sourceType="APPL" metricsOnException="true" metricsFrequency="60">
+            <PatternLayout>
+                <Pattern>%d{ABSOLUTE} %-5p [%c{1}] %m%n</Pattern>
+            </PatternLayout>
+        </Tnt4j>
+    </Appenders>
+    <Loggers>
+        <!-- ### jesl stream API logger -->
+        <AsyncLogger name="com.jkoolcloud.jesl.stream" level="OFF"/>
+        <!-- ### jkoolcloud API logger -->
+        <AsyncLogger name="com.jkoolcloud" level="INFO"/>
+        <!-- ### jesl API logger -->
+        <AsyncLogger name="com.jkoolcloud.jesl" level="INFO"/>
+    </Loggers>
+</Configuration>

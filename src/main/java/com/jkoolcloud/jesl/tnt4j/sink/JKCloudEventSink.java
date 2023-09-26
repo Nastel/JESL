@@ -321,10 +321,6 @@ public class JKCloudEventSink extends LoggedEventSink {
 
 			super._open();
 		} catch (Throwable e) {
-			logger.log(OpLevel.ERROR,
-					"Failed to open sink name={6}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
-					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx", getName(),
-					e);
 			_close();
 
 			if (e instanceof IOException) {

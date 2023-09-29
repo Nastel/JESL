@@ -1,5 +1,13 @@
 # JESL - jKool Event Streaming Library
 
+-----------------------
+
+**NOTE:** `jesl` version `1.0.0` migrated to Java 11 and bumped SLF4J from `1.7.x` to `2.x`.
+
+Latest Java 8 compliant `tnt4j` version is `0.11.1`.
+
+-----------------------
+
 JESL allows application developers stream time-series data to [jKoolCloud](https://www.jkoolcloud.com). To stream data to jKoolCloud your 
 application must:
 

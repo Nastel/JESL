@@ -251,6 +251,25 @@ special values on`TNT4J/JESL` side:
 * `ENQUOTE` - enquote special numeric value. Produced JSON will have en-quoted values e.g.`"Infinity"`, `"NaN"`. 
 * `MAINTAIN` - maintain value as is. Produced JSON will have literal number values e.g. `Infnity`, `NaN`.
 
+## Optional configuration
+
+* `ConnTimeout` - defines connection timeout in milliseconds. Default - `10sec.`
+* `IdleTimeout` - defines connection idle timeout in milliseconds. Default - `4min.`
+* `AckSends` - indicates connection to wait for acknowledgments for sent packages. Default - `false`. 
+* `DisableSSLVerification` - indicates connection to disable SSL validation (may be useful if HTTP endpoint has certificate expired). 
+  Default - `false`.
+
+Sample:
+```properties
+event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
+event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
+event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
+event.sink.factory.EventSinkFactory.ConnTimeout: 5000
+event.sink.factory.EventSinkFactory.IdleTimeout: 300000
+event.sink.factory.EventSinkFactory.AckSends: true
+event.sink.factory.EventSinkFactory.DisableSSLVerification: true
+```
+
 ## Proxy configuration
 
 Proxy can be used do deliver data over JESL Event Sink (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`) for both `HTTP(S)` and 
@@ -265,14 +284,14 @@ Proxy can be used do deliver data over JESL Event Sink (`com.jkoolcloud.jesl.tnt
 
     Sample:
     ```properties
-        event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
-        event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
-        event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
-        event.sink.factory.EventSinkFactory.ProxyScheme: http
-        event.sink.factory.EventSinkFactory.ProxyHost: proxy.host.com
-        event.sink.factory.EventSinkFactory.ProxyPort: 8060
-        event.sink.factory.EventSinkFactory.ProxyUser: proxy-user
-        event.sink.factory.EventSinkFactory.ProxyPass: proxy-pass
+    event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
+    event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
+    event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
+    event.sink.factory.EventSinkFactory.ProxyScheme: http
+    event.sink.factory.EventSinkFactory.ProxyHost: proxy.host.com
+    event.sink.factory.EventSinkFactory.ProxyPort: 8060
+    event.sink.factory.EventSinkFactory.ProxyUser: proxy-user
+    event.sink.factory.EventSinkFactory.ProxyPass: proxy-pass
     ```
 
 * To use `SOCKSv5` proxy, set such configuration properties:
@@ -283,12 +302,12 @@ Proxy can be used do deliver data over JESL Event Sink (`com.jkoolcloud.jesl.tnt
 
     Sample:
     ```properties
-        event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
-        event.sink.factory.EventSinkFactory.Url: tcp://172.16.6.25:6004
-        event.sink.factory.EventSinkFactory.ProxyHost: proxy.host.com
-        event.sink.factory.EventSinkFactory.ProxyPort: 8060
-        event.sink.factory.EventSinkFactory.ProxyUser: proxy-user
-        event.sink.factory.EventSinkFactory.ProxyPass: proxy-pass
+    event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
+    event.sink.factory.EventSinkFactory.Url: tcp://172.16.6.25:6004
+    event.sink.factory.EventSinkFactory.ProxyHost: proxy.host.com
+    event.sink.factory.EventSinkFactory.ProxyPort: 8060
+    event.sink.factory.EventSinkFactory.ProxyUser: proxy-user
+    event.sink.factory.EventSinkFactory.ProxyPass: proxy-pass
     ```
   Proxy authentication credentials can be also passed through JVM system properties `java.net.socks.username` and `java.net.socks.password`, 
   e.g.:

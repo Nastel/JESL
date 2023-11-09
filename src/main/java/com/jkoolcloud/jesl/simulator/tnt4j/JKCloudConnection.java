@@ -35,15 +35,18 @@ public class JKCloudConnection implements Closeable {
 	private String accessToken;
 	private long connTimeout;
 	private boolean ackSends = false;
+	private boolean disableSSLVerification = false;
 
 	private JKClient jkHandle;
 	private TrackingLogger logger;
 
-	public JKCloudConnection(String url, String accessToken, long connTimeout, boolean acks, TrackingLogger logger) {
+	public JKCloudConnection(String url, String accessToken, long connTimeout, boolean acks,
+			boolean disableSSLVerification, TrackingLogger logger) {
 		this.gwUrl = url.toLowerCase();
 		this.accessToken = accessToken;
 		this.connTimeout = connTimeout;
 		this.ackSends = acks;
+		this.disableSSLVerification = disableSSLVerification;
 		this.logger = logger;
 	}
 
@@ -61,7 +64,7 @@ public class JKCloudConnection implements Closeable {
 		}
 
 		try {
-			jkHandle = new JKClient(gwUrl, connTimeout, getEventSink());
+			jkHandle = new JKClient(gwUrl, connTimeout, disableSSLVerification, getEventSink());
 			jkHandle.connect(accessToken);
 		} catch (URISyntaxException e) {
 			close();

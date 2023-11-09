@@ -19,10 +19,11 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.NoSuchAlgorithmException;
+import java.security.GeneralSecurityException;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.SSLContext;
+import javax.net.ssl.*;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -82,6 +83,7 @@ public class HttpClient implements HttpStream {
 	protected BasicHttpClientConnectionManager connMgr;
 	protected HttpClientConnection connection;
 	protected boolean secure = false;
+	protected boolean disableSSLVerification = false;
 
 	/**
 	 * Create JESL HTTP[S] client stream with given attributes
@@ -115,7 +117,7 @@ public class HttpClient implements HttpStream {
 	 */
 	public HttpClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger)
 			throws URISyntaxException {
-		this(urlStr, DEFAULT_CONN_TIMEOUT, proxyHost, proxyPort, proxyScheme, logger);
+		this(urlStr, DEFAULT_CONN_TIMEOUT, false, proxyHost, proxyPort, proxyScheme, logger);
 	}
 
 	/**
@@ -125,6 +127,8 @@ public class HttpClient implements HttpStream {
 	 *            connection string to specified JESL server
 	 * @param connTimeout
 	 *            connection timeout in milliseconds
+	 * @param disableSSLVerification
+	 *            flag indicating to disable SSL validation
 	 * @param proxyHost
 	 *            proxy host name if any, null if none
 	 * @param proxyPort
@@ -136,9 +140,9 @@ public class HttpClient implements HttpStream {
 	 * @throws URISyntaxException
 	 *             if invalid connection string
 	 */
-	public HttpClient(String urlStr, long connTimeout, String proxyHost, int proxyPort, String proxyScheme,
-			EventSink logger) throws URISyntaxException {
-		this(urlStr, connTimeout, proxyHost, proxyPort, proxyScheme, null, null, logger);
+	public HttpClient(String urlStr, long connTimeout, boolean disableSSLVerification, String proxyHost, int proxyPort,
+			String proxyScheme, EventSink logger) throws URISyntaxException {
+		this(urlStr, connTimeout, disableSSLVerification, proxyHost, proxyPort, proxyScheme, null, null, logger);
 	}
 
 	/**
@@ -148,6 +152,8 @@ public class HttpClient implements HttpStream {
 	 *            connection string to specified JESL server
 	 * @param connTimeout
 	 *            connection timeout in milliseconds
+	 * @param disableSSLVerification
+	 *            flag indicating to disable SSL validation
 	 * @param proxyHost
 	 *            proxy host name if any, null if none
 	 * @param proxyPort
@@ -163,8 +169,8 @@ public class HttpClient implements HttpStream {
 	 * @throws URISyntaxException
 	 *             if invalid connection string
 	 */
-	public HttpClient(String urlStr, long connTimeout, String proxyHost, int proxyPort, String proxyScheme,
-			String proxyUser, String proxyPass, EventSink logger) throws URISyntaxException {
+	public HttpClient(String urlStr, long connTimeout, boolean disableSSLVerification, String proxyHost, int proxyPort,
+			String proxyScheme, String proxyUser, String proxyPass, EventSink logger) throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
 		secure = SCHEME_HTTPS.equalsIgnoreCase(scheme);
@@ -176,21 +182,23 @@ public class HttpClient implements HttpStream {
 		if (port <= 0) {
 			port = (secure ? 443 : 80);
 		}
-		init(host, port, uri.getPath(), secure, connTimeout, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass,
-				logger);
+		init(host, port, uri.getPath(), secure, connTimeout, disableSSLVerification, proxyHost, proxyPort, proxyScheme,
+				proxyUser, proxyPass, logger);
 	}
 
 	/**
 	 * Initializes client properties.
 	 */
-	private void init(String host, int port, String uriPath, boolean secure, long timeout, String proxyHost,
-			int proxyPort, String proxyScheme, String proxyUser, String proxyPass, EventSink logger) {
+	private void init(String host, int port, String uriPath, boolean secure, long timeout,
+			boolean disableSSLVerification, String proxyHost, int proxyPort, String proxyScheme, String proxyUser,
+			String proxyPass, EventSink logger) {
 		this.host = host;
 		this.port = port;
 		this.uriPath = uriPath;
 		this.secure = secure;
 		this.connTimeout = timeout;
 		this.logger = (logger != null ? logger : DefaultEventSinkFactory.defaultEventSink(HttpClient.class));
+		this.disableSSLVerification = disableSSLVerification;
 
 		String scheme = secure ? SCHEME_HTTPS : SCHEME_HTTP;
 
@@ -223,7 +231,7 @@ public class HttpClient implements HttpStream {
 	 * @param startTime
 	 *            timestamp in milliseconds when connection initiation started
 	 */
-	private synchronized void initHttpConnMgr(long startTime) throws NoSuchAlgorithmException {
+	private synchronized void initHttpConnMgr(long startTime) throws GeneralSecurityException {
 		Registry<ConnectionSocketFactory> schemeReg = null;
 		if (secure) {
 			SSLContext sslCtx;
@@ -231,7 +239,11 @@ public class HttpClient implements HttpStream {
 				SSLContextFactory scf = new SSLContextFactory(sslKeystore, sslKeystorePwd, sslKeystorePwd);
 				sslCtx = scf.getSslContext(true);
 			} else {
-				sslCtx = SSLContext.getDefault();
+				if (disableSSLVerification) {
+					sslCtx = disableSslVerification();
+				} else {
+					sslCtx = SSLContext.getDefault();
+				}
 			}
 
 			String[] supportedProtocols = sslCtx.getSupportedSSLParameters().getProtocols();
@@ -246,6 +258,45 @@ public class HttpClient implements HttpStream {
 				: new BasicHttpClientConnectionManager();
 		logger.log(OpLevel.DEBUG, "Created connection manager uri={0}, secure={1}, elapsed.ms={2}", uri, secure,
 				(System.currentTimeMillis() - startTime));
+	}
+
+	/**
+	 * Disables SSL context verification.
+	 */
+	protected SSLContext disableSslVerification() throws GeneralSecurityException {
+		// Create a trust manager that does not validate certificate chains
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			@Override
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return null;
+			}
+
+			@Override
+			public void checkClientTrusted(X509Certificate[] certs, String authType) {
+			}
+
+			@Override
+			public void checkServerTrusted(X509Certificate[] certs, String authType) {
+			}
+		} };
+
+		// Install the all-trusting trust manager
+		SSLContext sc = SSLContext.getInstance("TLS"); // NON-NLS
+		sc.init(null, trustAllCerts, new java.security.SecureRandom());
+		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+		// Create all-trusting host name verifier
+		HostnameVerifier allHostsValid = new HostnameVerifier() {
+			@Override
+			public boolean verify(String hostname, SSLSession session) {
+				return true;
+			}
+		};
+
+		// Install the all-trusting host verifier
+		HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+		return sc;
 	}
 
 	/**

@@ -78,6 +78,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 	private long connTimeout = DEFAULT_CONN_TIMEOUT;
 	private long idleTimeout = DEFAULT_IDLE_TIMEOUT;
 	private boolean ackSends = false;
+	private boolean disableSSLVerification = false;
 
 	private AtomicLong idleCount = new AtomicLong(0);
 	private AtomicLong lastWrite = new AtomicLong(0);
@@ -170,6 +171,18 @@ public class JKCloudEventSink extends LoggedEventSink {
 	 */
 	public JKCloudEventSink setConnectionTimeout(long timeout, TimeUnit tunit) {
 		this.connTimeout = tunit.toMillis(timeout);
+		return this;
+	}
+
+	/**
+	 * Sets connection SSL verification disabled/enabled.
+	 *
+	 * @param disableSSLVerification
+	 *            flag indicating to disable SSL validation
+	 * @return itself
+	 */
+	public JKCloudEventSink setDisableSSLVerification(boolean disableSSLVerification) {
+		this.disableSSLVerification = disableSSLVerification;
 		return this;
 	}
 
@@ -308,10 +321,11 @@ public class JKCloudEventSink extends LoggedEventSink {
 			}
 			setErrorState(null);
 			logger.log(OpLevel.DEBUG,
-					"Open name={6}, url={0}, timeout={5}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
+					"Open name={6}, url={0}, timeout={5}, disableSSLVerification={6}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
 					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx", getName(),
-					connTimeout);
-			jkHandle = new JKClient(url, connTimeout, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass, logger);
+					connTimeout, disableSSLVerification);
+			jkHandle = new JKClient(url, connTimeout, disableSSLVerification, proxyHost, proxyPort, proxyScheme,
+					proxyUser, proxyPass, logger);
 			if (!StringUtils.isEmpty(accessToken)) {
 				jkHandle.connect(accessToken);
 			} else {

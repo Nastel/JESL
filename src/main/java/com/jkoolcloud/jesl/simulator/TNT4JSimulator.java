@@ -15,11 +15,7 @@
  */
 package com.jkoolcloud.jesl.simulator;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.Files;
@@ -647,7 +643,7 @@ public class TNT4JSimulator {
 		String gwUrl = TNT4JSimulator.getConnectUrl();
 		TNT4JSimulator.debug(new UsecTimestamp(), "Connecting to service=" + gwUrl + " with access token="
 				+ jkAccessToken + " and connection timeout=" + jKConnTimeout + " ...");
-		gwConn = new JKCloudConnection(gwUrl, jkAccessToken, jKConnTimeout, false, logger);
+		gwConn = new JKCloudConnection(gwUrl, jkAccessToken, jKConnTimeout, false, false, logger);
 		gwConn.open();
 
 		return gwConn;

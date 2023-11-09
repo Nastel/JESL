@@ -50,6 +50,7 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 	private long idleTimeout = Long.getLong("jesl.sink.factory.socket.idle.timeout", JKCloudEventSink.DEFAULT_IDLE_TIMEOUT);
 	private long connTimeout = Long.getLong("jesl.sink.factory.socket.conn.timeout", JKCloudEventSink.DEFAULT_CONN_TIMEOUT);
 	private boolean ackSends = Boolean.getBoolean("jesl.sink.factory.ack.sends");
+	private boolean disableSSLVerification = Boolean.getBoolean("jesl.sink.factory.ssl.verification");
 
 	private String proxyScheme = "http";
 	private String proxyHost;
@@ -96,7 +97,8 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 		JKCloudEventSink jsink = (JKCloudEventSink) super.configureSink(sink);
 		jsink.setConnectionTimeout(connTimeout, TimeUnit.MILLISECONDS)
 				.setIdleTimeout(idleTimeout, TimeUnit.MILLISECONDS).setProxyParms(proxyScheme, proxyHost, proxyPort)
-				.setProxyCredentials(proxyUser, proxyPass).ackSends(ackSends);
+				.setProxyCredentials(proxyUser, proxyPass).ackSends(ackSends)
+				.setDisableSSLVerification(disableSSLVerification);
 		return jsink;
 	}
 
@@ -114,6 +116,7 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 		proxyUser = Utils.getString("ProxyUser", settings, proxyUser);
 		proxyPass = Utils.getString("ProxyPass", settings, proxyPass);
 		ackSends = Utils.getBoolean("AckSends", settings, ackSends);
+		disableSSLVerification = Utils.getBoolean("DisableSSLVerification", settings, disableSSLVerification);
 		_applyConfig(settings);
 	}
 

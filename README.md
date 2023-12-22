@@ -8,14 +8,14 @@ Latest Java 8 compliant `tnt4j` version is `0.12.x`.
 
 -----------------------
 
-JESL allows application developers stream time-series data to [jKoolCloud](https://www.jkoolcloud.com). To stream data to jKoolCloud your 
+JESL allows application developers stream time-series data to [meshIQ](https://www.meshiq.com). To stream data to jKoolCloud your 
 application must:
 
 1. Use TNT4J, or MQTT/slf4j/log4j/Logback in your application to log events, activities, metrics 
    (see [TNT4J-Streams](https://github.com/Nastel/tnt4j-streams/))
 
-1. Obtain your jKool account and API access token at https://www.jkoolcloud.com. API access token is required to stream data to your 
-   [jKoolCloud](https://jkool.jkoolcloud.com) repository.
+1. Obtain your jKool account and API access token at https://www.meshiq.com. API access token is required to stream data to your 
+   [XRay](https://xray.meshiq.com) repository.
 
 1. Use JESL Event Sink implementation (contained in this project) within your TNT4J configuration. (Requires API access token)
 
@@ -28,7 +28,7 @@ application must:
         </dependency>
    ```
 
-1. Configure your application for streaming to [jKoolCloud](https://jkool.jkoolcloud.com) using JESL Event Sink (requires API access token). 
+1. Configure your application for streaming to [XRay](https://xray.meshiq.com) using JESL Event Sink (requires API access token). 
    See (`com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory`)
 
 **NOTE:** To initiate `HTTPS` connection, JESL uses `TLSv1.2+` protocol:
@@ -39,10 +39,10 @@ JESL package includes the following components:
 
 1. TNT4J streaming library with SLF4j support (https://github.com/Nastel/TNT4J)
 
-1. JESL Simulator -- stream simulated events, activities and metrics to [jKoolCloud](https://jkool.jkoolcloud.com). Simulations are defined 
+1. JESL Simulator -- stream simulated events, activities and metrics to [XRay](https://xray.meshiq.com). Simulations are defined 
    in XML files. (See [`tnt4j-sim-template.xml`](sims/tnt4j-sim-template.xml) and [`order-process.xml`](sims/order-process.xml))
 
-1. JESL Event Sink -- TNT4J Event Sink implementation to stream events to [jKoolCloud](https://jkool.jkoolcloud.com).
+1. JESL Event Sink -- TNT4J Event Sink implementation to stream events to [XRay](https://xray.meshiq.com).
 
 ## JESL Simulator
 
@@ -163,13 +163,13 @@ Log4J can be configured to stream events and metrics to jKoolCloud by using JESL
 
    This allows streaming data to be associated with your private repository.
 
-   **NOTE**: Make sure your firewall allows outgoing `https` connections to [jKoolCloud](https://data.jkoolcloud.com).
+   **NOTE**: Make sure your firewall allows outgoing `https` connections to [XRay](https://stream.meshiq.com).
 
 1. Restart your application
 
-   log4j messages which map to JESL `jkoolcloud` appender will stream to [jKoolCloud](https://data.jkoolcloud.com)
+   log4j messages which map to JESL `jkoolcloud` appender will stream to [XRay](https://stream.meshiq.com)
 
-1. Login to "My Dashboard" @ [jKoolCloud](https://jkool.jkoolcloud.com/jKool/login.jsp)
+1. Login to "My Dashboard" @ [XRay](https://xray.meshiq.com/xray/login.jsp)
 
 **NOTE**: See [TNT4J documentation](https://github.com/Nastel/TNT4J#slf4j-event-sink-integration) for more information on `TNT4JAppender`.
 Optionally you may annotate your log4j messages to provide better context, timing as well as report user defined metrics. Example:
@@ -194,7 +194,7 @@ Configure your TNT4J source as follows (using `tnt4j.properties` file):
 	event.sink.factory.PooledLoggerFactory: com.jkoolcloud.tnt4j.sink.impl.PooledLoggerFactoryImpl
 
 	event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
-	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
+	event.sink.factory.EventSinkFactory.Url: https://stream.meshiq.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.jkoolcloud.tnt4j.format.JSONFormatter
 	....
@@ -219,7 +219,7 @@ Below is an example of a sample TNT4J source (com.myco.myappl) configuration wit
 	event.sink.factory.PooledLoggerFactory: com.jkoolcloud.tnt4j.sink.impl.PooledLoggerFactoryImpl
 
 	event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
-	event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
+	event.sink.factory.EventSinkFactory.Url: https://stream.meshiq.com
 	event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 	event.formatter: com.jkoolcloud.tnt4j.format.JSONFormatter
 
@@ -262,7 +262,7 @@ special values on`TNT4J/JESL` side:
 Sample:
 ```properties
 event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
-event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
+event.sink.factory.EventSinkFactory.Url: https://stream.meshiq.com
 event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 event.sink.factory.EventSinkFactory.ConnTimeout: 5000
 event.sink.factory.EventSinkFactory.IdleTimeout: 300000
@@ -285,7 +285,7 @@ Proxy can be used do deliver data over JESL Event Sink (`com.jkoolcloud.jesl.tnt
     Sample:
     ```properties
     event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEventSinkFactory
-    event.sink.factory.EventSinkFactory.Url: https://data.jkoolcloud.com
+    event.sink.factory.EventSinkFactory.Url: https://stream.meshiq.com
     event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
     event.sink.factory.EventSinkFactory.ProxyScheme: http
     event.sink.factory.EventSinkFactory.ProxyHost: proxy.host.com
@@ -408,4 +408,4 @@ JESL requires the following (which will download automatically if using Maven):
 
 # Available Integrations
 
-* [jkoolcloud.com](https://www.jkoolcloud.com/)
+* [meshIQ](https://www.meshiq.com)

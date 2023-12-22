@@ -28,8 +28,8 @@ import com.jkoolcloud.tnt4j.utils.Utils;
 
 /**
  * JESL Client Stream class that enables client applications to connect to JESL server using http, https, and tcp[s]
- * URI. Example: http://data.jkoolcloud.com:6580. Applications should use this class to connect to JESL servers to
- * stream events.
+ * URI. Example: https://stream.meshiq.com. Applications should use this class to connect to JESL servers to stream
+ * events.
  *
  * @version $Revision: 1 $
  */

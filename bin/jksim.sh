@@ -1,2 +1,2 @@
 #! /bin/bash
-./jks.sh run -T:data.jkoolcloud.com -C:HTTPS -p:10 -ui -uc $@
+./jks.sh run -T:stream.meshiq.com -C:HTTPS -p:10 -ui -uc $@

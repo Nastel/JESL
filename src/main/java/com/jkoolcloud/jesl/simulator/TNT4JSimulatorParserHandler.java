@@ -695,7 +695,7 @@ public class TNT4JSimulatorParserHandler extends DefaultHandler implements AutoC
 			} else if (SIM_XML_DATASET.equals(curElement)) {
 				curDataset.add(prop);
 			} else if (SIM_XML_EVENT.equals(curElement)) {
-				curEvent.getOperation().addProperty(prop);
+				curEvent.addProperty(prop);
 			} else if (SIM_XML_ACTIVITY.equals(curElement)) {
 				curActivity.addProperty(prop);
 			}

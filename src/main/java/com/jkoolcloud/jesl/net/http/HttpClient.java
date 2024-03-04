@@ -68,12 +68,14 @@ public class HttpClient implements HttpStream {
 	private static final String LOCAL_HOST = "localhost";
 
 	public static final long DEFAULT_CONN_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
+	public static final long DEFAULT_CONN_CLOSE_TIMEOUT = TimeUnit.SECONDS.toMillis(2);
 
 	protected URI uri;
 	protected EventSink logger;
 	protected String host;
 	protected int port;
 	protected long connTimeout = DEFAULT_CONN_TIMEOUT;
+	protected long connCloseTimeout = DEFAULT_CONN_CLOSE_TIMEOUT;
 	protected String uriPath;
 	protected String sslKeystore;
 	protected String sslKeystorePwd;
@@ -117,7 +119,8 @@ public class HttpClient implements HttpStream {
 	 */
 	public HttpClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger)
 			throws URISyntaxException {
-		this(urlStr, DEFAULT_CONN_TIMEOUT, false, proxyHost, proxyPort, proxyScheme, logger);
+		this(urlStr, DEFAULT_CONN_TIMEOUT, DEFAULT_CONN_CLOSE_TIMEOUT, false, proxyHost, proxyPort, proxyScheme,
+				logger);
 	}
 
 	/**
@@ -127,6 +130,8 @@ public class HttpClient implements HttpStream {
 	 *            connection string to specified JESL server
 	 * @param connTimeout
 	 *            connection timeout in milliseconds
+	 * @param connCloseTimeout
+	 *            connection close timeout in milliseconds
 	 * @param disableSSLVerification
 	 *            flag indicating to disable SSL validation
 	 * @param proxyHost
@@ -140,9 +145,10 @@ public class HttpClient implements HttpStream {
 	 * @throws URISyntaxException
 	 *             if invalid connection string
 	 */
-	public HttpClient(String urlStr, long connTimeout, boolean disableSSLVerification, String proxyHost, int proxyPort,
-			String proxyScheme, EventSink logger) throws URISyntaxException {
-		this(urlStr, connTimeout, disableSSLVerification, proxyHost, proxyPort, proxyScheme, null, null, logger);
+	public HttpClient(String urlStr, long connTimeout, long connCloseTimeout, boolean disableSSLVerification,
+			String proxyHost, int proxyPort, String proxyScheme, EventSink logger) throws URISyntaxException {
+		this(urlStr, connTimeout, connCloseTimeout, disableSSLVerification, proxyHost, proxyPort, proxyScheme, null,
+				null, logger);
 	}
 
 	/**
@@ -152,6 +158,8 @@ public class HttpClient implements HttpStream {
 	 *            connection string to specified JESL server
 	 * @param connTimeout
 	 *            connection timeout in milliseconds
+	 * @param connCloseTimeout
+	 *            connection close timeout in milliseconds
 	 * @param disableSSLVerification
 	 *            flag indicating to disable SSL validation
 	 * @param proxyHost
@@ -169,8 +177,9 @@ public class HttpClient implements HttpStream {
 	 * @throws URISyntaxException
 	 *             if invalid connection string
 	 */
-	public HttpClient(String urlStr, long connTimeout, boolean disableSSLVerification, String proxyHost, int proxyPort,
-			String proxyScheme, String proxyUser, String proxyPass, EventSink logger) throws URISyntaxException {
+	public HttpClient(String urlStr, long connTimeout, long connCloseTimeout, boolean disableSSLVerification,
+			String proxyHost, int proxyPort, String proxyScheme, String proxyUser, String proxyPass, EventSink logger)
+			throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
 		secure = SCHEME_HTTPS.equalsIgnoreCase(scheme);
@@ -182,14 +191,14 @@ public class HttpClient implements HttpStream {
 		if (port <= 0) {
 			port = (secure ? 443 : 80);
 		}
-		init(host, port, uri.getPath(), secure, connTimeout, disableSSLVerification, proxyHost, proxyPort, proxyScheme,
-				proxyUser, proxyPass, logger);
+		init(host, port, uri.getPath(), secure, connTimeout, connCloseTimeout, disableSSLVerification, proxyHost,
+				proxyPort, proxyScheme, proxyUser, proxyPass, logger);
 	}
 
 	/**
 	 * Initializes client properties.
 	 */
-	private void init(String host, int port, String uriPath, boolean secure, long timeout,
+	private void init(String host, int port, String uriPath, boolean secure, long timeout, long closeTimeout,
 			boolean disableSSLVerification, String proxyHost, int proxyPort, String proxyScheme, String proxyUser,
 			String proxyPass, EventSink logger) {
 		this.host = host;
@@ -197,6 +206,7 @@ public class HttpClient implements HttpStream {
 		this.uriPath = uriPath;
 		this.secure = secure;
 		this.connTimeout = timeout;
+		this.connCloseTimeout = closeTimeout;
 		this.logger = (logger != null ? logger : DefaultEventSinkFactory.defaultEventSink(HttpClient.class));
 		this.disableSSLVerification = disableSSLVerification;
 
@@ -485,6 +495,9 @@ public class HttpClient implements HttpStream {
 		}
 
 		// Utils.close(connection);
+		// To fix delayed SSL socket close on socket read timeout (10sec.) - XRay backend never responds in timely
+		// manner.
+		connection.setSocketTimeout(Timeout.of(connCloseTimeout, TimeUnit.MILLISECONDS));
 		Utils.close(connMgr);
 		logger.log(OpLevel.DEBUG, "Closed connection to {0}", uri);
 
@@ -603,5 +616,24 @@ public class HttpClient implements HttpStream {
 	 */
 	public void setConnTimeout(long connTimeout) {
 		this.connTimeout = connTimeout;
+	}
+
+	/**
+	 * Obtain HTTP connection close timeout value in milliseconds.
+	 *
+	 * @return connection close timeout value in milliseconds
+	 */
+	public long getConnCloseTimeout() {
+		return connCloseTimeout;
+	}
+
+	/**
+	 * Sets HTTP connection close timeout value in milliseconds.
+	 * 
+	 * @param connCloseTimeout
+	 *            connection close timeout value in milliseconds
+	 */
+	public void setConnClsoeTimeout(long connCloseTimeout) {
+		this.connCloseTimeout = connCloseTimeout;
 	}
 }

@@ -253,7 +253,8 @@ special values on`TNT4J/JESL` side:
 
 ## Optional configuration
 
-* `ConnTimeout` - defines connection timeout in milliseconds. Default - `10sec.`
+* `ConnTimeout` - defines connection timeout in milliseconds. Default - `10 sec.`
+* `ConnCloseTimeout` - defines connection close timeout in milliseconds. Default - `2 sec.`
 * `IdleTimeout` - defines connection idle timeout in milliseconds. Default - `4min.`
 * `AckSends` - indicates connection to wait for acknowledgments for sent packages. Default - `false`. 
 * `DisableSSLVerification` - indicates connection to disable SSL validation (may be useful if HTTP endpoint has certificate expired). 
@@ -265,6 +266,7 @@ event.sink.factory.EventSinkFactory: com.jkoolcloud.jesl.tnt4j.sink.JKCloudEvent
 event.sink.factory.EventSinkFactory.Url: https://stream.meshiq.com
 event.sink.factory.EventSinkFactory.Token: YOUR-ACCESS-TOKEN
 event.sink.factory.EventSinkFactory.ConnTimeout: 5000
+event.sink.factory.EventSinkFactory.ConnCloseTimeout: 1000
 event.sink.factory.EventSinkFactory.IdleTimeout: 300000
 event.sink.factory.EventSinkFactory.AckSends: true
 event.sink.factory.EventSinkFactory.DisableSSLVerification: true

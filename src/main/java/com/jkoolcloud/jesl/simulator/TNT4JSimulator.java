@@ -33,6 +33,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 
+import com.jkoolcloud.jesl.net.http.HttpClient;
 import com.jkoolcloud.jesl.simulator.tnt4j.JKCloudConnection;
 import com.jkoolcloud.tnt4j.TrackingLogger;
 import com.jkoolcloud.tnt4j.config.DefaultConfigFactory;
@@ -58,7 +59,7 @@ public class TNT4JSimulator {
 	private static String jkHost = null;
 	private static int jkPort = 443;
 	private static String jkAccessToken = null;
-	private static long jKConnTimeout = TimeUnit.SECONDS.toMillis(10);
+	private static long jKConnTimeout = HttpClient.DEFAULT_CONN_TIMEOUT;
 	private static String simFileName = "";
 	private static boolean uniqueTags = false;
 	private static boolean uniqueCorrs = false;

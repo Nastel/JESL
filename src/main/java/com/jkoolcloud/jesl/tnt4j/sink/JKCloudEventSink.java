@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.lang3.StringUtils;
 
 import com.jkoolcloud.jesl.net.JKClient;
+import com.jkoolcloud.jesl.net.http.HttpClient;
 import com.jkoolcloud.tnt4j.core.KeyValueStats;
 import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.format.EventFormatter;
@@ -61,7 +62,8 @@ public class JKCloudEventSink extends LoggedEventSink {
 	public static final String KEY_LAST_ACK_ELAPSED = "sink-ack-last-elapsed-ms";
 
 	public static final long DEFAULT_IDLE_TIMEOUT = TimeUnit.MINUTES.toMillis(4);
-	public static final long DEFAULT_CONN_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
+	public static final long DEFAULT_CONN_TIMEOUT = HttpClient.DEFAULT_CONN_TIMEOUT;
+	public static final long DEFAULT_CONN_CLOSE_TIMEOUT = HttpClient.DEFAULT_CONN_CLOSE_TIMEOUT;
 
 	private JKClient jkHandle;
 
@@ -76,6 +78,7 @@ public class JKCloudEventSink extends LoggedEventSink {
 	private String proxyPass;
 
 	private long connTimeout = DEFAULT_CONN_TIMEOUT;
+	private long connCloseTimeout = DEFAULT_CONN_CLOSE_TIMEOUT;
 	private long idleTimeout = DEFAULT_IDLE_TIMEOUT;
 	private boolean ackSends = false;
 	private boolean disableSSLVerification = false;
@@ -171,6 +174,20 @@ public class JKCloudEventSink extends LoggedEventSink {
 	 */
 	public JKCloudEventSink setConnectionTimeout(long timeout, TimeUnit tunit) {
 		this.connTimeout = tunit.toMillis(timeout);
+		return this;
+	}
+
+	/**
+	 * Sets connection close timeout.
+	 *
+	 * @param timeout
+	 *            connection close timeout
+	 * @param tunit
+	 *            time out time units
+	 * @return itself
+	 */
+	public JKCloudEventSink setConnectionCloseTimeout(long timeout, TimeUnit tunit) {
+		this.connCloseTimeout = tunit.toMillis(timeout);
 		return this;
 	}
 
@@ -321,11 +338,11 @@ public class JKCloudEventSink extends LoggedEventSink {
 			}
 			setErrorState(null);
 			logger.log(OpLevel.DEBUG,
-					"Open name={6}, url={0}, timeout={5}, disableSSLVerification={6}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
+					"Open name={6}, url={0}, timeout={5}, closeTimeout={6}, disableSSLVerification={7}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
 					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx", getName(),
-					connTimeout, disableSSLVerification);
-			jkHandle = new JKClient(url, connTimeout, disableSSLVerification, proxyHost, proxyPort, proxyScheme,
-					proxyUser, proxyPass, logger);
+					connTimeout, connCloseTimeout, disableSSLVerification);
+			jkHandle = new JKClient(url, connTimeout, connCloseTimeout, disableSSLVerification, proxyHost, proxyPort,
+					proxyScheme, proxyUser, proxyPass, logger);
 			if (!StringUtils.isEmpty(accessToken)) {
 				jkHandle.connect(accessToken);
 			} else {

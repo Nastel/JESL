@@ -64,7 +64,7 @@ public class JKCloudConnection implements Closeable {
 		}
 
 		try {
-			jkHandle = new JKClient(gwUrl, connTimeout, disableSSLVerification, getEventSink());
+			jkHandle = new JKClient(gwUrl, connTimeout, connTimeout / 5, disableSSLVerification, getEventSink());
 			jkHandle.connect(accessToken);
 		} catch (URISyntaxException e) {
 			close();

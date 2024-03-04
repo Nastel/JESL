@@ -58,6 +58,8 @@ public class JKClient implements JKStream {
 	 *            connection string to specified JESL server
 	 * @param connTimeout
 	 *            connection timeout in milliseconds
+	 * @param connCloseTimeout
+	 *            connection close timeout in milliseconds
 	 * @param disableSSLVerification
 	 *            flag indicating to disable SSL validation
 	 * @param logger
@@ -65,9 +67,9 @@ public class JKClient implements JKStream {
 	 * @throws URISyntaxException
 	 *             if invalid connection string
 	 */
-	public JKClient(String urlStr, long connTimeout, boolean disableSSLVerification, EventSink logger)
-			throws URISyntaxException {
-		this(urlStr, connTimeout, disableSSLVerification, null, 0, null, logger);
+	public JKClient(String urlStr, long connTimeout, long connCloseTimeout, boolean disableSSLVerification,
+			EventSink logger) throws URISyntaxException {
+		this(urlStr, connTimeout, connCloseTimeout, disableSSLVerification, null, 0, null, logger);
 	}
 
 	/**
@@ -88,7 +90,8 @@ public class JKClient implements JKStream {
 	 */
 	public JKClient(String urlStr, String proxyHost, int proxyPort, String proxyScheme, EventSink logger)
 			throws URISyntaxException {
-		this(urlStr, HttpClient.DEFAULT_CONN_TIMEOUT, false, proxyHost, proxyPort, proxyScheme, logger);
+		this(urlStr, HttpClient.DEFAULT_CONN_TIMEOUT, HttpClient.DEFAULT_CONN_CLOSE_TIMEOUT, false, proxyHost,
+				proxyPort, proxyScheme, logger);
 	}
 
 	/**
@@ -97,7 +100,9 @@ public class JKClient implements JKStream {
 	 * @param urlStr
 	 *            connection string to specified JESL server
 	 * @param connTimeout
-	 *            connection timeout in seconds
+	 *            connection timeout in milliseconds
+	 * @param connCloseTimeout
+	 *            connection close timeout in milliseconds
 	 * @param disableSSLVerification
 	 *            flag indicating to disable SSL validation
 	 * @param proxyHost
@@ -111,9 +116,10 @@ public class JKClient implements JKStream {
 	 * @throws URISyntaxException
 	 *             if invalid connection string
 	 */
-	public JKClient(String urlStr, long connTimeout, boolean disableSSLVerification, String proxyHost, int proxyPort,
-			String proxyScheme, EventSink logger) throws URISyntaxException {
-		this(urlStr, connTimeout, disableSSLVerification, proxyHost, proxyPort, proxyScheme, null, null, logger);
+	public JKClient(String urlStr, long connTimeout, long connCloseTimeout, boolean disableSSLVerification,
+			String proxyHost, int proxyPort, String proxyScheme, EventSink logger) throws URISyntaxException {
+		this(urlStr, connTimeout, connCloseTimeout, disableSSLVerification, proxyHost, proxyPort, proxyScheme, null,
+				null, logger);
 	}
 
 	/**
@@ -122,7 +128,9 @@ public class JKClient implements JKStream {
 	 * @param urlStr
 	 *            connection string to specified JESL server
 	 * @param connTimeout
-	 *            connection timeout in seconds
+	 *            connection timeout in milliseconds
+	 * @param connCloseTimeout
+	 *            connection close timeout in milliseconds
 	 * @param disableSSLVerification
 	 *            flag indicating to disable SSL validation
 	 * @param proxyHost
@@ -140,8 +148,9 @@ public class JKClient implements JKStream {
 	 * @throws URISyntaxException
 	 *             if invalid connection string
 	 */
-	public JKClient(String urlStr, long connTimeout, boolean disableSSLVerification, String proxyHost, int proxyPort,
-			String proxyScheme, String proxyUser, String proxyPass, EventSink logger) throws URISyntaxException {
+	public JKClient(String urlStr, long connTimeout, long connCloseTimeout, boolean disableSSLVerification,
+			String proxyHost, int proxyPort, String proxyScheme, String proxyUser, String proxyPass, EventSink logger)
+			throws URISyntaxException {
 		uri = new URI(urlStr);
 		String scheme = uri.getScheme();
 		if (StringUtils.equalsAnyIgnoreCase(scheme, "tcp", "tcps")) {
@@ -166,8 +175,8 @@ public class JKClient implements JKStream {
 
 			handle = new SocketClient(host, port, secure, proxyHost, proxyPort, logger);
 		} else {
-			handle = new HttpClient(urlStr, connTimeout, disableSSLVerification, proxyHost, proxyPort, proxyScheme,
-					proxyUser, proxyPass, logger);
+			handle = new HttpClient(urlStr, connTimeout, connCloseTimeout, disableSSLVerification, proxyHost, proxyPort,
+					proxyScheme, proxyUser, proxyPass, logger);
 		}
 	}
 

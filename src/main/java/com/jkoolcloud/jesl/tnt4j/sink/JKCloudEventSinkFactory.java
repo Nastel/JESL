@@ -49,6 +49,7 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 	// NOTE: server side uses 5min. to close inactive connection by default
 	private long idleTimeout = Long.getLong("jesl.sink.factory.socket.idle.timeout", JKCloudEventSink.DEFAULT_IDLE_TIMEOUT);
 	private long connTimeout = Long.getLong("jesl.sink.factory.socket.conn.timeout", JKCloudEventSink.DEFAULT_CONN_TIMEOUT);
+	private long connCloseTimeout = Long.getLong("jesl.sink.factory.socket.conn.close.timeout", JKCloudEventSink.DEFAULT_CONN_CLOSE_TIMEOUT);
 	private boolean ackSends = Boolean.getBoolean("jesl.sink.factory.ack.sends");
 	private boolean disableSSLVerification = Boolean.getBoolean("jesl.sink.factory.ssl.verification");
 
@@ -96,6 +97,7 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 	protected EventSink configureSink(EventSink sink) {
 		JKCloudEventSink jsink = (JKCloudEventSink) super.configureSink(sink);
 		jsink.setConnectionTimeout(connTimeout, TimeUnit.MILLISECONDS)
+				.setConnectionCloseTimeout(connCloseTimeout, TimeUnit.MILLISECONDS)
 				.setIdleTimeout(idleTimeout, TimeUnit.MILLISECONDS).setProxyParms(proxyScheme, proxyHost, proxyPort)
 				.setProxyCredentials(proxyUser, proxyPass).ackSends(ackSends)
 				.setDisableSSLVerification(disableSSLVerification);
@@ -109,6 +111,7 @@ public class JKCloudEventSinkFactory extends LoggedEventSinkFactory {
 		url = Utils.getString("Url", settings, url);
 		token = makeAccessToken(Utils.getString("Token", settings, token));
 		connTimeout = Utils.getLong("ConnTimeout", settings, connTimeout);
+		connCloseTimeout = Utils.getLong("ConnCloseTimeout", settings, connCloseTimeout);
 		idleTimeout = Utils.getLong("IdleTimeout", settings, idleTimeout);
 		proxyScheme = Utils.getString("ProxyScheme", settings, proxyScheme);
 		proxyHost = Utils.getString("ProxyHost", settings, proxyHost);

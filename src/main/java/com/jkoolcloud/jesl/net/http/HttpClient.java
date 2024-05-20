@@ -272,6 +272,11 @@ public class HttpClient implements HttpStream {
 
 	/**
 	 * Disables SSL context verification.
+	 *
+	 * @return SSL context instance having disabled context verification
+	 *
+	 * @throws GeneralSecurityException
+	 *             if context configuration fails
 	 */
 	protected SSLContext disableSslVerification() throws GeneralSecurityException {
 		// Create a trust manager that does not validate certificate chains

@@ -278,7 +278,7 @@ public class HttpClient implements HttpStream {
 	 * @throws GeneralSecurityException
 	 *             if context configuration fails
 	 */
-	protected SSLContext disableSslVerification() throws GeneralSecurityException {
+	public static SSLContext disableSslVerification() throws GeneralSecurityException {
 		// Create a trust manager that does not validate certificate chains
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
 			@Override

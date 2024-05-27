@@ -338,9 +338,9 @@ public class JKCloudEventSink extends LoggedEventSink {
 			}
 			setErrorState(null);
 			logger.log(OpLevel.DEBUG,
-					"Open name={6}, url={0}, timeout={5}, closeTimeout={6}, disableSSLVerification={7}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}, proxy.user={4}, proxy.pass={5}",
-					url, proxyHost, proxyPort, proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx", getName(),
-					connTimeout, connCloseTimeout, disableSSLVerification);
+					"Open name={}, url={}, timeout={}, closeTimeout={}, disableSSLVerification={}, proxy.host={}, proxy.port={}, proxy.scheme={}, proxy.user={}, proxy.pass={}",
+					getName(), url, connTimeout, connCloseTimeout, disableSSLVerification, proxyHost, proxyPort,
+					proxyScheme, proxyUser, proxyPass == null ? null : "xxxxxx");
 			jkHandle = new JKClient(url, connTimeout, connCloseTimeout, disableSSLVerification, proxyHost, proxyPort,
 					proxyScheme, proxyUser, proxyPass, logger);
 			if (!StringUtils.isEmpty(accessToken)) {
@@ -364,8 +364,8 @@ public class JKCloudEventSink extends LoggedEventSink {
 
 	@Override
 	protected synchronized void _close() throws IOException {
-		logger.log(OpLevel.DEBUG, "Closing sink name={4}, url={0}, proxy.host={1}, proxy.port={2}, proxy.scheme={3}",
-				url, proxyHost, proxyPort, proxyScheme, getName());
+		logger.log(OpLevel.DEBUG, "Closing sink name={}, url={}, proxy.host={}, proxy.port={}, proxy.scheme={}",
+				getName(), url, proxyHost, proxyPort, proxyScheme);
 		Utils.close(jkHandle);
 
 		super._close();

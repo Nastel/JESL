@@ -266,7 +266,7 @@ public class HttpClient implements HttpStream {
 		}
 		connMgr = schemeReg != null ? new BasicHttpClientConnectionManager(schemeReg)
 				: new BasicHttpClientConnectionManager();
-		logger.log(OpLevel.DEBUG, "Created connection manager uri={0}, secure={1}, elapsed.ms={2}", uri, secure,
+		logger.log(OpLevel.DEBUG, "Created connection manager uri={}, secure={}, elapsed.ms={}", uri, secure,
 				(System.currentTimeMillis() - startTime));
 	}
 
@@ -339,7 +339,7 @@ public class HttpClient implements HttpStream {
 			connMgr.connect(connectionEndpoint, timeout, context);
 			connectionEndpoint.setSocketTimeout(timeout);
 		}
-		logger.log(OpLevel.DEBUG, "Connected to uri={0}, proxy={1}, elapsed.ms={2}, timeout.ms={3}", uri,
+		logger.log(OpLevel.DEBUG, "Connected to uri={}, proxy={}, elapsed.ms={}, timeout.ms={}", uri,
 				(httpProxy != null ? httpProxy : "(no-proxy)"), (System.currentTimeMillis() - startTime), connTimeout);
 	}
 
@@ -369,9 +369,9 @@ public class HttpClient implements HttpStream {
 		connect();
 		if (!StringUtils.isEmpty(token)) {
 			try {
-				logger.log(OpLevel.DEBUG, "Authenticating connection={0}, token={1}", this, Utils.hide(token, "x", 4));
+				logger.log(OpLevel.DEBUG, "Authenticating connection={}, token={}", this, Utils.hide(token, "x", 4));
 				AuthUtils.authenticate(this, token);
-				logger.log(OpLevel.DEBUG, "Authenticated connection={0}, token={1}", this, Utils.hide(token, "x", 4));
+				logger.log(OpLevel.DEBUG, "Authenticated connection={}, token={}", this, Utils.hide(token, "x", 4));
 			} catch (SecurityException exc) {
 				_close();
 				throw new IOException("Connect failed to complete", exc);
@@ -396,7 +396,7 @@ public class HttpClient implements HttpStream {
 			if (request.getVersion() == null || request.getVersion().greaterEquals(HttpVersion.HTTP_1_1)) {
 				request.setHeader(HttpHeaders.HOST, host + ":" + port);
 			}
-			logger.log(OpLevel.TRACE, "Sending to {0}: {1}", uri, request);
+			logger.log(OpLevel.TRACE, "Sending to {}: {}", uri, request);
 			ClassicHttpRequest httpRequest = (ClassicHttpRequest) request;
 
 			checkState(request.getHeaderStr(X_API_KEY));
@@ -470,7 +470,7 @@ public class HttpClient implements HttpStream {
 			content = resp.getContentString();
 			int status = resp.getStatus();
 
-			logger.log(OpLevel.TRACE, "Received response from={0}: code={1}, msg={2}", uri, status, content);
+			logger.log(OpLevel.TRACE, "Received response from={}: code={}, msg={}", uri, status, content);
 			if (status >= HttpStatus.SC_CLIENT_ERROR) {
 				if (AccessResponse.isAccessResponse(content)) {
 					_close();
@@ -504,7 +504,7 @@ public class HttpClient implements HttpStream {
 		// manner.
 		connection.setSocketTimeout(Timeout.of(connCloseTimeout, TimeUnit.MILLISECONDS));
 		Utils.close(connMgr);
-		logger.log(OpLevel.DEBUG, "Closed connection to {0}", uri);
+		logger.log(OpLevel.DEBUG, "Closed connection to {}", uri);
 
 		connection = null;
 	}
@@ -525,14 +525,14 @@ public class HttpClient implements HttpStream {
 	 */
 	protected void ensureAllRequestsSent() {
 		try {
-			logger.log(OpLevel.DEBUG, "Ping {0}: ensure all requests have been sent to {1}", this, uri);
+			logger.log(OpLevel.DEBUG, "Ping {}: ensure all requests have been sent to {}", this, uri);
 			HttpRequest pingReq = newDefaultRequest();
 			pingReq.setHeader(HttpHeaders.PRAGMA, PRAGMA_VALUE_PING);
 			sendRequest(pingReq, true);
 			HttpResponseImpl pingResp = null;
 			try {
 				pingResp = (HttpResponseImpl) getResponse();
-				logger.log(OpLevel.DEBUG, "Ping {0}: response received from {1}, response={2}", this, uri, pingResp);
+				logger.log(OpLevel.DEBUG, "Ping {}: response received from {}, response={}", this, uri, pingResp);
 			} finally {
 				if (pingResp != null) {
 					EntityUtils.consumeQuietly(pingResp.getEntity());

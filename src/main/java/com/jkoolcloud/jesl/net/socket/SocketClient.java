@@ -135,11 +135,10 @@ public class SocketClient implements JKStream {
 		connect();
 		if (!StringUtils.isEmpty(token)) {
 			try {
-				logger.log(OpLevel.DEBUG, "Authenticating connection={0} with token={1}", this,
+				logger.log(OpLevel.DEBUG, "Authenticating connection={} with token={}", this,
 						Utils.hide(token, "x", 4));
 				AuthUtils.authenticate(this, token);
-				logger.log(OpLevel.DEBUG, "Authenticated connection={0} with token={1}", this,
-						Utils.hide(token, "x", 4));
+				logger.log(OpLevel.DEBUG, "Authenticated connection={} with token={}", this, Utils.hide(token, "x", 4));
 			} catch (SecurityException exc) {
 				close();
 				throw new IOException("Connect failed to complete", exc);

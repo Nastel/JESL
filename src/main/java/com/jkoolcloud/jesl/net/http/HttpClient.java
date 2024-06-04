@@ -360,6 +360,14 @@ public class HttpClient implements HttpStream {
 					+ ", reason=" + e.getMessage();
 			logger.log(OpLevel.ERROR, errMsg, e);
 			_close();
+
+			if (e instanceof SSLHandshakeException) {
+				// Remote host terminated the handshake
+				if (StringUtils.contains(e.getMessage(), "terminated the handshake")) {
+					disableSSLVerification = !disableSSLVerification;
+				}
+			}
+
 			throw new IOException(errMsg, e);
 		}
 	}
